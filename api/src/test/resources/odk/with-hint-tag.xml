@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xf:xforms xmlns:xf="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jr="http://openrosa.org/javarosa">
+    <xf:head>
+        <xf:title>CCSP Dysplasia Form</xf:title>
+        <xf:model id="openmrs_model">
+            <xf:instance id="openmrs_model_instance">
+            </xf:instance>
+        </xf:model>
+    </xf:head>
+    <xf:body>
+        <group appearance="field-list">
+            <select1 bind="current_visit_type">
+                <label>Current Visit Type</label>
+                <hint>What is the current visit type?</hint>
+                <item>
+                    <label>New visit</label>
+                    <value>7850^INITIAL VISIT ^99DCT</value>
+                </item>
+                <item>
+                    <label>Revisit</label>
+                    <value>2345^FOLLOW-UP^99DCT</value>
+                </item>
+                <item>
+                    <label>Review of pathology results</label>
+                    <value>7588^REVIEW OF PATHOLOGY RESULTS^99DCT</value>
+                </item>
+            </select1>
+        </group>
+    </xf:body>
+</xf:xforms>

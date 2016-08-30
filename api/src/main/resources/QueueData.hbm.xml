@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.openmrs.module.muzima.model">
+
+    <class name="QueueData" table="muzima_queue_data">
+        <id name="id" type="java.lang.Integer" column="id" unsaved-value="0">
+            <generator class="native"/>
+        </id>
+        <property name="discriminator" type="java.lang.String" column="discriminator" not-null="true"/>
+
+        <property name="payload" type="java.lang.String" column="payload" not-null="true"/>
+        <many-to-one name="dataSource" class="DataSource" column="data_source" not-null="true"/>
+
+        <many-to-one name="creator" class="org.openmrs.User" not-null="true">
+            <column name="creator"/>
+        </many-to-one>
+        <property name="dateCreated" type="java.util.Date" column="date_created" not-null="true" length="19"/>
+
+        <many-to-one name="changedBy" class="org.openmrs.User" column="changed_by"/>
+        <property name="dateChanged" type="java.util.Date" column="date_changed" length="19"/>
+
+        <property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true"/>
+
+        <many-to-one name="location" class="org.openmrs.Location" not-null="false">
+            <column name="location"/>
+        </many-to-one>
+
+        <many-to-one name="provider" class="org.openmrs.Provider" not-null="false">
+            <column name="provider"/>
+        </many-to-one>
+
+        <property name="formName" type="java.lang.String" column="form_name" not-null="false"/>
+
+        <property name="patientUuid" type="java.lang.String" column="patient_uuid" not-null="false"/>
+    </class>
+
+</hibernate-mapping>

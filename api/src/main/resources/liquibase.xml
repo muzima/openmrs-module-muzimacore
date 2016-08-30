@@ -1,0 +1,995 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+
+    <!--
+         See http://wiki.openmrs.org/display/docs/Module+liquibase+File for
+         documentation on this file.
+
+         See http://www.liquibase.org/manual/home#available_database_refactorings
+         for a list of supported elements and attributes
+     -->
+    <property name="clob.type" value="longtext"/>
+
+
+
+
+    <changeSet id="html5form-2013-06-11-12:30" author="ThoughtWorks">
+        <comment>
+            Table for tags
+        </comment>
+        <createTable tableName="html5forms_tag">
+            <column name="html5forms_tag_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="html5form-2013-06-12-05:30" author="ThoughtWorks">
+        <comment>
+            Table for tags to form mapping
+        </comment>
+        <createTable tableName="html5forms_form_tag_mapping">
+            <column name="form_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tag_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="form_id,tag_id" constraintName="html5forms_form_tag_mapping_form_id_pk"
+                       tableName="html5forms_form_tag_mapping"/>
+    </changeSet>
+
+    <changeSet id="html5form-2013-06-13-07:15" author="ThoughtWorks">
+        <comment>
+            Table for forms
+        </comment>
+        <createTable tableName="html5forms_form">
+            <column name="form_id" type="int">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="form_id" constraintName="html5forms_form_id_pk" tableName="html5forms_form"/>
+    </changeSet>
+
+    <changeSet id="html5form-2013-06-25-18:15" author="ThoughtWorks">
+        <comment>
+            adding new columns to html5forms
+        </comment>
+        <addColumn tableName="html5forms_form">
+            <column name="model" type="text"></column>
+        </addColumn>
+        <addColumn tableName="html5forms_form">
+            <column name="form" type="text"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="html5form-2013-07-1-18:15" author="ThoughtWorks">
+        <comment>
+            removing columns
+        </comment>
+        <dropColumn columnName="form"
+                    tableName="html5forms_form"/>
+        <dropColumn columnName="model"
+                    tableName="html5forms_form"/>
+    </changeSet>
+
+
+    <changeSet id="html5form-2013-07-1-20:15" author="ThoughtWorks">
+        <comment>
+            adding new columns to html5forms
+        </comment>
+        <addColumn tableName="html5forms_form">
+            <column name="model" type="${clob.type}"></column>
+        </addColumn>
+        <addColumn tableName="html5forms_form">
+            <column name="form" type="${clob.type}"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-07-10-12:00" author="ThoughtWorks">
+        <comment>
+            renames tables - prefix html5 to muzima
+        </comment>
+
+        <renameTable oldTableName="html5forms_form" newTableName="muzimaforms_form"/>
+        <renameTable oldTableName="html5forms_tag" newTableName="muzimaforms_tag"/>
+        <renameTable oldTableName="html5forms_form_tag_mapping" newTableName="muzimaforms_tag_map"/>
+
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-07-10-16:30" author="ThoughtWorks">
+        <comment>
+            renaming old columns and adding new column to html5forms
+        </comment>
+
+        <renameColumn tableName="muzimaforms_tag" oldColumnName="html5forms_tag_id" newColumnName="muzimaforms_tag_id"
+                      columnDataType="int"/>
+        <renameColumn tableName="muzimaforms_form" oldColumnName="model" newColumnName="model_xml"
+                      columnDataType="${clob.type}"/>
+        <renameColumn tableName="muzimaforms_form" oldColumnName="form" newColumnName="form_html"
+                      columnDataType="${clob.type}"/>
+        <addColumn tableName="muzimaforms_form">
+            <column name="model_json" type="${clob.type}"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-07-10-18:00" author="ThoughtWorks">
+        <comment>
+            renaming columns removed autoincrement - fixing that
+        </comment>
+        <dropColumn tableName="muzimaforms_tag" columnName="muzimaforms_tag_id"/>
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-07-10-18:30" author="ThoughtWorks">
+        <comment>
+            renaming columns removed autoincrement - fixing that
+        </comment>
+        <addColumn tableName="muzimaforms_tag">
+            <column name="muzimaforms_tag_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+
+    <changeSet id="muzimaform-2013-07-10-19:00" author="ThoughtWorks">
+        <comment>
+            adding unique constraint
+        </comment>
+        <addUniqueConstraint constraintName="unique-tag-name" tableName="muzimaforms_tag" columnNames="name"/>
+    </changeSet>
+
+
+    <changeSet id="muzimaform-2013-07-10-20:00" author="ThoughtWorks">
+        <comment>
+            adding audit columns
+        </comment>
+        <addColumn tableName="muzimaforms_form">
+            <column name="creator" valueNumeric="1" type="int"/>
+            <column name="date_created" valueDate="2007-05-04" type="date"/>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="date"/>
+            <column name="retired" valueBoolean="false" type="boolean"/>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="date"/>
+            <column name="retire_reason" type="text"/>
+        </addColumn>
+
+        <addColumn tableName="muzimaforms_tag">
+            <column name="creator" valueNumeric="1" type="int"/>
+            <column name="date_created" valueDate="2007-05-04" type="date"/>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="date"/>
+            <column name="retired" valueBoolean="false" type="boolean"/>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="date"/>
+            <column name="retire_reason" type="text"/>
+        </addColumn>
+
+        <addColumn tableName="muzimaforms_tag_map">
+            <column name="creator" valueNumeric="1" type="int"/>
+            <column name="date_created" valueDate="2007-05-04" type="date"/>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="date"/>
+            <column name="retired" valueBoolean="false" type="boolean"/>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="date"/>
+            <column name="retire_reason" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-07-15-16:30" author="ThoughtWorks">
+        <comment>
+            adding unique constraint
+        </comment>
+        <addColumn tableName="muzimaforms_form">
+            <column name="uuid" type="char(38)" />
+        </addColumn>
+
+        <addColumn tableName="muzimaforms_tag">
+            <column name="uuid" type="char(38)" />
+        </addColumn>
+        <addUniqueConstraint constraintName="unique-muzimaforms-form-uuid" tableName="muzimaforms_form" columnNames="uuid"/>
+        <addUniqueConstraint constraintName="unique-muzimaforms-tag-uuid" tableName="muzimaforms_tag" columnNames="uuid"/>
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-08-20-16:40" author="ThoughtWorks">
+        <comment>
+            Adding the name and description columns
+        </comment>
+        <addColumn tableName="muzimaforms_form">
+            <column name="name" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="muzimaforms_form">
+            <column name="description" type="varchar(255)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-08-20-17:08" author="ThoughtWorks" runOnChange="true">
+        <comment>
+            Migrating already imported form names and descriptions
+        </comment>
+        <sql>
+            UPDATE
+            muzimaforms_form mform
+            JOIN form form ON mform.form_id = form.form_id
+            SET
+            mform.name = form.name,
+            mform.description = form.description
+        </sql>
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-12-01-09:30" author="ThoughtWorks">
+        <comment>
+            Adding default values for boolean columns in muzimaforms_form related tables
+        </comment>
+        <addDefaultValue tableName="muzimaforms_form" columnName="retired" defaultValueBoolean="false"/>
+        <addDefaultValue tableName="muzimaforms_tag" columnName="retired" defaultValueBoolean="false"/>
+        <addDefaultValue tableName="muzimaforms_tag_map" columnName="retired" defaultValueBoolean="false"/>
+    </changeSet>
+
+    <changeSet id="muzimaform-2013-12-02-09:30" author="ThoughtWorks">
+        <comment>
+            Adding default values for the existing records in muzimaforms_form related tables
+        </comment>
+        <update tableName="muzimaforms_form">
+            <column name="retired" valueBoolean="false"/>
+            <where>
+                retired is null
+            </where>
+        </update>
+        <update tableName="muzimaforms_tag">
+            <column name="retired" valueBoolean="false"/>
+            <where>
+                retired is null
+            </where>
+        </update>
+        <update tableName="muzimaforms_tag_map">
+            <column name="retired" valueBoolean="false"/>
+            <where>
+                retired is null
+            </where>
+        </update>
+    </changeSet>
+
+    <changeSet id="muzimaform-2014-06-29-22:55" author="nribeka" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzimaforms_form" columnName="discriminator"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the discriminator column
+        </comment>
+        <addColumn tableName="muzimaforms_form">
+            <column name="discriminator" type="varchar(255)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzimaform-2014-07-14-21:36" author="nribeka" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzimaforms_form" columnName="form"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the form relation to resolve the encounter type.
+        </comment>
+        <addColumn tableName="muzimaforms_form">
+            <column name="form" type="char(38)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzimaform-2014-10-16" author="SahajSoft">
+        <comment>
+            Adding version column
+        </comment>
+        <addColumn tableName="muzimaforms_form">
+            <column name="version" type="varchar(255)" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet  id="muzimaform-2014-10-31" author="SahajSoft">
+        <addForeignKeyConstraint baseColumnNames="form"
+                                 baseTableName="muzimaforms_form"
+                                 constraintName="fk_muzimaforms_form_openmrs_form"
+                                 referencedColumnNames="uuid"
+                                 referencedTableName="form"/>
+    </changeSet>
+
+    <changeSet author="shwetha" id="muzimaform-2014-10-17" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzimaforms_form" columnName="name"/>
+                <columnExists tableName="muzimaforms_form" columnName="description"/>
+                <columnExists tableName="muzimaforms_form" columnName="version"/>
+            </and>
+        </preConditions>
+        <dropColumn columnName="name"
+                    tableName="muzimaforms_form"/>
+        <dropColumn columnName="description"
+                    tableName="muzimaforms_form"/>
+        <dropColumn columnName="version"
+                    tableName="muzimaforms_form"/>
+    </changeSet>
+
+
+
+
+
+
+
+
+
+
+
+
+    <changeSet id="muzima-2013-04-18-10-50" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_data_source"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_data_source">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(1024)"/>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="retired" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="datetime"/>
+            <column name="retire_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_data_source_creator"
+                                 baseTableName="muzima_data_source" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_data_source_changed_by"
+                                 baseTableName="muzima_data_source" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_data_source_retired_by"
+                                 baseTableName="muzima_data_source" baseColumnNames="retired_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
+
+    <changeSet id="muzima-2013-04-18-10-51" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_queue_data"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_queue_data">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="discriminator" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_source" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload" type="mediumtext">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_queue_data_creator"
+                                 baseTableName="muzima_queue_data" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_queue_data_changed_by"
+                                 baseTableName="muzima_queue_data" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_queue_data_data_source"
+                                 baseTableName="muzima_queue_data" baseColumnNames="data_source"
+                                 referencedTableName="muzima_data_source" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="muzima-2013-04-18-10-52" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_archive_data"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_archive_data">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="discriminator" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_source" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload" type="mediumtext">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_archived" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_archive_data_creator"
+                                 baseTableName="muzima_archive_data" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_archive_data_changed_by"
+                                 baseTableName="muzima_archive_data" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_archive_data_data_source"
+                                 baseTableName="muzima_archive_data" baseColumnNames="data_source"
+                                 referencedTableName="muzima_data_source" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="muzima-2013-04-18-10-53" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_error_data"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_error_data">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="discriminator" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_source" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload" type="mediumtext">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_processed" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_error_data_creator"
+                                 baseTableName="muzima_error_data" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_error_data_changed_by"
+                                 baseTableName="muzima_error_data" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_error_data_data_source"
+                                 baseTableName="muzima_error_data" baseColumnNames="data_source"
+                                 referencedTableName="muzima_data_source" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="muzima-2013-04-18-10-54" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_notification_data"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_notification_data">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="subject" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payload" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiver" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sender" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="voided" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_notification_data_creator"
+                                 baseTableName="muzima_notification_data" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_notification_data_changed_by"
+                                 baseTableName="muzima_notification_data" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_notification_data_voided_by"
+                                 baseTableName="muzima_notification_data" baseColumnNames="voided_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_notification_data_sender"
+                                 baseTableName="muzima_notification_data" baseColumnNames="sender"
+                                 referencedTableName="person" referencedColumnNames="person_id"/>
+        <addForeignKeyConstraint constraintName="muzima_notification_data_receiver"
+                                 baseTableName="muzima_notification_data" baseColumnNames="receiver"
+                                 referencedTableName="person" referencedColumnNames="person_id"/>
+    </changeSet>
+
+    <changeSet id="nribeka" author="muzima-2014-02-04-07-10-54">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <not>
+                    <columnExists tableName="muzima_notification_data" columnName="status" />
+                </not>
+                <not>
+                    <columnExists tableName="muzima_notification_data" columnName="source"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="muzima_notification_data">
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="source" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="muzima-20140312-110700" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <changeSetExecuted id="nribeka" author="muzima-2014-02-04-07-10-54" changeLogFile="liquibase.xml" />
+        </preConditions>
+        <delete tableName="liquibasechangelog">
+            <where>id='nribeka' and author='muzima-2014-02-04-07-10-54'</where>
+        </delete>
+    </changeSet>
+
+    <changeSet id="muzima-20140312-110800" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_notification_data" columnName="status"/>
+                <columnExists tableName="muzima_notification_data" columnName="source"/>
+            </and>
+        </preConditions>
+        <dropColumn tableName="muzima_notification_data" columnName="status" />
+        <dropColumn tableName="muzima_notification_data" columnName="source" />
+    </changeSet>
+
+    <changeSet id="muzima-20140312-110900" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <not>
+                    <columnExists tableName="muzima_notification_data" columnName="status" />
+                </not>
+                <not>
+                    <columnExists tableName="muzima_notification_data" columnName="source"/>
+                </not>
+            </and>
+        </preConditions>
+        <addColumn tableName="muzima_notification_data">
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="source" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20140312-111000" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_notification_data" columnName="role"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_notification_data">
+            <column name="role" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="muzima_notification_data_role"
+                                 baseTableName="muzima_notification_data" baseColumnNames="role"
+                                 referencedTableName="role" referencedColumnNames="role"/>
+    </changeSet>
+
+    <changeSet id="muzima-20140312-111100" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="muzima_notification_data" columnName="receiver"/>
+        </preConditions>
+        <dropNotNullConstraint tableName="muzima_notification_data" columnName="receiver" columnDataType="int"/>
+    </changeSet>
+
+
+    <changeSet id="muzima-2015-03-30-4:00pm" author="Vikas">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_error_message"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_error_message">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="muzima_error_data_id" type="int">
+            </column>
+            <column name="message" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_error_message_creator"
+                                 baseTableName="muzima_error_message" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_error_message_changed_by"
+                                 baseTableName="muzima_error_message" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_error_message_data"
+                                 baseTableName="muzima_error_message" baseColumnNames="muzima_error_data_id"
+                                 referencedTableName="muzima_error_data" referencedColumnNames="id"/>
+
+    </changeSet>
+
+    <changeSet id="muzima-20150819-111000" author="shwetha">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_queue_data" columnName="location_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_queue_data">
+            <column name="location_id" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="muzima_queue_data">
+            <column name="location_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="muzima_queue_data">
+            <column name="provider_id" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="muzima_queue_data">
+            <column name="provider_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20150820-112000" author="shwetha">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_error_data" columnName="location_id"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_error_data">
+            <column name="location_id" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="muzima_error_data">
+            <column name="location_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="muzima_error_data">
+            <column name="provider_id" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="muzima_error_data">
+            <column name="provider_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20150825-113000" author="shwetha">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_queue_data" columnName="form_name"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_queue_data">
+            <column name="form_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20150825-114000" author="shwetha">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_error_data" columnName="form_name"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_error_data">
+            <column name="form_name" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet id="muzima-20150909-113000" author="shwetha">
+    <preConditions onFail="MARK_RAN">
+        <and>
+            <columnExists tableName="muzima_queue_data" columnName="location_id"/>
+            <columnExists tableName="muzima_queue_data" columnName="location_name"/>
+        </and>
+    </preConditions>
+    <dropColumn tableName="muzima_queue_data" columnName="location_id" />
+    <dropColumn tableName="muzima_queue_data" columnName="location_name" />
+        <addColumn tableName="muzima_queue_data">
+            <column name="location" type="int">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="muzima_queue_data_location"
+                                 baseTableName="muzima_queue_data" baseColumnNames="location"
+                                 referencedTableName="location" referencedColumnNames="location_id"/>
+    </changeSet>
+
+    <changeSet id="muzima-20150909-114000" author="shwetha">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_error_data" columnName="location_id"/>
+                <columnExists tableName="muzima_error_data" columnName="location_name"/>
+            </and>
+        </preConditions>
+        <dropColumn tableName="muzima_error_data" columnName="location_id" />
+        <dropColumn tableName="muzima_error_data" columnName="location_name" />
+        <addColumn tableName="muzima_error_data">
+            <column name="location" type="int">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="muzima_error_data_location"
+                                 baseTableName="muzima_error_data" baseColumnNames="location"
+                                 referencedTableName="location" referencedColumnNames="location_id"/>
+    </changeSet>
+
+    <changeSet id="muzima-20150910-113000" author="shwetha">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_queue_data" columnName="provider_id"/>
+                <columnExists tableName="muzima_queue_data" columnName="provider_name"/>
+            </and>
+        </preConditions>
+        <dropColumn tableName="muzima_queue_data" columnName="provider_id" />
+        <dropColumn tableName="muzima_queue_data" columnName="provider_name" />
+        <addColumn tableName="muzima_queue_data">
+            <column name="provider" type="int">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="muzima_queue_data_provider"
+                                 baseTableName="muzima_queue_data" baseColumnNames="provider"
+                                 referencedTableName="provider" referencedColumnNames="provider_id"/>
+    </changeSet>
+
+    <changeSet id="muzima-20150910-114000" author="shwetha">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_error_data" columnName="provider_id"/>
+                <columnExists tableName="muzima_error_data" columnName="provider_name"/>
+            </and>
+        </preConditions>
+        <dropColumn tableName="muzima_error_data" columnName="provider_id" />
+        <dropColumn tableName="muzima_error_data" columnName="provider_name" />
+        <addColumn tableName="muzima_error_data">
+            <column name="provider" type="int">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="muzima_error_data_provider"
+                                 baseTableName="muzima_error_data" baseColumnNames="provider"
+                                 referencedTableName="provider" referencedColumnNames="provider_id"/>
+    </changeSet>
+
+    <changeSet id="muzima-2015-10-05-11:45am" author="VNAGARAJAN">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_error_data" columnName="patientUuid"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_error_data">
+            <column name="patientUuid" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-2015-10-05-12:00pm" author="VNAGARAJAN">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_queue_data" columnName="patientUuid"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_queue_data">
+            <column name="patientUuid" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+    </changeSet>
+
+    <changeSet id="muzima-2015-10-05-11:31am" author="VNAGARAJAN">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_archive_data" columnName="patientUuid"/>
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_archive_data">
+            <column name="patientUuid" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet author="mssavai" id="muzima-20151102-105200">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_error_data" columnName="patientUuid"/>
+            </and>
+        </preConditions>
+        <renameColumn columnDataType="varchar(255)"
+                newColumnName="patient_uuid"
+                oldColumnName="patientUuid"
+                tableName="muzima_error_data"/>
+    </changeSet>
+    <changeSet author="mssavai" id="muzima-20151102-105300">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_queue_data" columnName="patientUuid"/>
+            </and>
+        </preConditions>
+        <renameColumn columnDataType="varchar(255)"
+                newColumnName="patient_uuid"
+                oldColumnName="patientUuid"
+                tableName="muzima_queue_data"/>
+    </changeSet>
+    <changeSet author="mssavai" id="muzima-20151102-105400">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_archive_data" columnName="patientUuid"/>
+            </and>
+        </preConditions>
+        <renameColumn columnDataType="varchar(255)"
+                newColumnName="patient_uuid"
+                oldColumnName="patientUuid"
+                tableName="muzima_archive_data"/>
+    </changeSet>
+
+    <changeSet id="smbugua" author="muzima-2015-10-15-20-13-12">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_notification_data" columnName="patient" />
+            </not>
+        </preConditions>
+        <addColumn tableName="muzima_notification_data">
+            <column name="patient" type="int">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint constraintName="muzima_notification_patient"
+                                 baseTableName="muzima_notification_data" baseColumnNames="patient"
+                                 referencedTableName="patient" referencedColumnNames="patient_id"/>
+    </changeSet>
+
+
+
+
+
+    <changeSet id="muzimaregistration-2013-06-18-09-20" author="nribeka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzimaregistration_registration_data"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzimaregistration_registration_data">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="temporary_uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="assigned_uuid" type="char(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+
+            <column name="voided" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzimaregistration_registration_data_creator"
+                                 baseTableName="muzimaregistration_registration_data" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzimaregistration_registration_data_changed_by"
+                                 baseTableName="muzimaregistration_registration_data" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzimaregistration_registration_data_voided_by"
+                                 baseTableName="muzimaregistration_registration_data" baseColumnNames="voided_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,95 @@
+<div id="wide-sidebar" class="row">
+    <div class="col-lg-2">
+        <ul class="nav nav-tabs nav-stacked">
+            <li><a href="#/sources">Data Source</a></li>
+            <li><a href="#/queues">Queue Data</a></li>
+            <li><a href="#/registrations">Registrations</a></li>
+            <li><a href="#/forms">Muzima Forms</a></li>
+            <li class="navigation-active"><a href="#/errors">Error Data</a></li>
+        </ul>
+    </div>
+    <div class="col-lg-8">
+
+        <form name="registrationForm" ng-controller="EditCtrl" ng-submit="postEditErrors(registrationForm.$valid)">
+
+            <label for="family_name">Family Name: <span class="required">*</span> </label>
+            <input ng-model="family_name" id="family_name" name="family_name" type="text" required="required">
+
+            </br>
+            <input ng-model="record_uuid" id="record_uuid" name="record_uuid" type="hidden">
+
+            <input ng-model="other_identifier_type_name" id="other_identifier_type_name" name="other_identifier_type_name" type="hidden">
+
+            <label for="given_name">Given Name: <span class="required">*</span></label>
+            <input ng-model="given_name" id="given_name" name="given_name" type="text" required="required">
+
+            </br>
+            <label for="middle_name">Middle Name:</label>
+            <input ng-model="middle_name" id="middle_name" name="middle_name" type="text">
+
+            </br>
+            <label for="phone_number">Phone Number:</label>
+            <input ng-model="phone_number" id="phone_number" name="phone_number" type="text">
+
+            </br>
+            <label for="person_attribute4">Person Attribute4:</label>
+            <input ng-model="person_attribute4" id="person_attribute4" name="person_attribute4" required="required" type="text">
+
+            </br>
+            <label for="sex">Sex: <span class="required">*</span></label>
+            <select class="form-control" ng-model="sex" id="sex" name="sex" required="required">
+                <option value="">...</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select>
+
+            </br>
+            <input ng-model="uuid" class="form-control" id="uuid" name="uuid" type="hidden" required="required" type="tel">
+
+            <label for="identifier_type_id">Patient Type Identifier ID: </label>
+            <input ng-model="identifier_type_id" id="identifier_type_id" name="identifier_type_id" required="required" type="text">
+
+            <label for="other_identifier_type">Other Identifier Type: </label>
+            <input ng-model="other_identifier_type" id="other_identifier_type" name="other_identifier_type" required="required" type="text">
+
+            <label for="other_identifier_type_value">Other Identifier Type Value: </label>
+            <input ng-model="other_identifier_type_value" id="other_identifier_type_value" name="other_identifier_type_value" required="required" type="text">
+            <div style="display:inline; color:red" id="identifierError">
+            </div>
+
+            <label for="medical_record_number">AMRS Universal ID Assigned: <span class="required">*</span></label>
+            <input ng-model="medical_record_number" id="medical_record_number" name="medical_record_number" required="required" type="text">
+            <div id="amrsError" style="display:inline; color:red">
+            </div>
+
+            <label for="birth_date">Select Birthdate <span class="required">*</span></label>
+            <input class="form-control datepicker" ng-model="birth_date" class="form-control datepicker" id="birth_date" name="birth_date" type="date" required="required">
+
+            <label for="birthdate_estimated">Is age estimated from Birthdate: <span class="required">*</span></label>
+            <select class="form-control" ng-model="birthdate_estimated" id="birthdate_estimated" name="birthdate_estimated" required="required">
+                <option value="">...</option>
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+            </select>
+
+            <label for="location_id">Encounter Location <span class="required">*</span> </label>
+            <select class="form-control" ng-model="location_id" id="location_id" name="location_id" required="required">
+                <option value="">...</option>
+                <option value="2">Mosoriot Health Centre</option>
+                <option value="3">Turbo Health Centre</option>
+                <option value="12">Teso District Hospital</option>
+            </select>
+
+            <label for="provider_id">Provider ID: <span class="required">*</span> </label>
+            <select class="form-control" ng-model="provider_id" id="provider_id" name="provider_id" required="required">
+                <option value="">...</option>
+                <option value="1">Super User</option>
+            </select>
+
+            <label for="encounter_datetime">Encounter Date <span class="required">*</span></label>
+            <input class="form-control datepicker" ng-model="encounter_datetime" class="form-control datepicker" id="encounter_datetime" name="encounter_datetime" type="date" required="required">
+
+            <button type="submit" class="btn">Submit Changes</button>
+        </form>
+    </div>
+</div>

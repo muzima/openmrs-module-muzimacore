@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:h="http://www.w3.org/1999/xhtml">
+    <h:head>
+        <h:title>CCSP Dysplasia Form</h:title>
+        <model>
+            <instance>
+                <value template="0"/>
+            </instance>
+        </model>
+    </h:head>
+</h:html>
