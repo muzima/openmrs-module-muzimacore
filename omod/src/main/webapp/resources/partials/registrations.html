@@ -1,0 +1,49 @@
+<div id="wide-sidebar" class="row">
+    <div class="col-lg-2">
+        <ul class="nav nav-tabs nav-stacked">
+            <li><a href="#/sources">Data Source</a></li>
+            <li><a href="#/queues">Queue Data</a></li>
+            <li class="navigation-active"><a href="#/registrations">Registrations</a></li>
+            <li><a href="#/forms">Muzima Forms</a></li>
+            <li><a href="#/errors">Error Data</a></li>
+        </ul>
+    </div>
+    <div class="col-lg-8">
+        <div class="clearfix">
+            <div class="row">
+                <div class="col-lg-3 pull-right">
+                    <input type="text" class="form-control" ng-model="search" placeholder="search..." style="padding-left: 10px;"/>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-striped table-bordered table-condensed table-hover">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Birthdate</th>
+                        <th>Temporary UUID</th>
+                        <th>Assigned UUID</th>
+                        <th>Submitted On</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-hide="registrations.length">
+                        <td colspan="8">You have no registrations for now.</td>
+                    </tr>
+                    <tr ng-repeat="registration in registrations | orderBy:'submitted':true">
+                        <td><a href="#/registration/{{registration.uuid}}">{{(currentPage - 1) * maxSize + $index + 1}}</a></td>
+                        <td>{{registration.patient.name}}</td>
+                        <td>{{registration.patient.gender}}</td>
+                        <td>{{registration.patient.birthdate}}</td>
+                        <td>{{registration.temporaryUuid}}</td>
+                        <td>{{registration.assignedUuid}}</td>
+                        <td>{{registration.submitted}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

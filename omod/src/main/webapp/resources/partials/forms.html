@@ -1,0 +1,134 @@
+<div id="wide-sidebar" class="row" ng-init="init()">
+    <div class="col-lg-2">
+        <ul class="nav nav-tabs nav-stacked">
+            <li><a href="#/sources">Data Source</a></li>
+            <li><a href="#/queues">Queue Data</a></li>
+            <li><a href="#/registrations">Registrations</a></li>
+            <li class="navigation-active"><a href="#/forms">Muzima Forms</a></li>
+            <li><a href="#/errors">Error Data</a></li>
+        </ul>
+    </div>
+    <div class="col-lg-9">
+        <div class="clearfix">
+            <div class="row navbar navbar-inverse navbar-custom">
+                <a class="navbar-brand" href="#/forms" style="color: #ffffff; font-size: 20px"><i class="icon-home"></i></a>
+                <div class="container-fluid navbar-right">
+					<span class="nav navbar-nav form-group" style="margin-right: 5px">
+						<form>
+							<input type="text" class="form-control navbar-btn" ng-model="searchQuery" placeholder="Search" style="padding-left: 5px; padding-right: 5px; margin-right: 5px">
+						</form>
+                    </span>
+                    <span class="nav navbar-nav" style="margin-right: 5px">
+                        <button type="button" class="btn btn-success dropdown-toggle navbar-btn" data-toggle="dropdown">
+                          Import <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#/xforms" style="color: #323232 ;text-decoration: none">Existing</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#/import/xforms" style="color: #323232 ;text-decoration: none">Upload</a></li>
+                        </ul>
+					</span>
+                </div>
+            </div>
+
+            <div ng-show="fetchingForms">
+                <div style="text-align: center">
+                    <h3>Fetching forms...</h3>
+                </div>
+                <div class="progress progress-striped active">
+                    <div class="progress-bar" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <div ng-show="tagFilterActive() && !fetchingForms" class="well well-large">
+                <span>Filter by: </span>
+                <span class="tag" ng-repeat="tag in activeTagFilters">
+                    <span class="label form-tag" ng-style="tagStyle(tag.id)">
+                        <span>{{tag.name}} </span>
+                        <span ng-click="removeTagFilter(tag)"><i class="icon-remove"></i></span>
+                    </span>
+                </span>
+            </div>
+
+            <div class="row">
+                <table class="table table-bordered table-condensed table-hover">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Version</th>
+                        <th>Discriminator</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody ng-repeat="muzimaform in muzimaforms | filter:searchQuery | tagFilter:activeTagFilters">
+                    <tr>
+                        <td nowrap>
+                                <span>
+                                    <a title="Preview Form" ng-click="showFormPreview(muzimaform.form.html, muzimaform.form.model, muzimaform.form.modelJson)">
+                                        <i class="icon-eye-open"></i>
+                                    </a>
+                                </span>
+                            <span>
+                                    <a title="Add Tags" ng-click="editMode = !editMode">
+                                        <i class="icon-tags"></i>
+                                    </a>
+                                </span>
+                            <span>
+                                    <a title="Update form template" ng-click="editForm(muzimaform)">
+                                        <i class="icon-edit"></i>
+                                    </a>
+                                </span>
+                        </td>
+                        <td class="small">{{muzimaform.form.name}}</td>
+                        <td class="small">{{muzimaform.form.version || ""}}</td>
+                        <td class="small">{{muzimaform.form.discriminator || ""}}</td>
+                        <td class="small">{{muzimaform.form.description || ""}}</td>
+                        <td>
+                                <span class="retire-form">
+                                    <a title="Retire" ng-click="toggleRetireForm(muzimaform)" ng-show="!muzimaform.retired">
+                                        <i class="icon-remove"></i>
+                                    </a>
+                                </span>
+                        </td>
+                    </tr>
+                    <tr ng-show="muzimaform.retired || muzimaform.form.tags.length || editMode">
+                        <td></td>
+                        <td colspan=4>
+                                <span class="tag" ng-show="muzimaform.form.tags.length" ng-repeat="tag in muzimaform.form.tags">
+                                    <span class="label form-tag" ng-style="tagStyle(tag.id)">
+                                        <span ng-click="addTagFilter(tag);$event.stopPropagation()">{{tag.name}} </span>
+                                        <span ng-click="removeTag(muzimaform.form, tag)">
+                                            <i class="icon-remove"></i>
+                                        </span>
+                                    </span>
+                                </span>
+                            <div ng-show="editMode">
+                                <form ng-submit="saveTag(muzimaform)">
+                                    <input name="newTag" ng-model="muzimaform.newTag" ng-trim="true" type="text" class="form-control" placeholder="Add tag" style="margin-top: 15px; padding-left: 5px; padding-right: 5px"/>
+                                </form>
+                            </div>
+
+                            <div class="retire-form" ng-show="muzimaform.retired">
+                                <input type="text" class="retire-reason" placeholder="Retire reason" ng-model="muzimaform.retireReason" ng-show="muzimaform.retired" style="margin-top: 15px;"/>
+                                <a class="btn btn-danger" ng-click="remove(muzimaform)" ng-show="muzimaform.retired">Retire</a>
+                                <a class="btn" ng-click="toggleRetireForm(muzimaform)" ng-show="muzimaform.retired">Cancel</a>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="close-box" ng-show="!hasForms() && !fetchingForms">
+                <h2>No Available Forms</h2>
+
+                <p>Please import forms by clicking on the import button.</p>
+
+                <p>You can import forms from Openmrs XForms module, from Formhub or from your file system.</p>
+            </div>
+        </div>
+    </div>
+</div>

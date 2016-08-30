@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xf:xforms xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jr="http://openrosa.org/javarosa">
+  <xf:model id="openmrs_model">
+    <xf:instance id="openmrs_model_instance">
+      <form xmlns:openmrs="/moduleServlet/formentry/forms/schema/22-1" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003" id="22" name="1 Basic Form" version="0.1" uuid="464806c1-9d3a-4bd0-979f-a70b1aac217a">
+  <header>
+    <enterer/>
+    <date_entered/>
+    <session/>
+    <uid/>
+  </header>
+  <patient>
+    <patient.birthdate openmrs_table="patient" openmrs_attribute="birthdate"/>
+    <patient.birthdate_estimated openmrs_table="patient" openmrs_attribute="birthdate_estimated"/>
+    <patient.family_name openmrs_table="patient_name" openmrs_attribute="family_name"/>
+    <patient.given_name openmrs_table="patient_name" openmrs_attribute="given_name"/>
+    <patient.medical_record_number openmrs_table="patient_identifier" openmrs_attribute="identifier"/>
+    <patient.middle_name openmrs_table="patient_name" openmrs_attribute="middle_name"/>
+    <patient.patient_id openmrs_table="patient" openmrs_attribute="patient_id"/>
+    <patient.sex openmrs_table="patient" openmrs_attribute="gender"/>
+    <patient.tribe openmrs_table="patient" openmrs_attribute="tribe"/>
+    <patient_address.address1 openmrs_table="patient_address" openmrs_attribute="address1"/>
+    <patient_address.address2 openmrs_table="patient_address" openmrs_attribute="address2"/>
+  </patient>
+  <encounter>
+    <encounter.encounter_datetime openmrs_table="encounter" openmrs_attribute="encounter_datetime">'today()'</encounter.encounter_datetime>
+    <encounter.location_id openmrs_table="encounter" openmrs_attribute="location_id"/>
+    <encounter.provider_id openmrs_table="encounter" openmrs_attribute="provider_id" provider_id_type="PROVIDER.ID"/>
+  </encounter>
+  <obs>
+    <weight_kg openmrs_concept="5089^WEIGHT (KG)^99DCT" openmrs_datatype="NM">
+        <date xsi:nil="true"/>
+        <time xsi:nil="true"/>
+        <value xsi:nil="true"/>
+    </weight_kg>
+  </obs>
+  <problem_list openmrs_concept="1284^PROBLEM LIST^99DCT" openmrs_datatype="ZZ">
+    <problem_added openmrs_concept="6042^PROBLEM ADDED^99DCT" openmrs_datatype="CWE" multiple="0">
+        <date xsi:nil="true"/>
+        <time xsi:nil="true"/>
+        <value xsi:nil="true"/>
+    </problem_added>
+    <problem_resolved openmrs_concept="6097^PROBLEM RESOLVED^99DCT" openmrs_datatype="CWE" multiple="0">
+        <date xsi:nil="true"/>
+        <time xsi:nil="true"/>
+        <value xsi:nil="true"/>
+    </problem_resolved>
+  </problem_list>
+  <other/></form>
+    </xf:instance>
+    <xf:bind id="patient.birthdate" nodeset="/form/patient/patient.birthdate" type="xsd:date" locked="true()" jr:preload="patient" jr:preloadParams="birthDate"/>
+    <xf:bind id="patient.birthdate_estimated" nodeset="/form/patient/patient.birthdate_estimated" type="xsd:boolean" locked="true()"/>
+    <xf:bind id="patient.family_name" nodeset="/form/patient/patient.family_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="familyName"/>
+    <xf:bind id="patient.given_name" nodeset="/form/patient/patient.given_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="givenName"/>
+    <xf:bind id="patient.medical_record_number" nodeset="/form/patient/patient.medical_record_number" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="patientIdentifier"/>
+    <xf:bind id="patient.middle_name" nodeset="/form/patient/patient.middle_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="middleName"/>
+    <xf:bind id="patient.patient_id" nodeset="/form/patient/patient.patient_id" type="xsd:int" required="true()" visible="false()" jr:preload="patient" jr:preloadParams="patientId"/>
+    <xf:bind id="patient.sex" nodeset="/form/patient/patient.sex" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="sex"/>
+    <xf:bind id="patient.tribe" nodeset="/form/patient/patient.tribe" type="xsd:string" locked="true()"/>
+    <xf:bind id="patient_address.address1" nodeset="/form/patient/patient_address.address1" type="xsd:string" locked="true()"/>
+    <xf:bind id="patient_address.address2" nodeset="/form/patient/patient_address.address2" type="xsd:string" locked="true()"/>
+    <xf:bind id="encounter.encounter_datetime" nodeset="/form/encounter/encounter.encounter_datetime" type="xsd:date" constraint=". &lt;= today()" message="Encounter date cannot be after today" required="true()"/>
+    <xf:bind id="encounter.location_id" nodeset="/form/encounter/encounter.location_id" type="xsd:string" required="true()"/>
+    <xf:bind id="encounter.provider_id" nodeset="/form/encounter/encounter.provider_id" type="xsd:string" required="true()"/>
+    <xf:bind id="weight_kg" nodeset="/form/obs/weight_kg/value" type="xsd:decimal" constraint=". &gt;= 0.0 and . &lt;= 250.0" message="value should be between 0.0 and 250.0 inclusive"/>
+    <xf:bind id="problem_added" nodeset="/form/problem_list/problem_added"/>
+    <xf:bind id="problem_resolved" nodeset="/form/problem_list/problem_resolved"/>
+    <xf:bind id="problem_list_problem_added_value" nodeset="/form/problem_list/problem_added/value" type="xsd:string"/>
+    <xf:bind id="problem_list_problem_resolved_value" nodeset="/form/problem_list/problem_resolved/value" type="xsd:string"/>
+  </xf:model>
+  <xf:group id="1">
+    <xf:label>Page1</xf:label>
+    <xf:input bind="patient.birthdate">
+      <xf:label>BIRTHDATE</xf:label>
+    </xf:input>
+    <xf:input bind="patient.birthdate_estimated">
+      <xf:label>BIRTHDATE ESTIMATED</xf:label>
+    </xf:input>
+    <xf:input bind="patient.family_name">
+      <xf:label>FAMILY NAME</xf:label>
+    </xf:input>
+    <xf:input bind="patient.given_name">
+      <xf:label>GIVEN NAME</xf:label>
+    </xf:input>
+    <xf:input bind="patient.medical_record_number">
+      <xf:label>MEDICAL RECORD NUMBER</xf:label>
+    </xf:input>
+    <xf:input bind="patient.middle_name">
+      <xf:label>MIDDLE NAME</xf:label>
+    </xf:input>
+    <xf:input bind="patient.patient_id">
+      <xf:label>PATIENT ID</xf:label>
+    </xf:input>
+    <xf:input bind="patient.sex">
+      <xf:label>SEX</xf:label>
+    </xf:input>
+    <xf:input bind="patient.tribe">
+      <xf:label>TRIBE</xf:label>
+    </xf:input>
+    <xf:input bind="patient_address.address1">
+      <xf:label>ADDRESS1</xf:label>
+    </xf:input>
+    <xf:input bind="patient_address.address2">
+      <xf:label>ADDRESS2</xf:label>
+    </xf:input>
+    <xf:input bind="encounter.encounter_datetime">
+      <xf:label>ENCOUNTER DATETIME</xf:label>
+    </xf:input>
+    <xf:select1 bind="encounter.location_id">
+      <xf:label>LOCATION ID</xf:label>
+      <xf:item id="4">
+        <xf:label>Chulaimbo [4]</xf:label>
+        <xf:value>4</xf:value>
+      </xf:item>
+      <xf:item id="3">
+        <xf:label>Mosoriot Hospital [3]</xf:label>
+        <xf:value>3</xf:value>
+      </xf:item>
+      <xf:item id="1">
+        <xf:label>Unknown Location [1]</xf:label>
+        <xf:value>1</xf:value>
+      </xf:item>
+      <xf:item id="11">
+        <xf:label>Unknown Location 10 [11]</xf:label>
+        <xf:value>11</xf:value>
+      </xf:item>
+      <xf:item id="12">
+        <xf:label>Unknown Location 11 [12]</xf:label>
+        <xf:value>12</xf:value>
+      </xf:item>
+      <xf:item id="13">
+        <xf:label>Unknown Location 12 [13]</xf:label>
+        <xf:value>13</xf:value>
+      </xf:item>
+      <xf:item id="14">
+        <xf:label>Unknown Location 13 [14]</xf:label>
+        <xf:value>14</xf:value>
+      </xf:item>
+      <xf:item id="15">
+        <xf:label>Unknown Location 14 [15]</xf:label>
+        <xf:value>15</xf:value>
+      </xf:item>
+      <xf:item id="16">
+        <xf:label>Unknown Location 15 [16]</xf:label>
+        <xf:value>16</xf:value>
+      </xf:item>
+      <xf:item id="17">
+        <xf:label>Unknown Location 16 [17]</xf:label>
+        <xf:value>17</xf:value>
+      </xf:item>
+      <xf:item id="18">
+        <xf:label>Unknown Location 17 [18]</xf:label>
+        <xf:value>18</xf:value>
+      </xf:item>
+      <xf:item id="19">
+        <xf:label>Unknown Location 18 [19]</xf:label>
+        <xf:value>19</xf:value>
+      </xf:item>
+      <xf:item id="5">
+        <xf:label>Unknown Location 4 [5]</xf:label>
+        <xf:value>5</xf:value>
+      </xf:item>
+      <xf:item id="6">
+        <xf:label>Unknown Location 5 [6]</xf:label>
+        <xf:value>6</xf:value>
+      </xf:item>
+      <xf:item id="7">
+        <xf:label>Unknown Location 6 [7]</xf:label>
+        <xf:value>7</xf:value>
+      </xf:item>
+      <xf:item id="8">
+        <xf:label>Unknown Location 7 [8]</xf:label>
+        <xf:value>8</xf:value>
+      </xf:item>
+      <xf:item id="9">
+        <xf:label>Unknown Location 8 [9]</xf:label>
+        <xf:value>9</xf:value>
+      </xf:item>
+      <xf:item id="10">
+        <xf:label>Unknown Location 9  [10]</xf:label>
+        <xf:value>10</xf:value>
+      </xf:item>
+      <xf:item id="2">
+        <xf:label>Wishard Hospital [2]</xf:label>
+        <xf:value>2</xf:value>
+      </xf:item>
+    </xf:select1>
+    <xf:select1 bind="encounter.provider_id">
+      <xf:label>PROVIDER ID</xf:label>
+      <xf:item id="1">
+        <xf:label>Super User [admin]</xf:label>
+        <xf:value>1</xf:value>
+      </xf:item>
+    </xf:select1>
+    <xf:input bind="weight_kg">
+      <xf:label>WEIGHT (KG)</xf:label>
+      <xf:hint>Patient's weight in kilograms.</xf:hint>
+    </xf:input>
+    <xf:group id="problem_list/problem_added">
+      <xf:label>PROBLEM ADDED</xf:label>
+      <xf:hint>Diagnosis or problem noted on a patient encounter.</xf:hint>
+      <xf:repeat bind="problem_added">
+        <xf:input bind="problem_list_problem_added_value">
+          <xf:label>problem_added value</xf:label>
+          <xf:hint>Diagnosis or problem noted on a patient encounter.</xf:hint>
+        </xf:input>
+      </xf:repeat>
+    </xf:group>
+    <xf:group id="problem_list/problem_resolved">
+      <xf:label>PROBLEM RESOLVED</xf:label>
+      <xf:hint>Diagnosis or problem noted on a patient encounter as being resolved.</xf:hint>
+      <xf:repeat bind="problem_resolved">
+        <xf:input bind="problem_list_problem_resolved_value">
+          <xf:label>problem_resolved value</xf:label>
+          <xf:hint>Diagnosis or problem noted on a patient encounter as being resolved.</xf:hint>
+        </xf:input>
+      </xf:repeat>
+    </xf:group>
+  </xf:group>
+</xf:xforms>
