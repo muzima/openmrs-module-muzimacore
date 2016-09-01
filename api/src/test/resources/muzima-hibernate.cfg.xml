@@ -12,5 +12,8 @@
         <mapping resource="DataSource.hbm.xml"/>
         <mapping resource="MuzimaErrorMessage.hbm.xml"/>
         <mapping resource="RegistrationData.hbm.xml"/>
+        <mapping resource="MuzimaForm.hbm.xml" />
+        <mapping resource="MuzimaFormTag.hbm.xml" />
+        <mapping resource="MuzimaXForm.hbm.xml" />
     </session-factory>
 </hibernate-configuration>

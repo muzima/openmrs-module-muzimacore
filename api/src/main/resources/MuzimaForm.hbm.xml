@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="org.openmrs.module.muzima">
-    <class name="MuzimaForm" table="muzimaforms_form">
+    <class name="MuzimaForm" table="muzima_form">
         <id name="id" type="java.lang.Integer" column="form_id">
             <generator class="increment"/>
         </id>
@@ -11,7 +11,7 @@
                   column="uuid" length="38" unique="true"/>
 
         <property name="discriminator" type="java.lang.String"/>
-        <set name="tags" table="muzimaforms_tag_map" cascade="all-delete-orphan">
+        <set name="tags" table="muzima_form_tag_map" cascade="all-delete-orphan">
             <key column="form_id" not-null="true"/>
             <many-to-many column="tag_id" class="MuzimaFormTag"/>
         </set>
