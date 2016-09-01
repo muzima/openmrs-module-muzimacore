@@ -3,8 +3,8 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="org.openmrs.module.muzima">
-    <class name="MuzimaFormTag" table="muzimaforms_tag">
-        <id name="id" type="java.lang.Integer" column="muzimaforms_tag_id" unsaved-value="0">
+    <class name="MuzimaFormTag" table="muzima_form_tag">
+        <id name="id" type="java.lang.Integer" column="muzima_form_tag_id" unsaved-value="0">
             <generator class="native"/>
         </id>
         <property name="uuid" type="java.lang.String"
