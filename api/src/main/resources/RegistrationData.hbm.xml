@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="org.openmrs.module.muzima.model">
 
-	<class name="RegistrationData" table="muzimaregistration_registration_data">
+	<class name="RegistrationData" table="muzima_registration_data">
         <id name="id" type="java.lang.Integer" column="id" unsaved-value="0">
             <generator class="native"/>
         </id>

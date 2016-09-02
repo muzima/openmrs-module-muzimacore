@@ -28,45 +28,42 @@ public class MuzimaCoreModuleActivator implements ModuleActivator {
      * @see ModuleActivator#willRefreshContext()
      */
     public void willRefreshContext() {
-        log.info("Refreshing Muzima Processor Module");
+        log.info("Refreshing Muzima Core Module");
     }
 
     /**
      * @see ModuleActivator#contextRefreshed()
      */
     public void contextRefreshed() {
-        log.info("Muzima Processor Module refreshed");
+        log.info("Muzima Processor Core refreshed");
     }
 
     /**
      * @see ModuleActivator#willStart()
      */
     public void willStart() {
-        log.info("Starting Muzima Processor Module");
+        log.info("Starting Muzima Core Module");
     }
 
     /**
      * @see ModuleActivator#started()
      */
     public void started() {
-        log.info("Muzima Processor Module started");
-
-//        MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
-//        log.info("Accessing muzima form service: " + muzimaFormService.getAll().size());
+        log.info("Muzima Core Module started");
     }
 
     /**
      * @see ModuleActivator#willStop()
      */
     public void willStop() {
-        log.info("Stopping Muzima Processor Module");
+        log.info("Stopping Muzima Core Module");
     }
 
     /**
      * @see ModuleActivator#stopped()
      */
     public void stopped() {
-        log.info("Muzima Processor Module stopped");
+        log.info("Muzima Core Module stopped");
     }
 
 }
