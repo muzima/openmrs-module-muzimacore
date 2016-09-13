@@ -3,7 +3,7 @@ package org.openmrs.module.muzima.api.xForm2MuzimaTransform;
 import org.custommonkey.xmlunit.Diff;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.module.muzima.api.service.impl.EnketoResult;
+import org.openmrs.module.muzima.model.EnketoResult;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.*;
 
 import javax.xml.transform.TransformerFactory;

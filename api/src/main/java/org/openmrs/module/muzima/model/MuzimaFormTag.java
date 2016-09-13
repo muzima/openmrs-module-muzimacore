@@ -1,4 +1,4 @@
-package org.openmrs.module.muzima;
+package org.openmrs.module.muzima.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsData;

@@ -29,6 +29,7 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/SourceController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/UpdateController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/XFormsController.js"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/ConfigController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/fileUpload.js"/>
 
 <h3><spring:message code="muzimacore.title"/></h3>

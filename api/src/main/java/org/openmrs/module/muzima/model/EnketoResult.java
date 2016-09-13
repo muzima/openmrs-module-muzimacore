@@ -1,4 +1,4 @@
-package org.openmrs.module.muzima.api.service.impl;
+package org.openmrs.module.muzima.model;
 
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;

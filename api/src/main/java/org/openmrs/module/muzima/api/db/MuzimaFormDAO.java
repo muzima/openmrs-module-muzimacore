@@ -1,7 +1,7 @@
 package org.openmrs.module.muzima.api.db;
 
-import org.openmrs.module.muzima.MuzimaForm;
-import org.openmrs.module.muzima.MuzimaXForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.xforms.Xform;
 
 import java.util.Date;

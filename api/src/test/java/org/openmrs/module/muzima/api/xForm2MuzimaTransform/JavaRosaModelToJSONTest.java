@@ -4,7 +4,7 @@ import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.module.muzima.api.service.impl.EnketoResult;
+import org.openmrs.module.muzima.model.EnketoResult;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.*;
 
 import javax.xml.transform.TransformerFactory;

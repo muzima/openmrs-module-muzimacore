@@ -21,7 +21,8 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaConfig;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.DataSource;
@@ -217,5 +218,16 @@ public class WebConverter {
             System.out.println("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
         }
         return returnedString;
+    }
+
+    public static Map<String, Object> convertMuzimaConfig(final MuzimaConfig config) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (config != null) {
+            map.put("uuid", config.getUuid());
+            map.put("name", config.getName());
+            map.put("description", config.getDescription());
+            map.put("created", Context.getDateFormat().format(config.getDateCreated()));
+        }
+        return map;
     }
 }

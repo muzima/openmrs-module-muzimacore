@@ -2,11 +2,10 @@ package org.openmrs.module.muzima.api.service;
 
 import org.javarosa.xform.parse.ValidationMessages;
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.muzima.MuzimaForm;
-import org.openmrs.module.muzima.MuzimaXForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
