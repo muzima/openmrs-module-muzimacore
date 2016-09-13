@@ -5,8 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.openmrs.module.muzima.MuzimaForm;
-import org.openmrs.module.muzima.MuzimaXForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.xforms.Xform;
 

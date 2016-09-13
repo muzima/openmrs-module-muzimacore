@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;

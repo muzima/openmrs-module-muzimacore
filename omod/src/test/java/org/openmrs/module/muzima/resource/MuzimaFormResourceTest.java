@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.web.resource.muzima.MuzimaFormResource;
 import org.openmrs.module.webservices.rest.SimpleObject;

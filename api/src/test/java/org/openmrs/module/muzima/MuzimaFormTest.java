@@ -2,7 +2,7 @@ package org.openmrs.module.muzima;
 
 import org.junit.Test;
 import org.openmrs.Form;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

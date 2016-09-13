@@ -1,5 +1,7 @@
 package org.openmrs.module.muzima;
 
+import org.openmrs.module.muzima.model.MuzimaFormTag;
+
 public class MuzimaFormTagBuilder extends Builder<MuzimaFormTag> {
     private Integer id;
     private String name;

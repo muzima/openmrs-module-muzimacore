@@ -33,7 +33,7 @@ public class RegistrationController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getNotificationsFor(final @RequestParam(value = "uuid") String uuid) {
+    public Map<String, Object> getRegistration(final @RequestParam(value = "uuid") String uuid) {
         RegistrationDataService service = Context.getService(RegistrationDataService.class);
         return WebConverter.convertRegistrationData(service.getRegistrationDataByUuid(uuid));
     }

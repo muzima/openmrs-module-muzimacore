@@ -33,13 +33,14 @@
     <mappingFiles>
         ArchiveData.hbm.xml
         DataSource.hbm.xml
-        MuzimaErrorMessage.hbm.xml
         ErrorData.hbm.xml
-        QueueData.hbm.xml
-        NotificationData.hbm.xml
+        MuzimaConfig.hbm.xml
+        MuzimaErrorMessage.hbm.xml
         MuzimaForm.hbm.xml
-        MuzimaXForm.hbm.xml
         MuzimaFormTag.hbm.xml
+        MuzimaXForm.hbm.xml
+        NotificationData.hbm.xml
+        QueueData.hbm.xml
         RegistrationData.hbm.xml
     </mappingFiles>
 

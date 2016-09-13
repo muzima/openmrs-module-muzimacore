@@ -13,6 +13,7 @@
         <mapping resource="MuzimaErrorMessage.hbm.xml"/>
         <mapping resource="RegistrationData.hbm.xml"/>
         <mapping resource="MuzimaForm.hbm.xml" />
+        <mapping resource="MuzimaConfig.hbm.xml" />
         <mapping resource="MuzimaFormTag.hbm.xml" />
         <mapping resource="MuzimaXForm.hbm.xml" />
     </session-factory>

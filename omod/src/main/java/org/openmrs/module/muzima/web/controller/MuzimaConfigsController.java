@@ -17,7 +17,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
+import org.openmrs.module.muzima.api.service.MuzimaConfigService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
@@ -36,42 +38,31 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Controller
-@RequestMapping(value = "/module/muzimacore/queues.json")
-public class QueuesController {
+@RequestMapping(value = "/module/muzimacore/configs.json")
+public class MuzimaConfigsController {
 
     protected Log log = LogFactory.getLog(getClass());
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getQueues(final @RequestParam(value = "search") String search,
+    public Map<String, Object> getConfigs(final @RequestParam(value = "search") String search,
                                          final @RequestParam(value = "pageNumber") Integer pageNumber,
                                          final @RequestParam(value = "pageSize") Integer pageSize) {
         Map<String, Object> response = new HashMap<String, Object>();
 
         if (Context.isAuthenticated()) {
-            DataService dataService = Context.getService(DataService.class);
-            int pages = (dataService.countQueueData(search).intValue() + pageSize - 1) / pageSize;
+            MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
+            System.out.println("+++++++++++++++++++++++++++1");
+            int pages = (configService.countConfigs(search).intValue() + pageSize - 1) / pageSize;
+            System.out.println("+++++++++++++++++++++++++++2");
             List<Object> objects = new ArrayList<Object>();
-            for (QueueData queueData : dataService.getPagedQueueData(search, pageNumber, pageSize)) {
-                objects.add(WebConverter.convertQueueData(queueData));
+            for (MuzimaConfig config : configService.getPagedConfigs(search, pageNumber, pageSize)) {
+                objects.add(WebConverter.convertMuzimaConfig(config));
             }
 
             response.put("pages", pages);
             response.put("objects", objects);
         }
         return response;
-    }
-
-    @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
-    public void deleteQueue(final @RequestBody Map<String, Object> map) {
-        if (Context.isAuthenticated()) {
-            List<String> uuidList = (List<String>) map.get("uuidList");
-            DataService dataService = Context.getService(DataService.class);
-            for (String uuid : uuidList) {
-                QueueData queueData = dataService.getQueueDataByUuid(uuid);
-                dataService.purgeQueueData(queueData);
-            }
-        }
     }
 }
