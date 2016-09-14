@@ -1,0 +1,2690 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xf:xforms xmlns:xf="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jr="http://openrosa.org/javarosa">
+	<xf:head>
+		<xf:title>Dispensary Form</xf:title>
+		<xf:model id="openmrs_model">
+			<xf:instance id="openmrs_model_instance">
+				<form id="394" name="Dispensary Form" version="0.1" xmlns:openmrs="/moduleServlet/formentry/forms/schema/4-1" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003">
+					<header>
+					<enterer/>
+						<date_entered/>
+						<session/>
+						<uid/>
+					</header>
+					<patient>
+						<patient.patient_id openmrs_table="patient" openmrs_attribute="patient_id"/>
+						<patient_identifier.identifier_type_id openmrs_table="patient_identifier" openmrs_attribute="identifier_type_id"/>
+						<patient.medical_record_number openmrs_table="patient_identifier" openmrs_attribute="identifier"/>
+						<patient.birthdate openmrs_table="patient" openmrs_attribute="birthdate"/>
+						<patient.birthdate_estimated openmrs_table="patient" openmrs_attribute="birthdate_estimated"/>
+						<patient.family_name openmrs_table="patient_name" openmrs_attribute="family_name"/>
+						<patient.given_name openmrs_table="patient_name" openmrs_attribute="given_name"/>
+						<patient.middle_name openmrs_table="patient_name" openmrs_attribute="middle_name"/>
+						<patient.sex openmrs_table="patient" openmrs_attribute="gender"/>
+                        <patient.uuid openmrs_table="patient" openmrs_attribute="uuid"/>
+                        <person_attribute10 openmrs_table="" openmrs_attribute=""/>
+						<tmp>
+							<amrs_id_scan/>
+							<amrs_id_manual/>
+							<amrs_id_manual_confirm/>
+							<birthdate_type/>
+							<age/>
+							<age_in_years/>
+							<birth_date/>
+							<birthdate_estimated/>
+						</tmp>
+					</patient>
+					<encounter>
+						<encounter.encounter_datetime openmrs_table="encounter" openmrs_attribute="encounter_datetime"/>
+						<encounter.location_id openmrs_table="encounter" openmrs_attribute="location_id"/>
+						<encounter.provider_id openmrs_table="encounter" openmrs_attribute="provider_id"/>
+						<tmp>
+							<provider_id_select/>
+							<provider_id_text/>
+						</tmp>
+					</encounter>
+					<obs openmrs_concept="1238^MEDICAL RECORD OBSERVATIONS^99DCT" openmrs_datatype="ZZ">
+						<start_time openmrs_concept="1693^START TIME^99DCT" openmrs_datatype="TM"><value/></start_time>
+    					<end_time openmrs_concept="1694^END TIME^99DCT" openmrs_datatype="TM"><value/></end_time>
+						<current_visit_type openmrs_concept="1839^CURRENT VISIT TYPE^99DCT" openmrs_datatype="CWE"><value/></current_visit_type>
+						<date_of_initial_hct_encounter openmrs_concept="7038^DATE OF INITIAL HCT ENCOUNTER^99DCT" openmrs_datatype="DT"><value/></date_of_initial_hct_encounter>
+						<systolic_blood_pressure_detailed openmrs_concept="7039^SYSTOLIC BLOOD PRESSURE, DETAILED^99DCT" openmrs_datatype="ZZ">
+							<location_of_contact openmrs_concept="1569^LOCATION OF CONTACT^99DCT" openmrs_datatype="CWE"><value/></location_of_contact>
+							<systolic_blood_pressure openmrs_concept="5085^SYSTOLIC BLOOD PRESSURE^99DCT" openmrs_datatype="NM"><value/></systolic_blood_pressure>
+						</systolic_blood_pressure_detailed>
+						<diastolic_blood_pressure_detailed openmrs_concept="7040^DIASTOLIC BLOOD PRESSURE, DETAILED^99DCT" openmrs_datatype="ZZ">
+							<location_of_contact openmrs_concept="1569^LOCATION OF CONTACT^99DCT" openmrs_datatype="CWE"><value/></location_of_contact>
+							<diastolic_blood_pressure openmrs_concept="5086^DIASTOLIC BLOOD PRESSURE^99DCT" openmrs_datatype="NM"><value/></diastolic_blood_pressure>
+						</diastolic_blood_pressure_detailed>
+						<fasting_blood_sugar_detailed openmrs_concept="7041^FASTING BLOOD SUGAR, DETAILED^99DCT" openmrs_datatype="ZZ">
+							<location_of_contact openmrs_concept="1569^LOCATION OF CONTACT^99DCT" openmrs_datatype="CWE"><value/></location_of_contact>
+							<serum_glucose_fasting openmrs_concept="6252^SERUM GLUCOSE, FASTING^99DCT" openmrs_datatype="NM"><value/></serum_glucose_fasting>
+						</fasting_blood_sugar_detailed>
+						<random_blood_sugar_detailed openmrs_concept="7042^RANDOM BLOOD SUGAR, DETAILED^99DCT" openmrs_datatype="ZZ">
+							<location_of_contact openmrs_concept="1569^LOCATION OF CONTACT^99DCT" openmrs_datatype="CWE"><value/></location_of_contact>
+							<serum_glucose openmrs_concept="887^SERUM GLUCOSE^99DCT" openmrs_datatype="NM"><value/></serum_glucose>
+						</random_blood_sugar_detailed>
+						<phct_review/>
+						<tmp_drugs/>
+						<!-- Metformin -->
+						<patient_reported_current_other_treatment openmrs_concept="1919^PATIENT REPORTED CURRENT OTHER TREATMENT^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+						</patient_reported_current_other_treatment>
+						<!-- Glibenclamide -->
+						<patient_reported_current_other_treatment_1 openmrs_concept="1919^PATIENT REPORTED CURRENT OTHER TREATMENT^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+						</patient_reported_current_other_treatment_1>
+						<!-- Enalapril -->
+						<patient_reported_current_other_treatment_2 openmrs_concept="1919^PATIENT REPORTED CURRENT OTHER TREATMENT^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+						</patient_reported_current_other_treatment_2>
+						<!-- HCTZ -->
+						<patient_reported_current_other_treatment_3 openmrs_concept="1919^PATIENT REPORTED CURRENT OTHER TREATMENT^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+						</patient_reported_current_other_treatment_3>
+						<!-- Losartan -->
+						<patient_reported_current_other_treatment_4 openmrs_concept="1919^PATIENT REPORTED CURRENT OTHER TREATMENT^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+						</patient_reported_current_other_treatment_4>
+						<!-- Nifedipine -->
+						<patient_reported_current_other_treatment_5 openmrs_concept="1919^PATIENT REPORTED CURRENT OTHER TREATMENT^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+						</patient_reported_current_other_treatment_5>
+						<!-- Other Medications -->
+						<patient_reported_current_other_treatment_6 openmrs_concept="1919^PATIENT REPORTED CURRENT OTHER TREATMENT^99DCT" openmrs_datatype="ZZ">
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<number_of_milliliter openmrs_concept="1940^NUMBER OF MILLILITER^99DCT" openmrs_datatype="NM"><value/></number_of_milliliter>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+							<medication_name_freetext openmrs_concept="1779^MEDICATION NAME, FREETEXT^99DCT" openmrs_datatype="ST"><value/></medication_name_freetext>
+						</patient_reported_current_other_treatment_6>
+						<!-- Metformin -->
+						<missed_medication_for_past_week openmrs_concept="1918^MISSED MEDICATION FOR PAST WEEK^99DCT" openmrs_datatype="ZZ">
+							<missed_medication_added openmrs_concept="1916^MISSED MEDICATION ADDED^99DCT" openmrs_datatype="CWE" multiple="0"><value /></missed_medication_added>
+							<number_of_pills_taken_in_the_last_week_any_medication openmrs_concept="7059^NUMBER OF PILLS TAKEN IN THE LAST WEEK, ANY MEDICATION, QUALITATIVE^99DCT" openmrs_datatype="CWE" multiple="0"><value /></number_of_pills_taken_in_the_last_week_any_medication>
+							<missed_medication_reason openmrs_concept="1668^MISSED MEDICATION REASON^99DCT" openmrs_datatype="CWE" multiple="1">
+								<side_effects_from_taking_medications openmrs_concept="1664^SIDE EFFECTS FROM TAKING MEDICATIONS^99DCT">false</side_effects_from_taking_medications>
+								<time_for_a_break openmrs_concept="1665^TIME FOR A BREAK^99DCT">false</time_for_a_break>
+								<do_not_know openmrs_concept="1624^DO NOT KNOW^99DCT">false</do_not_know>
+								<forgot_to_take_medicine openmrs_concept="1648^FORGOT TO TAKE MEDICINE^99DCT">false</forgot_to_take_medicine>
+								<other_non-coded openmrs_concept="5622^OTHER NON-CODED^99DCT">false</other_non-coded>
+								<other_treatment openmrs_concept="1667^OTHER TREATMENT^99DCT">false</other_treatment>
+								<could_not_get_medicine openmrs_concept="1662^COULD NOT GET MEDICINE^99DCT">false</could_not_get_medicine>
+								<medicine_not_useful openmrs_concept="1663^MEDICINE NOT USEFUL^99DCT">false</medicine_not_useful>
+								<healed_by_faith openmrs_concept="1587^HEALED BY FAITH^99DCT">false</healed_by_faith>
+								<stigma openmrs_concept="1666^STIGMA^99DCT">false</stigma>
+								<did_not_miss_any_doses openmrs_concept="1714^DID NOT MISS ANY DOSES^99DCT">false</did_not_miss_any_doses>
+								<missed_appointment openmrs_concept="1448^MISSED APPOINTMENT^99DCT">false</missed_appointment>
+								<run_out_drugs openmrs_concept="6100^RUN OUT DRUGS^99DCT">false</run_out_drugs>
+								<transport_problems openmrs_concept="820^TRANSPORT PROBLEMS^99DCT">false</transport_problems>
+								<travel openmrs_concept="1546^TRAVEL^99DCT">false</travel>
+								<stopped openmrs_concept="1679^STOPPED^99DCT">false</stopped>
+								<patient_refusal openmrs_concept="1504^PATIENT REFUSAL^99DCT">false</patient_refusal>
+								<facility_stocked_out_of_medication openmrs_concept="7043^FACILITY STOCKED OUT OF MEDICATION^99DCT">false</facility_stocked_out_of_medication>
+								<financial_barrier openmrs_concept="6295^FINANCIAL BARRIER^99DCT">false</financial_barrier>
+								<xforms_value/>
+							</missed_medication_reason>
+							<freetext_general openmrs_concept="1915^FREETEXT GENERAL^99DCT" openmrs_datatype="ST"><value /></freetext_general>
+						</missed_medication_for_past_week>
+						<!-- Glibenclamide -->
+						<missed_medication_for_past_week_1 openmrs_concept="1918^MISSED MEDICATION FOR PAST WEEK^99DCT" openmrs_datatype="ZZ">
+							<missed_medication_added openmrs_concept="1916^MISSED MEDICATION ADDED^99DCT" openmrs_datatype="CWE" multiple="0"><value /></missed_medication_added>
+							<number_of_pills_taken_in_the_last_week_any_medication openmrs_concept="7059^NUMBER OF PILLS TAKEN IN THE LAST WEEK, ANY MEDICATION, QUALITATIVE^99DCT" openmrs_datatype="CWE" multiple="0"><value /></number_of_pills_taken_in_the_last_week_any_medication>
+							<missed_medication_reason openmrs_concept="1668^MISSED MEDICATION REASON^99DCT" openmrs_datatype="CWE" multiple="1">
+								<side_effects_from_taking_medications openmrs_concept="1664^SIDE EFFECTS FROM TAKING MEDICATIONS^99DCT">false</side_effects_from_taking_medications>
+								<time_for_a_break openmrs_concept="1665^TIME FOR A BREAK^99DCT">false</time_for_a_break>
+								<do_not_know openmrs_concept="1624^DO NOT KNOW^99DCT">false</do_not_know>
+								<forgot_to_take_medicine openmrs_concept="1648^FORGOT TO TAKE MEDICINE^99DCT">false</forgot_to_take_medicine>
+								<other_non-coded openmrs_concept="5622^OTHER NON-CODED^99DCT">false</other_non-coded>
+								<other_treatment openmrs_concept="1667^OTHER TREATMENT^99DCT">false</other_treatment>
+								<could_not_get_medicine openmrs_concept="1662^COULD NOT GET MEDICINE^99DCT">false</could_not_get_medicine>
+								<medicine_not_useful openmrs_concept="1663^MEDICINE NOT USEFUL^99DCT">false</medicine_not_useful>
+								<healed_by_faith openmrs_concept="1587^HEALED BY FAITH^99DCT">false</healed_by_faith>
+								<stigma openmrs_concept="1666^STIGMA^99DCT">false</stigma>
+								<did_not_miss_any_doses openmrs_concept="1714^DID NOT MISS ANY DOSES^99DCT">false</did_not_miss_any_doses>
+								<missed_appointment openmrs_concept="1448^MISSED APPOINTMENT^99DCT">false</missed_appointment>
+								<run_out_drugs openmrs_concept="6100^RUN OUT DRUGS^99DCT">false</run_out_drugs>
+								<transport_problems openmrs_concept="820^TRANSPORT PROBLEMS^99DCT">false</transport_problems>
+								<travel openmrs_concept="1546^TRAVEL^99DCT">false</travel>
+								<stopped openmrs_concept="1679^STOPPED^99DCT">false</stopped>
+								<patient_refusal openmrs_concept="1504^PATIENT REFUSAL^99DCT">false</patient_refusal>
+								<facility_stocked_out_of_medication openmrs_concept="7043^FACILITY STOCKED OUT OF MEDICATION^99DCT">false</facility_stocked_out_of_medication>
+								<financial_barrier openmrs_concept="6295^FINANCIAL BARRIER^99DCT">false</financial_barrier>
+								<xforms_value/>
+							</missed_medication_reason>
+							<freetext_general openmrs_concept="1915^FREETEXT GENERAL^99DCT" openmrs_datatype="ST"><value /></freetext_general>
+						</missed_medication_for_past_week_1>
+						<!-- Enalapril -->
+						<missed_medication_for_past_week_2 openmrs_concept="1918^MISSED MEDICATION FOR PAST WEEK^99DCT" openmrs_datatype="ZZ">
+							<missed_medication_added openmrs_concept="1916^MISSED MEDICATION ADDED^99DCT" openmrs_datatype="CWE" multiple="0"><value /></missed_medication_added>
+							<number_of_pills_taken_in_the_last_week_any_medication openmrs_concept="7059^NUMBER OF PILLS TAKEN IN THE LAST WEEK, ANY MEDICATION, QUALITATIVE^99DCT" openmrs_datatype="CWE" multiple="0"><value /></number_of_pills_taken_in_the_last_week_any_medication>
+							<missed_medication_reason openmrs_concept="1668^MISSED MEDICATION REASON^99DCT" openmrs_datatype="CWE" multiple="1">
+								<side_effects_from_taking_medications openmrs_concept="1664^SIDE EFFECTS FROM TAKING MEDICATIONS^99DCT">false</side_effects_from_taking_medications>
+								<time_for_a_break openmrs_concept="1665^TIME FOR A BREAK^99DCT">false</time_for_a_break>
+								<do_not_know openmrs_concept="1624^DO NOT KNOW^99DCT">false</do_not_know>
+								<forgot_to_take_medicine openmrs_concept="1648^FORGOT TO TAKE MEDICINE^99DCT">false</forgot_to_take_medicine>
+								<other_non-coded openmrs_concept="5622^OTHER NON-CODED^99DCT">false</other_non-coded>
+								<other_treatment openmrs_concept="1667^OTHER TREATMENT^99DCT">false</other_treatment>
+								<could_not_get_medicine openmrs_concept="1662^COULD NOT GET MEDICINE^99DCT">false</could_not_get_medicine>
+								<medicine_not_useful openmrs_concept="1663^MEDICINE NOT USEFUL^99DCT">false</medicine_not_useful>
+								<healed_by_faith openmrs_concept="1587^HEALED BY FAITH^99DCT">false</healed_by_faith>
+								<stigma openmrs_concept="1666^STIGMA^99DCT">false</stigma>
+								<did_not_miss_any_doses openmrs_concept="1714^DID NOT MISS ANY DOSES^99DCT">false</did_not_miss_any_doses>
+								<missed_appointment openmrs_concept="1448^MISSED APPOINTMENT^99DCT">false</missed_appointment>
+								<run_out_drugs openmrs_concept="6100^RUN OUT DRUGS^99DCT">false</run_out_drugs>
+								<transport_problems openmrs_concept="820^TRANSPORT PROBLEMS^99DCT">false</transport_problems>
+								<travel openmrs_concept="1546^TRAVEL^99DCT">false</travel>
+								<stopped openmrs_concept="1679^STOPPED^99DCT">false</stopped>
+								<patient_refusal openmrs_concept="1504^PATIENT REFUSAL^99DCT">false</patient_refusal>
+								<facility_stocked_out_of_medication openmrs_concept="7043^FACILITY STOCKED OUT OF MEDICATION^99DCT">false</facility_stocked_out_of_medication>
+								<financial_barrier openmrs_concept="6295^FINANCIAL BARRIER^99DCT">false</financial_barrier>
+								<xforms_value/>
+							</missed_medication_reason>
+							<freetext_general openmrs_concept="1915^FREETEXT GENERAL^99DCT" openmrs_datatype="ST"><value /></freetext_general>
+						</missed_medication_for_past_week_2>
+						<!-- HCTZ -->
+						<missed_medication_for_past_week_3 openmrs_concept="1918^MISSED MEDICATION FOR PAST WEEK^99DCT" openmrs_datatype="ZZ">
+							<missed_medication_added openmrs_concept="1916^MISSED MEDICATION ADDED^99DCT" openmrs_datatype="CWE" multiple="0"><value /></missed_medication_added>
+							<number_of_pills_taken_in_the_last_week_any_medication openmrs_concept="7059^NUMBER OF PILLS TAKEN IN THE LAST WEEK, ANY MEDICATION, QUALITATIVE^99DCT" openmrs_datatype="CWE" multiple="0"><value /></number_of_pills_taken_in_the_last_week_any_medication>
+							<missed_medication_reason openmrs_concept="1668^MISSED MEDICATION REASON^99DCT" openmrs_datatype="CWE" multiple="1">
+								<side_effects_from_taking_medications openmrs_concept="1664^SIDE EFFECTS FROM TAKING MEDICATIONS^99DCT">false</side_effects_from_taking_medications>
+								<time_for_a_break openmrs_concept="1665^TIME FOR A BREAK^99DCT">false</time_for_a_break>
+								<do_not_know openmrs_concept="1624^DO NOT KNOW^99DCT">false</do_not_know>
+								<forgot_to_take_medicine openmrs_concept="1648^FORGOT TO TAKE MEDICINE^99DCT">false</forgot_to_take_medicine>
+								<other_non-coded openmrs_concept="5622^OTHER NON-CODED^99DCT">false</other_non-coded>
+								<other_treatment openmrs_concept="1667^OTHER TREATMENT^99DCT">false</other_treatment>
+								<could_not_get_medicine openmrs_concept="1662^COULD NOT GET MEDICINE^99DCT">false</could_not_get_medicine>
+								<medicine_not_useful openmrs_concept="1663^MEDICINE NOT USEFUL^99DCT">false</medicine_not_useful>
+								<healed_by_faith openmrs_concept="1587^HEALED BY FAITH^99DCT">false</healed_by_faith>
+								<stigma openmrs_concept="1666^STIGMA^99DCT">false</stigma>
+								<did_not_miss_any_doses openmrs_concept="1714^DID NOT MISS ANY DOSES^99DCT">false</did_not_miss_any_doses>
+								<missed_appointment openmrs_concept="1448^MISSED APPOINTMENT^99DCT">false</missed_appointment>
+								<run_out_drugs openmrs_concept="6100^RUN OUT DRUGS^99DCT">false</run_out_drugs>
+								<transport_problems openmrs_concept="820^TRANSPORT PROBLEMS^99DCT">false</transport_problems>
+								<travel openmrs_concept="1546^TRAVEL^99DCT">false</travel>
+								<stopped openmrs_concept="1679^STOPPED^99DCT">false</stopped>
+								<patient_refusal openmrs_concept="1504^PATIENT REFUSAL^99DCT">false</patient_refusal>
+								<facility_stocked_out_of_medication openmrs_concept="7043^FACILITY STOCKED OUT OF MEDICATION^99DCT">false</facility_stocked_out_of_medication>
+								<financial_barrier openmrs_concept="6295^FINANCIAL BARRIER^99DCT">false</financial_barrier>
+								<xforms_value/>
+							</missed_medication_reason>
+							<freetext_general openmrs_concept="1915^FREETEXT GENERAL^99DCT" openmrs_datatype="ST"><value /></freetext_general>
+						</missed_medication_for_past_week_3>
+						<!-- Losartan -->
+						<missed_medication_for_past_week_4 openmrs_concept="1918^MISSED MEDICATION FOR PAST WEEK^99DCT" openmrs_datatype="ZZ">
+							<missed_medication_added openmrs_concept="1916^MISSED MEDICATION ADDED^99DCT" openmrs_datatype="CWE" multiple="0"><value /></missed_medication_added>
+							<number_of_pills_taken_in_the_last_week_any_medication openmrs_concept="7059^NUMBER OF PILLS TAKEN IN THE LAST WEEK, ANY MEDICATION, QUALITATIVE^99DCT" openmrs_datatype="CWE" multiple="0"><value /></number_of_pills_taken_in_the_last_week_any_medication>
+							<missed_medication_reason openmrs_concept="1668^MISSED MEDICATION REASON^99DCT" openmrs_datatype="CWE" multiple="1">
+								<side_effects_from_taking_medications openmrs_concept="1664^SIDE EFFECTS FROM TAKING MEDICATIONS^99DCT">false</side_effects_from_taking_medications>
+								<time_for_a_break openmrs_concept="1665^TIME FOR A BREAK^99DCT">false</time_for_a_break>
+								<do_not_know openmrs_concept="1624^DO NOT KNOW^99DCT">false</do_not_know>
+								<forgot_to_take_medicine openmrs_concept="1648^FORGOT TO TAKE MEDICINE^99DCT">false</forgot_to_take_medicine>
+								<other_non-coded openmrs_concept="5622^OTHER NON-CODED^99DCT">false</other_non-coded>
+								<other_treatment openmrs_concept="1667^OTHER TREATMENT^99DCT">false</other_treatment>
+								<could_not_get_medicine openmrs_concept="1662^COULD NOT GET MEDICINE^99DCT">false</could_not_get_medicine>
+								<medicine_not_useful openmrs_concept="1663^MEDICINE NOT USEFUL^99DCT">false</medicine_not_useful>
+								<healed_by_faith openmrs_concept="1587^HEALED BY FAITH^99DCT">false</healed_by_faith>
+								<stigma openmrs_concept="1666^STIGMA^99DCT">false</stigma>
+								<did_not_miss_any_doses openmrs_concept="1714^DID NOT MISS ANY DOSES^99DCT">false</did_not_miss_any_doses>
+								<missed_appointment openmrs_concept="1448^MISSED APPOINTMENT^99DCT">false</missed_appointment>
+								<run_out_drugs openmrs_concept="6100^RUN OUT DRUGS^99DCT">false</run_out_drugs>
+								<transport_problems openmrs_concept="820^TRANSPORT PROBLEMS^99DCT">false</transport_problems>
+								<travel openmrs_concept="1546^TRAVEL^99DCT">false</travel>
+								<stopped openmrs_concept="1679^STOPPED^99DCT">false</stopped>
+								<patient_refusal openmrs_concept="1504^PATIENT REFUSAL^99DCT">false</patient_refusal>
+								<facility_stocked_out_of_medication openmrs_concept="7043^FACILITY STOCKED OUT OF MEDICATION^99DCT">false</facility_stocked_out_of_medication>
+								<financial_barrier openmrs_concept="6295^FINANCIAL BARRIER^99DCT">false</financial_barrier>
+								<xforms_value/>
+							</missed_medication_reason>
+							<freetext_general openmrs_concept="1915^FREETEXT GENERAL^99DCT" openmrs_datatype="ST"><value /></freetext_general>
+						</missed_medication_for_past_week_4>
+						<!-- Nifedipine -->
+						<missed_medication_for_past_week_5 openmrs_concept="1918^MISSED MEDICATION FOR PAST WEEK^99DCT" openmrs_datatype="ZZ">
+							<missed_medication_added openmrs_concept="1916^MISSED MEDICATION ADDED^99DCT" openmrs_datatype="CWE" multiple="0"><value /></missed_medication_added>
+							<number_of_pills_taken_in_the_last_week_any_medication openmrs_concept="7059^NUMBER OF PILLS TAKEN IN THE LAST WEEK, ANY MEDICATION, QUALITATIVE^99DCT" openmrs_datatype="CWE" multiple="0"><value /></number_of_pills_taken_in_the_last_week_any_medication>
+							<missed_medication_reason openmrs_concept="1668^MISSED MEDICATION REASON^99DCT" openmrs_datatype="CWE" multiple="1">
+								<side_effects_from_taking_medications openmrs_concept="1664^SIDE EFFECTS FROM TAKING MEDICATIONS^99DCT">false</side_effects_from_taking_medications>
+								<time_for_a_break openmrs_concept="1665^TIME FOR A BREAK^99DCT">false</time_for_a_break>
+								<do_not_know openmrs_concept="1624^DO NOT KNOW^99DCT">false</do_not_know>
+								<forgot_to_take_medicine openmrs_concept="1648^FORGOT TO TAKE MEDICINE^99DCT">false</forgot_to_take_medicine>
+								<other_non-coded openmrs_concept="5622^OTHER NON-CODED^99DCT">false</other_non-coded>
+								<other_treatment openmrs_concept="1667^OTHER TREATMENT^99DCT">false</other_treatment>
+								<could_not_get_medicine openmrs_concept="1662^COULD NOT GET MEDICINE^99DCT">false</could_not_get_medicine>
+								<medicine_not_useful openmrs_concept="1663^MEDICINE NOT USEFUL^99DCT">false</medicine_not_useful>
+								<healed_by_faith openmrs_concept="1587^HEALED BY FAITH^99DCT">false</healed_by_faith>
+								<stigma openmrs_concept="1666^STIGMA^99DCT">false</stigma>
+								<did_not_miss_any_doses openmrs_concept="1714^DID NOT MISS ANY DOSES^99DCT">false</did_not_miss_any_doses>
+								<missed_appointment openmrs_concept="1448^MISSED APPOINTMENT^99DCT">false</missed_appointment>
+								<run_out_drugs openmrs_concept="6100^RUN OUT DRUGS^99DCT">false</run_out_drugs>
+								<transport_problems openmrs_concept="820^TRANSPORT PROBLEMS^99DCT">false</transport_problems>
+								<travel openmrs_concept="1546^TRAVEL^99DCT">false</travel>
+								<stopped openmrs_concept="1679^STOPPED^99DCT">false</stopped>
+								<patient_refusal openmrs_concept="1504^PATIENT REFUSAL^99DCT">false</patient_refusal>
+								<facility_stocked_out_of_medication openmrs_concept="7043^FACILITY STOCKED OUT OF MEDICATION^99DCT">false</facility_stocked_out_of_medication>
+								<financial_barrier openmrs_concept="6295^FINANCIAL BARRIER^99DCT">false</financial_barrier>
+								<xforms_value/>
+							</missed_medication_reason>
+							<freetext_general openmrs_concept="1915^FREETEXT GENERAL^99DCT" openmrs_datatype="ST"><value /></freetext_general>
+						</missed_medication_for_past_week_5>
+						<!-- Other Medications -->
+						<missed_medication_for_past_week_6 openmrs_concept="1918^MISSED MEDICATION FOR PAST WEEK^99DCT" openmrs_datatype="ZZ">
+							<missed_medication_added openmrs_concept="1916^MISSED MEDICATION ADDED^99DCT" openmrs_datatype="CWE" multiple="0"><value /></missed_medication_added>
+							<number_of_pills_taken_in_the_last_week_any_medication openmrs_concept="7059^NUMBER OF PILLS TAKEN IN THE LAST WEEK, ANY MEDICATION, QUALITATIVE^99DCT" openmrs_datatype="CWE" multiple="0"><value /></number_of_pills_taken_in_the_last_week_any_medication>
+							<missed_medication_reason openmrs_concept="1668^MISSED MEDICATION REASON^99DCT" openmrs_datatype="CWE" multiple="1">
+								<side_effects_from_taking_medications openmrs_concept="1664^SIDE EFFECTS FROM TAKING MEDICATIONS^99DCT">false</side_effects_from_taking_medications>
+								<time_for_a_break openmrs_concept="1665^TIME FOR A BREAK^99DCT">false</time_for_a_break>
+								<do_not_know openmrs_concept="1624^DO NOT KNOW^99DCT">false</do_not_know>
+								<forgot_to_take_medicine openmrs_concept="1648^FORGOT TO TAKE MEDICINE^99DCT">false</forgot_to_take_medicine>
+								<other_non-coded openmrs_concept="5622^OTHER NON-CODED^99DCT">false</other_non-coded>
+								<other_treatment openmrs_concept="1667^OTHER TREATMENT^99DCT">false</other_treatment>
+								<could_not_get_medicine openmrs_concept="1662^COULD NOT GET MEDICINE^99DCT">false</could_not_get_medicine>
+								<medicine_not_useful openmrs_concept="1663^MEDICINE NOT USEFUL^99DCT">false</medicine_not_useful>
+								<healed_by_faith openmrs_concept="1587^HEALED BY FAITH^99DCT">false</healed_by_faith>
+								<stigma openmrs_concept="1666^STIGMA^99DCT">false</stigma>
+								<did_not_miss_any_doses openmrs_concept="1714^DID NOT MISS ANY DOSES^99DCT">false</did_not_miss_any_doses>
+								<missed_appointment openmrs_concept="1448^MISSED APPOINTMENT^99DCT">false</missed_appointment>
+								<run_out_drugs openmrs_concept="6100^RUN OUT DRUGS^99DCT">false</run_out_drugs>
+								<transport_problems openmrs_concept="820^TRANSPORT PROBLEMS^99DCT">false</transport_problems>
+								<travel openmrs_concept="1546^TRAVEL^99DCT">false</travel>
+								<stopped openmrs_concept="1679^STOPPED^99DCT">false</stopped>
+								<patient_refusal openmrs_concept="1504^PATIENT REFUSAL^99DCT">false</patient_refusal>
+								<facility_stocked_out_of_medication openmrs_concept="7043^FACILITY STOCKED OUT OF MEDICATION^99DCT">false</facility_stocked_out_of_medication>
+								<financial_barrier openmrs_concept="6295^FINANCIAL BARRIER^99DCT">false</financial_barrier>
+								<xforms_value/>
+							</missed_medication_reason>
+							<freetext_general openmrs_concept="1915^FREETEXT GENERAL^99DCT" openmrs_datatype="ST"><value /></freetext_general>
+						</missed_medication_for_past_week_6>
+						<review_of_systems_general
+							openmrs_concept="1069^REVIEW OF SYSTEMS, GENERAL^99DCT" openmrs_datatype="CWE" multiple="1">
+							<congenital_disorders openmrs_concept="81^CONGENITAL DISORDERS^99DCT">false</congenital_disorders>
+							<rash openmrs_concept="512^RASH^99DCT">false</rash>
+							<weight_loss openmrs_concept="832^WEIGHT LOSS^99DCT">false</weight_loss>
+							<chills openmrs_concept="871^CHILLS^99DCT">false</chills>
+							<weight_gain openmrs_concept="5544^WEIGHT GAIN^99DCT">false</weight_gain>
+							<fever openmrs_concept="5945^FEVER^99DCT">false</fever>
+							<fatigue openmrs_concept="5949^FATIGUE^99DCT">false</fatigue>
+							<history_of_jaundice openmrs_concept="5986^HISTORY OF JAUNDICE^99DCT">false</history_of_jaundice>
+							<delayed_milestones openmrs_concept="6022^DELAYED MILESTONES^99DCT">false</delayed_milestones>
+							<irritability openmrs_concept="6023^IRRITABILITY^99DCT">false</irritability>
+							<night_sweats openmrs_concept="6029^NIGHT SWEATS^99DCT">false</night_sweats>
+							<negative openmrs_concept="664^NEGATIVE^99DCT">false</negative>
+							<poor_weight_gain openmrs_concept="1396^POOR WEIGHT GAIN^99DCT">false</poor_weight_gain>
+							<chigoe_flea openmrs_concept="6847^CHIGOE FLEA^99DCT">false</chigoe_flea>
+							<scabies openmrs_concept="140^SCABIES^99DCT">false</scabies>
+							<diarrhea openmrs_concept="16^DIARRHEA^99DCT">false</diarrhea>
+							<cough_for_more_than_two_weeks openmrs_concept="6171^COUGH FOR MORE THAN TWO WEEKS^99DCT">false</cough_for_more_than_two_weeks>
+							<other_non-coded openmrs_concept="5622^OTHER NON-CODED^99DCT">false</other_non-coded>
+							<presence_of_pain openmrs_concept="7032^PRESENCE OF PAIN^99DCT">false</presence_of_pain>
+							<dermatophytosis openmrs_concept="937^DERMATOPHYTOSIS^99DCT">false</dermatophytosis>
+							<edema_legs openmrs_concept="590^EDEMA, LEGS^99DCT">false</edema_legs>
+							<shortness_of_breath_with_exertion openmrs_concept="5963^SHORTNESS OF BREATH WITH EXERTION^99DCT">false</shortness_of_breath_with_exertion>
+							<focal_weakness openmrs_concept="6005^FOCAL WEAKNESS^99DCT">false</focal_weakness>
+							<oliguria openmrs_concept="6021^OLIGURIA^99DCT">false</oliguria>
+							<heart_racing openmrs_concept="7044^HEART RACING^99DCT">false</heart_racing>
+							<dizziness openmrs_concept="877^DIZZINESS^99DCT">false</dizziness>
+							<fainting openmrs_concept="7045^FAINTING^99DCT">false</fainting>
+							<unconscious openmrs_concept="2295^UNCONSCIOUS^99DCT">false</unconscious>
+							<vision_difficulties openmrs_concept="5953^VISION DIFFICULTIES^99DCT">false</vision_difficulties>
+							<foot_complaints openmrs_concept="7046^FOOT COMPLAINTS^99DCT">false</foot_complaints>
+							<none openmrs_concept="1107^NONE^99DCT">false</none>
+							<nausea openmrs_concept="5978^NAUSEA^99DCT">false</nausea>
+							<vomiting openmrs_concept="5980^VOMITING^99DCT">false</vomiting>
+							<abdominal_pain openmrs_concept="151^ABDOMINAL PAIN^99DCT">false</abdominal_pain>
+							<constipation openmrs_concept="996^CONSTIPATION^99DCT">false</constipation>
+							<chronic_cough openmrs_concept="1470^CHRONIC COUGH^99DCT">false</chronic_cough>
+							<hypoglycemia openmrs_concept="7047^HYPOGLYCEMIA^99DCT">false</hypoglycemia>
+							<xforms_value/>
+						</review_of_systems_general>
+						<last_menstrual_period_qualitative openmrs_concept="7048^LAST MENSTRUAL PERIOD, QUALITATIVE^99DCT" openmrs_datatype="CWE"><value/></last_menstrual_period_qualitative>
+						<systolic_blood_pressure openmrs_concept="5085^SYSTOLIC BLOOD PRESSURE^99DCT" openmrs_datatype="NM"><value/></systolic_blood_pressure>
+						<diastolic_blood_pressure openmrs_concept="5086^DIASTOLIC BLOOD PRESSURE^99DCT" openmrs_datatype="NM"><value/></diastolic_blood_pressure>
+						<pulse openmrs_concept="5087^PULSE^99DCT" openmrs_datatype="NM"><value/></pulse>
+						<temperature_c openmrs_concept="5088^TEMPERATURE (C)^99DCT" openmrs_datatype="NM"><value/></temperature_c>
+						<weight_kg openmrs_concept="5089^WEIGHT (KG)^99DCT" openmrs_datatype="NM"><value/></weight_kg>
+						<height_cm openmrs_concept="5090^HEIGHT (CM)^99DCT" openmrs_datatype="NM"><value/></height_cm>
+						<height_m/>
+						<body_mass_index openmrs_concept="1342^BODY MASS INDEX^99DCT" openmrs_datatype="NM"><value/></body_mass_index>
+						<serum_glucose_fasting openmrs_concept="6252^SERUM GLUCOSE, FASTING^99DCT" openmrs_datatype="NM"><value/></serum_glucose_fasting>
+						<serum_glucose openmrs_concept="887^SERUM GLUCOSE^99DCT" openmrs_datatype="NM"><value/></serum_glucose>
+						<glycosylated_hemoglobin openmrs_concept="6126^GLYCOSYLATED HEMOGLOBIN^99DCT" openmrs_datatype="NM"><value/></glycosylated_hemoglobin>
+						<urine_pregnancy_test_qualitative openmrs_concept="45^URINE PREGNANCY TEST, QUALITATIVE^99DCT" openmrs_datatype="CWE"><value/></urine_pregnancy_test_qualitative>
+						<algorithm_diabetes/>
+						<algorithm_htn/>
+						<drugs_dispensed_info/>
+						<drugs_dispensed/>
+						<!-- Metformin -->
+						<other_medication_order openmrs_concept="1901^OTHER MEDICATION ORDER^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_tablets openmrs_concept="1898^NUMBER OF TABLETS^99DCT" openmrs_datatype="NM"><value/></number_of_tablets>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+							<dosage_change openmrs_concept="1931^DOSAGE CHANGE^99DCT" openmrs_datatype="CWE"><value/></dosage_change>
+							<tmp_dosage_change/>
+							<medication_received_at_vist openmrs_concept="1276^MEDICATION RECEIVED AT VIST^99DCT" openmrs_datatype="BIT"><value/></medication_received_at_vist>
+						</other_medication_order>
+						<!-- Glibenclamide -->
+						<other_medication_order_1 openmrs_concept="1901^OTHER MEDICATION ORDER^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_tablets openmrs_concept="1898^NUMBER OF TABLETS^99DCT" openmrs_datatype="NM"><value/></number_of_tablets>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+							<medication_received_at_vist openmrs_concept="1276^MEDICATION RECEIVED AT VIST^99DCT" openmrs_datatype="BIT"><value/></medication_received_at_vist>
+						</other_medication_order_1>
+						<!-- Enalapril -->
+						<other_medication_order_2 openmrs_concept="1901^OTHER MEDICATION ORDER^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_tablets openmrs_concept="1898^NUMBER OF TABLETS^99DCT" openmrs_datatype="NM"><value/></number_of_tablets>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+							<medication_received_at_vist openmrs_concept="1276^MEDICATION RECEIVED AT VIST^99DCT" openmrs_datatype="BIT"><value/></medication_received_at_vist>
+						</other_medication_order_2>
+						<!-- HCTZ -->
+						<other_medication_order_3 openmrs_concept="1901^OTHER MEDICATION ORDER^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_tablets openmrs_concept="1898^NUMBER OF TABLETS^99DCT" openmrs_datatype="NM"><value/></number_of_tablets>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+							<medication_received_at_vist openmrs_concept="1276^MEDICATION RECEIVED AT VIST^99DCT" openmrs_datatype="BIT"><value/></medication_received_at_vist>
+						</other_medication_order_3>
+						<!-- Losartan -->
+						<other_medication_order_4 openmrs_concept="1901^OTHER MEDICATION ORDER^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_tablets openmrs_concept="1898^NUMBER OF TABLETS^99DCT" openmrs_datatype="NM"><value/></number_of_tablets>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+							<medication_received_at_vist openmrs_concept="1276^MEDICATION RECEIVED AT VIST^99DCT" openmrs_datatype="BIT"><value/></medication_received_at_vist>
+						</other_medication_order_4>
+						<!-- Nifedipine -->
+						<other_medication_order_5 openmrs_concept="1901^OTHER MEDICATION ORDER^99DCT" openmrs_datatype="ZZ">
+							<medication_added openmrs_concept="1895^MEDICATION ADDED^99DCT" openmrs_datatype="CWE"><value/></medication_added>
+							<number_of_tablets openmrs_concept="1898^NUMBER OF TABLETS^99DCT" openmrs_datatype="NM"><value/></number_of_tablets>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+							<medication_received_at_vist openmrs_concept="1276^MEDICATION RECEIVED AT VIST^99DCT" openmrs_datatype="BIT"><value/></medication_received_at_vist>
+						</other_medication_order_5>
+						<!-- Other Medications -->
+						<other_medication_order_6 openmrs_concept="1901^OTHER MEDICATION ORDER^99DCT" openmrs_datatype="ZZ">
+							<number_of_tablets openmrs_concept="1898^NUMBER OF TABLETS^99DCT" openmrs_datatype="NM"><value/></number_of_tablets>
+							<number_of_milligram openmrs_concept="1899^NUMBER OF MILLIGRAM^99DCT" openmrs_datatype="NM"><value/></number_of_milligram>
+							<medication_frequency_per_day openmrs_concept="1896^MEDICATION FREQUENCY^99DCT" openmrs_datatype="CWE"><value/></medication_frequency_per_day>
+							<medication_received_at_vist openmrs_concept="1276^MEDICATION RECEIVED AT VIST^99DCT" openmrs_datatype="BIT"><value/></medication_received_at_vist>
+							<medication_name_freetext openmrs_concept="1779^MEDICATION NAME, FREETEXT^99DCT" openmrs_datatype="ST"><value/></medication_name_freetext>
+						</other_medication_order_6>
+						<patient_education_received_this_visit openmrs_concept="6327^PATIENT EDUCATION RECEIVED THIS VISIT^99DCT" openmrs_datatype="CWE" multiple="1">
+							<nutritional_support openmrs_concept="5484^NUTRITIONAL SUPPORT^99DCT">false</nutritional_support>
+							<alcohol_counseling openmrs_concept="1288^ALCOHOL COUNSELING^99DCT">false</alcohol_counseling>
+							<diabetic_diet openmrs_concept="7051^DIABETIC DIET^99DCT">false</diabetic_diet>
+							<diabetic_danger_signs openmrs_concept="7052^DIABETIC DANGER SIGNS^99DCT">false</diabetic_danger_signs>
+							<salt_reduction openmrs_concept="7053^SALT REDUCTION^99DCT">false</salt_reduction>
+							<smoking_cessation openmrs_concept="7054^SMOKING CESSATION^99DCT">false</smoking_cessation>
+							<exercise openmrs_concept="7055^EXERCISE^99DCT">false</exercise>
+							<weight_loss openmrs_concept="832^WEIGHT LOSS^99DCT">false</weight_loss>
+							<adherence_counseling openmrs_concept="5488^ADHERENCE COUNSELING^99DCT">false</adherence_counseling>
+							<none openmrs_concept="1107^NONE^99DCT">false</none>
+							<xforms_value/>
+						</patient_education_received_this_visit>
+						<referrals_ordered openmrs_concept="1272^REFERRALS ORDERED^99DCT" openmrs_datatype="CWE" multiple="1">
+							<referred_to_clinic openmrs_concept="7056^REFERRED TO CLINIC^99DCT">false</referred_to_clinic>
+							<dispensary openmrs_concept="6436^DISPENSARY^99DCT">false</dispensary>
+							<routine_dispensary_antenatal_clinic openmrs_concept="7057^ROUTINE DISPENSARY ANTENATAL CLINIC^99DCT">false</routine_dispensary_antenatal_clinic>
+							<antenatal_care_service openmrs_concept="1865^ANTENATAL CARE SERVICE^99DCT">false</antenatal_care_service>
+							<high_risk_antenatal_clinic openmrs_concept="7058^HIGH RISK ANTENATAL CLINIC^99DCT">false</high_risk_antenatal_clinic>
+						    <none openmrs_concept="1107^NONE^99DCT">false</none>
+							<xforms_value />
+          				</referrals_ordered>
+						<return_visit_date openmrs_concept="5096^RETURN VISIT DATE^99DCT" openmrs_datatype="DT"><value/></return_visit_date>
+						<htn_reminders>
+							<reminder_1/>
+							<reminder_2/>
+							<reminder_3a/>
+							<reminder_3b/>
+							<reminder_3c/>
+							<reminder_4/>
+							<reminder_5/>
+							<reminder_6a/>
+							<reminder_6b/>
+							<reminder_7/>
+							<reminder_8/>
+							<reminder_9/>
+							<reminder_10/>
+						</htn_reminders>
+						<diabetes_reminders>
+							<reminder_1/>
+							<reminder_2/>
+							<reminder_3/>
+							<reminder_4/>
+							<reminder_5/>
+							<reminder_6/>
+							<reminder_7/>
+							<reminder_8/>
+							<reminder_9/>
+							<reminder_10/>
+						</diabetes_reminders>
+					</obs>
+				</form>
+			</xf:instance>
+			<bind id="patient" nodeset="/form/patient"/>
+			<bind id="patient.patient_id" nodeset="/form/patient/patient.patient_id" type="int" required="true()"/>
+			<bind id="patient_identifier.identifier_type_id" nodeset="/form/patient/patient_identifier.identifier_type_id" calculate="3" type="integer" />
+			<!-- UNCOMMENT TO ENTER PATIENT IDENTIFIER
+			<bind id="amrs_id_scan" nodeset="/form/patient/tmp/amrs_id_scan" type="barcode"/>
+			<bind id="amrs_id_manual" nodeset="/form/patient/tmp/amrs_id_manual" type="string" required="true()" relevant="../amrs_id_scan = ''"/>
+			<bind id="amrs_id_manual_confirm" nodeset="/form/patient/tmp/amrs_id_manual_confirm" type="string" required="true()" relevant="../amrs_id_manual != ''"
+				constraint=". = ../amrs_id_manual" jr:constraintMsg="Entered ID's did not match!"/>
+		    <bind id="patient.medical_record_number" nodeset="/form/patient/patient.medical_record_number" type="string" readonly="true()"
+		    	calculate="if (../tmp/amrs_id_scan != '',../tmp/amrs_id_scan,../tmp/amrs_id_manual)"/> -->
+			<bind id="patient.medical_record_number" nodeset="/form/patient/patient.medical_record_number" type="string" readonly="true()"/>
+
+            <!--  Birth Date Calculations -->
+            <!-- UNCOMMENTED TO CALCULATE DATE (IF NOT USING mCLINIC OR REGISTERING PATIENTS)
+            <bind id="birthdate_type" nodeset="/form/patient/tmp/birthdate_type" type="string" required="true()"/>
+            <bind id="age" nodeset="/form/patient/tmp/age" type="int" relevant="../birthdate_type = 'age'" required="true()"
+                constraint=". &gt;= 18 and . &lt;=125" jr:constraintMsg="Allowed ages is between 18 and 125 years"/>
+            <bind id="birthdate" nodeset="/form/patient/tmp/birth_date" type="date" relevant="../birthdate_type = 'birthdate'" required="true()"
+                constraint=". &lt;= today()" jr:constraintMsg="Birthdate cannot be in the future"/>
+            <bind id="birthdate_estimated" nodeset="/form/patient/tmp/birthdate_estimated" relevant="../birthdate_type = 'birthdate'" required="true()"/>
+            <bind id="patient.birthdate" nodeset="/form/patient/patient.birthdate" type="date"
+                calculate="if(../tmp/birthdate_type = 'age',  date(today() - (../tmp/age) * 365.2425), ../tmp/birth_date)"/>
+            <bind id="age_in_years" nodeset="/form/patient/tmp/age_in_years" type="decimal"
+                calculate="if(../birthdate_type = 'age', ../age, int(today() - ../../patient.birthdate))"/>
+            <bind id="patient.birthdate_estimated" nodeset="/form/patient/patient.birthdate_estimated" type="string"
+                calculate="if(../tmp/birthdate_type = 'age', 'true', ../tmp/birthdate_estimated)"/> -->
+
+            <bind id="age_in_years" nodeset="/form/patient/tmp/age_in_years" type="decimal"
+                  calculate="if(../birthdate_type = 'age', ../age, ((now() - /form/patient/patient.birthdate) div 365.2425))"/>
+
+            <bind id="patient.birthdate" nodeset="/form/patient/patient.birthdate" type="date" readonly="true()"/>
+            <bind id="patient.birthdate_estimated" nodeset="/form/patient/patient.birthdate_estimated" type="string" readonly="true()"/>
+			
+			<bind id="patient.family_name" nodeset="/form/patient/patient.family_name" type="string" readonly="true()"/>
+			<bind id="patient.given_name" nodeset="/form/patient/patient.given_name" required="true()" type="string" readonly="true()"/>
+			<bind id="patient.middle_name" nodeset="/form/patient/patient.middle_name" type="string" readonly="true()"/>
+			<bind id="patient.sex" nodeset="/form/patient/patient.sex" required="true()" type="string" readonly="true()"/>
+			<bind id="encounter.encounter_datetime" nodeset="/form/encounter/encounter.encounter_datetime" type="date"
+                  constraint=". &lt; (today() + 1)" jr:constraintMsg="Encounter date cannot be in the future" required="true()"/>
+			<bind id="encounter.location_id" nodeset="/form/encounter/encounter.location_id" type="string" required="true()"/>
+            <bind id="patient.uuid" nodeset="/form/patient/patient.uuid" type="string"/>
+            <bind id="provider_id_select" nodeset="/form/encounter/tmp/provider_id_select" type="select1"/>
+            <bind id="provider_id_text" nodeset="/form/encounter/tmp/provider_id_text" type="string" required="true()"
+				relevant="../provider_id_select = ''" constraint="regex(., '^\w+[-]?\d{1}') and (checkdigit(.))" 
+						jr:constraintMsg="Invalid ID format and/or CheckDigit. Please Re-enter your ID."/>
+			<bind id="encounter.provider_id" nodeset="/form/encounter/encounter.provider_id" type="string" 
+				calculate="if(../tmp/provider_id_select != '',../tmp/provider_id_select,../tmp/provider_id_text)"/>
+			<bind id="phone" nodeset="/form/patient/person_attribute10" type="string" constraint="regex(., '^\d{8,12}$')" jr:constraintMsg="Invalid Phone Number. Please check and re-enter."/>
+			<bind id="start_time" nodeset="/form/obs/start_time/value" jr:preload="time" jr:preloadParams="start" type="time"/>
+    		<bind id="end_time" nodeset="/form/obs/end_time/value" jr:preload="time" jr:preloadParams="end" type="time"/>
+			<bind id="current_visit_type" nodeset="/form/obs/current_visit_type/value" required="true()" type="string"/>
+			<bind id="date_of_initial_hct_encounter" nodeset="/form/obs/date_of_initial_hct_encounter/value" type="date"
+                constraint=". &lt; (today() + 1)" jr:constraintMsg="pHCT Encounter date cannot be in the future"
+				relevant="../../current_visit_type/value='7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT'"/>
+			<bind id="systolic_blood_pressure_detailed" nodeset="/form/obs/systolic_blood_pressure_detailed"/>
+			<bind id="location_of_contact_sbpd" nodeset="/form/obs/systolic_blood_pressure_detailed/location_of_contact/value"
+				calculate="if(../../systolic_blood_pressure/value != '','2049^HOME BASED TESTING PROGRAM^99DCT','')"/>
+			<bind id="systolic_blood_pressure_phct" nodeset="/form/obs/systolic_blood_pressure_detailed/systolic_blood_pressure/value"
+				constraint=". &gt;= 50 and . &lt;= 300" jr:constraintMsg="SBP should be between 50 and 300 inclusive" type="decimal"/>
+			<bind id="diastolic_blood_pressure_detailed" nodeset="/form/obs/diastolic_blood_pressure_detailed"/>
+			<bind id="location_of_contact_dbpd" nodeset="/form/obs/diastolic_blood_pressure_detailed/location_of_contact/value"
+				calculate="if(../../diastolic_blood_pressure/value != '','2049^HOME BASED TESTING PROGRAM^99DCT','')"/>
+			<bind id="diastolic_blood_pressure_phct" nodeset="/form/obs/diastolic_blood_pressure_detailed/diastolic_blood_pressure/value"
+				constraint=". &gt;= 20 and . &lt;= 150 and . &lt;= ../../../systolic_blood_pressure_detailed/systolic_blood_pressure/value" jr:constraintMsg="DBP should be between 20 and 150 inclusive and cannot be more than Systolic Blood Pressure" type="decimal"/>
+			<bind id="fasting_blood_sugar_detailed" nodeset="/form/obs/fasting_blood_sugar_detailed"/>
+			<bind id="location_of_contact_fbsd" nodeset="/form/obs/fasting_blood_sugar_detailed/location_of_contact/value"
+				calculate="if(../../serum_glucose_fasting/value != '','2049^HOME BASED TESTING PROGRAM^99DCT','')"/>
+			<bind id="serum_glucose_fasting_phct" nodeset="/form/obs/fasting_blood_sugar_detailed/serum_glucose_fasting/value"
+				constraint=". &gt;= 0 and . &lt;= 150" jr:constraintMsg="FBS should be between 0 and 150 inclusive" type="decimal"/>
+			<bind id="random_blood_sugar_detailed" nodeset="/form/obs/random_blood_sugar_detailed"/>
+			<bind id="location_of_contact_rbsd" nodeset="/form/obs/random_blood_sugar_detailed/location_of_contact/value" type="string"
+				calculate="if(../../serum_glucose/value != '','2049^HOME BASED TESTING PROGRAM^99DCT','')"/>
+			<bind id="serum_glucose_phct" nodeset="/form/obs/random_blood_sugar_detailed/serum_glucose/value"
+				constraint=". &gt;= 0 and . &lt;= 150" jr:constraintMsg="RBS should be between 0 and 150 inclusive" type="decimal"/>
+			
+			<!-- CURRENT & MISSED MEDICATIONS -->
+			<bind id="tmp_drugs" nodeset="/form/obs/tmp_drugs" type="string" required="true()"
+				constraint="not(selected(., 'none') and count-selected(.) > 1)" jr:constraintMsg="If None is select, it should be the only option"/>
+			<!-- METFORMIN CURRENT -->
+			<bind id="patient_reported_current_other_treatment_metformin" nodeset="/form/obs/patient_reported_current_other_treatment"
+				relevant="selected(../tmp_drugs,'metformin')"/>
+			<bind id="medication_added_metformin" nodeset="/form/obs/patient_reported_current_other_treatment/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','2261^METFORMIN^99DCT','')"/>
+			<bind id="number_of_milligram_metformin" nodeset="/form/obs/patient_reported_current_other_treatment/number_of_milligram/value" required="true()" type="decimal"/>
+			<bind id="medication_frequency_per_day_metformin" nodeset="/form/obs/patient_reported_current_other_treatment/medication_frequency_per_day/value" required="true()" type="string"/>
+			<!-- METFORMIN MISSED -->
+			<bind id="missed_medication_for_past_week_metformin" nodeset="/form/obs/missed_medication_for_past_week" 
+				relevant="selected(../tmp_drugs, 'metformin')"/>
+			<bind id="missed_medication_added_metformin" nodeset="/form/obs/missed_medication_for_past_week/missed_medication_added/value" type="string"
+				calculate="../../../patient_reported_current_other_treatment/medication_added/value"/>
+    		<bind id="number_of_pills_taken_in_the_last_week_any_medication_metformin" nodeset="/form/obs/missed_medication_for_past_week/number_of_pills_taken_in_the_last_week_any_medication/value" type="string" required="true()"/>
+			<bind id="missed_medication_reason_metformin" nodeset="/form/obs/missed_medication_for_past_week/missed_medication_reason/xforms_value" required="true()" type="string"
+                  relevant="(../../number_of_pills_taken_in_the_last_week_any_medication/value !='1163^ALL^99DCT')
+ 			        and (../../number_of_pills_taken_in_the_last_week_any_medication/value !='')"/>
+			<bind id="freetext_general_metformin" nodeset="/form/obs/missed_medication_for_past_week/freetext_general/value" type="string"/>
+			
+			<!-- GLIBENCLAMIDE CURRENT -->
+			<bind id="patient_reported_current_other_treatment_glibenclamide" nodeset="/form/obs/patient_reported_current_other_treatment_1"
+				relevant="selected(../tmp_drugs,'glibenclamide')"/>
+			<bind id="medication_added_glibenclamide" nodeset="/form/obs/patient_reported_current_other_treatment_1/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','2257^GLIBENCLAMIDE^99DCT','')"/>
+			<bind id="number_of_milligram_glibenclamide" nodeset="/form/obs/patient_reported_current_other_treatment_1/number_of_milligram/value" required="true()" type="decimal"/>
+			<bind id="medication_frequency_per_day_glibenclamide" nodeset="/form/obs/patient_reported_current_other_treatment_1/medication_frequency_per_day/value" required="true()" type="string"/>
+			<!-- GLIBENCLAMIDE MISSED -->
+			<bind id="missed_medication_for_past_week_glibenclamide" nodeset="/form/obs/missed_medication_for_past_week_1" 
+				relevant="selected(../tmp_drugs, 'glibenclamide')"/>
+			<bind id="missed_medication_added_glibenclamide" nodeset="/form/obs/missed_medication_for_past_week_1/missed_medication_added/value" type="string"
+				calculate="../../../patient_reported_current_other_treatment_1/medication_added/value"/>
+    		<bind id="number_of_pills_taken_in_the_last_week_any_medication_glibenclamide" nodeset="/form/obs/missed_medication_for_past_week_1/number_of_pills_taken_in_the_last_week_any_medication/value" type="string"/>
+			<bind id="missed_medication_reason_glibenclamide" nodeset="/form/obs/missed_medication_for_past_week_1/missed_medication_reason/xforms_value" required="true()" type="string"
+                  relevant="(../../number_of_pills_taken_in_the_last_week_any_medication/value !='1163^ALL^99DCT')
+ 			        and (../../number_of_pills_taken_in_the_last_week_any_medication/value !='')"/>
+			<bind id="freetext_general_glibenclamide" nodeset="/form/obs/missed_medication_for_past_week_1/freetext_general/value" type="string"/>
+			
+			<!-- ENALAPRIL CURRENT-->
+			<bind id="patient_reported_current_other_treatment_enalapril" nodeset="/form/obs/patient_reported_current_other_treatment_2"
+				relevant="selected(../tmp_drugs,'enalapril')"/>
+			<bind id="medication_added_enalapril" nodeset="/form/obs/patient_reported_current_other_treatment_2/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','1242^ENALAPRIL^99DCT','')"/>
+			<bind id="number_of_milligram_enalapril" nodeset="/form/obs/patient_reported_current_other_treatment_2/number_of_milligram/value" required="true()" type="decimal"/>
+			<bind id="medication_frequency_per_day_enalapril" nodeset="/form/obs/patient_reported_current_other_treatment_2/medication_frequency_per_day/value" required="true()" type="string"/>
+			<!-- ENALAPRIL MISSED -->
+			<bind id="missed_medication_for_past_week_enalapril" nodeset="/form/obs/missed_medication_for_past_week_2" 
+				relevant="selected(../tmp_drugs, 'enalapril')"/>
+			<bind id="missed_medication_added_enalapril" nodeset="/form/obs/missed_medication_for_past_week_2/missed_medication_added/value" type="string"
+				calculate="../../../patient_reported_current_other_treatment_2/medication_added/value"/>
+    		<bind id="number_of_pills_taken_in_the_last_week_any_medication_enalapril" nodeset="/form/obs/missed_medication_for_past_week_2/number_of_pills_taken_in_the_last_week_any_medication/value" type="string"/>
+			<bind id="missed_medication_reason_enalapril" nodeset="/form/obs/missed_medication_for_past_week_2/missed_medication_reason/xforms_value" required="true()" type="string"
+                  relevant="(../../number_of_pills_taken_in_the_last_week_any_medication/value !='1163^ALL^99DCT')
+ 			        and (../../number_of_pills_taken_in_the_last_week_any_medication/value !='')"/>
+			<bind id="freetext_general_enalapril" nodeset="/form/obs/missed_medication_for_past_week_2/freetext_general/value" type="string"/>
+			
+			<!-- HCTZ CURRENT-->
+			<bind id="patient_reported_current_other_treatment_hctz" nodeset="/form/obs/patient_reported_current_other_treatment_3"
+				relevant="selected(../tmp_drugs,'hctz')"/>
+			<bind id="medication_added_hctz" nodeset="/form/obs/patient_reported_current_other_treatment_3/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','1243^HYDROCHLOROTHIAZIDE^99DCT','')"/>
+			<bind id="number_of_milligram_hctz" nodeset="/form/obs/patient_reported_current_other_treatment_3/number_of_milligram/value" required="true()" type="decimal"/>
+			<bind id="medication_frequency_per_day_hctz" nodeset="/form/obs/patient_reported_current_other_treatment_3/medication_frequency_per_day/value" required="true()" type="string"/>
+			<!-- HCTZ MISSED -->
+			<bind id="missed_medication_for_past_week_hctz" nodeset="/form/obs/missed_medication_for_past_week_3" 
+				relevant="selected(../tmp_drugs, 'hctz')"/>
+			<bind id="missed_medication_added_hctz" nodeset="/form/obs/missed_medication_for_past_week_3/missed_medication_added/value" type="string"
+				calculate="../../../patient_reported_current_other_treatment_3/medication_added/value"/>
+    		<bind id="number_of_pills_taken_in_the_last_week_any_medication_hctz" nodeset="/form/obs/missed_medication_for_past_week_3/number_of_pills_taken_in_the_last_week_any_medication/value" type="string"/>
+			<bind id="missed_medication_reason_hctz" nodeset="/form/obs/missed_medication_for_past_week_3/missed_medication_reason/xforms_value" required="true()" type="string"
+                  relevant="(../../number_of_pills_taken_in_the_last_week_any_medication/value !='1163^ALL^99DCT')
+ 			        and (../../number_of_pills_taken_in_the_last_week_any_medication/value !='')"/>
+			<bind id="freetext_general_hctz" nodeset="/form/obs/missed_medication_for_past_week_3/freetext_general/value" type="string"/>
+			
+			<!-- LOSARTAN CURRENT -->
+			<bind id="patient_reported_current_other_treatment_losartan" nodeset="/form/obs/patient_reported_current_other_treatment_4"
+				relevant="selected(../tmp_drugs,'losartan')"/>
+			<bind id="medication_added_losartan" nodeset="/form/obs/patient_reported_current_other_treatment_4/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','2265^LOSARTAN^99DCT','')"/>
+			<bind id="number_of_milligram_losartan" nodeset="/form/obs/patient_reported_current_other_treatment_4/number_of_milligram/value" required="true()" type="decimal"/>
+			<bind id="medication_frequency_per_day_losartan" nodeset="/form/obs/patient_reported_current_other_treatment_4/medication_frequency_per_day/value" required="true()" type="string"/>
+			<!-- LOSARTAN MISSED -->
+			<bind id="missed_medication_for_past_week_losartan" nodeset="/form/obs/missed_medication_for_past_week_4" 
+				relevant="selected(../tmp_drugs, 'losartan')"/>
+			<bind id="missed_medication_added_losartan" nodeset="/form/obs/missed_medication_for_past_week_4/missed_medication_added/value" type="string"
+				calculate="../../../patient_reported_current_other_treatment_4/medication_added/value"/>
+    		<bind id="number_of_pills_taken_in_the_last_week_any_medication_losartan" nodeset="/form/obs/missed_medication_for_past_week_4/number_of_pills_taken_in_the_last_week_any_medication/value" type="string"/>
+			<bind id="missed_medication_reason_losartan" nodeset="/form/obs/missed_medication_for_past_week_4/missed_medication_reason/xforms_value" required="true()" type="string"
+                  relevant="(../../number_of_pills_taken_in_the_last_week_any_medication/value !='1163^ALL^99DCT')
+ 			        and (../../number_of_pills_taken_in_the_last_week_any_medication/value !='')"/>
+			<bind id="freetext_general_losartan" nodeset="/form/obs/missed_medication_for_past_week_4/freetext_general/value" type="string"/>
+			
+			<!-- NIFEDIPINE CURRENT -->
+			<bind id="patient_reported_current_other_treatment_nifedipine" nodeset="/form/obs/patient_reported_current_other_treatment_5"
+				relevant="selected(../tmp_drugs,'nifedipine')"/>
+			<bind id="medication_added_nifedipine" nodeset="/form/obs/patient_reported_current_other_treatment_5/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','250^NIFEDIPINE^99DCT','')"/>
+			<bind id="number_of_milligram_nifedipine" nodeset="/form/obs/patient_reported_current_other_treatment_5/number_of_milligram/value" required="true()" type="decimal"/>
+			<bind id="medication_frequency_per_day_nifedipine" nodeset="/form/obs/patient_reported_current_other_treatment_5/medication_frequency_per_day/value" required="true()" type="string"/>
+			<!-- NIFEDIPINE MISSED -->
+			<bind id="missed_medication_for_past_week_nifedipine" nodeset="/form/obs/missed_medication_for_past_week_5" 
+				relevant="selected(../tmp_drugs, 'nifedipine')"/>
+			<bind id="missed_medication_added_nifedipine" nodeset="/form/obs/missed_medication_for_past_week_5/missed_medication_added/value" type="string"
+				calculate="../../../patient_reported_current_other_treatment_5/medication_added/value"/>
+    		<bind id="number_of_pills_taken_in_the_last_week_any_medication_nifedipine" nodeset="/form/obs/missed_medication_for_past_week_5/number_of_pills_taken_in_the_last_week_any_medication/value" type="string"/>
+			<bind id="missed_medication_reason_nifedipine" nodeset="/form/obs/missed_medication_for_past_week_5/missed_medication_reason/xforms_value" required="true()" type="string"
+                  relevant="(../../number_of_pills_taken_in_the_last_week_any_medication/value !='1163^ALL^99DCT')
+ 			        and (../../number_of_pills_taken_in_the_last_week_any_medication/value !='')"/>
+			<bind id="freetext_general_nifedipine" nodeset="/form/obs/missed_medication_for_past_week_5/freetext_general/value" type="string"/>
+			
+			<!-- OTHER MEDICATIONS CURRENT -->
+			<bind id="patient_reported_current_other_treatment_other" nodeset="/form/obs/patient_reported_current_other_treatment_6"
+				relevant="selected(../tmp_drugs,'other')"/>
+			<bind id="medication_name_freetext_other" nodeset="/form/obs/patient_reported_current_other_treatment_6/medication_name_freetext/value" required="true()" type="string"/>
+			<bind id="number_of_milligram_other" nodeset="/form/obs/patient_reported_current_other_treatment_6/number_of_milligram/value" type="decimal"/>
+			<bind id="number_of_milliliter_other" nodeset="/form/obs/patient_reported_current_other_treatment_6/number_of_milliliter/value"
+				relevant="../../number_of_milligram/value = ''" type="decimal"/>
+			<bind id="medication_frequency_per_day_other" nodeset="/form/obs/patient_reported_current_other_treatment_6/medication_frequency_per_day/value" required="true()" type="string"/>
+			<!-- OTHER MEDICATIONS MISSED -->
+			<bind id="missed_medication_for_past_week_other" nodeset="/form/obs/missed_medication_for_past_week_6" 
+				relevant="selected(../tmp_drugs, 'other')"/>
+    		<bind id="number_of_pills_taken_in_the_last_week_any_medication_other" nodeset="/form/obs/missed_medication_for_past_week_6/number_of_pills_taken_in_the_last_week_any_medication/value" type="string"/>
+			<bind id="missed_medication_reason_other" nodeset="/form/obs/missed_medication_for_past_week_6/missed_medication_reason/xforms_value" required="true()" type="string"
+                  relevant="(../../number_of_pills_taken_in_the_last_week_any_medication/value !='1163^ALL^99DCT')
+ 			        and (../../number_of_pills_taken_in_the_last_week_any_medication/value !='')"/>
+			<bind id="freetext_general_other" nodeset="/form/obs/missed_medication_for_past_week_6/freetext_general/value" type="string"
+				calculate="../../../patient_reported_current_other_treatment_6/medication_name_freetext/value"/>
+    
+			<bind id="review_of_systems_general" nodeset="/form/obs/review_of_systems_general/xforms_value" type="string" required="true()"
+				constraint="not(selected(., 'none') and count-selected(.) > 1)" jr:constraintMsg="If None is select, it should be the only option"/>
+			<bind id="last_menstrual_period_qualitative" nodeset="/form/obs/last_menstrual_period_qualitative/value" type="string"
+				relevant="../../../patient/patient.sex='F'"/>
+			<bind id="systolic_blood_pressure" nodeset="/form/obs/systolic_blood_pressure/value" required="true()"
+				constraint=". &gt;= 50 and . &lt;= 300" jr:constraintMsg="Value should be between 50 and 300 inclusive" type="decimal"/>
+			<bind id="diastolic_blood_pressure" nodeset="/form/obs/diastolic_blood_pressure/value" required="true()"
+				constraint=". &gt;= 20 and . &lt;= 150 and . &lt;= ../../systolic_blood_pressure/value" jr:constraintMsg="Value should be between 20 and 150 inclusive and cannot be more than Systolic Blood Pressure" type="decimal"/>
+			<bind id="pulse" nodeset="/form/obs/pulse/value" constraint=". &gt;= 0 and . &lt;= 230" jr:constraintMsg="Value should be between 0 and 230 inclusive" type="decimal"/>
+			<bind id="temperature_c" nodeset="/form/obs/temperature_c/value" constraint=". &gt;= 25.0 and . &lt;= 43.0" jr:constraintMsg="Value should be between 25.0 and 43.0 inclusive" type="decimal"/>
+			<bind id="weight_kg" nodeset="/form/obs/weight_kg/value" constraint=". &gt;= 0.0 and . &lt;= 250.0" jr:constraintMsg="Value should be between 0.0 and 250.0 inclusive" type="decimal"/>
+			<bind id="height_cm" nodeset="/form/obs/height_cm/value" constraint=". &gt;= 10.0 and . &lt;= 228.0" jr:constraintMsg="Value should be between 10.0 and 228.0 inclusive" type="decimal"/>
+			<bind id="height_m" nodeset="/form/obs/height_m" type="decimal" readonly="true()"
+				calculate="if(../height_cm/value='','',
+					if(../height_cm/value=100.0,1.000000001,../height_cm/value div 100))"/>
+			<bind id="body_mass_index" nodeset="/form/obs/body_mass_index/value" readonly="true()" type="decimal"
+				relevant="../../weight_kg/value!='' and ../../height_m!=''"
+				calculate="if(../../weight_kg/value='' or ../../height_m='','',../../weight_kg/value div (../../height_m * ../../height_m))"/>
+			<bind id="serum_glucose_fasting" nodeset="/form/obs/serum_glucose_fasting/value" constraint=". &gt;= 0 and . &lt;= 150" jr:constraintMsg="Value should be between 0 and 150 inclusive" type="decimal"/>
+			<bind id="serum_glucose" nodeset="/form/obs/serum_glucose/value" relevant="../../serum_glucose_fasting/value=''" type="decimal"
+				constraint=". &gt;= 0.0 and . &lt;= 150.0" jr:constraintMsg="Value should be between 0.0 and 150.0 inclusive"/>
+			<bind id="glycosylated_hemoglobin" nodeset="/form/obs/glycosylated_hemoglobin/value" constraint=". &gt;= 0 and . &lt;= 20" jr:constraintMsg="Value should be between 0 and 20 inclusive" type="decimal"/>
+			<bind id="urine_pregnancy_test_qualitative" nodeset="/form/obs/urine_pregnancy_test_qualitative/value" type="string"
+				required="true()" relevant="../../../patient/patient.sex = 'F'"/>
+			
+			<!-- HTN REMINDERS -->
+			<bind id="htn_reminders" nodeset="/form/obs/htn_reminders" readonly="true()" type="string"/>
+			
+			<bind id="htn_reminder_1" nodeset="/form/obs/htn_reminders/reminder_1" readonly="true()" type="string"
+				relevant="(../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT' or ../../current_visit_type/value = '7035^SECOND DISPENSARY VISIT AFTER HCT ^99DCT')
+				and	(../../systolic_blood_pressure/value &gt; 100 and ../../systolic_blood_pressure/value &lt; 140)
+				and (../../diastolic_blood_pressure/value &gt; 50 and ../../diastolic_blood_pressure/value &lt; 90) 
+				and not(selected(../../tmp_drugs, 'enalapril') or 
+						selected(../../tmp_drugs, 'hctz') or
+						selected(../../tmp_drugs, 'losartan') or
+						selected(../../tmp_drugs, 'nifedipine'))
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))"/>
+
+            <bind id="htn_reminder_2" nodeset="/form/obs/htn_reminders/reminder_2" readonly="true()" type="string"
+                  relevant="(../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT')
+				and ((../../systolic_blood_pressure/value &gt;= 140 and ../../systolic_blood_pressure/value &lt; 180)
+					or (../../diastolic_blood_pressure/value &gt;= 90 and ../../diastolic_blood_pressure/value &lt; 110))
+				and (../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT')
+				and (/form/patient/tmp/age_in_years &lt; 35)
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))"/>
+
+			<bind id="htn_reminder_3a" nodeset="/form/obs/htn_reminders/reminder_3a" readonly="true()" type="string"
+				relevant="../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT' 
+				and ((../../systolic_blood_pressure/value &gt;= 140 and ../../systolic_blood_pressure/value &lt; 180) 
+					or (../../diastolic_blood_pressure/value &gt;= 90 and ../../diastolic_blood_pressure/value &lt; 110)) 
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT' 
+				and /form/patient/tmp/age_in_years &gt;= 35
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))
+				and (../../serum_glucose_fasting/value &lt; 5.6 or ../../glycosylated_hemoglobin/value &lt; 5.7)"/>
+
+			<bind id="htn_reminder_3b" nodeset="/form/obs/htn_reminders/reminder_3b" readonly="true()" type="string"
+				relevant="../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT' 
+				and ((../../systolic_blood_pressure/value &gt;= 140 and ../../systolic_blood_pressure/value &lt; 180) 
+					or (../../diastolic_blood_pressure/value &gt;= 90 and ../../diastolic_blood_pressure/value &lt; 110)) 
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT' 
+				and /form/patient/tmp/age_in_years &gt;= 35
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))
+				and (selected(../../tmp_drugs, 'enalapril') or 
+					selected(../../tmp_drugs, 'hctz') or
+					selected(../../tmp_drugs, 'losartan') or
+					selected(../../tmp_drugs, 'nifedipine'))"/>
+
+			<bind id="htn_reminder_3c" nodeset="/form/obs/htn_reminders/reminder_3c" readonly="true()" type="string"
+				relevant="../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT' 
+				and ((../../systolic_blood_pressure/value &gt;= 140 and ../../systolic_blood_pressure/value &lt; 180) 
+					or (../../diastolic_blood_pressure/value &gt;= 90 and ../../diastolic_blood_pressure/value &lt; 110)) 
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT' 
+				and /form/patient/tmp/age_in_years &gt;= 35
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))
+				and (../../serum_glucose_fasting/value &gt;= 5.6 or ../../glycosylated_hemoglobin/value &gt;= 5.7)"/>
+
+			<bind id="htn_reminder_4" nodeset="/form/obs/htn_reminders/reminder_4" readonly="true()" type="string"
+				relevant="(../../systolic_blood_pressure/value &gt;= 180 or ../../diastolic_blood_pressure/value &gt;= 110)
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'"/>
+			
+			<bind id="htn_reminder_5" nodeset="/form/obs/htn_reminders/reminder_5" readonly="true()" type="string"
+				relevant="(../../systolic_blood_pressure/value &gt;= 140 or ../../diastolic_blood_pressure/value &gt;= 90)
+				and ../../urine_pregnancy_test_qualitative/value = '703^POSITIVE^99DCT'"/>
+
+			<bind id="htn_reminder_6a" nodeset="/form/obs/htn_reminders/reminder_6a" readonly="true()" type="string"
+				relevant="../../current_visit_type/value = '7035^SECOND DISPENSARY VISIT AFTER HCT ^99DCT'
+				and ((../../systolic_blood_pressure/value &gt;= 140 and ../../systolic_blood_pressure/value &lt; 180) 
+					or (../../diastolic_blood_pressure/value &gt;= 90 and ../../diastolic_blood_pressure/value &lt; 110)) 
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and /form/patient/tmp/age_in_years &gt;= 35
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))
+				and not(selected(../../tmp_drugs, 'enalapril') or 
+						selected(../../tmp_drugs, 'hctz') or
+						selected(../../tmp_drugs, 'losartan') or
+						selected(../../tmp_drugs, 'nifedipine'))
+				and (../../serum_glucose_fasting/value &lt; 5.6 or ../../glycosylated_hemoglobin/value &lt; 5.7)"/>
+
+			<bind id="htn_reminder_6b" nodeset="/form/obs/htn_reminders/reminder_6b" readonly="true()" type="string"
+				relevant="../../current_visit_type/value = '7035^SECOND DISPENSARY VISIT AFTER HCT ^99DCT'
+				and ((../../systolic_blood_pressure/value &gt;= 140 and ../../systolic_blood_pressure/value &lt; 180) 
+					or (../../diastolic_blood_pressure/value &gt;= 90 and ../../diastolic_blood_pressure/value &lt; 110)) 
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and ../../../patient/tmp/age_in_years &gt;= 35
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))
+				and not(selected(../../tmp_drugs, 'enalapril') or 
+						selected(../../tmp_drugs, 'hctz') or
+						selected(../../tmp_drugs, 'losartan') or
+						selected(../../tmp_drugs, 'nifedipine'))
+				and (../../serum_glucose_fasting/value &gt;= 5.6 or ../../glycosylated_hemoglobin/value &gt;= 5.7)"/>
+			
+			<bind id="htn_reminder_7" nodeset="/form/obs/htn_reminders/reminder_7" readonly="true()" type="string"
+				relevant="((../../systolic_blood_pressure/value &gt;= 100 and ../../systolic_blood_pressure/value &lt; 180) 
+					or (../../diastolic_blood_pressure/value &gt;= 50 and ../../diastolic_blood_pressure/value &lt; 110)) 
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and (selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+					selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+					selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+					selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))"/>
+
+			<bind id="htn_reminder_8" nodeset="/form/obs/htn_reminders/reminder_8" readonly="true()" type="string"
+				relevant="../../current_visit_type/value != '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT'
+				and ../../systolic_blood_pressure/value &lt; 140 and ../../diastolic_blood_pressure/value &lt; 90 
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and ../../../patient/tmp/age_in_years &gt;= 35
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))
+				and (selected(/form/obs/tmp_drugs, 'hctz ')
+						and /form/obs/patient_reported_current_other_treatment_3/number_of_milligram/value = 25.0
+						and (selected(/form/obs/patient_reported_current_other_treatment_3/medication_frequency_per_day/value, '1639^MORNING^99DCT') or
+                             selected(/form/obs/patient_reported_current_other_treatment_3/medication_frequency_per_day/value, '1730^EVENING^99DCT') or
+                             selected(/form/obs/patient_reported_current_other_treatment_3/medication_frequency_per_day/value, '1891^ONCE A DAY^99DCT')
+						     )
+					)"/>
+
+			<bind id="htn_reminder_9" nodeset="/form/obs/htn_reminders/reminder_9" readonly="true()" type="string"
+				relevant="../../current_visit_type/value = '7036^RETURN DISPENSARY VISIT^99DCT'
+				and ((../../systolic_blood_pressure/value &gt;= 140 and ../../systolic_blood_pressure/value &lt; 180) 
+					or (../../diastolic_blood_pressure/value &gt;= 90 and ../../diastolic_blood_pressure/value &lt; 110)) 
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and ../../../patient/tmp/age_in_years &gt;= 35
+				and not(selected(../../review_of_systems_general/xforms_value, 'edema_legs') or 
+						selected(../../review_of_systems_general/xforms_value, 'shortness_of_breath_with_exertion') or
+						selected(../../review_of_systems_general/xforms_value, 'oliguria') or
+						selected(../../review_of_systems_general/xforms_value, 'focal_weakness'))
+				and (selected(/form/obs/tmp_drugs, 'hctz ')
+						and /form/obs/patient_reported_current_other_treatment_3/number_of_milligram/value = 25.0
+						and (selected(/form/obs/patient_reported_current_other_treatment_3/medication_frequency_per_day/value, '1639^MORNING^99DCT') or
+                             selected(/form/obs/patient_reported_current_other_treatment_3/medication_frequency_per_day/value, '1730^EVENING^99DCT') or
+                             selected(/form/obs/patient_reported_current_other_treatment_3/medication_frequency_per_day/value, '1891^ONCE A DAY^99DCT')
+						     )
+					)"/>
+						
+			<bind id="htn_reminder_10" nodeset="/form/obs/htn_reminders/reminder_10" readonly="true()" type="string"
+				relevant="../../systolic_blood_pressure/value &lt; 100 or ../../diastolic_blood_pressure/value &lt; 50"/>
+			
+			<!-- DIABETES REMINDERS -->
+			<bind id="diabetes_reminders" nodeset="/form/obs/diabetes_reminders" readonly="true()" type="string"/>
+			<bind id="diabetes_reminder_1" nodeset="/form/obs/diabetes_reminders/reminder_1" readonly="true()" type="string"
+				relevant="(../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT' or ../../current_visit_type/value = '7035^SECOND DISPENSARY VISIT AFTER HCT ^99DCT')
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and not(selected(../../tmp_drugs, 'metformin') or 
+						selected(../../tmp_drugs, 'glibenclamide'))
+				and (../../serum_glucose_fasting/value &lt; 5.6 or ../../glycosylated_hemoglobin/value &lt; 5.7)"/>
+			<bind id="diabetes_reminder_2" nodeset="/form/obs/diabetes_reminders/reminder_2" readonly="true()" type="string"
+				relevant="../../urine_pregnancy_test_qualitative/value = '703^POSITIVE^99DCT'
+				and (../../serum_glucose_fasting/value &gt;= 5.6 or ../../glycosylated_hemoglobin/value &gt;= 5.7)"/>
+			<bind id="diabetes_reminder_3" nodeset="/form/obs/diabetes_reminders/reminder_3" readonly="true()" type="string"
+				relevant="(../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT' or ../../current_visit_type/value = '7035^SECOND DISPENSARY VISIT AFTER HCT ^99DCT')
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and not(selected(../../tmp_drugs, 'metformin') or 
+						selected(../../tmp_drugs, 'glibenclamide'))
+				and ((../../serum_glucose_fasting/value &gt;= 5.6 and ../../serum_glucose_fasting/value &lt;= 6.9)
+					or (../../glycosylated_hemoglobin/value &gt;= 5.7 and ../../glycosylated_hemoglobin/value &lt;= 7.0))
+				and (../../systolic_blood_pressure/value &lt; 140 or ../../diastolic_blood_pressure/value &lt; 90)"/>
+			
+			<bind id="diabetes_reminder_4" nodeset="/form/obs/diabetes_reminders/reminder_4" readonly="true()" type="string"
+				relevant="(../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT' or ../../current_visit_type/value = '7035^SECOND DISPENSARY VISIT AFTER HCT ^99DCT')
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and not(selected(../../tmp_drugs, 'metformin') or 
+						selected(../../tmp_drugs, 'glibenclamide'))
+				and ((../../serum_glucose_fasting/value &gt; 6.9 and ../../serum_glucose_fasting/value &lt;= 10.0)
+					or (../../glycosylated_hemoglobin/value &gt; 7.0 and ../../glycosylated_hemoglobin/value &lt;= 9.0))
+				and (../../systolic_blood_pressure/value &lt; 140 or ../../diastolic_blood_pressure/value &lt; 90)"/>
+				
+			<bind id="diabetes_reminder_5" nodeset="/form/obs/diabetes_reminders/reminder_5" readonly="true()" type="string"
+				relevant="(../../current_visit_type/value = '7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT' or ../../current_visit_type/value = '7035^SECOND DISPENSARY VISIT AFTER HCT ^99DCT')
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and not(selected(../../tmp_drugs, 'metformin') or 
+						selected(../../tmp_drugs, 'glibenclamide'))
+				and (../../serum_glucose_fasting/value &gt; 10.0 or ../../glycosylated_hemoglobin/value &gt; 9.0)"/>
+			<bind id="diabetes_reminder_6" nodeset="/form/obs/diabetes_reminders/reminder_6" readonly="true()" type="string"
+				relevant="selected(../../tmp_drugs, 'metformin')
+				and (selected(../../review_of_systems_general/xforms_value, 'nausea') or 
+					selected(../../review_of_systems_general/xforms_value, 'vomiting') or
+					selected(../../review_of_systems_general/xforms_value, 'abdominal_pain') or
+					selected(../../review_of_systems_general/xforms_value, 'diarrhea') or
+					selected(../../review_of_systems_general/xforms_value, 'constipation'))"/>
+			<bind id="diabetes_reminder_7" nodeset="/form/obs/diabetes_reminders/reminder_7" readonly="true()" type="string"
+				relevant="selected(../../tmp_drugs, 'glibenclamide') 
+				and selected(../../review_of_systems_general/xforms_value, 'hypoglycemia')"/>
+
+			<bind id="diabetes_reminder_8" nodeset="/form/obs/diabetes_reminders/reminder_8" readonly="true()" type="string"
+				relevant="../../current_visit_type/value = '7036^RETURN DISPENSARY VISIT^99DCT'
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and ../../serum_glucose_fasting/value &gt;= 8.0
+				and not(selected(../../review_of_systems_general/xforms_value, 'nausea') or
+						selected(../../review_of_systems_general/xforms_value, 'abdominal_pain') or
+						selected(../../review_of_systems_general/xforms_value, 'diarrhea') or
+						selected(../../review_of_systems_general/xforms_value, 'constipation'))
+				and (selected(/form/obs/tmp_drugs, 'metformin')
+						and /form/obs/patient_reported_current_other_treatment/number_of_milligram/value = 500.0
+						and (selected(/form/obs/patient_reported_current_other_treatment/medication_frequency_per_day/value, '1888^TWICE A DAY^99DCT')
+						     )
+					)"/>
+
+			<bind id="diabetes_reminder_9" nodeset="/form/obs/diabetes_reminders/reminder_9" readonly="true()" type="string"
+                  relevant="../../current_visit_type/value = '7036^RETURN DISPENSARY VISIT^99DCT'
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and ../../serum_glucose_fasting/value &gt;= 8.0
+				and not(selected(../../review_of_systems_general/xforms_value, 'nausea') or
+						selected(../../review_of_systems_general/xforms_value, 'abdominal_pain') or
+						selected(../../review_of_systems_general/xforms_value, 'diarrhea') or
+						selected(../../review_of_systems_general/xforms_value, 'constipation'))
+				and (selected(/form/obs/tmp_drugs, 'metformin')
+						and /form/obs/patient_reported_current_other_treatment/number_of_milligram/value = 750.0
+						and (selected(/form/obs/patient_reported_current_other_treatment/medication_frequency_per_day/value, '1888^TWICE A DAY^99DCT')
+						     )
+					)"/>
+
+
+			<bind id="diabetes_reminder_10" nodeset="/form/obs/diabetes_reminders/reminder_10" readonly="true()" type="string"
+				relevant="../../current_visit_type/value = '7036^RETURN DISPENSARY VISIT^99DCT'
+				and ../../urine_pregnancy_test_qualitative/value != '703^POSITIVE^99DCT'
+				and ../../serum_glucose_fasting/value &gt;= 8.0 
+				and selected(../../tmp_drugs, 'metformin')
+				and ../../patient_reported_current_other_treatment/number_of_milligram/value = 1000
+				and not(selected(../../review_of_systems_general/xforms_value, 'nausea') or 
+					selected(../../review_of_systems_general/xforms_value, 'vomiting') or
+					selected(../../review_of_systems_general/xforms_value, 'abdominal_pain') or
+					selected(../../review_of_systems_general/xforms_value, 'diarrhea') or
+					selected(../../review_of_systems_general/xforms_value, 'constipation'))"/>
+																									
+			<!-- MEDICATIONS DISPENSED -->
+			<bind id="algorithm_diabetes" nodeset="/form/obs/algorithm_diabetes" type="string" readonly="true()"/>
+			<bind id="algorithm_htn" nodeset="/form/obs/algorithm_htn" type="string" readonly="true()"/>
+			<bind id="drugs_dispensed_info" nodeset="/form/obs/drugs_dispensed_info" type="string" readonly="true()"/>
+			<bind id="drugs_dispensed" nodeset="/form/obs/drugs_dispensed" type="string" 
+				constraint="not(selected(., 'none') and count-selected(.) > 1)" jr:constraintMsg="If None is select, it should be the only option"/>
+			<!-- METFORMIN -->
+			<bind id="other_medication_order_metformin" nodeset="/form/obs/other_medication_order"
+				relevant="selected(../drugs_dispensed,'metformin')"/>
+			<bind id="omo_medication_added_metformin" nodeset="/form/obs/other_medication_order/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','2261^METFORMIN^99DCT','')"/>
+			<bind id="omo_dosage_change_metformin" nodeset="/form/obs/other_medication_order/dosage_change/value" type="string" required="true()"
+				relevant="selected(../../../tmp_drugs, 'metformin')"/>
+			<bind id="tmp_dosage_change_metformin" nodeset="/form/obs/other_medication_order/tmp_dosage_change" type="decimal" required="true()"
+				relevant="../dosage_change/value != '1066^NO^99DCT' or not(selected(../../tmp_drugs, 'metformin'))"/>
+			<bind id="omo_number_of_milligram_metformin" nodeset="/form/obs/other_medication_order/number_of_milligram/value" readonly="true()" constraint=". &gt;= 0.0 and . &lt;= 1000.0" jr:constraintMsg="Value should be between 0.0 and 1000.0 inclusive" type="decimal"
+				calculate="if(../../dosage_change/value != '1066^NO^99DCT', ../../tmp_dosage_change,
+							../../../patient_reported_current_other_treatment/number_of_milligram/value)"/>
+			<bind id="omo_number_of_tablets_metformin" nodeset="/form/obs/other_medication_order/number_of_tablets/value" required="true()" constraint=". &gt;= 0 and . &lt;= 180" jr:constraintMsg="Value should be between 0 and 180 inclusive" type="decimal"/>
+			<bind id="omo_medication_frequency_per_day_metformin" nodeset="/form/obs/other_medication_order/medication_frequency_per_day/value" required="true()" type="string"/>
+			<bind id="omo_medication_received_at_vist_metformin" nodeset="/form/obs/other_medication_order/medication_received_at_vist/value" type="string" required="true()"/>
+			<!-- GLIBECLAMIDE -->
+			<bind id="other_medication_order_glibenclamide" nodeset="/form/obs/other_medication_order_1"
+				relevant="selected(../drugs_dispensed,'glibenclamide')"/>
+			<bind id="omo_medication_added_glibenclamide" nodeset="/form/obs/other_medication_order_1/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','2257^GLIBENCLAMIDE^99DCT','')"/>
+			<bind id="omo_number_of_tablets_glibenclamide" nodeset="/form/obs/other_medication_order_1/number_of_tablets/value" required="true()" constraint=". &gt;= 0 and . &lt;= 180" jr:constraintMsg="Value should be between 0 and 180 inclusive" type="decimal"/>
+			<bind id="omo_number_of_milligram_glibenclamide" nodeset="/form/obs/other_medication_order_1/number_of_milligram/value" required="true()" constraint=". &gt;= 0.0 and . &lt;= 1000.0" jr:constraintMsg="Value should be between 0.0 and 1000.0 inclusive" type="decimal"/>
+			<bind id="omo_medication_frequency_per_day_glibenclamide" nodeset="/form/obs/other_medication_order_1/medication_frequency_per_day/value" required="true()" type="string"/>
+			<bind id="omo_medication_received_at_vist_glibenclamide" nodeset="/form/obs/other_medication_order_1/medication_received_at_vist/value" required="true()" type="string"/>
+			<!-- ENALAPRIL -->
+			<bind id="other_medication_order_enalapril" nodeset="/form/obs/other_medication_order_2"
+				relevant="selected(../drugs_dispensed,'enalapril')"/>
+			<bind id="omo_medication_added_enalapril" nodeset="/form/obs/other_medication_order_2/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','1242^ENALAPRIL^99DCT','')"/>
+			<bind id="omo_number_of_tablets_enalapril" nodeset="/form/obs/other_medication_order_2/number_of_tablets/value" required="true()" constraint=". &gt;= 0 and . &lt;= 180" jr:constraintMsg="Value should be between 0 and 180 inclusive" type="decimal"/>
+			<bind id="omo_number_of_milligram_enalapril" nodeset="/form/obs/other_medication_order_2/number_of_milligram/value" required="true()" constraint=". &gt;= 0.0 and . &lt;= 1000.0" jr:constraintMsg="Value should be between 0.0 and 1000.0 inclusive" type="decimal"/>
+			<bind id="omo_medication_frequency_per_day_enalapril" nodeset="/form/obs/other_medication_order_2/medication_frequency_per_day/value" required="true()" type="string"/>
+			<bind id="omo_medication_received_at_vist_enalapril" nodeset="/form/obs/other_medication_order_2/medication_received_at_vist/value" required="true()" type="string"/>
+			<!-- HCTZ -->
+			<bind id="other_medication_order_hctz" nodeset="/form/obs/other_medication_order_3"
+				relevant="selected(../drugs_dispensed,'hctz')"/>
+			<bind id="omo_medication_added_hctz" nodeset="/form/obs/other_medication_order_3/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','1243^HYDROCHLOROTHIAZIDE^99DCT','')"/>
+			<bind id="omo_number_of_tablets_hctz" nodeset="/form/obs/other_medication_order_3/number_of_tablets/value" required="true()" constraint=". &gt;= 0 and . &lt;= 180" jr:constraintMsg="Value should be between 0 and 180 inclusive" type="decimal"/>
+			<bind id="omo_number_of_milligram_hctz" nodeset="/form/obs/other_medication_order_3/number_of_milligram/value" required="true()" constraint=". &gt;= 0.0 and . &lt;= 1000.0" jr:constraintMsg="Value should be between 0.0 and 1000.0 inclusive" type="decimal"/>
+			<bind id="omo_medication_frequency_per_day_hctz" nodeset="/form/obs/other_medication_order_3/medication_frequency_per_day/value" required="true()" type="string"/>
+			<bind id="omo_medication_received_at_vist_hctz" nodeset="/form/obs/other_medication_order_3/medication_received_at_vist/value" required="true()" type="string"/>
+			<!-- LOSARTAN -->
+			<bind id="other_medication_order_losartan" nodeset="/form/obs/other_medication_order_4"
+				relevant="selected(../drugs_dispensed,'losartan')"/>
+			<bind id="omo_medication_added_losartan" nodeset="/form/obs/other_medication_order_4/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','2265^LOSARTAN^99DCT','')"/>
+			<bind id="omo_number_of_tablets_losartan" nodeset="/form/obs/other_medication_order_4/number_of_tablets/value" required="true()" constraint=". &gt;= 0 and . &lt;= 180" jr:constraintMsg="Value should be between 0 and 180 inclusive" type="decimal"/>
+			<bind id="omo_number_of_milligram_losartan" nodeset="/form/obs/other_medication_order_4/number_of_milligram/value" required="true()" constraint=". &gt;= 0.0 and . &lt;= 1000.0" jr:constraintMsg="Value should be between 0.0 and 1000.0 inclusive" type="decimal"/>
+			<bind id="omo_medication_frequency_per_day_losartan" nodeset="/form/obs/other_medication_order_4/medication_frequency_per_day/value" required="true()" type="string"/>
+			<bind id="omo_medication_received_at_vist_losartan" nodeset="/form/obs/other_medication_order_4/medication_received_at_vist/value" required="true()" type="string"/>
+			<!-- NIFEDIPINE -->
+			<bind id="other_medication_order_nifedipine" nodeset="/form/obs/other_medication_order_5"
+				relevant="selected(../drugs_dispensed,'nifedipine')"/>
+			<bind id="omo_medication_added_nifedipine" nodeset="/form/obs/other_medication_order_5/medication_added/value" type="string"
+				calculate="if(../../number_of_milligram/value != '','250^NIFEDIPINE^99DCT','')"/>
+			<bind id="omo_number_of_tablets_nifedipine" nodeset="/form/obs/other_medication_order_5/number_of_tablets/value" required="true()" constraint=". &gt;= 0 and . &lt;= 180" jr:constraintMsg="Value should be between 0 and 180 inclusive" type="decimal"/>
+			<bind id="omo_number_of_milligram_nifedipine" nodeset="/form/obs/other_medication_order_5/number_of_milligram/value" required="true()" constraint=". &gt;= 0.0 and . &lt;= 1000.0" jr:constraintMsg="Value should be between 0.0 and 1000.0 inclusive" type="decimal"/>
+			<bind id="omo_medication_frequency_per_day_nifedipine" nodeset="/form/obs/other_medication_order_5/medication_frequency_per_day/value" required="true()" type="string"/>
+			<bind id="omo_medication_received_at_vist_nifedipine" nodeset="/form/obs/other_medication_order_5/medication_received_at_vist/value" required="true()" type="string"/>
+			<!-- OTHER MEDICATIONS -->
+			<bind id="other_medication_order_other" nodeset="/form/obs/other_medication_order_6"
+				relevant="selected(../drugs_dispensed,'other')"/>
+			<bind id="omo_medication_name_freetext_other" nodeset="/form/obs/other_medication_order_6/medication_name_freetext/value" required="true()" type="string"/>
+			<bind id="omo_number_of_tablets_other" nodeset="/form/obs/other_medication_order_6/number_of_tablets/value" required="true()" constraint=". &gt;= 0 and . &lt;= 180" jr:constraintMsg="Value should be between 0 and 180 inclusive" type="decimal"/>
+			<bind id="omo_number_of_milligram_other" nodeset="/form/obs/other_medication_order_6/number_of_milligram/value" required="true()" constraint=". &gt;= 0.0 and . &lt;= 1000.0" jr:constraintMsg="Value should be between 0.0 and 1000.0 inclusive" type="decimal"/>
+			<bind id="omo_medication_frequency_per_day_other" nodeset="/form/obs/other_medication_order_6/medication_frequency_per_day/value" required="true()" type="string"/>
+			<bind id="omo_medication_received_at_vist_other" nodeset="/form/obs/other_medication_order_6/medication_received_at_vist/value" required="true()" type="string"/>
+			
+			<!-- END OF MEDICATIONS DISPENSED -->
+			
+			<bind id="patient_education_received_this_visit" nodeset="/form/obs/patient_education_received_this_visit/xforms_value" type="string"
+				constraint="not(selected(., 'none') and count-selected(.) > 1)" jr:constraintMsg="If None is select, it should be the only option"/>
+			<bind id="referrals_ordered" nodeset="/form/obs/referrals_ordered/xforms_value" type="string"
+				constraint="not(selected(., 'none') and count-selected(.) > 1)" jr:constraintMsg="If None is select, it should be the only option"/>
+			<bind id="return_visit_date" nodeset="/form/obs/return_visit_date/value" type="date"
+				constraint=". &gt; today()" jr:constraintMsg="Return Date to Dispensary must be in the future"/>
+			
+			<!-- groups mapping -->
+			<bind id="phct_review" nodeset="/form/obs/phct_review" relevant="../current_visit_type/value='7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT'"/>
+			
+			<!--<itext>
+				<translation lang="English" default="">
+					<text id="algorithm_diabetes">
+						<value form="long">Diabetes Screening and care algorithm</value>
+						<value form="image">jr://images/DiabetesAlgorithm.jpg</value>
+					</text>
+					<text id="algorithm_htn">
+						<value form="long">Hypertension screening and care algorithm</value>
+						<value form="image">jr://images/HTNAlgorithm.jpg</value>
+					</text>
+				</translation>
+			</itext>-->
+		</xf:model>
+	</xf:head>
+	<xf:body>
+		<group>
+			<label>Dispensary Confirmation Form</label>
+			<!-- Demographics -->
+			<group appearance="field-list" bind="patient">
+				<label>Demographics</label>
+				<!-- <input bind="amrs_id_scan">
+					<label>AMRS ID SCAN</label>
+					<hint>The scanned barcode AMRS ID.</hint>
+				</input>
+				<input bind="amrs_id_manual">
+					<label>AMRS ID</label>
+					<hint>The manually entered AMRS ID.</hint>
+				</input>
+				<input bind="amrs_id_manual_confirm">
+					<label>AMRS ID (CONFIRM)</label>
+					<hint>Confirm the manually entered AMRS ID.</hint>
+				</input> -->
+				<input bind="patient.medical_record_number">
+					<label>AMRS Identifier</label>
+				</input>
+				<input bind="patient.family_name">
+					<label>Family Name</label>
+				</input>
+				<input bind="patient.given_name">
+					<label>Given Name</label>
+				</input>
+				<input bind="patient.middle_name">
+					<label>Middle Name</label>
+				</input>
+				<!-- <select1 bind="patient.sex">
+					<label>Sex</label>
+					<item>
+						<label>Male</label>
+						<value>M</value>
+					</item>
+					<item>
+						<label>Female</label>
+						<value>F</value>
+					</item>
+				</select1>
+				<select1 bind="birthdate_type">
+					<label>Will Record Date of Birth...</label>
+					<hint>How will you capture the patients birth-date?</hint>
+					<item>
+						<label>By Age</label>
+						<value>age</value>
+					</item>
+					<item>
+						<label>By Birth-Date</label>
+						<value>birthdate</value>
+					</item>
+				</select1>
+				<input bind="age">
+					<label>How old are you now?</label>
+					<hint>Age in complete years</hint>
+				</input>
+				<input bind="birthdate">
+					<label>Select Birthdate</label>
+				</input>
+				<select1 bind="birthdate_estimated">
+					<label>Is this birthdate an estimate?</label>
+					<item>
+						<label>Yes</label>
+						<value>true</value>
+					</item>
+					<item>
+						<label>No</label>
+						<value>false</value>
+					</item>
+				</select1> -->
+				<input bind="patient.sex">
+					<label>Sex</label>
+				</input>
+				<input bind="patient.birthdate">
+					<label>Birthdate</label>
+				</input>
+				<!-- <input bind="patient.birthdate_estimated">
+					<label>Birthdate Estimated?</label>
+				</input> -->
+			</group>
+			<select1 bind="encounter.location_id">
+				<label>Name of Dispensary</label>
+				<item>
+					<label>Mosoriot Health Centre</label>
+					<value>2</value>
+				</item>
+				<item>
+					<label>Turbo Health Centre</label>
+					<value>3</value>
+				</item>
+				<item>
+					<label>Teso District Hospital</label>
+					<value>12</value>
+				</item>
+				<item>
+				<item>
+					<label>Chepsaita Dispensary</label>
+					<value>60</value>
+				</item>
+				<item>
+					<label>Angurai Health Centre</label>
+					<value>65</value>
+				</item>
+				<item>
+					<label>Changara Dispensary</label>
+					<value>90</value>
+				</item>
+				<item>
+					<label>Malaba Dispensary</label>
+					<value>91</value>
+				</item>
+					<label>Kamollo Dispensary</label>
+					<value>106</value>
+				</item>
+				<item>
+					<label>Mogoget Dispensary</label>
+					<value>110</value>
+				</item>
+				<item>
+					<label>Biribiriet Dispensary</label>
+					<value>111</value>
+				</item>
+				<item>
+					<label>Itigo Dispensary</label>
+					<value>112</value>
+				</item>
+				<item>
+					<label>Lelmokwo Dispensary</label>
+					<value>113</value>
+				</item>
+				<item>
+					<label>Kokwet Dispensary</label>
+					<value>114</value>
+				</item>
+				<item>
+					<label>Ngechek Dispensary</label>
+					<value>115</value>
+				</item>
+				<item>
+					<label>Cheramei Dispensary</label>
+					<value>116</value>
+				</item>
+				<item>
+					<label>Murgusi Dispensary</label>
+					<value>117</value>
+				</item>
+				<item>
+					<label>Cheplasgei Dispensary</label>
+					<value>118</value>
+				</item>
+				<item>
+					<label>Sigot Dispensary</label>
+					<value>119</value>
+				</item>
+				<item>
+					<label>Sugoi A Dispensary</label>
+					<value>120</value>
+				</item>
+				<item>
+					<label>Sugoi B	Dispensary</label>
+					<value>121</value>
+				</item>
+				<item>
+					<label>Chepkemel Dispensary</label>
+					<value>122</value>
+				</item>
+				<item>
+					<label>Akichelesit Dispensary</label>
+					<value>124</value>
+				</item>
+				<item>
+					<label>Aboloi Dispensary</label>
+					<value>125</value>
+				</item>
+				<item>
+					<label>Moding Dispensary</label>
+					<value>126</value>
+				</item>
+				<item>
+					<label>Sambut</label>
+					<value>127</value>
+				</item>
+				<item>
+					<label>Ngenyilel</label>
+					<value>128</value>
+				</item>
+				<item>
+					<label>Sosiani</label>
+					<value>129</value>
+				</item>
+			</select1>
+			<select1 appearance="autocomplete" bind="provider_id_select">
+				<label>Provider ID</label>
+				<item>
+					<label>David S. Pamba</label>
+					<value>3356-3</value>
+				</item>
+				<item>
+					<label>Ariya Patrick</label>
+					<value>237-8</value>
+				</item>
+				<item>
+					<label>Benjamin Osiya Ekirapa</label>
+					<value>3331-6</value>
+				</item>
+				<item>
+					<label>Molly Omodek Aluku</label>
+					<value>3332-4</value>
+				</item>
+				<item>
+					<label>Mercyline Lubisya Omusolo</label>
+					<value>3333-2</value>
+				</item>
+				<item>
+					<label>Julita Auma Ndege</label>
+					<value>3334-0</value>
+				</item>
+				<item>
+					<label>Caroline Fedha Injete</label>
+					<value>3335-7</value>
+				</item>
+				<item>
+					<label>Nelly Nabwire Shiundu</label>
+					<value>3336-5</value>
+				</item>
+				<item>
+					<label>Nicholas Dekkers Shitaha</label>
+					<value>3337-3</value>
+				</item>
+				<item>
+					<label>Tezra Asangire Okaal</label>
+					<value>3338-1</value>
+				</item>
+				<item>
+					<label>Sophy Ikarot Idele</label>
+					<value>3340-7</value>
+				</item>
+				<item>
+					<label>Maureen Jacinta Muteitsi</label>
+					<value>3339-9</value>
+				</item>
+				<item>
+					<label>Gibson Musera Mutira</label>
+					<value>3341-5</value>
+				</item>
+				<item>
+					<label>Titus Chuma Khusua</label>
+					<value>3342-3</value>
+				</item>
+				<item>
+					<label>Pamela Ekuriai Emukule</label>
+					<value>3343-1</value>
+				</item>
+				<item>
+					<label>Rhoda Jeruto Kurgat</label>
+					<value>3344-9</value>
+				</item>
+				<item>
+					<label>Zaitun Hassan Mohamed</label>
+					<value>3345-6</value>
+				</item>
+				<item>
+					<label>Grace Gichanga Nyathogora</label>
+					<value>3346-4</value>
+				</item>
+				<item>
+					<label>Gabriel Silas Okapes</label>
+					<value>3347-2</value>
+				</item>
+				<item>
+					<label>Henry Samson Obonyo</label>
+					<value>3348-0</value>
+				</item>
+				<item>
+					<label>Rebecca M. Wambura</label>
+					<value>3349-8</value>
+				</item>
+				<item>
+					<label>Zeruya Amwatok Barua</label>
+					<value>3350-6</value>
+				</item>
+				<item>
+					<label>Immaculate Otengo Namibia</label>
+					<value>3351-4</value>
+				</item>
+				<item>
+					<label>Pamela Were Wamoyi</label>
+					<value>3352-2</value>
+				</item>
+				<item>
+					<label>Caroline Wafula Nandisi</label>
+					<value>3357-1</value>
+				</item>
+				<item>
+					<label>Markins Opuko Cresent</label>
+					<value>3353-0</value>
+				</item>
+				<item>
+					<label>Benedict Kifufuli Wafula</label>
+					<value>3354-8</value>
+				</item>
+				<item>
+					<label>Clementine Ingosi Osiel</label>
+					<value>3355-5</value>
+				</item>
+			</select1>
+			<input bind="provider_id_text">
+				<label>Enter provider's system-id</label>
+			</input>
+			<input bind="encounter.encounter_datetime">
+				<label>Encounter Date</label>
+			</input>
+			<select1 bind="current_visit_type">
+				<label>Visit Type</label>
+				<hint>What is the the current visit type?</hint>
+				<item>
+					<label>First Dispensary Visit After pHCT</label>
+					<value>7034^FIRST DISPENSARY VISIT AFTER HCT^99DCT</value>
+				</item>
+				<item>
+					<label>Second Dispensary Visit After pHCT</label>
+					<value>7035^SECOND DISPENSARY VISIT AFTER HCT ^99DCT</value>
+				</item>
+				<item>
+					<label>Return Dispensary Visit</label>
+					<value>7036^RETURN DISPENSARY VISIT^99DCT</value>
+				</item>
+				<item>
+					<label>Referred from Clinic</label>
+					<value>7037^REFERRED FROM CLINIC^99DCT</value>
+				</item>
+			</select1>
+			<input bind="phone">
+				<label>Phone</label>
+				<hint>Patient's telephone number</hint>
+			</input>
+			<group bind="phct_review">
+				<label>pHCT REVIEW</label>
+				<input bind="date_of_initial_hct_encounter">
+					<label>pHCT Encounter Date</label>
+				</input>
+				<input bind="systolic_blood_pressure_phct">
+					<label>Systolic Blood Pressure from pHCT Screening card</label>
+				</input>
+				<input bind="diastolic_blood_pressure_phct">
+					<label>Diastolic Blood Pressure from pHCT Screening card</label>
+				</input>
+				<input bind="serum_glucose_fasting_phct">
+					<label>Fasting Blood Sugar (FBS) from pHCT Screening card</label>
+					<hint>Blood glucose is measured on a fasting basis (collected after an 8 to 10 hour fast).</hint>
+				</input>
+				<input bind="serum_glucose_phct">
+					<label>Random Blood Sugar (RBS) from pHCT Screening card</label>
+					<hint>Laboratory measurement of the glucose level in the blood.</hint>
+				</input>
+			</group>
+			<!-- 
+				CURRENT MEDICATIONS TMP
+				The tmp_drugs section holds the medications for us to allow for logic programming
+				Every addition of new drug will require that its added in this tmp section
+			-->
+			<select bind="tmp_drugs" appearance="full">
+				<label>Your current medications</label>
+				<hint>Select all medications the patient is currently taking</hint>
+				<item>
+					<label>Metformin</label>
+					<value>metformin</value>
+				</item>
+				<item>
+					<label>Glibenclamide</label>
+					<value>glibenclamide</value>
+				</item>
+				<item>
+					<label>Enalapril</label>
+					<value>enalapril</value>
+				</item>
+				<item>
+					<label>HCTZ</label>
+					<value>hctz</value>
+				</item>
+				<item>
+					<label>Losartan</label>
+					<value>losartan</value>
+				</item>
+				<item>
+					<label>Nifedipine</label>
+					<value>nifedipine</value>
+				</item>
+				<item>
+					<label>Other Medications</label>
+					<value>other</value>
+				</item>
+				<item>
+					<label>None</label>
+					<value>none</value>
+				</item>
+			</select>
+			<!-- METFORMIN -->
+			<group appearance="field-list" bind="patient_reported_current_other_treatment_metformin">
+				<label>Metformin</label>
+				<input bind="number_of_milligram_metformin">
+					<label>Metformin dose in Milligrams (mg)</label>
+				</input>
+				<select1 appearance="minimal" bind="medication_frequency_per_day_metformin">
+					<label>Metformin frequency per day</label>
+					<item>
+						<label>Every Morning</label>
+						<value>1639^MORNING^99DCT</value>
+					</item>
+					<item>
+						<label>Every Evening</label>
+						<value>1730^EVENING^99DCT</value>
+					</item>
+					<item>
+						<label>Once Daily</label>
+						<value>1891^ONCE A DAY^99DCT</value>
+					</item>
+					<item>
+						<label>Twice Daily</label>
+						<value>1888^TWICE A DAY^99DCT</value>
+					</item>
+				</select1>
+				<select1 appearance="minimal" bind="number_of_pills_taken_in_the_last_week_any_medication_metformin">
+					<label>Number of scheduled [Metformin] you took..</label>
+					<item>
+						<label>All</label>
+						<value>1163^ALL^99DCT</value>
+					</item>
+					<item>
+						<label>More than half</label>
+						<value>1162^MOST^99DCT</value>
+					</item>
+					<item>
+						<label>Half</label>
+						<value>1161^HALF^99DCT</value>
+					</item>
+					<item>
+						<label>Less than half</label>
+						<value>1160^FEW^99DCT</value>
+					</item>
+					<item>
+						<label>None</label>
+						<value>1107^NONE^99DCT</value>
+					</item>
+				</select1>
+			</group>
+			<select appearance="full" bind="missed_medication_reason_metformin">
+				<label>Specify the reason for missing some of your [Metformin] doses</label>
+				<item>
+					<label>No money</label>
+					<value>financial_barrier</value>
+				</item>
+				<item>
+					<label>Facility stocked out of medication</label>
+					<value>facility_stocked_out_of_medication</value>
+				</item>
+				<item>
+					<label>Missed Appointment</label>
+					<value>missed_appointment</value>
+				</item>
+				<item>
+					<label>Healed by faith</label>
+					<value>healed_by_faith</value>
+				</item>
+				<item>
+					<label>Forgot to take medicine</label>
+					<value>forgot_to_take_medicine</value>
+				</item>
+				<item>
+					<label>Medicine not useful</label>
+					<value>medicine_not_useful</value>
+				</item>
+				<item>
+					<label>Side effects</label>
+					<value>side_effects_from_taking_medications</value>
+				</item>
+				<item>
+					<label>Lack of Transport</label>
+					<value>transport_problems</value>
+				</item>
+				<item>
+					<label>Other</label>
+					<value>other_non-coded</value>
+				</item>
+			</select>
+			<!-- GLIBENCLAMIDE -->			
+			<group appearance="field-list" bind="patient_reported_current_other_treatment_glibenclamide">
+				<label>Glibenclamide</label>
+				<input bind="number_of_milligram_glibenclamide">
+					<label>Glibenclamide dose in Milligrams (mg)</label>
+				</input>
+				<select1 appearance="minimal" bind="medication_frequency_per_day_glibenclamide">
+					<label>Glibenclamide frequency per day</label>
+					<item>
+						<label>Every Morning</label>
+						<value>1639^MORNING^99DCT</value>
+					</item>
+					<item>
+						<label>Every Evening</label>
+						<value>1730^EVENING^99DCT</value>
+					</item>
+					<item>
+						<label>Once Daily</label>
+						<value>1891^ONCE A DAY^99DCT</value>
+					</item>
+					<item>
+						<label>Twice Daily</label>
+						<value>1888^TWICE A DAY^99DCT</value>
+					</item>
+				</select1>
+				<select1 appearance="minimal" bind="number_of_pills_taken_in_the_last_week_any_medication_glibenclamide">
+					<label>Number of scheduled [Glibenclamide] you took..</label>
+					<item>
+						<label>All</label>
+						<value>1163^ALL^99DCT</value>
+					</item>
+					<item>
+						<label>More than half</label>
+						<value>1162^MOST^99DCT</value>
+					</item>
+					<item>
+						<label>Half</label>
+						<value>1161^HALF^99DCT</value>
+					</item>
+					<item>
+						<label>Less than half</label>
+						<value>1160^FEW^99DCT</value>
+					</item>
+					<item>
+						<label>None</label>
+						<value>1107^NONE^99DCT</value>
+					</item>
+				</select1>
+			</group>
+			<select appearance="full" bind="missed_medication_reason_glibenclamide">
+				<label>Specify the reason for missing some of your [Glibenclamide] doses</label>
+				<item>
+					<label>No money</label>
+					<value>financial_barrier</value>
+				</item>
+				<item>
+					<label>Facility stocked out of medication</label>
+					<value>facility_stocked_out_of_medication</value>
+				</item>
+				<item>
+					<label>Missed Appointment</label>
+					<value>missed_appointment</value>
+				</item>
+				<item>
+					<label>Healed by faith</label>
+					<value>healed_by_faith</value>
+				</item>
+				<item>
+					<label>Forgot to take medicine</label>
+					<value>forgot_to_take_medicine</value>
+				</item>
+				<item>
+					<label>Medicine not useful</label>
+					<value>medicine_not_useful</value>
+				</item>
+				<item>
+					<label>Side effects</label>
+					<value>side_effects_from_taking_medications</value>
+				</item>
+				<item>
+					<label>Lack of Transport</label>
+					<value>transport_problems</value>
+				</item>
+				<item>
+					<label>Other</label>
+					<value>other_non-coded</value>
+				</item>
+			</select>
+			<!-- ENALAPRIL -->			
+			<group appearance="field-list" bind="patient_reported_current_other_treatment_enalapril">
+				<label>Enalapril</label>
+				<input bind="number_of_milligram_enalapril">
+					<label>Enalapril dose in Milligrams (mg)</label>
+				</input>
+				<select1 appearance="minimal" bind="medication_frequency_per_day_enalapril">
+					<label>Enalapril frequency per day</label>
+					<item>
+						<label>Every Morning</label>
+						<value>1639^MORNING^99DCT</value>
+					</item>
+					<item>
+						<label>Every Evening</label>
+						<value>1730^EVENING^99DCT</value>
+					</item>
+					<item>
+						<label>Once Daily</label>
+						<value>1891^ONCE A DAY^99DCT</value>
+					</item>
+					<item>
+						<label>Twice Daily</label>
+						<value>1888^TWICE A DAY^99DCT</value>
+					</item>
+				</select1>
+				<select1 appearance="minimal" bind="number_of_pills_taken_in_the_last_week_any_medication_enalapril">
+					<label>Number of scheduled [Enalapril] you took..</label>
+					<item>
+						<label>All</label>
+						<value>1163^ALL^99DCT</value>
+					</item>
+					<item>
+						<label>More than half</label>
+						<value>1162^MOST^99DCT</value>
+					</item>
+					<item>
+						<label>Half</label>
+						<value>1161^HALF^99DCT</value>
+					</item>
+					<item>
+						<label>Less than half</label>
+						<value>1160^FEW^99DCT</value>
+					</item>
+					<item>
+						<label>None</label>
+						<value>1107^NONE^99DCT</value>
+					</item>
+				</select1>
+			</group>
+			<select appearance="full" bind="missed_medication_reason_enalapril">
+				<label>Specify the reason for missing some of your [Enalapril] doses</label>
+				<item>
+					<label>No money</label>
+					<value>financial_barrier</value>
+				</item>
+				<item>
+					<label>Facility stocked out of medication</label>
+					<value>facility_stocked_out_of_medication</value>
+				</item>
+				<item>
+					<label>Missed Appointment</label>
+					<value>missed_appointment</value>
+				</item>
+				<item>
+					<label>Healed by faith</label>
+					<value>healed_by_faith</value>
+				</item>
+				<item>
+					<label>Forgot to take medicine</label>
+					<value>forgot_to_take_medicine</value>
+				</item>
+				<item>
+					<label>Medicine not useful</label>
+					<value>medicine_not_useful</value>
+				</item>
+				<item>
+					<label>Side effects</label>
+					<value>side_effects_from_taking_medications</value>
+				</item>
+				<item>
+					<label>Lack of Transport</label>
+					<value>transport_problems</value>
+				</item>
+				<item>
+					<label>Other</label>
+					<value>other_non-coded</value>
+				</item>
+			</select>
+			<!-- HCTZ -->			
+			<group appearance="field-list" bind="patient_reported_current_other_treatment_hctz">
+				<label>HCTZ</label>
+				<input bind="number_of_milligram_hctz">
+					<label>HCTZ dose in Milligrams (mg)</label>
+				</input>
+				<select1 appearance="minimal" bind="medication_frequency_per_day_hctz">
+					<label>HCTZ frequency per day</label>
+					<item>
+						<label>Every Morning</label>
+						<value>1639^MORNING^99DCT</value>
+					</item>
+					<item>
+						<label>Every Evening</label>
+						<value>1730^EVENING^99DCT</value>
+					</item>
+					<item>
+						<label>Once Daily</label>
+						<value>1891^ONCE A DAY^99DCT</value>
+					</item>
+					<item>
+						<label>Twice Daily</label>
+						<value>1888^TWICE A DAY^99DCT</value>
+					</item>
+				</select1>
+				<select1 appearance="minimal" bind="number_of_pills_taken_in_the_last_week_any_medication_hctz">
+					<label>Number of scheduled [HCTZ] you took..</label>
+					<item>
+						<label>All</label>
+						<value>1163^ALL^99DCT</value>
+					</item>
+					<item>
+						<label>More than half</label>
+						<value>1162^MOST^99DCT</value>
+					</item>
+					<item>
+						<label>Half</label>
+						<value>1161^HALF^99DCT</value>
+					</item>
+					<item>
+						<label>Less than half</label>
+						<value>1160^FEW^99DCT</value>
+					</item>
+					<item>
+						<label>None</label>
+						<value>1107^NONE^99DCT</value>
+					</item>
+				</select1>
+			</group>
+			<select appearance="full" bind="missed_medication_reason_hctz">
+				<label>Specify the reason for missing some of your [HCTZ] doses</label>
+				<item>
+					<label>No money</label>
+					<value>financial_barrier</value>
+				</item>
+				<item>
+					<label>Facility stocked out of medication</label>
+					<value>facility_stocked_out_of_medication</value>
+				</item>
+				<item>
+					<label>Missed Appointment</label>
+					<value>missed_appointment</value>
+				</item>
+				<item>
+					<label>Healed by faith</label>
+					<value>healed_by_faith</value>
+				</item>
+				<item>
+					<label>Forgot to take medicine</label>
+					<value>forgot_to_take_medicine</value>
+				</item>
+				<item>
+					<label>Medicine not useful</label>
+					<value>medicine_not_useful</value>
+				</item>
+				<item>
+					<label>Side effects</label>
+					<value>side_effects_from_taking_medications</value>
+				</item>
+				<item>
+					<label>Lack of Transport</label>
+					<value>transport_problems</value>
+				</item>
+				<item>
+					<label>Other</label>
+					<value>other_non-coded</value>
+				</item>
+			</select>
+			<!-- LOSARTAN -->			
+			<group appearance="field-list" bind="patient_reported_current_other_treatment_losartan">
+				<label>Losartan</label>
+				<input bind="number_of_milligram_losartan">
+					<label>Losartan dose in Milligrams (mg)</label>
+				</input>
+				<select1 appearance="minimal" bind="medication_frequency_per_day_losartan">
+					<label>Losartan frequency per day</label>
+					<item>
+						<label>Every Morning</label>
+						<value>1639^MORNING^99DCT</value>
+					</item>
+					<item>
+						<label>Every Evening</label>
+						<value>1730^EVENING^99DCT</value>
+					</item>
+					<item>
+						<label>Once Daily</label>
+						<value>1891^ONCE A DAY^99DCT</value>
+					</item>
+					<item>
+						<label>Twice Daily</label>
+						<value>1888^TWICE A DAY^99DCT</value>
+					</item>
+				</select1>
+				<select1 appearance="minimal" bind="number_of_pills_taken_in_the_last_week_any_medication_losartan">
+					<label>Number of scheduled [Losartan] you took..</label>
+					<item>
+						<label>All</label>
+						<value>1163^ALL^99DCT</value>
+					</item>
+					<item>
+						<label>More than half</label>
+						<value>1162^MOST^99DCT</value>
+					</item>
+					<item>
+						<label>Half</label>
+						<value>1161^HALF^99DCT</value>
+					</item>
+					<item>
+						<label>Less than half</label>
+						<value>1160^FEW^99DCT</value>
+					</item>
+					<item>
+						<label>None</label>
+						<value>1107^NONE^99DCT</value>
+					</item>
+				</select1>
+			</group>
+			<select appearance="full" bind="missed_medication_reason_losartan">
+				<label>Specify the reason for missing some of your [Losartan] doses</label>
+				<item>
+					<label>No money</label>
+					<value>financial_barrier</value>
+				</item>
+				<item>
+					<label>Facility stocked out of medication</label>
+					<value>facility_stocked_out_of_medication</value>
+				</item>
+				<item>
+					<label>Missed Appointment</label>
+					<value>missed_appointment</value>
+				</item>
+				<item>
+					<label>Healed by faith</label>
+					<value>healed_by_faith</value>
+				</item>
+				<item>
+					<label>Forgot to take medicine</label>
+					<value>forgot_to_take_medicine</value>
+				</item>
+				<item>
+					<label>Medicine not useful</label>
+					<value>medicine_not_useful</value>
+				</item>
+				<item>
+					<label>Side effects</label>
+					<value>side_effects_from_taking_medications</value>
+				</item>
+				<item>
+					<label>Lack of Transport</label>
+					<value>transport_problems</value>
+				</item>
+				<item>
+					<label>Other</label>
+					<value>other_non-coded</value>
+				</item>
+			</select>
+			<!-- NIFEDIPINE -->			
+			<group appearance="field-list" bind="patient_reported_current_other_treatment_nifedipine">
+				<label>Nifedipine</label>
+				<input bind="number_of_milligram_nifedipine">
+					<label>Nifedipine dose in Milligrams (mg)</label>
+				</input>
+				<select1 appearance="minimal" bind="medication_frequency_per_day_nifedipine">
+					<label>Nifedipine frequency per day</label>
+					<item>
+						<label>Every Morning</label>
+						<value>1639^MORNING^99DCT</value>
+					</item>
+					<item>
+						<label>Every Evening</label>
+						<value>1730^EVENING^99DCT</value>
+					</item>
+					<item>
+						<label>Once Daily</label>
+						<value>1891^ONCE A DAY^99DCT</value>
+					</item>
+					<item>
+						<label>Twice Daily</label>
+						<value>1888^TWICE A DAY^99DCT</value>
+					</item>
+				</select1>
+				<select1 appearance="minimal" bind="number_of_pills_taken_in_the_last_week_any_medication_nifedipine">
+					<label>Number of scheduled [Nifedipine] you took..</label>
+					<item>
+						<label>All</label>
+						<value>1163^ALL^99DCT</value>
+					</item>
+					<item>
+						<label>More than half</label>
+						<value>1162^MOST^99DCT</value>
+					</item>
+					<item>
+						<label>Half</label>
+						<value>1161^HALF^99DCT</value>
+					</item>
+					<item>
+						<label>Less than half</label>
+						<value>1160^FEW^99DCT</value>
+					</item>
+					<item>
+						<label>None</label>
+						<value>1107^NONE^99DCT</value>
+					</item>
+				</select1>
+			</group>
+			<select appearance="full" bind="missed_medication_reason_nifedipine">
+				<label>Specify the reason for missing some of your [Nifedipine] doses</label>
+				<item>
+					<label>No money</label>
+					<value>financial_barrier</value>
+				</item>
+				<item>
+					<label>Facility stocked out of medication</label>
+					<value>facility_stocked_out_of_medication</value>
+				</item>
+				<item>
+					<label>Missed Appointment</label>
+					<value>missed_appointment</value>
+				</item>
+				<item>
+					<label>Healed by faith</label>
+					<value>healed_by_faith</value>
+				</item>
+				<item>
+					<label>Forgot to take medicine</label>
+					<value>forgot_to_take_medicine</value>
+				</item>
+				<item>
+					<label>Medicine not useful</label>
+					<value>medicine_not_useful</value>
+				</item>
+				<item>
+					<label>Side effects</label>
+					<value>side_effects_from_taking_medications</value>
+				</item>
+				<item>
+					<label>Lack of Transport</label>
+					<value>transport_problems</value>
+				</item>
+				<item>
+					<label>Other</label>
+					<value>other_non-coded</value>
+				</item>
+			</select>
+			<!-- OTHER MEDICATIONS -->			
+			<group bind="patient_reported_current_other_treatment_other">
+				<label>Other Medication</label>
+				<repeat appearance="field-list" bind="patient_reported_current_other_treatment_other">
+					<group appearance="field-list">
+						<input bind="medication_name_freetext_other">
+							<label>Medication Name</label>
+						</input>
+						<input bind="number_of_milligram_other">
+							<label>Dose in Milligrams (mg)</label>
+						</input>
+						<select1 appearance="minimal" bind="medication_frequency_per_day_other">
+							<label>Frequency per day</label>
+							<item>
+								<label>Every Morning</label>
+								<value>1639^MORNING^99DCT</value>
+							</item>
+							<item>
+								<label>Every Evening</label>
+								<value>1730^EVENING^99DCT</value>
+							</item>
+							<item>
+								<label>Once Daily</label>
+								<value>1891^ONCE A DAY^99DCT</value>
+							</item>
+							<item>
+								<label>Twice Daily</label>
+								<value>1888^TWICE A DAY^99DCT</value>
+							</item>
+						</select1>
+					</group>
+					<input bind="number_of_milliliter_other">
+						<label>Dose in Milliliters (ml)</label>
+						<hint>You MUST provide dosage.</hint>
+					</input>
+				</repeat>
+			</group>
+			
+			<select bind="review_of_systems_general" appearance="full">
+				<label>Do you have any of the following symptoms</label>
+				<hint>Make sure you ask about each symptom. Mark all whose answer is yes</hint>
+				<item>
+					<label>Leg Swelling (Oedema)</label>
+					<value>edema_legs</value>
+				</item>
+				<item>
+					<label>Shortness of breath with activity</label>
+					<value>shortness_of_breath_with_exertion</value>
+				</item>
+				<item>
+					<label>Weakness in one part of the body</label>
+					<value>focal_weakness</value>
+				</item>
+				<item>
+					<label>Reduced urine output</label>
+					<value>oliguria</value>
+				</item>
+				<item>
+					<label>Heart Racing</label>
+					<value>heart_racing</value>
+				</item>
+				<item>
+					<label>Recurrent Dizziness</label>
+					<value>dizziness</value>
+				</item>
+				<item>
+					<label>Fainting</label>
+					<value>fainting</value>
+				</item>
+				<item>
+					<label>Loss of consciousness</label>
+					<value>unconscious</value>
+				</item>
+				<item>
+					<label>Vision Difficulties</label>
+					<value>vision_difficulties</value>
+				</item>
+				<item>
+					<label>Foot Complaints</label>
+					<value>foot_complaints</value>
+				</item>
+				<item>
+					<label>Nausea</label>
+					<value>nausea</value>
+				</item>
+				<item>
+					<label>Vomiting</label>
+					<value>vomiting</value>
+				</item>
+				<item>
+					<label>Abdominal Discomfort</label>
+					<value>abdominal_pain</value>
+				</item>
+				<item>
+					<label>Diarrhea</label>
+					<value>diarrhea</value>
+				</item>
+				<item>
+					<label>Constipation</label>
+					<value>constipation</value>
+				</item>
+				<item>
+					<label>Recurrent Cough</label>
+					<value>chronic_cough</value>
+				</item>
+				<item>
+					<label>Hunger, Sweating, dizziness and shaking</label>
+					<value>hypoglycemia</value>
+				</item>
+				<item>
+					<label>None of the above</label>
+					<value>none</value>
+				</item>
+			</select>
+			<select1 bind="last_menstrual_period_qualitative">
+				<label>How long ago was the first day of your menstrual period?</label>
+				<item>
+					<label>Less than 35 days ago</label>
+					<value>7049^LESS THAN 35 DAYS^99DCT</value>
+				</item>
+				<item>
+					<label>Over 35 days ago</label>
+					<value>7050^MORE THAN 35 DAYS^99DCT</value>
+				</item>
+				<item>
+					<label>Don't know</label>
+					<value>1624^DO NOT KNOW^99DCT</value>
+				</item>
+			</select1>
+			<input bind="systolic_blood_pressure">
+				<label>Systolic Blood Pressure (mmHg)</label>
+				<hint>Please record today's SBP.</hint>
+			</input>
+			<input bind="diastolic_blood_pressure">
+				<label>Diastolic Blood Pressure (mmHg)</label>
+				<hint>Please record today's DBP.</hint>
+			</input>
+			<input bind="pulse">
+				<label>Pulse Rate (per minute)</label>
+				<hint>Please record today's pulse.</hint>
+			</input>
+			<input bind="temperature_c">
+				<label>Temperature (centigrade)</label>
+				<hint>Please record today's temperature</hint>
+			</input>
+			<input bind="weight_kg">
+				<label>Weight (KG)</label>
+				<hint>Please record today's weight.</hint>
+			</input>
+			<input bind="height_cm">
+				<label>Height (CM)</label>
+				<hint>Please record today's height.</hint>
+			</input>
+			<input bind="body_mass_index">
+				<label>Body Mass Index</label>
+			</input>
+			<input bind="serum_glucose_fasting">
+				<label>Fasting Blood Sugar (FBS)</label>
+				<hint>Please record today's FBS.</hint>
+			</input>
+			<input bind="serum_glucose">
+				<label>Random Blood Sugar (RBS)</label>
+				<hint>Please record today's RBS.</hint>
+			</input>
+			<input bind="glycosylated_hemoglobin">
+				<label>Hemoglobin A1C</label>
+				<hint>Please record today's A1C.</hint>
+			</input>
+			<select1 bind="urine_pregnancy_test_qualitative">
+				<label>Urine Pregnancy Test</label>
+				<hint>Test that determines pregnancy status through measure of hormone content in urine.</hint>
+				<item>
+					<label>Positive</label>
+					<value>703^POSITIVE^99DCT</value>
+				</item>
+				<item>
+					<label>Negative</label>
+					<value>664^NEGATIVE^99DCT</value>
+				</item>
+				<item>
+					<label>Indeterminate</label>
+					<value>1138^INDETERMINATE^99DCT</value>
+				</item>
+				<item>
+					<label>Test Not Done</label>
+					<value>1118^NOT DONE^99DCT</value>
+				</item>
+			</select1>
+			
+			<!-- HTN REMINDERS  -->
+			<group appearance="field-list" bind="htn_reminders">
+				<label>Hypertension Reminders</label>
+
+				<input bind="htn_reminder_1">
+					<label>Good BP. Advise on Salt reduction, Weight reduction if BMI >30, Exercise, Smoking cessation and Alcohol reduction (if applicable). DISCHARGE HOME</label>
+				</input>
+				<input bind="htn_reminder_2">
+					<label>Patient under 35 with elevated BP. Refer to CO/Health Center</label>
+				</input>
+				<input bind="htn_reminder_3a">
+					<label>Advise on Salt reduction, Weight reduction if BMI >30, Exercise, Smoking cessation and Alcohol reduction (if applicable); RETURN to DISPENSARY in 1 month</label>
+				</input>
+				<input bind="htn_reminder_3b">
+					<label>BP high on HTN meds.  Advise on Salt reduction, Weight reduction if BMI >30, Exercise, Smoking cessation and Alcohol reduction (if applicable). REFER to CO/Clinic.</label>
+				</input>
+				<input bind="htn_reminder_3c">
+					<label>Patient with both elevated blood pressure and blood sugar.  REFER to CO/Clinic.</label>
+				</input>
+				<input bind="htn_reminder_4">
+					<label>BP is very high. Advise on Salt reduction, Weight reduction if BMI >30, Exercise, Smoking cessation and Alcohol reduction (if applicable). REFER to CO immediately.</label>
+				</input>
+				<input bind="htn_reminder_5">
+					<label>REFER TO CO/ High Risk ANC</label>
+				</input>
+				<input bind="htn_reminder_6a">
+					<label>Start on HCTZ 25 mg a day. Advise on Salt reduction, Weight reduction if BMI >30, Exercise, Smoking cessation and Alcohol reduction (if applicable)</label>
+				</input>
+				<input bind="htn_reminder_6b">
+					<label>Patient with elevated blood pressure and elevated blood sugar. REFER to CO/Clinic.</label>
+				</input>
+				<input bind="htn_reminder_7">
+					<label>Patient with Hypertension symptoms. REFER TO CO</label>
+				</input>
+
+				<input bind="htn_reminder_8">
+					<label>BP good. Continue HCTZ 25mg a day. Advise on Salt reduction, Weight reduction if BMI >30, Exercise, Smoking cessation and Alcohol reduction (if applicable). RETURN TO DISPENSARY in 4 months</label>
+				</input>
+				<input bind="htn_reminder_9">
+					<label>BP elevated. If today is 3rd successive monthly return visit while on HCTZ 25mg a day, REFER Pt to CO. Otherwise continue HCTZ 25mg a day, and monitor monthly. Advise on Salt reduction, Weight reduction if BMI >30, Exercise, Smoking cessation and Alcohol reduction (if applicable)</label>
+				</input>
+				<input bind="htn_reminder_10">
+					<label>BP low. REFER patient to CO/Health Center</label>
+				</input>
+			</group>
+			
+			<!-- DIABETES REMINDERS  -->
+			<group appearance="field-list" bind="diabetes_reminders">
+				<label>Diabetes Reminders</label>
+				<input bind="diabetes_reminder_1">
+					<label>NORMAL blood sugar, educate on prevention. DISCHARGE or follow-up after a year as needed</label>
+				</input>
+				<input bind="diabetes_reminder_2">
+					<label>Pregnant with Diabetes. Refer to High Risk ANC Clinic</label>
+				</input>
+				<input bind="diabetes_reminder_3">
+					<label>Borderline high Blood sugar. Educate on lifestyle modification, review after 6 months</label>
+				</input>
+				<input bind="diabetes_reminder_4">
+					<label>Diabetes CONFIRMED – Start Metformin 500mg twice a day (BD). Return to Dispensary in 2 weeks</label>
+				</input>
+				<input bind="diabetes_reminder_5">
+					<label>Blood sugar is very high. REFER TO CO immediately. Educate on lifestyle modification</label>
+				</input>
+				<input bind="diabetes_reminder_6">
+					<label>Patient has [symptom], [symptom] on Metformin. Likely side effect. Refer to CO immediately</label>
+				</input>
+				<input bind="diabetes_reminder_7">
+					<label>Patient has likely hypoglycemia on Glibenclamide.  Refer to CO immediately</label>
+				</input>
+				<input bind="diabetes_reminder_8">
+					<label>Suboptimal Blood sugar control.  Consider increasing Metformin up to 750 mg twice a day (BD). Return to Dispensary after 2 weeks. Educate on lifestyle modification</label>
+				</input>
+				<input bind="diabetes_reminder_9">
+					<label>Suboptimal Blood sugar control.  Consider increasing Metformin up to 1000 mg (1 gram) twice a day (BD). Return to Dispensary after 2 weeks. Educate on lifestyle modification</label>
+				</input>
+				<input bind="diabetes_reminder_10">
+					<label>Suboptimal BS control on 1000 mg (1 gram) metformin.  REFER to CO immediately</label>
+				</input>
+			</group>
+			
+			<!-- Images -->
+            <!--<group>
+                <input bind="algorithm_diabetes">
+                    <label ref="jr:itext('algorithm_diabetes')"/>
+                </input>
+                <input bind="algorithm_htn">
+                    <label ref="jr:itext('algorithm_htn')"/>
+                </input>
+            </group>-->
+			<!-- 
+				MEDICATIONS DISPENSED TMP
+				The tmp_drugs section holds the medications for us to allow for logic programming
+				Every addition of new drug will require that its added in this tmp section
+			-->
+            <group>
+                <input bind="drugs_dispensed_info">
+                    <label>For Medications Prescribed, if there are different doses for the medication for different times of day, you should enter each as a separate prescription using the ‘Add Group’ feature.</label>
+                </input>
+            </group>
+			<select bind="drugs_dispensed" appearance="full">
+				<label>Medications Prescribed</label>
+				<hint>Select all medications prescriped during this visit</hint>
+				<item>
+					<label>Metformin</label>
+					<value>metformin</value>
+				</item>
+				<item>
+					<label>Glibenclamide</label>
+					<value>glibenclamide</value>
+				</item>
+				<item>
+					<label>Enalapril</label>
+					<value>enalapril</value>
+				</item>
+				<item>
+					<label>HCTZ</label>
+					<value>hctz</value>
+				</item>
+				<item>
+					<label>Losartan</label>
+					<value>losartan</value>
+				</item>
+				<item>
+					<label>Nifedipine</label>
+					<value>nifedipine</value>
+				</item>
+				<item>
+					<label>Other Medications</label>
+					<value>other</value>
+				</item>
+				<item>
+					<label>None</label>
+					<value>none</value>
+				</item>
+			</select>
+			<!-- METFORMIN -->
+			<group bind="other_medication_order_metformin">
+				<label>Metformin Dispense</label>
+			    <repeat appearance="field-list" bind="other_medication_order_metformin">
+					<select1 appearance="minimal" bind="omo_dosage_change_metformin">
+						<label>Did you change the [Metformin] dosage?</label>
+						<item>
+							<label>Yes</label>
+							<value>1065^YES^99DCT</value>
+						</item>
+						<item>
+							<label>No</label>
+							<value>1066^NO^99DCT</value>
+						</item>
+						<item>
+							<label>Do not know</label>
+							<value>1624^DO NOT KNOW^99DCT</value>
+						</item>
+					</select1>
+					<group appearance="field-list">
+						<input bind="tmp_dosage_change_metformin">
+							<label>Prescribed [Metformin] dose in milligrams (mg)</label>
+							<hint>[Metformin] was not previously prescribed or you are changing the dosage from the previous (<output value="../../patient_reported_current_other_treatment/number_of_milligram/value"/>mg). If this is not the case, Swipe back to correct the error.</hint>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_frequency_per_day_metformin">
+							<label>[Metformin] frequency per day</label>
+							<item>
+								<label>Every Morning</label>
+								<value>1639^MORNING^99DCT</value>
+							</item>
+							<item>
+								<label>Every Evening</label>
+								<value>1730^EVENING^99DCT</value>
+							</item>
+							<item>
+								<label>Once Daily</label>
+								<value>1891^ONCE A DAY^99DCT</value>
+							</item>
+							<item>
+								<label>Twice Daily</label>
+								<value>1888^TWICE A DAY^99DCT</value>
+							</item>
+						</select1>
+						<input bind="omo_number_of_tablets_metformin">
+							<label>Number of [Metformin] <output value="../../omo_medication_frequency_per_day_metformin/value"/> tablets prescribed</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_received_at_vist_metformin">
+							<label>[Metformin] picked-up at dispensary</label>
+							<item>
+								<label>Yes</label>
+								<value>true</value>
+							</item>
+							<item>
+								<label>No</label>
+								<value>false</value>
+							</item>
+						</select1>
+					</group>
+				</repeat>
+			</group>
+			<!-- GLIBENCLAMIDE -->
+			<group bind="other_medication_order_glibenclamide">
+				<label>Glibenclamide Dispense</label>
+				<repeat appearance="field-list" bind="other_medication_order_glibenclamide">
+					<group appearance="field-list">
+						<input bind="omo_number_of_milligram_glibenclamide">
+							<label>Prescribed [Glibenclamide] dose in milligrams (mg)</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_frequency_per_day_glibenclamide">
+							<label>[Glibenclamide] frequency per day</label>
+							<item>
+								<label>Every Morning</label>
+								<value>1639^MORNING^99DCT</value>
+							</item>
+							<item>
+								<label>Every Evening</label>
+								<value>1730^EVENING^99DCT</value>
+							</item>
+							<item>
+								<label>Once Daily</label>
+								<value>1891^ONCE A DAY^99DCT</value>
+							</item>
+							<item>
+								<label>Twice Daily</label>
+								<value>1888^TWICE A DAY^99DCT</value>
+							</item>
+						</select1>
+						<input bind="omo_number_of_tablets_glibenclamide">
+							<label>Number of [Glibenclamide] tablets prescribed</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_received_at_vist_glibenclamide">
+							<label>[Glibenclamide] picked-up at dispensary</label>
+							<item>
+								<label>Yes</label>
+								<value>true</value>
+							</item>
+							<item>
+								<label>No</label>
+								<value>false</value>
+							</item>
+						</select1>
+					</group>
+				</repeat>
+			</group>
+			<!-- ENALAPRIL -->
+			<group bind="other_medication_order_enalapril">
+				<label>Enalapril Dispense</label>
+				<repeat appearance="field-list" bind="other_medication_order_enalapril">
+					<group appearance="field-list">
+						<input bind="omo_number_of_milligram_enalapril">
+							<label>Prescribed [Enalapril] dose in milligrams (mg)</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_frequency_per_day_enalapril">
+							<label>[Enalapril] frequency per day</label>
+							<item>
+								<label>Every Morning</label>
+								<value>1639^MORNING^99DCT</value>
+							</item>
+							<item>
+								<label>Every Evening</label>
+								<value>1730^EVENING^99DCT</value>
+							</item>
+							<item>
+								<label>Once Daily</label>
+								<value>1891^ONCE A DAY^99DCT</value>
+							</item>
+							<item>
+								<label>Twice Daily</label>
+								<value>1888^TWICE A DAY^99DCT</value>
+							</item>
+						</select1>
+						<input bind="omo_number_of_tablets_enalapril">
+							<label>Number of [Enalapril] tablets prescribed</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_received_at_vist_enalapril">
+							<label>[Enalapril] picked-up at dispensary</label>
+							<item>
+								<label>Yes</label>
+								<value>true</value>
+							</item>
+							<item>
+								<label>No</label>
+								<value>false</value>
+							</item>
+						</select1>
+					</group>
+				</repeat>
+			</group>
+			<!-- HCTZ -->
+			<group bind="other_medication_order_hctz">
+				<label>HCTZ Dispense</label>
+				<repeat appearance="field-list" bind="other_medication_order_hctz">
+					<group appearance="field-list">
+						<input bind="omo_number_of_milligram_hctz">
+							<label>Prescribed [HCTZ] dose in milligrams (mg)</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_frequency_per_day_hctz">
+							<label>[HCTZ] frequency per day</label>
+							<item>
+								<label>Every Morning</label>
+								<value>1639^MORNING^99DCT</value>
+							</item>
+							<item>
+								<label>Every Evening</label>
+								<value>1730^EVENING^99DCT</value>
+							</item>
+							<item>
+								<label>Once Daily</label>
+								<value>1891^ONCE A DAY^99DCT</value>
+							</item>
+							<item>
+								<label>Twice Daily</label>
+								<value>1888^TWICE A DAY^99DCT</value>
+							</item>
+						</select1>
+						<input bind="omo_number_of_tablets_hctz">
+							<label>Number of [HCTZ] tablets prescribed</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_received_at_vist_hctz">
+							<label>[HCTZ] picked-up at dispensary</label>
+							<item>
+								<label>Yes</label>
+								<value>1</value>
+							</item>
+							<item>
+								<label>No</label>
+								<value>0</value>
+							</item>
+						</select1>
+					</group>
+				</repeat>
+			</group>
+			<!-- LOSARTAN -->
+			<group bind="other_medication_order_losartan">
+				<label>Losartan Dispense</label>
+				<repeat appearance="field-list" bind="other_medication_order_losartan">
+					<group appearance="field-list">
+						<input bind="omo_number_of_milligram_losartan">
+							<label>Prescribed [Losartan] dose in milligrams (mg)</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_frequency_per_day_losartan">
+							<label>[Losartan] frequency per day</label>
+							<item>
+								<label>Every Morning</label>
+								<value>1639^MORNING^99DCT</value>
+							</item>
+							<item>
+								<label>Every Evening</label>
+								<value>1730^EVENING^99DCT</value>
+							</item>
+							<item>
+								<label>Once Daily</label>
+								<value>1891^ONCE A DAY^99DCT</value>
+							</item>
+							<item>
+								<label>Twice Daily</label>
+								<value>1888^TWICE A DAY^99DCT</value>
+							</item>
+						</select1>
+						<input bind="omo_number_of_tablets_losartan">
+							<label>Number of [Losartan] tablets prescribed</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_received_at_vist_losartan">
+							<label>[Losartan] picked-up at dispensary</label>
+							<item>
+								<label>Yes</label>
+								<value>1</value>
+							</item>
+							<item>
+								<label>No</label>
+								<value>0</value>
+							</item>
+						</select1>
+					</group>
+				</repeat>
+			</group>
+			<!-- NIFEDIPINE -->
+			<group bind="other_medication_order_nifedipine">
+				<label>Nifedipine Dispense</label>
+				<repeat appearance="field-list" bind="other_medication_order_nifedipine">
+					<group appearance="field-list">
+						<input bind="omo_number_of_milligram_nifedipine">
+							<label>Prescribed [Nifedipine] dose in milligrams (mg)</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_frequency_per_day_nifedipine">
+							<label>[Nifedipine] frequency per day</label>
+							<item>
+								<label>Every Morning</label>
+								<value>1639^MORNING^99DCT</value>
+							</item>
+							<item>
+								<label>Every Evening</label>
+								<value>1730^EVENING^99DCT</value>
+							</item>
+							<item>
+								<label>Once Daily</label>
+								<value>1891^ONCE A DAY^99DCT</value>
+							</item>
+							<item>
+								<label>Twice Daily</label>
+								<value>1888^TWICE A DAY^99DCT</value>
+							</item>
+						</select1>
+						<input bind="omo_number_of_tablets_nifedipine">
+							<label>Number of [Nifedipine] tablets prescribed</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_received_at_vist_nifedipine">
+							<label>[Nifedipine] picked-up at dispensary</label>
+							<item>
+								<label>Yes</label>
+								<value>1</value>
+							</item>
+							<item>
+								<label>No</label>
+								<value>0</value>
+							</item>
+						</select1>
+					</group>
+				</repeat>
+			</group>
+			<!-- OTHER MEDICATIONS -->			
+			<group bind="other_medication_order_other">
+				<label>Other Medication</label>
+				<repeat appearance="field-list" bind="other_medication_order_other">
+					<group appearance="field-list">
+						<input bind="omo_medication_name_freetext_other">
+							<label>Medication Name</label>
+						</input>
+						<input bind="omo_number_of_milligram_other">
+							<label>Medication dose in Milligrams (mg)</label>
+						</input>
+						<select1 appearance="minimal" bind="omo_medication_frequency_per_day_other">
+							<label>Medication frequency per day</label>
+							<item>
+								<label>Every Morning</label>
+								<value>1639^MORNING^99DCT</value>
+							</item>
+							<item>
+								<label>Every Evening</label>
+								<value>1730^EVENING^99DCT</value>
+							</item>
+							<item>
+								<label>Once Daily</label>
+								<value>1891^ONCE A DAY^99DCT</value>
+							</item>
+							<item>
+								<label>Twice Daily</label>
+								<value>1888^TWICE A DAY^99DCT</value>
+							</item>
+						</select1>
+						<input bind="omo_number_of_tablets_other">
+							<label>Number of Medication tablets</label>
+						</input>
+					</group>
+				</repeat>
+			</group>
+			<select appearance="full" bind="patient_education_received_this_visit">
+				<label>Education Given</label>
+				<hint>Select all that apply</hint>
+				<item>
+					<label>Alcohol Reduction</label>
+					<value>alcohol_counseling</value>
+				</item>
+				<item>
+					<label>General Diet Education</label>
+					<value>nutritional_support</value>
+				</item>
+				<item>
+					<label>Diabetic Diet Education</label>
+					<value>diabetic_diet</value>
+				</item>
+				<item>
+					<label>Diabetic Danger Signs</label>
+					<value>diabetic_danger_signs</value>
+				</item>
+				<item>
+					<label>Salt Reduction</label>
+					<value>salt_reduction</value>
+				</item>
+				<item>
+					<label>Smoking Cessation</label>
+					<value>smoking_cessation</value>
+				</item>
+				<item>
+					<label>Exercise</label>
+					<value>exercise</value>
+				</item>
+				<item>
+					<label>Weight Reduction</label>
+					<value>weight_loss</value>
+				</item>
+				<item>
+					<label>Adherence Counseling</label>
+					<value>adherence_counseling</value>
+				</item>
+				<item>
+					<label>None</label>
+					<value>none</value>
+				</item>
+			</select>
+			<select bind="referrals_ordered">
+				<label>REFERRALS ORDERED</label>
+				<hint>Select all referrals made during this visit</hint>
+				<item>
+					<label>CO/Health Center</label>
+					<value>referred_to_clinic</value>
+				</item>
+				<item>
+					<label>Return to Dispensary</label>
+					<value>dispensary</value>
+				</item>
+				 <item>
+					<label>ANC Clinic</label>
+					<value>antenatal_care_service</value>
+				</item>
+				<item>
+					<label>High Risk ANC Clinic</label>
+					<value>high_risk_antenatal_clinic</value>
+				</item>
+				<item>
+					<label>None</label>
+					<value>none</value>
+				</item>
+			</select>
+			<input bind="return_visit_date">
+				<label>Return Date to Dispensary</label>
+				<hint>Patient is to return on this date</hint>
+			</input>
+		</group>
+	</xf:body>
+</xf:xforms>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms">
+  <h:head><model id="openmrs_model">
+    <instance id="openmrs_model_instance">
+      <form id="22" name="1 Basic Form" version="0.1" uuid="464806c1-9d3a-4bd0-979f-a70b1aac217a">
+  <header>
+    <enterer/>
+    <date_entered/>
+    <session/>
+    <uid/>
+  </header>
+  <patient>
+    <patient.birthdate openmrs_table="patient" openmrs_attribute="birthdate"/>
+    <patient.birthdate_estimated openmrs_table="patient" openmrs_attribute="birthdate_estimated"/>
+    <patient.family_name openmrs_table="patient_name" openmrs_attribute="family_name"/>
+    <patient.given_name openmrs_table="patient_name" openmrs_attribute="given_name"/>
+    <patient.medical_record_number openmrs_table="patient_identifier" openmrs_attribute="identifier"/>
+    <patient.middle_name openmrs_table="patient_name" openmrs_attribute="middle_name"/>
+    <patient.patient_id openmrs_table="patient" openmrs_attribute="patient_id"/>
+    <patient.sex openmrs_table="patient" openmrs_attribute="gender"/>
+    <patient.tribe openmrs_table="patient" openmrs_attribute="tribe"/>
+    <patient_address.address1 openmrs_table="patient_address" openmrs_attribute="address1"/>
+    <patient_address.address2 openmrs_table="patient_address" openmrs_attribute="address2"/>
+  </patient>
+  <encounter>
+    <encounter.encounter_datetime openmrs_table="encounter" openmrs_attribute="encounter_datetime">'today()'</encounter.encounter_datetime>
+    <encounter.location_id openmrs_table="encounter" openmrs_attribute="location_id"/>
+    <encounter.provider_id openmrs_table="encounter" openmrs_attribute="provider_id" provider_id_type="PROVIDER.ID"/>
+  </encounter>
+  <obs>
+    <weight_kg openmrs_concept="5089^WEIGHT (KG)^99DCT" openmrs_datatype="NM">
+        <date xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <time xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+    </weight_kg>
+  </obs>
+  <problem_list openmrs_concept="1284^PROBLEM LIST^99DCT" openmrs_datatype="ZZ">
+    <problem_added openmrs_concept="6042^PROBLEM ADDED^99DCT" openmrs_datatype="CWE" multiple="0">
+        <date xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <time xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+    </problem_added>
+    <problem_resolved openmrs_concept="6097^PROBLEM RESOLVED^99DCT" openmrs_datatype="CWE" multiple="0">
+        <date xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <time xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+        <value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+    </problem_resolved>
+  </problem_list>
+  <other/></form>
+    </instance>
+    <bind id="patient.birthdate" nodeset="/form/patient/patient.birthdate" type="xsd:date" locked="true()" jr:preload="patient" jr:preloadParams="birthDate"/>
+    <bind id="patient.birthdate_estimated" nodeset="/form/patient/patient.birthdate_estimated" type="xsd:boolean" locked="true()"/>
+    <bind id="patient.family_name" nodeset="/form/patient/patient.family_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="familyName"/>
+    <bind id="patient.given_name" nodeset="/form/patient/patient.given_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="givenName"/>
+    <bind id="patient.medical_record_number" nodeset="/form/patient/patient.medical_record_number" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="patientIdentifier"/>
+    <bind id="patient.middle_name" nodeset="/form/patient/patient.middle_name" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="middleName"/>
+    <bind id="patient.patient_id" nodeset="/form/patient/patient.patient_id" type="xsd:int" required="true()" visible="false()" jr:preload="patient" jr:preloadParams="patientId"/>
+    <bind id="patient.sex" nodeset="/form/patient/patient.sex" type="xsd:string" locked="true()" jr:preload="patient" jr:preloadParams="sex"/>
+    <bind id="patient.tribe" nodeset="/form/patient/patient.tribe" type="xsd:string" locked="true()"/>
+    <bind id="patient_address.address1" nodeset="/form/patient/patient_address.address1" type="xsd:string" locked="true()"/>
+    <bind id="patient_address.address2" nodeset="/form/patient/patient_address.address2" type="xsd:string" locked="true()"/>
+    <bind id="encounter.encounter_datetime" nodeset="/form/encounter/encounter.encounter_datetime" type="xsd:date" constraint=". &lt;= today()" message="Encounter date cannot be after today" required="true()"/>
+    <bind id="encounter.location_id" nodeset="/form/encounter/encounter.location_id" type="xsd:string" required="true()"/>
+    <bind id="encounter.provider_id" nodeset="/form/encounter/encounter.provider_id" type="xsd:string" required="true()"/>
+    <bind id="weight_kg" nodeset="/form/obs/weight_kg/value" type="xsd:decimal" constraint=". &gt;= 0.0 and . &lt;= 250.0" message="value should be between 0.0 and 250.0 inclusive"/>
+    <bind id="problem_added" nodeset="/form/problem_list/problem_added"/>
+    <bind id="problem_resolved" nodeset="/form/problem_list/problem_resolved"/>
+    <bind id="problem_list_problem_added_value" nodeset="/form/problem_list/problem_added/value" type="xsd:string"/>
+    <bind id="problem_list_problem_resolved_value" nodeset="/form/problem_list/problem_resolved/value" type="xsd:string"/>
+  </model></h:head>
+  <h:body id="1">
+    <label>Page1</label>
+    <input ref="patient.birthdate">
+      <label>BIRTHDATE</label>
+    </input>
+    <input ref="patient.birthdate_estimated">
+      <label>BIRTHDATE ESTIMATED</label>
+    </input>
+    <input ref="patient.family_name">
+      <label>FAMILY NAME</label>
+    </input>
+    <input ref="patient.given_name">
+      <label>GIVEN NAME</label>
+    </input>
+    <input ref="patient.medical_record_number">
+      <label>MEDICAL RECORD NUMBER</label>
+    </input>
+    <input ref="patient.middle_name">
+      <label>MIDDLE NAME</label>
+    </input>
+    <input ref="patient.patient_id">
+      <label>PATIENT ID</label>
+    </input>
+    <input ref="patient.sex">
+      <label>SEX</label>
+    </input>
+    <input ref="patient.tribe">
+      <label>TRIBE</label>
+    </input>
+    <input ref="patient_address.address1">
+      <label>ADDRESS1</label>
+    </input>
+    <input ref="patient_address.address2">
+      <label>ADDRESS2</label>
+    </input>
+    <input ref="encounter.encounter_datetime">
+      <label>ENCOUNTER DATETIME</label>
+    </input>
+    <select1 ref="encounter.location_id">
+      <label>LOCATION ID</label>
+      <item id="4">
+        <label>Chulaimbo [4]</label>
+        <value>4</value>
+      </item>
+      <item id="3">
+        <label>Mosoriot Hospital [3]</label>
+        <value>3</value>
+      </item>
+      <item id="1">
+        <label>Unknown Location [1]</label>
+        <value>1</value>
+      </item>
+      <item id="11">
+        <label>Unknown Location 10 [11]</label>
+        <value>11</value>
+      </item>
+      <item id="12">
+        <label>Unknown Location 11 [12]</label>
+        <value>12</value>
+      </item>
+      <item id="13">
+        <label>Unknown Location 12 [13]</label>
+        <value>13</value>
+      </item>
+      <item id="14">
+        <label>Unknown Location 13 [14]</label>
+        <value>14</value>
+      </item>
+      <item id="15">
+        <label>Unknown Location 14 [15]</label>
+        <value>15</value>
+      </item>
+      <item id="16">
+        <label>Unknown Location 15 [16]</label>
+        <value>16</value>
+      </item>
+      <item id="17">
+        <label>Unknown Location 16 [17]</label>
+        <value>17</value>
+      </item>
+      <item id="18">
+        <label>Unknown Location 17 [18]</label>
+        <value>18</value>
+      </item>
+      <item id="19">
+        <label>Unknown Location 18 [19]</label>
+        <value>19</value>
+      </item>
+      <item id="5">
+        <label>Unknown Location 4 [5]</label>
+        <value>5</value>
+      </item>
+      <item id="6">
+        <label>Unknown Location 5 [6]</label>
+        <value>6</value>
+      </item>
+      <item id="7">
+        <label>Unknown Location 6 [7]</label>
+        <value>7</value>
+      </item>
+      <item id="8">
+        <label>Unknown Location 7 [8]</label>
+        <value>8</value>
+      </item>
+      <item id="9">
+        <label>Unknown Location 8 [9]</label>
+        <value>9</value>
+      </item>
+      <item id="10">
+        <label>Unknown Location 9  [10]</label>
+        <value>10</value>
+      </item>
+      <item id="2">
+        <label>Wishard Hospital [2]</label>
+        <value>2</value>
+      </item>
+    </select1>
+    <select1 ref="encounter.provider_id">
+      <label>PROVIDER ID</label>
+      <item id="1">
+        <label>Super User [admin]</label>
+        <value>1</value>
+      </item>
+    </select1>
+    <input ref="weight_kg">
+      <label>WEIGHT (KG)</label>
+      <hint>Patient's weight in kilograms.</hint>
+    </input>
+    <group id="problem_list/problem_added">
+      <label>PROBLEM ADDED</label>
+      <hint>Diagnosis or problem noted on a patient encounter.</hint>
+      <repeat ref="problem_added">
+        <input ref="problem_list_problem_added_value">
+          <label>problem_added value</label>
+          <hint>Diagnosis or problem noted on a patient encounter.</hint>
+        </input>
+      </repeat>
+    </group>
+    <group id="problem_list/problem_resolved">
+      <label>PROBLEM RESOLVED</label>
+      <hint>Diagnosis or problem noted on a patient encounter as being resolved.</hint>
+      <repeat ref="problem_resolved">
+        <input ref="problem_list_problem_resolved_value">
+          <label>problem_resolved value</label>
+          <hint>Diagnosis or problem noted on a patient encounter as being resolved.</hint>
+        </input>
+      </repeat>
+    </group>
+  </h:body>
+</h:html>

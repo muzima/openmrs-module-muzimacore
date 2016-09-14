@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.openmrs.module.muzima">
+    <class name="MuzimaForm" table="muzima_form">
+        <id name="id" type="java.lang.Integer" column="form_id">
+            <generator class="increment"/>
+        </id>
+        <property name="uuid" type="java.lang.String"
+                  column="uuid" length="38" unique="true"/>
+
+        <property name="discriminator" type="java.lang.String"/>
+        <set name="tags" table="muzima_form_tag_map" cascade="all-delete-orphan">
+            <key column="form_id" not-null="true"/>
+            <many-to-many column="tag_id" class="MuzimaFormTag"/>
+        </set>
+        <property name="model" column="model_xml"/>
+        <property name="html" column="form_html"/>
+        <property name="modelJson" column="model_json"/>
+
+        <property name="form" type="java.lang.String" column="form" insert="false" update="false"/>
+
+        <property name="dateCreated" type="java.util.Date"
+                  column="date_created" length="19"/>
+        <property name="retired" type="java.lang.Boolean" column="retired"
+                  length="1"/>
+        <property name="dateRetired" type="java.util.Date"
+                  column="date_retired" length="19"/>
+        <property name="retireReason" type="java.lang.String"
+                  column="retire_reason" length="255"/>
+        <property name="dateChanged" type="java.util.Date"
+                  column="date_changed" length="19"/>
+
+        <many-to-one name="creator" class="org.openmrs.User"/>
+        <many-to-one name="retiredBy" class="org.openmrs.User" column="retired_by"/>
+        <many-to-one name="changedBy" class="org.openmrs.User" column="changed_by"/>
+        <many-to-one name="formDefinition" class="org.openmrs.Form" column="form" property-ref="uuid"/>
+
+
+    </class>
+</hibernate-mapping>
