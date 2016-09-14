@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.openmrs.module.muzima.model">
+    <class name="ErrorMessage" table="muzima_error_message">
+        <id name="id" type="java.lang.Integer" column="id" unsaved-value="0">
+            <generator class="native"/>
+        </id>
+        <property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
+
+        <property name="message" type="java.lang.String" column="message" length="255"/>
+
+        <many-to-one name="creator" class="org.openmrs.User" not-null="true">
+            <column name="creator"/>
+        </many-to-one>
+        <property name="dateCreated" type="java.util.Date" column="date_created" not-null="true" length="19"/>
+
+        <many-to-one name="changedBy" class="org.openmrs.User" column="changed_by"/>
+        <property name="dateChanged" type="java.util.Date" column="date_changed" length="19"/>
+
+    </class>
+</hibernate-mapping>

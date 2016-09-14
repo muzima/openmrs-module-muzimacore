@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xforms xmlns:xf="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jr="http://openrosa.org/javarosa">
+    <head>
+        <title>Patient Registration Form</title>
+        <model>
+            <instance id="openmrs_model_instance">
+                <form id="393" name="Patient Registration Form" version="0.1" xmlns:openmrs="/moduleServlet/formentry/forms/schema/4-1" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003"></form>
+            </instance>
+        </model>
+    </head>
+</xforms>

@@ -1,0 +1,50 @@
+<div id="wide-sidebar" class="row">
+    <div class="col-lg-2">
+        <ul class="nav nav-tabs nav-stacked">
+            <li><a href="#/sources">Data Source</a></li>
+            <li class="navigation-active"><a href="#/queues">Queue Data</a></li>
+            <li><a href="#/registrations">Registrations</a></li>
+            <li><a href="#/forms">Muzima Forms</a></li>
+            <li><a href="#/errors">Error Data</a></li>
+        </ul>
+    </div>
+    <div class="col-lg-8">
+        <table class="table">
+            <tbody>
+            <tr>
+                <td>Sender</td>
+                <td>{{queue.source}}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>Kind</td>
+                <td>{{queue.discriminator}}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>Submitted On</td>
+                <td>{{queue.submitted}}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>Patient Uuid</td>
+                <td>{{queue.patientUuid}}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="4"><pre>{{queue.payload}}</pre></td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <button type="submit" ng-click="delete()" class="btn">Delete</button>
+                    <button type="submit" ng-click="cancel()" class="btn">Cancel</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

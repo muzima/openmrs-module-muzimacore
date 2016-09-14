@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <muzima_data_source id="1" name="registration"
+                        description="Data source for registration"
+                        creator="1"
+                        date_created="2013-07-19 15:20:07"
+                        changed_by="1"
+                        date_changed="2013-01-01 00:00:00.0"
+                        retired="0"
+                        retired_by="1"
+                        date_retired="2013-01-01 00:00:00.0"
+                        retire_reason="Not used"
+                        uuid="fd352cae-65f0-4197-8b82-1ea49e33cb4a"/>
+</dataset>

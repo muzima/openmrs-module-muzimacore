@@ -1,0 +1,19 @@
+{
+    "dataSource": "Mobile Device",
+    "discriminator": "registration",
+    "payload": {
+        "patient.identifier":"",
+        "patient.medical_record_number": "9999-4",
+        "patient.identifier_type": 3,
+        "patient.identifier_location": 1,
+        "patient.uuid":"6e698d66-9f59-4a3b-b3d7-91efb7b297d3",
+        "patient.birthdate": "1984-04-16 06:15:00",
+        "patient.birthdate_estimated": false,
+        "patient.given_name": "Example",
+        "patient.middle_name": "of",
+        "patient.family_name": "Patient",
+        "patient.gender": "M",
+        "person_address.address1": "Adress 1",
+        "person_address.address2": "Adress 2"
+    }
+}

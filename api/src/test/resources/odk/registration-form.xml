@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xforms xmlns:xf="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jr="http://openrosa.org/javarosa">
+    <head>
+        <title>Patient Registration Form</title>
+        <model>
+            <instance id="openmrs_model_instance">
+                <form id="393" name="Patient Registration Form" version="0.1" xmlns:openmrs="/moduleServlet/formentry/forms/schema/4-1" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003">
+                    <header>
+                        <enterer/>
+                        <date_entered/>
+                        <session/>
+                        <uid/>
+                    </header>
+                    <patient>
+                        <patient.patient_id openmrs_table="patient" openmrs_attribute="patient_id"/>
+                        <patient.birthdate openmrs_table="patient" openmrs_attribute="birthdate"/>
+                        <patient.birthdate_estimated openmrs_table="patient" openmrs_attribute="birthdate_estimated"/>
+                        <tmp>
+                            <age/>
+                            <birthdate/>
+                            <birthdate_estimated/>
+                        </tmp>
+                        <patient.family_name openmrs_table="patient_name" openmrs_attribute="family_name"/>
+                        <patient.given_name openmrs_table="patient_name" openmrs_attribute="given_name"/>
+                        <patient.medical_record_number openmrs_table="patient_identifier" openmrs_attribute="identifier"/>
+                        <patient.middle_name openmrs_table="patient_name" openmrs_attribute="middle_name"/>
+                        <patient.sex openmrs_table="patient" openmrs_attribute="gender"/>
+                        <person_address_address1 openmrs_table="patient_address" openmrs_attribute="address1"/>
+                        <person_address_address2 openmrs_table="patient_address" openmrs_attribute="address2"/>
+
+                    </patient>
+                    <encounter>
+                        <encounter.encounter_datetime openmrs_table="encounter" openmrs_attribute="encounter_datetime"/>
+                        <encounter.location_id openmrs_table="encounter" openmrs_attribute="location_id"/>
+                        <encounter.provider_id openmrs_table="encounter" openmrs_attribute="provider_id"/>
+                    </encounter>
+                    <obs openmrs_concept="1238^MEDICAL RECORD OBSERVATIONS^99DCT" openmrs_datatype="ZZ">
+                    </obs>
+                </form>
+            </instance>
+            <xf:bind id="patient.patient_id" nodeset="/form/patient/patient.patient_id" type="int" required="true()" readonly="true()"/>
+            <bind id="patient.birthdate" nodeset="/form/patient/patient.birthdate" type="date" required="true()"
+                  calculate="if(../tmp/age='',../tmp/birthdate,date(today()-(../tmp/age * 365.2425)))"
+                  constraint=". &lt;=today()" jr:constraintMsg="Birth date cannot be in the future"/>
+            <bind id="patient.birthdate_estimated" nodeset="/form/patient/patient.birthdate_estimated" type="string"
+                  calculate="if(../tmp/age!='','true',../tmp/birthdate_estimated)"/>
+            <bind id="birthdate_by_age" nodeset="/form/patient/tmp/age" type="decimal"
+                  constraint=". &gt;0 and .&lt;=125" jr:constraintMsg="Age must be between 0 and 125 Years"/>
+            <bind id="birthdate" nodeset="/form/patient/tmp/birthdate" type="date" required="true()"
+                  constraint=". &lt;=today()" jr:constraintMsg="Birth Date cannot be in the Future"
+                  relevant="../age=''"/>
+            <bind id="birthdate_estimated" nodeset="/form/patient/tmp/birthdate_estimated" type="string" required="true()"
+                  relevant="../age=''"/>
+            <bind id="patient.family_name" nodeset="/form/patient/patient.family_name" type="string" required="true()"/>
+            <bind id="patient.given_name" nodeset="/form/patient/patient.given_name" type="string" required="true()"/>
+            <bind id="patient.medical_record_number" nodeset="/form/patient/patient.medical_record_number" type="string" required="true()"
+                  constraint="regex(., '^\w+[-]?\d{1}') and (checkdigit(.))" jr:constraintMsg="Invalid ID format and/or CheckDigit. Please Re-enter patient AMRS ID."/>
+            <bind id="patient.middle_name" nodeset="/form/patient/patient.middle_name" type="string"/>
+            <bind id="patient.sex" nodeset="/form/patient/patient.sex" type="string" required="true()"/>
+            <bind id="person_address_address1" nodeset="/form/patient/person_address_address1" type="string"/>
+            <bind id="person_address_address2" nodeset="/form/patient/person_address_address2" type="string"/>
+            <bind id="encounter.encounter_datetime" nodeset="/form/encounter/encounter.encounter_datetime" type="date" constraint=". &lt;= today()" jr:constraintMsg="Encounter date cannot be after today" required="true()"/>
+            <bind id="encounter.location_id" nodeset="/form/encounter/encounter.location_id" type="string" required="true()"/>
+            <bind id="encounter.provider_id" nodeset="/form/encounter/encounter.provider_id" type="string" required="true()"/>
+        </model>
+    </head>
+    <body>
+        <group>
+            <label>Patient Registration</label>
+            <group appearance="field-list">
+                <label>Demographic Information</label>
+                <input bind="patient.family_name">
+                    <label>Family Name</label>
+                </input>
+                <input bind="patient.given_name">
+                    <label>Given Name</label>
+                </input>
+                <input bind="patient.middle_name">
+                    <label>Middle Name</label>
+                </input>
+
+
+                <input bind="birthdate_by_age">
+                    <label>Enter age</label>
+                </input>
+                <input bind="birthdate">
+                    <label>Date of Birth</label>
+                </input>
+                <select1 bind="birthdate_estimated">
+                    <label>Date of Birth Estimated</label>
+                    <item>
+                        <label>Yes</label>
+                        <value>true</value>
+                    </item>
+                    <item>
+                        <label>No</label>
+                        <value>false</value>
+                    </item>
+                </select1>
+
+
+                <input bind="patient.medical_record_number">
+                    <label>Medical record number</label>
+                </input>
+                <select1 bind="patient.sex">
+                    <label>Gender</label>
+                    <item>
+                        <label>Male</label>
+                        <value>M</value>
+                    </item>
+                    <item>
+                        <label>Female</label>
+                        <value>F</value>
+                    </item>
+                </select1>
+                <input bind="person_address_address1">
+                    <label>Address1</label>
+                </input>
+                <input bind="person_address_address2">
+                    <label>Address2</label>
+                </input>
+                <input bind="person_address_address2">
+                    <label>Phone Number</label>
+                </input>
+            </group>
+            <group appearance="field-list">
+                <input bind="encounter.encounter_datetime">
+                    <label>Encounter Date</label>
+                </input>
+                <select1 bind="encounter.location_id">
+                    <label>Location</label>
+                    <item id="1">
+                        <label>Unknown Location [1]</label>
+                        <value>1</value>
+                    </item>
+                </select1>
+                <select1 bind="encounter.provider_id">
+                    <label>Provider Id</label>
+                    <item id="1">
+                        <label>Super User [1]</label>
+                        <value>1</value>
+                    </item>
+                </select1>
+            </group>
+        </group>
+    </body>
+</xforms>

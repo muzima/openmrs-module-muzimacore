@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:h="http://www.w3.org/1999/xhtml">
+    <h:body>
+        <input ref="patient.family_name">
+            <label>Family Name</label>
+        </input>
+    </h:body>
+</h:html>

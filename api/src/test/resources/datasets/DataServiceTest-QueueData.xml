@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <muzima_queue_data id="1" discriminator="registration"
+                       payload="registration data"
+                       data_source="1"
+                       creator="1"
+                       date_created="2013-01-01 00:00:00.0"
+                       changed_by="1"
+                       date_changed="2013-01-01 00:00:00.0"
+                       uuid="48e55acd-b8db-4f0d-862e-c6969250be2b"/>
+</dataset>

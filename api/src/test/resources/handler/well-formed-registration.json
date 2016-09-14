@@ -1,0 +1,159 @@
+{
+    "discriminator": "registration",
+    "payload": {
+        "form": {
+            "fields": [
+                {
+                    "bind": "/model/instance/form/header",
+                    "name": "header"
+                },
+                {
+                    "bind": "/model/instance/form/header/enterer",
+                    "name": "enterer"
+                },
+                {
+                    "bind": "/model/instance/form/header/date_entered",
+                    "name": "date_entered"
+                },
+                {
+                    "bind": "/model/instance/form/header/session",
+                    "name": "session"
+                },
+                {
+                    "bind": "/model/instance/form/header/uid",
+                    "name": "uid"
+                },
+                {
+                    "bind": "/model/instance/form/patient",
+                    "name": "patient"
+                },
+                {
+                    "bind": "/model/instance/form/patient/patient.patient_id",
+                    "name": "patient.patient_id"
+                },
+                {
+                    "value": "3",
+                    "bind": "/model/instance/form/patient/patient_identifier.identifier_type_id",
+                    "name": "patient_identifier.identifier_type_id"
+                },
+                {
+                    "value": "sniff",
+                    "bind": "/model/instance/form/patient/patient.medical_record_number",
+                    "name": "patient.medical_record_number"
+                },
+                {
+                    "value": "2002-11-01",
+                    "bind": "/model/instance/form/patient/patient.birthdate",
+                    "name": "patient.birthdate"
+                },
+                {
+                    "bind": "/model/instance/form/patient/patient.birthdate_estimated",
+                    "name": "patient.birthdate_estimated"
+                },
+                {
+                    "value": "li",
+                    "bind": "/model/instance/form/patient/patient.family_name",
+                    "name": "patient.family_name"
+                },
+                {
+                    "value": "agagsdgsgs-agadsgsgfs",
+                    "bind": "/model/instance/form/patient/patient.uuid",
+                    "name": "patient.uuid"
+                },
+                {
+                    "value": "si",
+                    "bind": "/model/instance/form/patient/patient.given_name",
+                    "name": "patient.given_name"
+                },
+                {
+                    "value": "",
+                    "bind": "/model/instance/form/patient/patient.middle_name",
+                    "name": "patient.middle_name"
+                },
+                {
+                    "value": "m",
+                    "bind": "/model/instance/form/patient/patient.sex",
+                    "name": "patient.sex"
+                },
+                {
+                    "bind": "/model/instance/form/patient/person_attribute10",
+                    "name": "person_attribute10"
+                },
+                {
+                    "bind": "/model/instance/form/patient/tmp",
+                    "name": "tmp"
+                },
+                {
+                    "value": "sniff",
+                    "bind": "/model/instance/form/patient/tmp/amrs_id_scan",
+                    "name": "amrs_id_scan"
+                },
+                {
+                    "bind": "/model/instance/form/patient/tmp/amrs_id_manual",
+                    "name": "amrs_id_manual"
+                },
+                {
+                    "bind": "/model/instance/form/patient/tmp/amrs_id_manual_confirm",
+                    "name": "amrs_id_manual_confirm"
+                },
+                {
+                    "bind": "/model/instance/form/patient/tmp/birthdate_type",
+                    "name": "birthdate_type"
+                },
+                {
+                    "bind": "/model/instance/form/patient/tmp/age",
+                    "name": "age"
+                },
+                {
+                    "bind": "/model/instance/form/patient/tmp/age_in_years",
+                    "name": "age_in_years"
+                },
+                {
+                    "bind": "/model/instance/form/patient/tmp/birth_date",
+                    "name": "birth_date"
+                },
+                {
+                    "bind": "/model/instance/form/patient/tmp/birthdate_estimated",
+                    "name": "birthdate_estimated"
+                },
+                {
+                    "bind": "/model/instance/form/encounter",
+                    "name": "encounter"
+                },
+                {
+                    "bind": "/model/instance/form/encounter/encounter.encounter_datetime",
+                    "name": "encounter.encounter_datetime"
+                },
+                {
+                    "value": "2",
+                    "bind": "/model/instance/form/encounter/encounter.location_id",
+                    "name": "encounter.location_id"
+                },
+                {
+                    "value": "1",
+                    "bind": "/model/instance/form/encounter/encounter.provider_id",
+                    "name": "encounter.provider_id"
+                },
+                {
+                    "bind": "/model/instance/form/encounter/tmp",
+                    "name": "tmp"
+                },
+                {
+                    "value": "1",
+                    "bind": "/model/instance/form/encounter/tmp/provider_id_select",
+                    "name": "provider_id_select"
+                },
+                {
+                    "bind": "/model/instance/form/encounter/tmp/provider_id_text",
+                    "name": "provider_id_text"
+                },
+                {
+                    "value": "\n\n",
+                    "bind": "/model/instance/form/obs",
+                    "name": "obs"
+                }
+            ]
+        }
+    },
+    "dataSource": "Mobile Device"
+}

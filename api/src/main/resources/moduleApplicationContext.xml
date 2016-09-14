@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Beans to add to the current Application context definition -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="transformerFactory" class="net.sf.saxon.TransformerFactoryImpl"/>
+
+    <bean id="xform2html5XSLPipeline" class="org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline"
+          factory-method="xform2HTML5Pipeline"/>
+
+    <bean id="odk2JavarosaXSLPipeline" class="org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline"
+          factory-method="ODK2Javarosa"/>
+
+    <bean id="odk2HTML5XSLPipeline" class="org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline"
+          factory-method="ODK2HTML5"/>
+
+    <bean id="modelXml2JsonXSLPipeline"
+          class="org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline"
+          factory-method="modelXml2JsonXSLPipeline"/>
+
+    <bean id="xform2HtmlTransformer" class="org.openmrs.module.muzima.xForm2MuzimaTransform.EnketoXslTransformer">
+        <constructor-arg name="transformerFactory" ref="transformerFactory"/>
+        <constructor-arg name="transformPipeline" ref="xform2html5XSLPipeline"/>
+    </bean>
+
+    <bean id="odk2JavarosaTransformer" class="org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer">
+        <constructor-arg name="transformerFactory" ref="transformerFactory"/>
+        <constructor-arg name="transformPipeline" ref="odk2JavarosaXSLPipeline"/>
+    </bean>
+
+    <bean id="odk2HTML5Transformer" class="org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer">
+        <constructor-arg name="transformerFactory" ref="transformerFactory"/>
+        <constructor-arg name="transformPipeline" ref="odk2HTML5XSLPipeline"/>
+    </bean>
+
+    <bean id="modelXml2JsonTransformer"
+          class="org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer">
+        <constructor-arg name="transformerFactory" ref="transformerFactory"/>
+        <constructor-arg name="jsonTransformers" ref="modelXml2JsonXSLPipeline"/>
+    </bean>
+
+    <bean id="muzimaFormDAO" class="org.openmrs.module.muzima.api.db.hibernate.HibernateMuzimaFormDAO">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
+
+    <!-- Services accessible via Context.getService() -->
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.muzima.api.service.DataService</value>
+                <bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+                    <property name="transactionManager">
+                        <ref bean="transactionManager"/>
+                    </property>
+                    <property name="target">
+                        <bean class="org.openmrs.module.muzima.api.service.impl.DataServiceImpl">
+                            <property name="errorDataDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateErrorDataDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
+                            <property name="queueDataDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateQueueDataDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
+                            <property name="archiveDataDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateArchiveDataDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
+                            <property name="dataSourceDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateDataSourceDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
+                            <property name="notificationDataDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateNotificationDataDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
+                            <property name="errorMessageDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateErrorMessageDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
+                        </bean>
+                    </property>
+                    <property name="preInterceptors">
+                        <ref bean="serviceInterceptors"/>
+                    </property>
+                    <property name="transactionAttributeSource">
+                        <ref bean="transactionAttributeSource"/>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.muzima.api.service.CoreService</value>
+                <bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+                    <property name="transactionManager">
+                        <ref bean="transactionManager"/>
+                    </property>
+                    <property name="target">
+                        <bean class="org.openmrs.module.muzima.api.service.impl.CoreServiceImpl">
+                            <property name="coreDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateCoreDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
+                        </bean>
+                    </property>
+                    <property name="preInterceptors">
+                        <ref bean="serviceInterceptors"/>
+                    </property>
+                    <property name="transactionAttributeSource">
+                        <ref bean="transactionAttributeSource"/>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.muzima.api.service.MuzimaTagService</value>
+                <bean
+                        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+                    <property name="transactionManager">
+                        <ref bean="transactionManager"/>
+                    </property>
+                    <property name="target">
+                        <bean class="org.openmrs.module.muzima.api.service.impl.MuzimaTagServiceImpl">
+                            <constructor-arg>
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateTagDAO">
+                                    <constructor-arg ref="sessionFactory"/>
+                                </bean>
+                            </constructor-arg>
+                        </bean>
+                    </property>
+                    <property name="preInterceptors">
+                        <ref bean="serviceInterceptors"/>
+                    </property>
+                    <property name="transactionAttributeSource">
+                        <ref bean="transactionAttributeSource"/>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.muzima.api.service.MuzimaFormService</value>
+                <bean
+                        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+                    <property name="transactionManager">
+                        <ref bean="transactionManager"/>
+                    </property>
+                    <property name="target">
+                        <bean class="org.openmrs.module.muzima.api.service.impl.MuzimaFormServiceImpl">
+                            <constructor-arg name="dao" ref="muzimaFormDAO"/>
+                            <constructor-arg name="html5Transformer" ref="xform2HtmlTransformer"/>
+                            <constructor-arg name="modelXml2JsonTransformer" ref="modelXml2JsonTransformer"/>
+                            <constructor-arg name="odk2JavarosaTransformer" ref="odk2JavarosaTransformer"/>
+                            <constructor-arg name="odk2HTML5Transformer" ref="odk2HTML5Transformer"/>
+                        </bean>
+                    </property>
+                    <property name="preInterceptors">
+                        <ref bean="serviceInterceptors"/>
+                    </property>
+                    <property name="transactionAttributeSource">
+                        <ref bean="transactionAttributeSource"/>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>org.openmrs.module.muzima.api.service.RegistrationDataService</value>
+                <bean
+                        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+                    <property name="transactionManager">
+                        <ref bean="transactionManager" />
+                    </property>
+                    <property name="target">
+                        <bean class="org.openmrs.module.muzima.api.service.impl.RegistrationDataServiceImpl">
+                            <property name="dao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateRegistrationDataDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="sessionFactory" />
+                                    </property>
+                                </bean>
+                            </property>
+                        </bean>
+                    </property>
+                    <property name="preInterceptors">
+                        <ref bean="serviceInterceptors" />
+                    </property>
+                    <property name="transactionAttributeSource">
+                        <ref bean="transactionAttributeSource" />
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+</beans>

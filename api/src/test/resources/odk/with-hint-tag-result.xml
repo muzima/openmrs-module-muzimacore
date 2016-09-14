@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:xf="http://www.w3.org/2002/xforms"
+        xmlns:h="http://www.w3.org/1999/xhtml">
+    <h:head>
+        <h:title>CCSP Dysplasia Form</h:title>
+        <model>
+            <instance>
+            </instance>
+        </model>
+    </h:head>
+    <h:body>
+        <group appearance="field-list">
+            <select1 bind="current_visit_type">
+                <label>Current Visit Type</label>
+                <item>
+                    <label>New visit</label>
+                    <value>7850^INITIAL VISIT ^99DCT</value>
+                </item>
+                <item>
+                    <label>Revisit</label>
+                    <value>2345^FOLLOW-UP^99DCT</value>
+                </item>
+                <item>
+                    <label>Review of pathology results</label>
+                    <value>7588^REVIEW OF PATHOLOGY RESULTS^99DCT</value>
+                </item>
+            </select1>
+        </group>
+    </h:body>
+</h:html>
