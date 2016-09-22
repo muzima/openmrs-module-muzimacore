@@ -76,10 +76,10 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.post("edit.json",{"formData": formData});
     };
     var validateData = function (uuid, formData) {
-            return $http.post("validate.json?uuid="+uuid+"&formData="+formData);
+        return $http.post("validate.json?uuid="+uuid+"&formData="+formData);
     };
     var saveEditedFormData = function (uuid, formData) {
-            return $http.post("error.json?uuid="+uuid+"&formData="+formData);
+        return $http.post("error.json?uuid="+uuid+"&formData="+formData);
     };
 
     return {
@@ -205,14 +205,38 @@ muzimaCoreModule.factory('$configs', function($http) {
         return $http.get("config.json?uuid=" + uuid);
     };
     var getConfigurations = function(search, pageNumber, pageSize) {
-        if (search === undefined) {
-            // replace undefined search term with empty string
-            search = '';
-        }
-        return $http.get("configs.json?search=" + search + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+        return $http.get("configs.json?search=" + (search === undefined ? '' : search) + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+    };
+    var saveConfiguration = function (uuid, name, description, configJson) {
+        return $http.post("config.json", {"uuid": uuid, "name": name, "description": description, "configJson": configJson});
+    };
+    var deleteConfiguration = function (uuid) {
+        return $http.post("config.json", {"uuid": uuid});
+    };
+    var searchConfigForms = function(search) {
+        return $http.get("configForms.json?search=" + (search === undefined ? '' : search));
+    };
+    var searchConfigCohorts = function(search) {
+        return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
+    };
+    var searchConfigLocations = function(search) {
+        return $http.get("configLocations.json?search=" + (search === undefined ? '' : search));
+    };
+    var searchConfigConcepts = function(search) {
+        return $http.get('../../ws/rest/v1/concept?v=custom:(uuid,name:(uuid,name))&q=' + (search === undefined ? '' : search));
+    };
+    var searchConfigProviders = function(search) {
+        return $http.get('../../ws/rest/v1/provider?v=custom:(uuid,name:(uuid,name))&q=' + (search === undefined ? '' : search));
     };
     return {
         getConfiguration: getConfiguration,
-        getConfigurations: getConfigurations
+        getConfigurations: getConfigurations,
+        saveConfiguration: saveConfiguration,
+        deleteConfiguration: deleteConfiguration,
+        searchConfigForms: searchConfigForms,
+        searchConfigCohorts: searchConfigCohorts,
+        searchConfigLocations: searchConfigLocations,
+        searchConfigProviders: searchConfigProviders,
+        searchConfigConcepts: searchConfigConcepts
     }
 });

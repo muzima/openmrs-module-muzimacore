@@ -65,7 +65,7 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         if (isFormExists(formUUID)) {
             CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
                     transform(html5Transformer.transform(xformXml).getResult());
-            MuzimaForm retrievedForm = dao.findByUuid(formUUID);
+            MuzimaForm retrievedForm = dao.getFormByUuid(formUUID);
             if(retrievedForm != null){
                 retrievedForm.setHtml(result.getForm());
                 retrievedForm.setModel(result.getModel());
@@ -79,7 +79,7 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
     }
 
     private boolean isFormExists(String formUUID) {
-        MuzimaForm muzimaforms = dao.findByUuid(formUUID);
+        MuzimaForm muzimaforms = dao.getFormByUuid(formUUID);
         if(muzimaforms != null)
             return true;
         else
@@ -87,9 +87,9 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
     }
 
     private boolean isFormDefinitionExists(String formUUID) {
-        List<MuzimaForm> formsWithUUID = dao.findByForm(formUUID);
+        List<MuzimaForm> formsWithUUID = getMuzimaFormByForm(formUUID, false);
         for (MuzimaForm form : formsWithUUID) {
-            if (form.getForm().equals(formUUID) && !form.isRetired()) {
+            if (form.getForm().equals(formUUID)) {
                 return true;
             }
         }
@@ -114,7 +114,7 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
 
     public MuzimaForm updateHTMLForm(String html,  String formUUID) throws Exception {
         if (isFormExists(formUUID)) {
-            MuzimaForm retrievedForm = dao.findByUuid(formUUID);
+            MuzimaForm retrievedForm = dao.getFormByUuid(formUUID);
             if (retrievedForm != null) {
                 retrievedForm.setHtml(html);
                 return save(retrievedForm);
@@ -139,15 +139,19 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         return new XFormParser(new StringReader(result)).validate();
     }
 
-    public MuzimaForm findById(Integer id) {
-        return dao.findById(id);
+    public MuzimaForm getFormById(Integer id) {
+        return dao.getFormById(id);
     }
 
-    public MuzimaForm findByUniqueId(String uuid) {
-        return dao.findByUuid(uuid);  //To change body of implemented methods use File | Settings | File Templates.
+    public MuzimaForm getFormByUuid(String uuid) {
+        return dao.getFormByUuid(uuid);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<MuzimaForm> findByName(final String name, final Date syncDate) {
-        return dao.findByName(name, syncDate);
+    public List<MuzimaForm> getFormByName(final String name, final Date syncDate) {
+        return dao.getFormByName(name, syncDate);
+    }
+
+    public List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired){
+        return dao.getMuzimaFormByForm(form, includeRetired);
     }
 }

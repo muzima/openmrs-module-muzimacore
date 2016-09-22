@@ -4,7 +4,6 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -43,7 +42,7 @@ public class HibernateMuzimaConfigDAO implements MuzimaConfigDAO {
 
     @Override
     @Transactional
-    public MuzimaConfig findByUuid(String uuid) {
+    public MuzimaConfig getConfigByUuid(String uuid) {
         return (MuzimaConfig) session().createQuery("from MuzimaConfig config where config.uuid = '" + uuid + "'").uniqueResult();
     }
 
@@ -68,7 +67,7 @@ public class HibernateMuzimaConfigDAO implements MuzimaConfigDAO {
             Disjunction disjunction = Restrictions.disjunction();
             disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("description", search, MatchMode.ANYWHERE));
-            if(StringUtils.isNumeric(search)) {
+            if (StringUtils.isNumeric(search)) {
                 disjunction.add(Restrictions.eq("id", Integer.parseInt(search)));
             }
             criteria.add(disjunction);
@@ -80,20 +79,21 @@ public class HibernateMuzimaConfigDAO implements MuzimaConfigDAO {
     @Override
     public List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize) {
         Criteria criteria = session().createCriteria(MuzimaConfig.class);
+        criteria.add(Restrictions.eq("retired", false));
 
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
             disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("description", search, MatchMode.ANYWHERE));
-            if(StringUtils.isNumeric(search)) {
+            if (StringUtils.isNumeric(search)) {
                 disjunction.add(Restrictions.eq("id", Integer.parseInt(search)));
             }
             criteria.add(disjunction);
         }
-         if (pageNumber != null) {
+        if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
         }
-            if (pageSize != null) {
+        if (pageSize != null) {
             criteria.setMaxResults(pageSize);
         }
         criteria.addOrder(Order.desc("dateCreated"));

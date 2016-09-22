@@ -333,7 +333,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         Form form = Context.getFormService().getFormByUuid(formUuid);
         if (form == null) {
             MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
-            MuzimaForm muzimaForm = muzimaFormService.findByUniqueId(formUuid);
+            MuzimaForm muzimaForm = muzimaFormService.getFormByUuid(formUuid);
             if (muzimaForm != null) {
                 Form formDefinition = Context.getFormService().getFormByUuid(muzimaForm.getForm());
                 encounter.setForm(formDefinition);
