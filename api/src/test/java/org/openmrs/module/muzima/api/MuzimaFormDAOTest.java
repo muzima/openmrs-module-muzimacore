@@ -69,7 +69,7 @@ public class MuzimaFormDAOTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void findById_shouldFindById() {
-        MuzimaForm form = dao.findById(1);
+        MuzimaForm form = dao.getFormById(1);
         assertThat(form, is(muzimaform()
                 .withId(1)
                 .withForm("c0c579b0-8e59-401d-8a4a-976a0b183519")
@@ -82,7 +82,7 @@ public class MuzimaFormDAOTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void findByUUID_shouldFindByUUID() {
-        MuzimaForm form = dao.findByUuid("foo");
+        MuzimaForm form = dao.getFormByUuid("foo");
         assertThat(form, is(muzimaform()
                 .withId(1)
                 .withUuid("foo")

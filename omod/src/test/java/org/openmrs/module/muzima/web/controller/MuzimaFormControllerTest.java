@@ -53,7 +53,7 @@ public class MuzimaFormControllerTest {
         form.setId(1);
         when(Context.getService(MuzimaFormService.class)).thenReturn(service);
         when(Context.getAuthenticatedUser()).thenReturn(admin);
-        when(service.findById(1)).thenReturn(form);
+        when(service.getFormById(1)).thenReturn(form);
 
         html5FormController.retire(form.getId(), "The form is 60 years old!");
 

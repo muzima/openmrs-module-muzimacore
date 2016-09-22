@@ -15,13 +15,13 @@ public interface MuzimaConfigService extends OpenmrsService {
     MuzimaConfig findById(Integer id);
 
     @Transactional
-    MuzimaConfig findByUuid(String uuid);
+    MuzimaConfig getConfigByUuid(String uuid);
 
     @Transactional
-    void save(MuzimaConfig config) throws Exception;
+    void save(MuzimaConfig config);
 
     @Transactional
-    void delete(MuzimaConfig config) throws Exception;
+    void delete(MuzimaConfig config);
 
     @Transactional
     Number countConfigs(final String search);

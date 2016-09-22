@@ -109,7 +109,7 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
     public void shouldNotCreateHTMLFormIfFormNameAlreadyExists() throws Exception {
         List<MuzimaForm> muzimaForms = asList(getMuzimaFormWithName("Something like name"),
                 getMuzimaFormWithName("name"));
-        when(dao.findByName("name", syncDate)).thenReturn(muzimaForms);
+        when(dao.getFormByName("name", syncDate)).thenReturn(muzimaForms);
         service.createHTMLForm("html", "c0c579b0-8e59-401d-8a4a-976a0b183519",  "discriminator");
         verifyZeroInteractions(transformer, modelTransformer, odk2JavarosaTransformer, odk2HTML5Transformer);
         verify(dao, never()).saveForm(any(MuzimaForm.class));
@@ -133,9 +133,9 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
                 .instance();
         muzimaForms.add(registrationForm);
         muzimaForms.add(pmtctForm);
-        when(dao.findByUuid("1")).thenReturn(registrationForm);
-        when(dao.findByUuid("2")).thenReturn(pmtctForm);
-        when(dao.findByName("PMTCT Form", null)).thenReturn(asList(pmtctForm));
+        when(dao.getFormByUuid("1")).thenReturn(registrationForm);
+        when(dao.getFormByUuid("2")).thenReturn(pmtctForm);
+        when(dao.getFormByName("PMTCT Form", null)).thenReturn(asList(pmtctForm));
         service.updateHTMLForm("UPDATED",  "2");
         assertEquals("UPDATED",pmtctForm.getHtml());
     }
@@ -207,14 +207,14 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void findById_shouldFindFormById() {
-        service.findById(1);
-        verify(dao, times(1)).findById(1);
+        service.getFormById(1);
+        verify(dao, times(1)).getFormById(1);
     }
 
     @Test
     public void findByUUID_shouldFindFormByUUID() {
-        service.findByUniqueId("foo");
-        verify(dao, times(1)).findByUuid("foo");
+        service.getFormByUuid("foo");
+        verify(dao, times(1)).getFormByUuid("foo");
     }
 
     @Test
@@ -238,7 +238,7 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
     public void shouldNotCreateFormIfTheNameAlreadyExists() throws ParserConfigurationException, TransformerException, DocumentException, IOException {
         List<MuzimaForm> muzimaForms = asList(getMuzimaFormWithName("Something like name"),
                 getMuzimaFormWithName("name"));
-        when(dao.findByName("name", syncDate)).thenReturn(muzimaForms);
+        when(dao.getFormByName("name", syncDate)).thenReturn(muzimaForms);
         try {
             service.create("xml",  "form",  "discriminator");
         } catch (Exception e) {
@@ -259,8 +259,8 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
         when(dao.getXform(1)).thenReturn(xForm().withId(1).withXFormXml(xFormXml).instance());
         when(transformer.transform(xFormXml)).thenReturn(new EnketoResult(htmlForm));
         when(modelTransformer.transform(htmlForm)).thenReturn(new CompositeEnketoResult(htmlForm, modelJson));
-        when(dao.findByForm("c0c579b0-8e59-401d-8a4a-976a0b183522")).thenReturn(asList(updateTestForm));
-        when(dao.findByUuid("123")).thenReturn(updateTestForm);
+        when(dao.getMuzimaFormByForm("c0c579b0-8e59-401d-8a4a-976a0b183522", true)).thenReturn(asList(updateTestForm));
+        when(dao.getFormByUuid("123")).thenReturn(updateTestForm);
 
         try {
             service.update("<xml><some/><valid/></xml>",  "123");
@@ -268,7 +268,7 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
             e.printStackTrace();
         }
 
-        MuzimaForm form = service.findByUniqueId("123");
+        MuzimaForm form = service.getFormByUuid("123");
         assertEquals("<form><ul><li/><li/></ul></form>", form.getHtml());
         assertEquals("<model/>",form.getModel());
         assertEquals("{form : [{name:'', bind: ''}]}",form.getModelJson());
@@ -282,7 +282,7 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
         EnketoResult enketoResult = mock(EnketoResult.class);
         CompositeEnketoResult compositeEnketResult = mock(CompositeEnketoResult.class);
 
-        when(dao.findByName("name", syncDate)).thenReturn(muzimaForms);
+        when(dao.getFormByName("name", syncDate)).thenReturn(muzimaForms);
         when(transformer.transform(anyString())).thenReturn(enketoResult);
         when(modelTransformer.transform(anyString())).thenReturn(compositeEnketResult);
 

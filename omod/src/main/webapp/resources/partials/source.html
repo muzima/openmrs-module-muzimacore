@@ -13,14 +13,14 @@
         <div ng-switch="mode">
             <div ng-switch-when="view">
                 <div class="row">
-                    <input class="col-lg-10" placeholder="Source description ..." type="text" disabled="" ng-model="source.name">
+                    <input class="col-lg-10" placeholder="Source name ..." type="text" disabled="" ng-model="source.name">
                 </div>
                 <div class="row">
                     <textarea class="col-lg-12" placeholder="Source description ..." rows="10" disabled="" ng-model="source.description">
                     </textarea>
                 </div>
                 <div class="row">
-                    <input class="col-lg-10" placeholder="Source description ..." type="text" disabled="" ng-model="source.uuid">
+                    <input class="col-lg-10" placeholder="Source uuid ..." type="text" disabled="" ng-model="source.uuid">
                 </div>
                 <div class="row">
                     <button type="submit" ng-click="edit()" class="btn">Edit</button>

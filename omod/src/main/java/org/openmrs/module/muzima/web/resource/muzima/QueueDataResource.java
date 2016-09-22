@@ -283,7 +283,7 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
     private String extractFormNameFromPayload(String payload) {
         String formUuid = JsonUtils.readAsString(payload, "$['encounter']['encounter.form_uuid']");
         MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
-        MuzimaForm muzimaForm = muzimaFormService.findByUniqueId(formUuid);
+        MuzimaForm muzimaForm = muzimaFormService.getFormByUuid(formUuid);
         return muzimaForm.getName();
     }
 

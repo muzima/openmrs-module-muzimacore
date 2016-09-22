@@ -35,7 +35,7 @@ public class MuzimaFormController {
     public void retire(final @PathVariable Integer formId, final @RequestParam String retireReason) throws Exception {
         if (Context.isAuthenticated()) {
             MuzimaFormService service = Context.getService(MuzimaFormService.class);
-            MuzimaForm form = service.findById(formId);
+            MuzimaForm form = service.getFormById(formId);
             form.setRetired(true);
             if (isNotBlank(retireReason)) {
                 form.setRetireReason(retireReason);
@@ -45,5 +45,4 @@ public class MuzimaFormController {
             service.save(form);
         }
     }
-
 }

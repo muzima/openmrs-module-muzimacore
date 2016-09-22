@@ -34,7 +34,7 @@ public class MuzimaConfigServiceImpl extends BaseOpenmrsService implements Muzim
     }
 
     @Override
-    public void save(MuzimaConfig config) throws Exception {
+    public void save(MuzimaConfig config) {
         dao.save(config);
     }
 
@@ -44,12 +44,12 @@ public class MuzimaConfigServiceImpl extends BaseOpenmrsService implements Muzim
     }
 
     @Override
-    public MuzimaConfig findByUuid(String uuid) {
-        return dao.findByUuid(uuid);
+    public MuzimaConfig getConfigByUuid(String uuid) {
+        return dao.getConfigByUuid(uuid);
     }
 
     @Override
-    public void delete(MuzimaConfig config) throws Exception {
+    public void delete(MuzimaConfig config) {
         dao.delete(config);
     }
 

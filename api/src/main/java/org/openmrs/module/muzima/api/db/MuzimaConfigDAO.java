@@ -9,11 +9,11 @@ public interface MuzimaConfigDAO {
 
     MuzimaConfig findById(Integer id);
 
-    MuzimaConfig findByUuid(String uuid);
+    MuzimaConfig getConfigByUuid(String uuid);
 
-    void save(MuzimaConfig config) throws Exception;
+    void save(MuzimaConfig config);
 
-    void delete(MuzimaConfig config) throws Exception;
+    void delete(MuzimaConfig config);
 
     Number countConfigs(String search);
 

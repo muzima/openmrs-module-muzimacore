@@ -140,7 +140,7 @@ public class QueueDataProcessor {
     private String extractFormNameFromPayload(String payload) {
         String formUuid = readAsString(payload, "$['encounter']['encounter.form_uuid']");
         MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
-        MuzimaForm muzimaForm = muzimaFormService.findByUniqueId(formUuid);
+        MuzimaForm muzimaForm = muzimaFormService.getFormByUuid(formUuid);
         if(muzimaForm != null) {
             return muzimaForm.getName();
         } else {

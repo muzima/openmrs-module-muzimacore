@@ -66,7 +66,7 @@ public class MuzimaFormResource extends MetadataDelegatingCrudResource<MuzimaFor
         List<MuzimaForm> muzimaForms = new ArrayList<MuzimaForm>();
         if (nameParameter != null) {
             Date syncDate = parseDate(syncDateParameter);
-            muzimaForms = Context.getService(MuzimaFormService.class).findByName(nameParameter, syncDate);
+            muzimaForms = Context.getService(MuzimaFormService.class).getFormByName(nameParameter, syncDate);
         }
         return new NeedsPaging<MuzimaForm>(muzimaForms, context);
     }
@@ -74,13 +74,13 @@ public class MuzimaFormResource extends MetadataDelegatingCrudResource<MuzimaFor
     @Override
     public MuzimaForm getByUniqueId(String uuid) {
         MuzimaFormService service = Context.getService(MuzimaFormService.class);
-        return service.findByUniqueId(uuid);
+        return service.getFormByUuid(uuid);
     }
 
     @Override
     public Object retrieve(String uuid, RequestContext context) throws ResponseException {
         MuzimaFormService service = Context.getService(MuzimaFormService.class);
-        return asRepresentation(service.findByUniqueId(uuid), context.getRepresentation());
+        return asRepresentation(service.getFormByUuid(uuid), context.getRepresentation());
     }
 
     @Override
