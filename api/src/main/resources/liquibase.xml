@@ -1083,4 +1083,20 @@
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
 
+    <changeSet id="muzima-20160922-145252" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_form" columnName="meta_json"/>
+            </not>
+        </preConditions>
+
+        <comment>
+            Add column metadata to store metadata as a json blob
+        </comment>
+
+        <addColumn tableName="muzima_form">
+            <column name="meta_json" type="${clob.type}"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

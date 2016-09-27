@@ -9,7 +9,7 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/styles/custom/custom.css"/>
 
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/jquery/jquery.js" />
-<openmrs:htmlInclude file="/moduleResources/muzimacore/js/underscore/underscore-min.js"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/lodash/lodash.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/styles/bootstrap/js/bootstrap.min.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/angular/angular.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/angular/angular-route.js"/>

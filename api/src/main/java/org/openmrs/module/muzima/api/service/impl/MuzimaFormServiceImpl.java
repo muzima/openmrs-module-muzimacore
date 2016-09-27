@@ -10,6 +10,7 @@ import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.utils.HTMLConceptParser;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer;
@@ -56,7 +57,7 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
             CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
                     transform(html5Transformer.transform(xformXml).getResult());
 
-            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), Context.getFormService().getFormByUuid(form)));
+            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), null, Context.getFormService().getFormByUuid(form)));
         }
         throw new DocumentException("The file name already Exists !");
     }
@@ -68,14 +69,13 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
             MuzimaForm retrievedForm = dao.getFormByUuid(formUUID);
             if(retrievedForm != null){
                 retrievedForm.setHtml(result.getForm());
-                retrievedForm.setModel(result.getModel());
+                retrievedForm.setModelXml(result.getModel());
                 retrievedForm.setModelJson(result.getModelAsJson());
             }
             return save(retrievedForm);
         }else{
             throw new DocumentException("Unable to update form with form definition !" + formUUID);
         }
-
     }
 
     private boolean isFormExists(String formUUID) {
@@ -100,14 +100,16 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         if (!isFormDefinitionExists(form)) {
             CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
                     transform(odk2HTML5Transformer.transform(xformXml).getResult());
-            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), Context.getFormService().getFormByUuid(form)));
+            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), null, Context.getFormService().getFormByUuid(form)));
         }
         throw new DocumentException("The file name already Exists !");
     }
 
     public MuzimaForm createHTMLForm(String html,  String form,  String discriminator) throws Exception {
         if (!isFormDefinitionExists(form)) {
-            return save(new MuzimaForm(form, discriminator, html, null, null, Context.getFormService().getFormByUuid(form)));
+            HTMLConceptParser parser = new HTMLConceptParser();
+            String metaJson = parser.createConceptMetadata(parser.parse(html));
+            return save(new MuzimaForm(form, discriminator, html, null, null,metaJson, Context.getFormService().getFormByUuid(form)));
         }
         throw new DocumentException("The file name already Exists !");
     }

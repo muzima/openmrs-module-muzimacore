@@ -103,7 +103,7 @@ public class MuzimaConfigController {
             for (Form form : forms) {
                 List<MuzimaForm> muzimaForms = muzimaFormService.getMuzimaFormByForm(form.getUuid(), false);
                 if (muzimaForms != null && muzimaForms.size() > 0)
-                    objects.add(WebConverter.convertMuzimaForm(form));
+                    objects.add(WebConverter.convertMuzimaForm(form, muzimaForms.get(0)));
             }
 
             response.put("objects", objects);

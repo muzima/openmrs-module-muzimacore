@@ -1,14 +1,9 @@
 function ConfigCtrl($scope, $routeParams, $location, $configs) {
 
-    // initialize the paging structure
-    $scope.maxSize = 10;
-    $scope.pageSize = 10;
-    $scope.currentPage = 1;
-
-    // initialize search objects
+    // initialize control objects
     $scope.search = {forms: '', cohorts: '', locations: '', providers: '', concepts: ''};
-    $scope.selected = {forms: '', cohorts: '', locations: '', providers: '', concepts: ''};
-    $scope.specialFields = {showConfigJson: ''};
+    $scope.selected = {forms: '', cohorts: '', locations: '', providers: '', concepts: [], eConcepts: []};
+    $scope.specialFields = {showConfigJson: '', stillLoading: true};
 
     // initialize the config objects
     $scope.config = {};
@@ -16,6 +11,8 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
     $scope.configCohorts = [];
     $scope.configLocations = [];
     $scope.configProviders = [];
+    $scope.extractedConcepts = [];
+    $scope.extractedNotUsedConcepts = [];
     $scope.configConcepts = [];
 
     // initialize the view to be read only
@@ -24,8 +21,7 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
     } else {
-        $configs.getConfiguration($scope.uuid).
-        then(function (response) {
+        $configs.getConfiguration($scope.uuid).then(function (response) {
             $scope.config = response.data;
             var configString = JSON.parse($scope.config.configJson);
             if (configString != null && configString != undefined) {
@@ -45,6 +41,23 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
             $scope.setEvent();
         });
     }
+
+    $configs.searchConfigForms().then(function (response) {
+        var forms = response.data.objects;
+        angular.forEach(forms, function (form) {
+            if (form.metaJson != undefined && form.metaJson != null) {
+                var metaJson = JSON.parse(form.metaJson);
+                if (metaJson.concepts != undefined) {
+                    $scope.extractedConcepts = _.unionWith($scope.extractedConcepts, metaJson.concepts, _.isEqual);
+                }
+            }
+        });
+
+        //pick only the not used concepts
+    }).then(function () {
+        $scope.extractedNotUsedConcepts = _.differenceWith($scope.extractedConcepts,$scope.configConcepts, _.isEqual);
+        $scope.specialFields.stillLoading=false;
+    });
 
     $scope.save = function (config) {
         $configs.saveConfiguration(config.uuid, config.name, config.description, createJson(config)).
@@ -92,7 +105,7 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
         }
     }, true);
 
-    $scope.selectForm = function(form) {
+    $scope.addForm = function(form) {
         var formExists = _.find($scope.configForms, function (configForm) {
             return configForm.uuid == form.uuid
         });
@@ -128,7 +141,7 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
         }
     }, true);
 
-    $scope.selectCohort = function(cohort) {
+    $scope.addCohort = function(cohort) {
         var cohortExists = _.find($scope.configCohorts, function (configCohort) {
             return configCohort.uuid == cohort.uuid
         });
@@ -163,7 +176,7 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
         }
     }, true);
 
-    $scope.selectLocation = function(location) {
+    $scope.addLocation = function(location) {
         var locationExists = _.find($scope.configLocations, function (configLocation) {
             return configLocation.uuid == location.uuid
         });
@@ -198,7 +211,7 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
         }
     }, true);
 
-    $scope.selectProvider = function(provider) {
+    $scope.addProvider = function(provider) {
         var providerExists = _.find($scope.configProviders, function (configProvider) {
             return configProvider.uuid == provider.uuid
         });
@@ -233,27 +246,74 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
         }
     }, true);
 
-    $scope.selectConcept = function(concept) {
+    $scope.addConcept = function(concept) {
         var conceptExists = _.find($scope.configConcepts, function (configConcept) {
             return configConcept.uuid == concept.uuid
         });
         if (!conceptExists) {
-            $scope.configConcepts.push(concept);
+            var jsonConcept = {};
+            jsonConcept["uuid"] = concept.uuid;
+            jsonConcept["name"] = concept.name.name;
+            $scope.configConcepts.push(jsonConcept);
             $scope.search.concepts = '';
         }
     };
 
-    $scope.chosenConcept = function (value) {
-        $scope.selected.concept = value;
+    $scope.moveAll = function () {
+        // lodash is very slow
+        //$scope.configConcepts = _.unionWith($scope.extractedConcepts, $scope.configConcepts, _.isEqual);
+        //$scope.extractedNotUsedConcepts = _.differenceWith($scope.extractedConcepts, $scope.configConcepts, _.isEqual);
+        angular.forEach($scope.extractedConcepts, function (eConcept) {
+            var conceptExists = _.find($scope.configConcepts, function (configConcept) {
+                return configConcept.uuid == eConcept.uuid
+            });
+
+            if (!conceptExists)
+                $scope.configConcepts.push(eConcept);
+        });
+        $scope.extractedNotUsedConcepts = [];
     };
 
-    $scope.removeConcept = function () {
-        angular.forEach($scope.configConcepts, function (configConcept, index) {
-            if (configConcept.uuid === $scope.selected.concept) {
-                $scope.configConcepts.splice(index, 1);
-                $scope.selected.concept = '';
-            }
-        });
+    $scope.moveSelected = function () {
+        if ($scope.selected.eConcepts != undefined && $scope.selected.eConcepts != null) {
+            angular.forEach($scope.selected.eConcepts, function (eConcept) {
+                var selectedConcept = JSON.parse(eConcept);
+                $scope.configConcepts.push(selectedConcept);
+
+                //and remove it from extractedNotUsedConcepts
+                angular.forEach($scope.extractedNotUsedConcepts, function (concept, index) {
+                    if (concept.uuid === selectedConcept.uuid) {
+                        $scope.extractedNotUsedConcepts.splice(index, 1);
+                        $scope.selected.concept = '';
+                    }
+                });
+            });
+            $scope.selected.eConcepts = [];
+        }
+    };
+
+    $scope.removeSelected = function () {
+        if ($scope.selected.concepts != undefined && $scope.selected.concepts != null) {
+            angular.forEach($scope.selected.concepts, function (concept) {
+                var selectedConcept = JSON.parse(concept);
+                var conceptIndex = _.findIndex($scope.configConcepts, function (configConcept) {
+                    return configConcept.uuid == selectedConcept.uuid
+                });
+
+                // remove it from configs
+                if (conceptIndex >= 0)
+                    $scope.configConcepts.splice(conceptIndex, 1);
+
+                // and repush it to extractedNotUsedConcepts if it was from forms
+                var conceptExists = _.find($scope.extractedConcepts, function (eConcept) {
+                    return selectedConcept.uuid == eConcept.uuid
+                });
+
+                if (conceptExists)
+                    $scope.extractedNotUsedConcepts.push(selectedConcept);
+            });
+            $scope.selected.concepts = [];
+        }
     };
 
     /****************************************************************************************
@@ -262,8 +322,10 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
     $scope.bindData = function(){
         $scope.ul_li_Data = '';
         var jsonFormData = JSON.parse($scope.config.configJson);
-        $scope.to_ul(jsonFormData,'treeul');
-        $scope.ul_li_Data = '';
+        if (jsonFormData != undefined) {
+            $scope.to_ul(jsonFormData,'treeul');
+            $scope.ul_li_Data = '';
+        }
     };
 
     $scope.to_ul = function(branches, htmlElement) {
@@ -296,7 +358,6 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
 
 function ConfigsCtrl($scope, $configs) {
     // initialize the paging structure
-    $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
     $configs.getConfigurations($scope.search, $scope.currentPage, $scope.pageSize).

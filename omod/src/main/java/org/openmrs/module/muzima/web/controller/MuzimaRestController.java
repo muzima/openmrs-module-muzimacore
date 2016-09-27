@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
-import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.v1_0.controller.MainResourceController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/rest/" + MuzimaConstants.MUZIMA_NAMESPACE)
 public class MuzimaRestController extends MainResourceController {
-
-
 
     /**
      * @see org.openmrs.module.webservices.rest.web.v1_0.controller.BaseRestController#getNamespace()
