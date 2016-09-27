@@ -34,7 +34,7 @@
                         <td colspan="4">No sources created in the system.</td>
                     </tr>
                     <tr ng-repeat="source in sources | filter:filterSource() | orderBy:'created':true">
-                        <td><a href="#/source/{{source.uuid}}"><i class=icon-edit></i></a></td>
+                        <td><a href="#/source/{{source.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
                         <td>{{source.name}}</td>
                         <td>{{source.uuid}}</td>
                         <td>{{source.created}}</td>

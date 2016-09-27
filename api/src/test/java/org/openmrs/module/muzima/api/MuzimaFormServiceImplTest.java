@@ -270,7 +270,7 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
 
         MuzimaForm form = service.getFormByUuid("123");
         assertEquals("<form><ul><li/><li/></ul></form>", form.getHtml());
-        assertEquals("<model/>",form.getModel());
+        assertEquals("<model/>",form.getModelXml());
         assertEquals("{form : [{name:'', bind: ''}]}",form.getModelJson());
         verify(modelTransformer).transform(anyString());
     }

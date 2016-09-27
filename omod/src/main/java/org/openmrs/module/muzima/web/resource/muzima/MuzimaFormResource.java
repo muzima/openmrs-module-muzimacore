@@ -117,9 +117,10 @@ public class MuzimaFormResource extends MetadataDelegatingCrudResource<MuzimaFor
             description.addProperty("name");
             description.addProperty("discriminator");
             description.addProperty("description");
-            description.addProperty("model");
+            description.addProperty("modelXml");
             description.addProperty("html");
             description.addProperty("modelJson");
+            description.addProperty("metaJson");
             description.addProperty("form");
             description.addProperty("tags", new CustomRepresentation("(id,uuid,name)"));
             description.addProperty("version");

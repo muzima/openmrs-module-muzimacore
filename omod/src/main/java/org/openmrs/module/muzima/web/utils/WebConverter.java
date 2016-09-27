@@ -235,11 +235,12 @@ public class WebConverter {
         return map;
     }
 
-    public static Map<String, Object> convertMuzimaForm(final Form form) {
+    public static Map<String, Object> convertMuzimaForm(final Form form, final MuzimaForm muzimaForm) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (form != null) {
             map.put("uuid", form.getUuid());
             map.put("name", form.getName());
+            map.put("metaJson", muzimaForm.getMetaJson());
         }
         return map;
     }

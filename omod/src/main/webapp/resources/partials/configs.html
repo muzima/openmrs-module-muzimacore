@@ -34,7 +34,7 @@
                         <td colspan="9">No configuration created in the system..</td>
                     </tr>
                     <tr ng-repeat="config in configs | orderBy:'created':true">
-                        <td><a title="View/Edit Configuraton" href="#/config/{{config.uuid}}"><i class=icon-edit></i></a></td>
+                        <td><a title="View/Edit Configuraton" href="#/config/{{config.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
                         <td>{{config.name}}</td>
                         <td>{{config.description}}</td>
                         <td>{{config.created}}</td>

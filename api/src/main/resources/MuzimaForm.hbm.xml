@@ -15,9 +15,10 @@
             <key column="form_id" not-null="true"/>
             <many-to-many column="tag_id" class="MuzimaFormTag"/>
         </set>
-        <property name="model" column="model_xml"/>
+        <property name="modelXml" column="model_xml"/>
         <property name="html" column="form_html"/>
         <property name="modelJson" column="model_json"/>
+        <property name="metaJson" column="meta_json"/>
 
         <property name="form" type="java.lang.String" column="form" insert="false" update="false"/>
 
