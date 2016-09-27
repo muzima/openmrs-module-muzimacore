@@ -3,6 +3,7 @@
 A module that provides core muzima functionalities. 
 
 These include:
+
 1. Muzima Forms management, offering
     1. Uploading Muzima HTML forms to the module
     2. Uploading ODK/JavaRosa XML forms to the module
