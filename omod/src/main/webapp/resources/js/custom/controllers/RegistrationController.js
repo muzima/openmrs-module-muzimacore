@@ -14,8 +14,8 @@ function ViewRegistrationCtrl($scope, $location, $routeParams, $registrations) {
 
 function ListRegistrationsCtrl($scope, $registrations) {
     // initialize the paging structure
-    $scope.maxSize = 5;
-    $scope.pageSize = 5;
+    $scope.maxSize = 10;
+    $scope.pageSize = 10;
     $scope.currentPage = 1;
     $registrations.getRegistrations($scope.currentPage, $scope.pageSize).
     then(function (response) {

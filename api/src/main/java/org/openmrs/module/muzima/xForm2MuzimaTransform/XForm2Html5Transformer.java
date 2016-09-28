@@ -2,7 +2,7 @@ package org.openmrs.module.muzima.xForm2MuzimaTransform;
 
 import org.apache.commons.io.FileUtils;
 import org.dom4j.DocumentException;
-import org.openmrs.module.muzima.api.service.impl.EnketoResult;
+import org.openmrs.module.muzima.model.EnketoResult;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;

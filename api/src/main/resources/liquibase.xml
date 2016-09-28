@@ -1039,4 +1039,64 @@
         </sql>
     </changeSet>
 
+    <changeSet id="muzima-20160915154129" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_config"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_config">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(1024)"/>
+            <column name="config_json" type="${clob.type}"/>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="retired" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="datetime"/>
+            <column name="retire_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_config_creator"
+                                 baseTableName="muzima_config" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_config_changed_by"
+                                 baseTableName="muzima_config" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_config_retired_by"
+                                 baseTableName="muzima_config" baseColumnNames="retired_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
+
+    <changeSet id="muzima-20160922-145252" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_form" columnName="meta_json"/>
+            </not>
+        </preConditions>
+
+        <comment>
+            Add column metadata to store metadata as a json blob
+        </comment>
+
+        <addColumn tableName="muzima_form">
+            <column name="meta_json" type="${clob.type}"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

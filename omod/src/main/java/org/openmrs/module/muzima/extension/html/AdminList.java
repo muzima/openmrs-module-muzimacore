@@ -49,6 +49,7 @@ public class AdminList extends AdministrationSectionExt {
     public Map<String, String> getLinks() {
         LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
         map.put("/module/muzimacore/view.list#/sources", "muzimacore.view.sources");
+        map.put("/module/muzimacore/view.list#/configs", "muzimacore.config.setup");
         map.put("/module/muzimacore/view.list#/queues", "muzimacore.view.queues");
         map.put("/module/muzimacore/view.list#/registrations", "muzimacore.view.registrations");
         map.put("/module/muzimacore/view.list#/forms", "muzimacore.form.manage");

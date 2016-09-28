@@ -1,5 +1,6 @@
-package org.openmrs.module.muzima;
+package org.openmrs.module.muzima.model;
 
+import ca.uhn.hl7v2.model.v21.datatype.ST;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.Form;
@@ -12,9 +13,10 @@ import java.util.UUID;
 public class MuzimaForm extends BaseOpenmrsMetadata {
     private Integer id;
     private String discriminator;
-    private String model;
+    private String modelXml;
     private String html;
     private String modelJson;
+    private String metaJson;
     private String form; ///uuid to form table
     private Set<MuzimaFormTag> tags = new HashSet<MuzimaFormTag>();
     private Form formDefinition;
@@ -22,7 +24,7 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
     public MuzimaForm() {
     }    // used by hibernate
 
-    public MuzimaForm(String form, String discriminator, String html, String model, String modelJson, Form formDefinition) {
+    public MuzimaForm(String form, String discriminator, String html, String modelXml, String modelJson, String metaJson, Form formDefinition) {
         // Correcting for the fact that in v1.8.2 of the stand-alone server the uuid of BaseOpenmrsObject is
         // not computed each time the empty constructor is called as is the case in v1.9.3
         if (getUuid()==null) {
@@ -32,8 +34,9 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
         this.discriminator = discriminator;
         // form structure
         this.html = html;
-        this.model = model;
+        this.modelXml = modelXml;
         this.modelJson = modelJson;
+        this.metaJson = metaJson;
         this.formDefinition = formDefinition;
     }
 
@@ -69,12 +72,20 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
         this.modelJson = modelJson;
     }
 
-    public String getModel() {
-        return model;
+    public String getMetaJson() {
+        return metaJson;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setMetaJson(String metaJson) {
+        this.metaJson = metaJson;
+    }
+
+    public String getModelXml() {
+        return modelXml;
+    }
+
+    public void setModelXml(String modelXml) {
+        this.modelXml = modelXml;
     }
 
     public String getHtml() {

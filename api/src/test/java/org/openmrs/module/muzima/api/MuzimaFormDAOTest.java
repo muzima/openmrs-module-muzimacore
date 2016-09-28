@@ -3,9 +3,9 @@ package org.openmrs.module.muzima.api;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
-import org.openmrs.module.muzima.MuzimaFormTag;
-import org.openmrs.module.muzima.MuzimaXForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaFormTag;
+import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.muzima.api.service.MuzimaTagService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -69,7 +69,7 @@ public class MuzimaFormDAOTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void findById_shouldFindById() {
-        MuzimaForm form = dao.findById(1);
+        MuzimaForm form = dao.getFormById(1);
         assertThat(form, is(muzimaform()
                 .withId(1)
                 .withForm("c0c579b0-8e59-401d-8a4a-976a0b183519")
@@ -82,7 +82,7 @@ public class MuzimaFormDAOTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void findByUUID_shouldFindByUUID() {
-        MuzimaForm form = dao.findByUuid("foo");
+        MuzimaForm form = dao.getFormByUuid("foo");
         assertThat(form, is(muzimaform()
                 .withId(1)
                 .withUuid("foo")

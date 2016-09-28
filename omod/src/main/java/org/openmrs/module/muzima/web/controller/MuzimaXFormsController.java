@@ -1,7 +1,7 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaXForm;
+import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

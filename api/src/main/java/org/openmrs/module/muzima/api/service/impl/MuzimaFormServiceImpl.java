@@ -5,10 +5,12 @@ import org.javarosa.xform.parse.ValidationMessages;
 import org.javarosa.xform.parse.XFormParser;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.muzima.MuzimaForm;
-import org.openmrs.module.muzima.MuzimaXForm;
+import org.openmrs.module.muzima.model.CompositeEnketoResult;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.utils.HTMLConceptParser;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer;
@@ -55,7 +57,7 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
             CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
                     transform(html5Transformer.transform(xformXml).getResult());
 
-            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), Context.getFormService().getFormByUuid(form)));
+            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), null, Context.getFormService().getFormByUuid(form)));
         }
         throw new DocumentException("The file name already Exists !");
     }
@@ -64,21 +66,20 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         if (isFormExists(formUUID)) {
             CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
                     transform(html5Transformer.transform(xformXml).getResult());
-            MuzimaForm retrievedForm = dao.findByUuid(formUUID);
+            MuzimaForm retrievedForm = dao.getFormByUuid(formUUID);
             if(retrievedForm != null){
                 retrievedForm.setHtml(result.getForm());
-                retrievedForm.setModel(result.getModel());
+                retrievedForm.setModelXml(result.getModel());
                 retrievedForm.setModelJson(result.getModelAsJson());
             }
             return save(retrievedForm);
         }else{
             throw new DocumentException("Unable to update form with form definition !" + formUUID);
         }
-
     }
 
     private boolean isFormExists(String formUUID) {
-        MuzimaForm muzimaforms = dao.findByUuid(formUUID);
+        MuzimaForm muzimaforms = dao.getFormByUuid(formUUID);
         if(muzimaforms != null)
             return true;
         else
@@ -86,9 +87,9 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
     }
 
     private boolean isFormDefinitionExists(String formUUID) {
-        List<MuzimaForm> formsWithUUID = dao.findByForm(formUUID);
+        List<MuzimaForm> formsWithUUID = getMuzimaFormByForm(formUUID, false);
         for (MuzimaForm form : formsWithUUID) {
-            if (form.getForm().equals(formUUID) && !form.isRetired()) {
+            if (form.getForm().equals(formUUID)) {
                 return true;
             }
         }
@@ -99,21 +100,23 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         if (!isFormDefinitionExists(form)) {
             CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
                     transform(odk2HTML5Transformer.transform(xformXml).getResult());
-            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), Context.getFormService().getFormByUuid(form)));
+            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), null, Context.getFormService().getFormByUuid(form)));
         }
         throw new DocumentException("The file name already Exists !");
     }
 
     public MuzimaForm createHTMLForm(String html,  String form,  String discriminator) throws Exception {
         if (!isFormDefinitionExists(form)) {
-            return save(new MuzimaForm(form, discriminator, html, null, null, Context.getFormService().getFormByUuid(form)));
+            HTMLConceptParser parser = new HTMLConceptParser();
+            String metaJson = parser.createConceptMetadata(parser.parse(html));
+            return save(new MuzimaForm(form, discriminator, html, null, null,metaJson, Context.getFormService().getFormByUuid(form)));
         }
         throw new DocumentException("The file name already Exists !");
     }
 
     public MuzimaForm updateHTMLForm(String html,  String formUUID) throws Exception {
         if (isFormExists(formUUID)) {
-            MuzimaForm retrievedForm = dao.findByUuid(formUUID);
+            MuzimaForm retrievedForm = dao.getFormByUuid(formUUID);
             if (retrievedForm != null) {
                 retrievedForm.setHtml(html);
                 return save(retrievedForm);
@@ -138,15 +141,19 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         return new XFormParser(new StringReader(result)).validate();
     }
 
-    public MuzimaForm findById(Integer id) {
-        return dao.findById(id);
+    public MuzimaForm getFormById(Integer id) {
+        return dao.getFormById(id);
     }
 
-    public MuzimaForm findByUniqueId(String uuid) {
-        return dao.findByUuid(uuid);  //To change body of implemented methods use File | Settings | File Templates.
+    public MuzimaForm getFormByUuid(String uuid) {
+        return dao.getFormByUuid(uuid);  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<MuzimaForm> findByName(final String name, final Date syncDate) {
-        return dao.findByName(name, syncDate);
+    public List<MuzimaForm> getFormByName(final String name, final Date syncDate) {
+        return dao.getFormByName(name, syncDate);
+    }
+
+    public List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired){
+        return dao.getMuzimaFormByForm(form, includeRetired);
     }
 }

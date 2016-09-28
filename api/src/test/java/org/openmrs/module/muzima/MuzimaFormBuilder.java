@@ -1,6 +1,8 @@
 package org.openmrs.module.muzima;
 
 import org.openmrs.Form;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaFormTag;
 
 import java.util.HashSet;
 import java.util.Set;

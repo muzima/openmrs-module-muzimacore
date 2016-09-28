@@ -1,4 +1,4 @@
-package org.openmrs.module.muzima.api.service.impl;
+package org.openmrs.module.muzima.model;
 
 import javax.xml.parsers.ParserConfigurationException;
 

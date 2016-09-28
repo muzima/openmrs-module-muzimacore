@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -53,7 +53,7 @@ public class MuzimaFormControllerTest {
         form.setId(1);
         when(Context.getService(MuzimaFormService.class)).thenReturn(service);
         when(Context.getAuthenticatedUser()).thenReturn(admin);
-        when(service.findById(1)).thenReturn(form);
+        when(service.getFormById(1)).thenReturn(form);
 
         html5FormController.retire(form.getId(), "The form is 60 years old!");
 

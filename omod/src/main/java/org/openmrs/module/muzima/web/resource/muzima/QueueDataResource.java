@@ -19,13 +19,12 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Location;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
-import org.openmrs.module.muzima.web.controller.MuzimaRestController;
 import org.openmrs.module.muzima.web.resource.utils.JsonUtils;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -284,7 +283,7 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
     private String extractFormNameFromPayload(String payload) {
         String formUuid = JsonUtils.readAsString(payload, "$['encounter']['encounter.form_uuid']");
         MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
-        MuzimaForm muzimaForm = muzimaFormService.findByUniqueId(formUuid);
+        MuzimaForm muzimaForm = muzimaFormService.getFormByUuid(formUuid);
         return muzimaForm.getName();
     }
 

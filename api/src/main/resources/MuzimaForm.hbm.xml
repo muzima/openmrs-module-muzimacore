@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<hibernate-mapping package="org.openmrs.module.muzima">
+<hibernate-mapping package="org.openmrs.module.muzima.model">
     <class name="MuzimaForm" table="muzima_form">
         <id name="id" type="java.lang.Integer" column="form_id">
             <generator class="increment"/>
@@ -15,9 +15,10 @@
             <key column="form_id" not-null="true"/>
             <many-to-many column="tag_id" class="MuzimaFormTag"/>
         </set>
-        <property name="model" column="model_xml"/>
+        <property name="modelXml" column="model_xml"/>
         <property name="html" column="form_html"/>
         <property name="modelJson" column="model_json"/>
+        <property name="metaJson" column="meta_json"/>
 
         <property name="form" type="java.lang.String" column="form" insert="false" update="false"/>
 
@@ -36,7 +37,5 @@
         <many-to-one name="retiredBy" class="org.openmrs.User" column="retired_by"/>
         <many-to-one name="changedBy" class="org.openmrs.User" column="changed_by"/>
         <many-to-one name="formDefinition" class="org.openmrs.Form" column="form" property-ref="uuid"/>
-
-
     </class>
 </hibernate-mapping>

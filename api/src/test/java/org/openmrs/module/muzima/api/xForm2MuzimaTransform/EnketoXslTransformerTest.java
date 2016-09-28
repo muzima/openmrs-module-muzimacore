@@ -7,7 +7,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
-import org.openmrs.module.muzima.api.service.impl.EnketoResult;
+import org.openmrs.module.muzima.model.EnketoResult;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.*;
 
 import javax.xml.parsers.ParserConfigurationException;
