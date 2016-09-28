@@ -28,12 +28,11 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
-import org.openmrs.Person;
 import org.openmrs.PersonName;
 import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
@@ -46,13 +45,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -382,7 +378,7 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
                     Form form = Context.getFormService().getFormByUuid(encounterElementValue);
                     if (form == null) {
                         MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
-                        MuzimaForm muzimaForm = muzimaFormService.findByUniqueId(encounterElementValue);
+                        MuzimaForm muzimaForm = muzimaFormService.getFormByUuid(encounterElementValue);
                         if (muzimaForm != null) {
                             Form formDefinition = Context.getFormService().getFormByUuid(muzimaForm.getForm());
                             encounter.setForm(formDefinition);

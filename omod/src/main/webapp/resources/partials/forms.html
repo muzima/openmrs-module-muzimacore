@@ -2,6 +2,7 @@
     <div class="col-lg-2">
         <ul class="nav nav-tabs nav-stacked">
             <li><a href="#/sources">Data Source</a></li>
+            <li><a href="#/configs">Setup Configurations</a></li>
             <li><a href="#/queues">Queue Data</a></li>
             <li><a href="#/registrations">Registrations</a></li>
             <li class="navigation-active"><a href="#/forms">Muzima Forms</a></li>
@@ -50,7 +51,7 @@
                 </span>
             </div>
 
-            <div class="row">
+            <div class="row" ng-show="hasForms()  && !fetchingForms">
                 <table class="table table-bordered table-condensed table-hover">
                     <thead>
                     <tr>

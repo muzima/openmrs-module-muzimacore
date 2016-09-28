@@ -11,7 +11,7 @@ import org.apache.http.message.BasicStatusLine;
 import org.dom4j.DocumentException;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openmrs.module.muzima.api.service.impl.EnketoResult;
+import org.openmrs.module.muzima.model.EnketoResult;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.EnketoHttpClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

@@ -56,9 +56,6 @@ public class QueuesController {
                 objects.add(WebConverter.convertQueueData(queueData));
             }
 
-            MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
-            log.info("Number of forms available are: " + muzimaFormService.getAll().size());
-
             response.put("pages", pages);
             response.put("objects", objects);
         }

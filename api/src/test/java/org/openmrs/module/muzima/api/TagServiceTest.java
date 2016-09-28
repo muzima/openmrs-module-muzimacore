@@ -3,7 +3,7 @@ package org.openmrs.module.muzima.api;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaFormTag;
+import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.openmrs.module.muzima.api.service.MuzimaTagService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.test.context.ContextConfiguration;

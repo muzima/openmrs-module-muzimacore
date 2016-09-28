@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.web.resource.muzima.MuzimaFormResource;
 import org.openmrs.module.webservices.rest.SimpleObject;
@@ -46,7 +46,7 @@ public class MuzimaFormResourceTest {
 
         MuzimaForm form = getForm("foo");
         service = mock(MuzimaFormService.class);
-        when(service.findByUniqueId("foo")).thenReturn(form);
+        when(service.getFormByUuid("foo")).thenReturn(form);
         controller = new MuzimaFormResource();
         mockStatic(Context.class);
         PowerMockito.when(Context.getService(MuzimaFormService.class)).thenReturn(service);
@@ -68,7 +68,7 @@ public class MuzimaFormResourceTest {
         when(context.getRepresentation()).thenReturn(representation);
 
         Object foo = controller.retrieve("foo", context);
-        verify(service, times(1)).findByUniqueId("foo");
+        verify(service, times(1)).getFormByUuid("foo");
     }
 
     @Test(expected = ResourceDoesNotSupportOperationException.class)

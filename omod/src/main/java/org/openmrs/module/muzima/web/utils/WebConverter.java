@@ -17,11 +17,15 @@ import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.openmrs.Cohort;
+import org.openmrs.Concept;
+import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaConfig;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.DataSource;
@@ -198,7 +202,7 @@ public class WebConverter {
     private static String extractFormNameFromPayload(String payload) {
         String formUuid = readAsString(payload, "$['encounter']['encounter.form_uuid']");
         MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
-        MuzimaForm muzimaForm = muzimaFormService.findByUniqueId(formUuid);
+        MuzimaForm muzimaForm = muzimaFormService.getFormByUuid(formUuid);
         return muzimaForm.getName();
     }
 
@@ -217,5 +221,54 @@ public class WebConverter {
             System.out.println("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
         }
         return returnedString;
+    }
+
+    public static Map<String, Object> convertMuzimaConfig(final MuzimaConfig config) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (config != null) {
+            map.put("uuid", config.getUuid());
+            map.put("name", config.getName());
+            map.put("description", config.getDescription());
+            map.put("configJson", config.getConfigJson());
+            map.put("created", Context.getDateFormat().format(config.getDateCreated()));
+        }
+        return map;
+    }
+
+    public static Map<String, Object> convertMuzimaForm(final Form form, final MuzimaForm muzimaForm) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (form != null) {
+            map.put("uuid", form.getUuid());
+            map.put("name", form.getName());
+            map.put("metaJson", muzimaForm.getMetaJson());
+        }
+        return map;
+    }
+
+    public static Map<String, Object> convertMuzimaCohort(final Cohort cohort) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (cohort != null) {
+            map.put("uuid", cohort.getUuid());
+            map.put("name", cohort.getName());
+        }
+        return map;
+    }
+
+    public static Map<String, Object> convertMuzimaLocation(final Location location) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (location != null) {
+            map.put("uuid", location.getUuid());
+            map.put("name", location.getName());
+        }
+        return map;
+    }
+
+    public static Object convertMuzimaConcept(Concept concept) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (concept != null) {
+            map.put("uuid", concept.getUuid());
+            map.put("name", concept.getName());
+        }
+        return map;
     }
 }

@@ -5,7 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -66,7 +66,7 @@ public class MuzimaFormResource extends MetadataDelegatingCrudResource<MuzimaFor
         List<MuzimaForm> muzimaForms = new ArrayList<MuzimaForm>();
         if (nameParameter != null) {
             Date syncDate = parseDate(syncDateParameter);
-            muzimaForms = Context.getService(MuzimaFormService.class).findByName(nameParameter, syncDate);
+            muzimaForms = Context.getService(MuzimaFormService.class).getFormByName(nameParameter, syncDate);
         }
         return new NeedsPaging<MuzimaForm>(muzimaForms, context);
     }
@@ -74,13 +74,13 @@ public class MuzimaFormResource extends MetadataDelegatingCrudResource<MuzimaFor
     @Override
     public MuzimaForm getByUniqueId(String uuid) {
         MuzimaFormService service = Context.getService(MuzimaFormService.class);
-        return service.findByUniqueId(uuid);
+        return service.getFormByUuid(uuid);
     }
 
     @Override
     public Object retrieve(String uuid, RequestContext context) throws ResponseException {
         MuzimaFormService service = Context.getService(MuzimaFormService.class);
-        return asRepresentation(service.findByUniqueId(uuid), context.getRepresentation());
+        return asRepresentation(service.getFormByUuid(uuid), context.getRepresentation());
     }
 
     @Override
@@ -117,9 +117,10 @@ public class MuzimaFormResource extends MetadataDelegatingCrudResource<MuzimaFor
             description.addProperty("name");
             description.addProperty("discriminator");
             description.addProperty("description");
-            description.addProperty("model");
+            description.addProperty("modelXml");
             description.addProperty("html");
             description.addProperty("modelJson");
+            description.addProperty("metaJson");
             description.addProperty("form");
             description.addProperty("tags", new CustomRepresentation("(id,uuid,name)"));
             description.addProperty("version");

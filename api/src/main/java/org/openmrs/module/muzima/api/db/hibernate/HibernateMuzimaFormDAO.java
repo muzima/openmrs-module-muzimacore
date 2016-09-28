@@ -5,8 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.openmrs.module.muzima.MuzimaForm;
-import org.openmrs.module.muzima.MuzimaXForm;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.xforms.Xform;
 
@@ -18,6 +18,10 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
 
     public HibernateMuzimaFormDAO(SessionFactory factory) {
         this.factory = factory;
+    }
+
+    private Session session() {
+        return factory.getCurrentSession();
     }
 
     public List<MuzimaForm> getAll() {
@@ -36,7 +40,7 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
         session().saveOrUpdate(form);
     }
 
-    public MuzimaForm findById(Integer id) {
+    public MuzimaForm getFormById(Integer id) {
         return (MuzimaForm) session().get(MuzimaForm.class, id);
     }
 
@@ -44,14 +48,20 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
         return (Xform) session().get(Xform.class, id);
     }
 
-    public MuzimaForm findByUuid(String uuid) {
-        return (MuzimaForm) session().createQuery("from MuzimaForm form where form.uuid = '" + uuid + "'").uniqueResult();
+    public MuzimaForm getFormByUuid(String uuid) {
+        Criteria criteria = session().createCriteria(MuzimaForm.class);
+        criteria.add(Restrictions.eq("uuid", uuid));
+        return (MuzimaForm) criteria.uniqueResult();
     }
-    public List<MuzimaForm> findByForm(String form){
-        return (List<MuzimaForm>) session().createQuery("from MuzimaForm form where form.form = '" + form + "'").list();
+    public List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired){
+        Criteria criteria = session().createCriteria(MuzimaForm.class);
+        criteria.add(Restrictions.eq("form", form));
+        if (!includeRetired)
+            criteria.add(Restrictions.eq("retired", false));
+        return (List<MuzimaForm>) criteria.list();
     }
 
-    public List<MuzimaForm> findByName(final String name, final Date syncDate) {
+    public List<MuzimaForm> getFormByName(final String name, final Date syncDate) {
         Criteria criteriaform = session().createCriteria(MuzimaForm.class);
         if (syncDate != null) {
             criteriaform.add(Restrictions.or(
@@ -68,9 +78,5 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
         }
         Criteria criteria  = criteriaform.createCriteria("formDefinition").add(Restrictions.ilike("name", name, MatchMode.ANYWHERE));
         return criteria.list();
-    }
-
-    private Session session() {
-        return factory.getCurrentSession();
     }
 }

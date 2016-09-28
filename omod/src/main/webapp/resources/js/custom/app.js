@@ -4,20 +4,23 @@ muzimaCoreModule.
     config(['$routeProvider', '$compileProvider', function ($routeProvider, $compileProvider) {
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file):/);
         $routeProvider.
-            when('/queue/:uuid', {controller: QueueCtrl, templateUrl: '../../moduleResources/muzimacore/partials/queue.html'}).
-            when('/queues', {controller: QueuesCtrl, templateUrl: '../../moduleResources/muzimacore/partials/queues.html'}).
-            when('/error/:uuid', {controller: ErrorCtrl, templateUrl: '../../moduleResources/muzimacore/partials/error.html'}).
-            when('/errors', {controller: ErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/errors.html'}).
             when('/source/:uuid', {controller: SourceCtrl, templateUrl: '../../moduleResources/muzimacore/partials/source.html'}).
             when('/createSource/', {controller: SourceCtrl, templateUrl: '../../moduleResources/muzimacore/partials/source.html'}).
             when('/sources', {controller: SourcesCtrl, templateUrl: '../../moduleResources/muzimacore/partials/sources.html'}).
-            when('/edit/:uuid', {controller: EditCtrl, templateUrl: '../../moduleResources/muzimacore/partials/edit.html'}).
+            when('/config/:uuid', {controller: ConfigCtrl, templateUrl: '../../moduleResources/muzimacore/partials/config.html'}).
+            when('/createConfig/', {controller: ConfigCtrl, templateUrl: '../../moduleResources/muzimacore/partials/config.html'}).
+            when('/configs', {controller: ConfigsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/configs.html'}).
+            when('/queue/:uuid', {controller: QueueCtrl, templateUrl: '../../moduleResources/muzimacore/partials/queue.html'}).
+            when('/queues', {controller: QueuesCtrl, templateUrl: '../../moduleResources/muzimacore/partials/queues.html'}).
             when('/registrations', {controller: ListRegistrationsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/registrations.html'}).
             when('/registration/:uuid', {controller: ViewRegistrationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/registration.html'}).
             when('/forms', {controller: FormsCtrl,  templateUrl: '../../moduleResources/muzimacore/partials/forms.html'}).
             when('/xforms', {controller: XFormsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/xforms.html'}).
             when('/import/xforms', {controller: ImportCtrl, templateUrl: '../../moduleResources/muzimacore/partials/import/xforms.html'}).
             when('/update/xforms/:muzimaform_uuid',{controller: UpdateCtrl, templateUrl: '../../moduleResources/muzimacore/partials/update/xforms.html'}).
+            when('/error/:uuid', {controller: ErrorCtrl, templateUrl: '../../moduleResources/muzimacore/partials/error.html'}).
+            when('/errors', {controller: ErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/errors.html'}).
+            when('/edit/:uuid', {controller: EditCtrl, templateUrl: '../../moduleResources/muzimacore/partials/edit.html'}).
             otherwise({redirectTo: '/sources'});
     }]);
 
@@ -73,10 +76,10 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.post("edit.json",{"formData": formData});
     };
     var validateData = function (uuid, formData) {
-            return $http.post("validate.json?uuid="+uuid+"&formData="+formData);
+        return $http.post("validate.json?uuid="+uuid+"&formData="+formData);
     };
     var saveEditedFormData = function (uuid, formData) {
-            return $http.post("error.json?uuid="+uuid+"&formData="+formData);
+        return $http.post("error.json?uuid="+uuid+"&formData="+formData);
     };
 
     return {
@@ -194,5 +197,46 @@ muzimaCoreModule.factory('$registrations', function($http) {
     return {
         getRegistrations: getRegistrations,
         getRegistration: getRegistration
+    }
+});
+
+muzimaCoreModule.factory('$configs', function($http) {
+    var getConfiguration = function(uuid) {
+        return $http.get("config.json?uuid=" + uuid);
+    };
+    var getConfigurations = function(search, pageNumber, pageSize) {
+        return $http.get("configs.json?search=" + (search === undefined ? '' : search) + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+    };
+    var saveConfiguration = function (uuid, name, description, configJson) {
+        return $http.post("config.json", {"uuid": uuid, "name": name, "description": description, "configJson": configJson});
+    };
+    var deleteConfiguration = function (uuid) {
+        return $http.post("config.json", {"uuid": uuid});
+    };
+    var searchConfigForms = function(search) {
+        return $http.get("configForms.json?search=" + (search === undefined ? '' : search));
+    };
+    var searchConfigCohorts = function(search) {
+        return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
+    };
+    var searchConfigLocations = function(search) {
+        return $http.get("configLocations.json?search=" + (search === undefined ? '' : search));
+    };
+    var searchConfigConcepts = function(search) {
+        return $http.get('../../ws/rest/v1/concept?v=custom:(uuid,name:(uuid,name))&q=' + (search === undefined ? '' : search));
+    };
+    var searchConfigProviders = function(search) {
+        return $http.get('../../ws/rest/v1/provider?v=custom:(uuid,name:(uuid,name))&q=' + (search === undefined ? '' : search));
+    };
+    return {
+        getConfiguration: getConfiguration,
+        getConfigurations: getConfigurations,
+        saveConfiguration: saveConfiguration,
+        deleteConfiguration: deleteConfiguration,
+        searchConfigForms: searchConfigForms,
+        searchConfigCohorts: searchConfigCohorts,
+        searchConfigLocations: searchConfigLocations,
+        searchConfigProviders: searchConfigProviders,
+        searchConfigConcepts: searchConfigConcepts
     }
 });

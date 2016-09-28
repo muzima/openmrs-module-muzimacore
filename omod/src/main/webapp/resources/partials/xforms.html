@@ -2,6 +2,7 @@
     <div class="col-lg-2">
         <ul class="nav nav-tabs nav-stacked">
             <li><a href="#/sources">Data Source</a></li>
+            <li><a href="#/configs">Setup Configurations</a></li>
             <li><a href="#/queues">Queue Data</a></li>
             <li><a href="#/registrations">Registrations</a></li>
             <li class="navigation-active"><a href="#/forms">Muzima Forms</a></li>
@@ -62,8 +63,8 @@
                     </div>
                 </div>
             </div>
-            <div class = "row panel panel-default">
-                <div class="col-lg-5" ng-disabled="!hasXForms()">
+            <div class = "row panel panel-default" ng-show="hasXForms()">
+                <div class="col-lg-5">
                     <label for="xFormDiscriminator">Select Form Discriminator </label>
                     <select class="form-control" id="xFormDiscriminator" ng-model="discriminator" ng-options="discriminator for discriminator in discriminatorTypes" required="true" >
                     </select>
