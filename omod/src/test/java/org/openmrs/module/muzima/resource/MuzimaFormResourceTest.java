@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.web.resource.muzima.MuzimaFormResource;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -29,9 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
@@ -39,7 +41,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @PrepareForTest(Context.class)
 public class MuzimaFormResourceTest {
     private MuzimaFormService service;
-    MuzimaFormResource controller;
+    private MuzimaFormResource controller;
 
     @Before
     public void setUp() throws Exception {
@@ -136,5 +138,4 @@ public class MuzimaFormResourceTest {
         assertThat(keys.contains("description"), is(true));
         assertThat(keys.contains("tags"), is(true));
     }
-
 }

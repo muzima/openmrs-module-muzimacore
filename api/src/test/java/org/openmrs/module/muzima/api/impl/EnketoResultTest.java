@@ -4,14 +4,15 @@ import net.sf.saxon.TransformerFactoryImpl;
 import org.dom4j.DocumentException;
 import org.junit.Test;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
-import org.openmrs.module.muzima.model.EnketoResult;
 import org.openmrs.module.muzima.api.service.impl.MuzimaFormServiceImpl;
+import org.openmrs.module.muzima.model.EnketoResult;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.EnketoXslTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline;
 import org.openmrs.module.xforms.Xform;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class EnketoResultTest {
+public class EnketoResultTest extends BaseModuleContextSensitiveTest {
     @Test(expected = NullPointerException.class)
     public void getForm_shouldEmpty() throws ParserConfigurationException, XPathExpressionException, SAXException, IOException, DocumentException {
         EnketoResult enketoResult = new EnketoResult("<root><form><ul><li/><li/></ul></form></root>");
