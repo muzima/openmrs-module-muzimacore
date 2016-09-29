@@ -19,7 +19,6 @@ import org.openmrs.Concept;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
-import org.openmrs.Order;
 import org.openmrs.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

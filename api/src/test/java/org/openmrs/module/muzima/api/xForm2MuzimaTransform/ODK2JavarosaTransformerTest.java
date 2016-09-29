@@ -4,9 +4,10 @@ import org.custommonkey.xmlunit.Diff;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openmrs.module.muzima.xForm2MuzimaTransform.*;
+import org.openmrs.module.muzima.xForm2MuzimaTransform.EnketoXslTransformer;
+import org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline;
 
-import javax.xml.transform.*;
+import javax.xml.transform.TransformerFactory;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsString;

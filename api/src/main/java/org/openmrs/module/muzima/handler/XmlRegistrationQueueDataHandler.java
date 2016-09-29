@@ -26,7 +26,6 @@ import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
 import org.openmrs.annotation.Handler;
-import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
@@ -66,8 +65,6 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
     private final Log log = LogFactory.getLog(XmlRegistrationQueueDataHandler.class);
 
     private PatientService patientService;
-
-    private LocationService locationService;
 
     private String temporaryPatientUuid;
 
@@ -110,7 +107,6 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
             if (registrationData == null) {
                 // we can't find registration data for this uuid, process the registration form.
                 patientService = Context.getPatientService();
-                locationService = Context.getLocationService();
 
                 Patient savedPatient = null;
                 // check whether we already have similar patients!

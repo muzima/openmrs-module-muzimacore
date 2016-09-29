@@ -2,9 +2,7 @@ package org.openmrs.module.muzima.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
-import org.openmrs.Form;
 
-import java.util.Set;
 import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)

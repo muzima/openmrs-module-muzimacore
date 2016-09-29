@@ -32,10 +32,10 @@ import org.openmrs.PersonName;
 import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
@@ -419,4 +419,3 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
     }
 }
-

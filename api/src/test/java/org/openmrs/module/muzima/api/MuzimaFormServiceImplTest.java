@@ -6,12 +6,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
+import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.api.service.impl.MuzimaFormServiceImpl;
 import org.openmrs.module.muzima.model.CompositeEnketoResult;
 import org.openmrs.module.muzima.model.EnketoResult;
-import org.openmrs.module.muzima.api.service.impl.MuzimaFormServiceImpl;
-import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer;
@@ -44,9 +44,9 @@ import static org.openmrs.module.muzima.XFormBuilder.xForm;
 public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
 
     private MuzimaFormService service;
-    MuzimaFormDAO dao;
-    XForm2Html5Transformer transformer;
-    ModelXml2JsonTransformer modelTransformer;
+    private MuzimaFormDAO dao;
+    private XForm2Html5Transformer transformer;
+    private ModelXml2JsonTransformer modelTransformer;
     private ODK2JavarosaTransformer odk2JavarosaTransformer;
     private Date syncDate;
     private ODK2HTML5Transformer odk2HTML5Transformer;

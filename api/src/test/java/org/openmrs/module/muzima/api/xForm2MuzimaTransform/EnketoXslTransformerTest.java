@@ -8,10 +8,16 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.openmrs.module.muzima.model.EnketoResult;
-import org.openmrs.module.muzima.xForm2MuzimaTransform.*;
+import org.openmrs.module.muzima.xForm2MuzimaTransform.EnketoXslTransformer;
+import org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
@@ -20,13 +26,17 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline.xslTransformPipeline;
 
 public class EnketoXslTransformerTest extends ResourceTest {
-    SAXTransformerFactory transformerFactory;
-    TransformerHandler transformerHandler;
-    Transformer transformer;
+    private SAXTransformerFactory transformerFactory;
+    private TransformerHandler transformerHandler;
+    private Transformer transformer;
 
     @Before
     public void setUp() throws Exception {
@@ -48,7 +58,7 @@ public class EnketoXslTransformerTest extends ResourceTest {
         XslTransformPipeline transformers = xslTransformPipeline().push(getXform2JRTransformer());
         EnketoXslTransformer enketoXslTransformer = new EnketoXslTransformer(transformerFactory, transformers);
 
-        EnketoResult transformed = enketoXslTransformer.transform(getSampleXForm());
+        enketoXslTransformer.transform(getSampleXForm());
         verify(transformerFactory, times(1)).newTransformer();
         verify(transformerHandler, times(1)).setResult(result.capture());
     }
@@ -69,7 +79,7 @@ public class EnketoXslTransformerTest extends ResourceTest {
         doNothing().when(transformerHandler).setResult(Matchers.<Result>anyObject());
 
         EnketoXslTransformer enketoXslTransformer = new EnketoXslTransformer(transformerFactory, transformers);
-        EnketoResult transformed = enketoXslTransformer.transform(getSampleXForm());
+        enketoXslTransformer.transform(getSampleXForm());
         verify(transformerFactory, times(1)).newTransformer();
         verify(transformerHandler, times(2)).setResult(result.capture());
     }
@@ -90,7 +100,7 @@ public class EnketoXslTransformerTest extends ResourceTest {
         doNothing().when(transformerHandler).setResult(Matchers.<Result>anyObject());
 
         EnketoXslTransformer enketoXslTransformer = new EnketoXslTransformer(transformerFactory, transformers);
-        EnketoResult transformed = enketoXslTransformer.transform(getSampleXForm());
+        enketoXslTransformer.transform(getSampleXForm());
         verify(transformerFactory, times(1)).newTransformer();
         verify(transformerHandler, times(2)).setResult(result.capture());
     }
@@ -181,6 +191,4 @@ public class EnketoXslTransformerTest extends ResourceTest {
     private File getODK2JRTransformer() throws IOException {
         return getFile("/ODK2jr.xsl");
     }
-
-
 }

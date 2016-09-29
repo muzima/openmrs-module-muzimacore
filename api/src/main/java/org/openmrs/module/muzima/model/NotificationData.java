@@ -18,8 +18,6 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.Role;
 
-import java.util.Set;
-
 /**
  * TODO: Write brief description about the class here.
  */

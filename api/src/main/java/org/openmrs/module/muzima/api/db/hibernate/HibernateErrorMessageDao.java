@@ -1,7 +1,6 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.openmrs.module.muzima.api.db.ErrorMessageDao;
-import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
 
 /**

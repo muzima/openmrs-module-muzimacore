@@ -14,7 +14,6 @@
 package org.openmrs.module.muzima.model;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -28,7 +27,6 @@ public class ErrorData extends AuditableData {
     private Set<ErrorMessage> errorMessages;
 
     public ErrorData() {
-
     }
 
     public ErrorData(final AuditableData data) {
