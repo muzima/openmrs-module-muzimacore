@@ -13,4 +13,3 @@ These include:
 5. Muzima Registration Management
 6. Muzima Error Resolution Portal
 7. Muzima RESTful services
-
