@@ -14,7 +14,6 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Expression;

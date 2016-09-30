@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xf:xforms xmlns:xf="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jr="http://openrosa.org/javarosa">
+<xf:xforms xmlns:xf="http://www.w3.org/2002/xforms"
+           xmlns:jr="http://openrosa.org/javarosa">
 	<xf:head>
 		<xf:title>Breast Cancer Screening Form</xf:title>
 		<xf:model id="openmrs_model">
 			<xf:instance id="openmrs_model_instance">
-				<form id="424" name="Breast Cancer Screening Form" version="1.0" xmlns:openmrs="/moduleServlet/formentry/forms/schema/2-1" xmlns:xd="http://schemas.microsoft.com/office/infopath/2003">
+                <form id="424" name="Breast Cancer Screening Form" version="1.0">
 					<header>
 					  <enterer/>
 					  <date_entered/>

@@ -5,8 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -19,19 +20,22 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
+import static org.powermock.api.support.membermodification.MemberMatcher.method;
+import static org.powermock.api.support.membermodification.MemberModifier.stub;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
 public class MuzimaFormControllerTest {
-    private MuzimaFormController html5FormController;
+    private MuzimaFormController muzimaFormController;
     private MuzimaFormService service;
     private MuzimaForm form;
 
     @Before
     public void setUp() throws Exception {
         service = mock(MuzimaFormService.class);
-        html5FormController = new MuzimaFormController();
+        muzimaFormController = new MuzimaFormController();
         mockStatic(Context.class);
+        when(Context.isAuthenticated()).thenReturn(true);
     }
 
     @Test
@@ -41,7 +45,7 @@ public class MuzimaFormControllerTest {
             setId(1);
         }};
 
-        html5FormController.save(form);
+        muzimaFormController.save(form);
 
         verify(service).save(form);
     }
@@ -55,7 +59,7 @@ public class MuzimaFormControllerTest {
         when(Context.getAuthenticatedUser()).thenReturn(admin);
         when(service.getFormById(1)).thenReturn(form);
 
-        html5FormController.retire(form.getId(), "The form is 60 years old!");
+        muzimaFormController.retire(form.getId(), "The form is 60 years old!");
 
         assertTrue(form.getRetired());
         assertEquals(admin, form.getRetiredBy());

@@ -24,13 +24,13 @@ import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaConfig;
-import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
+import org.openmrs.module.muzima.model.MuzimaConfig;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 
@@ -166,10 +166,6 @@ public class WebConverter {
             XmlJsonUtil.createPatientValuesFromPayload(map, errorData.getPayload());
             map.put("submitted", Context.getDateFormat().format(errorData.getDateCreated()));
             map.put("processed", Context.getDateFormat().format(errorData.getDateProcessed()));
-
-
-            System.out.println("data" + map.toString());
-
         }
         return map;
     }
@@ -259,15 +255,6 @@ public class WebConverter {
         if (location != null) {
             map.put("uuid", location.getUuid());
             map.put("name", location.getName());
-        }
-        return map;
-    }
-
-    public static Object convertMuzimaConcept(Concept concept) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        if (concept != null) {
-            map.put("uuid", concept.getUuid());
-            map.put("name", concept.getName());
         }
         return map;
     }

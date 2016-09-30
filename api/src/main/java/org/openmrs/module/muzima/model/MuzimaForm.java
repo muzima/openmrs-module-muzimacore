@@ -1,6 +1,5 @@
 package org.openmrs.module.muzima.model;
 
-import ca.uhn.hl7v2.model.v21.datatype.ST;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.Form;

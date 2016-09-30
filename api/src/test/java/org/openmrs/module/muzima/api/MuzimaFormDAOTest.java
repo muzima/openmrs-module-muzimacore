@@ -3,11 +3,11 @@ package org.openmrs.module.muzima.api;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
+import org.openmrs.module.muzima.api.service.MuzimaTagService;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.openmrs.module.muzima.model.MuzimaXForm;
-import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
-import org.openmrs.module.muzima.api.service.MuzimaTagService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 import java.io.IOException;

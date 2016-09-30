@@ -19,7 +19,6 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CoreService;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
-import org.openmrs.module.muzima.web.controller.MuzimaRestController;
 import org.openmrs.module.muzima.web.resource.utils.ResourceUtils;
 import org.openmrs.module.muzima.web.resource.wrapper.FakeCohortMember;
 import org.openmrs.module.webservices.rest.SimpleObject;

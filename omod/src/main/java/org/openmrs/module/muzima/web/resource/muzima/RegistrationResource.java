@@ -19,7 +19,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
-import org.openmrs.module.muzima.web.controller.MuzimaRestController;
 import org.openmrs.module.muzima.web.resource.wrapper.FakePatient;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
@@ -31,9 +30,6 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudR
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * TODO: Write brief description about the class here.

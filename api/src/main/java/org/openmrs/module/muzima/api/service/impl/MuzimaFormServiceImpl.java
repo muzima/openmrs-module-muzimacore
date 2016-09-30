@@ -5,11 +5,11 @@ import org.javarosa.xform.parse.ValidationMessages;
 import org.javarosa.xform.parse.XFormParser;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
+import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.CompositeEnketoResult;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaXForm;
-import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
-import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.utils.HTMLConceptParser;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
@@ -80,10 +80,7 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
 
     private boolean isFormExists(String formUUID) {
         MuzimaForm muzimaforms = dao.getFormByUuid(formUUID);
-        if(muzimaforms != null)
-            return true;
-        else
-            return false;
+        return muzimaforms != null;
     }
 
     private boolean isFormDefinitionExists(String formUUID) {

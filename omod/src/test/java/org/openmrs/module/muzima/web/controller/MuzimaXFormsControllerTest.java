@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -16,8 +16,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
@@ -30,7 +30,8 @@ public class MuzimaXFormsControllerTest {
         service = mock(MuzimaFormService.class);
         controller = new MuzimaXFormsController();
         mockStatic(Context.class);
-        PowerMockito.when(Context.getService(MuzimaFormService.class)).thenReturn(service);
+        when(Context.getService(MuzimaFormService.class)).thenReturn(service);
+        when(Context.isAuthenticated()).thenReturn(true);
     }
 
     @Test

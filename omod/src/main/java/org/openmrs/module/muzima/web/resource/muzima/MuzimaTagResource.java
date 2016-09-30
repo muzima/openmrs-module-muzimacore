@@ -4,8 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.openmrs.module.muzima.api.service.MuzimaTagService;
+import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
@@ -65,6 +65,4 @@ public class MuzimaTagResource extends DataDelegatingCrudResource<MuzimaFormTag>
     public MuzimaFormTag save(MuzimaFormTag muzimaFormTag) {
         throw new ResourceDoesNotSupportOperationException();
     }
-
-
 }
