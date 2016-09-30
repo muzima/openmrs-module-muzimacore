@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.openmrs.module.muzima.api.service.MuzimaTagService;
+import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -17,8 +17,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
@@ -31,7 +31,8 @@ public class TagControllerTest {
         service = mock(MuzimaTagService.class);
         controller = new TagController();
         mockStatic(Context.class);
-        PowerMockito.when(Context.getService(MuzimaTagService.class)).thenReturn(service);
+        when(Context.getService(MuzimaTagService.class)).thenReturn(service);
+        when(Context.isAuthenticated()).thenReturn(true);
     }
 
     @Test

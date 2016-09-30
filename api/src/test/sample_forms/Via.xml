@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xf:xforms xmlns:xf="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jr="http://openrosa.org/javarosa">
+<xf:xforms xmlns:xf="http://www.w3.org/2002/xforms"
+           xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+           xmlns:jr="http://openrosa.org/javarosa">
 	<xf:head>
 		<xf:title>CCSP VIA Form</xf:title>
 		<xf:model id="openmrs_model">
 			<xf:instance id="openmrs_model_instance">
-				<form id="428" name="VIA Form" version="1.0"
-					xmlns:openmrs="https://amrs.ampath.or.ke/amrs/moduleServlet/formentry/forms/schema/400-32"
-					xmlns:xd="http://schemas.microsoft.com/office/infopath/2003">
+                <form id="428" name="VIA Form" version="1.0"
+                >
 					<header>
 						<enterer/>
 						<date_entered/>

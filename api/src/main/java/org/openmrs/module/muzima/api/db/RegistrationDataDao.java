@@ -13,10 +13,7 @@
  */
 package org.openmrs.module.muzima.api.db;
 
-
-import org.openmrs.module.muzima.api.db.SingleClassDao;
 import org.openmrs.module.muzima.model.RegistrationData;
-
 import java.util.List;
 
 /**

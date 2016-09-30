@@ -18,7 +18,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
-import org.openmrs.module.muzima.web.controller.MuzimaRestController;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;

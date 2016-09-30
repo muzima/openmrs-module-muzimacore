@@ -1,7 +1,6 @@
 package org.openmrs.module.muzima.api.db;
 
 import org.openmrs.module.muzima.model.DataSource;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

@@ -14,16 +14,13 @@
 package org.openmrs.module.muzima.web.resource.openmrs;
 
 import org.apache.commons.lang.StringUtils;
-import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
-import org.openmrs.ConceptName;
 import org.openmrs.ConceptSearchResult;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
-import org.openmrs.module.muzima.web.controller.MuzimaRestController;
 import org.openmrs.module.muzima.web.resource.wrapper.FakeConcept;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;

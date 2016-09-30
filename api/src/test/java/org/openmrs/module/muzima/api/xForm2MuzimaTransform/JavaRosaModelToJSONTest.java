@@ -5,7 +5,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.muzima.model.EnketoResult;
-import org.openmrs.module.muzima.xForm2MuzimaTransform.*;
+import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
+import org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline;
 
 import javax.xml.transform.TransformerFactory;
 
@@ -102,5 +103,4 @@ public class JavaRosaModelToJSONTest extends ResourceTest {
     public void shouldHaveTheStreetFieldBindingInTheSubForm() throws Exception {
         assertThat(form.get("sub_forms").get(0).get("fields").get(0).get("bind").toString(), is("\"/model/instance/EC_Registration_EngKan/address/street\""));
     }
-
 }

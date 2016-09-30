@@ -1,9 +1,9 @@
 package org.openmrs.module.muzima.api.service.impl;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.openmrs.module.muzima.api.db.TagDAO;
 import org.openmrs.module.muzima.api.service.MuzimaTagService;
+import org.openmrs.module.muzima.model.MuzimaFormTag;
 
 import java.util.List;
 

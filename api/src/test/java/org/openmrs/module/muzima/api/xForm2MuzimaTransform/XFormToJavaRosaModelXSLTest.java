@@ -4,11 +4,11 @@ import org.custommonkey.xmlunit.Diff;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.module.muzima.model.EnketoResult;
-import org.openmrs.module.muzima.xForm2MuzimaTransform.*;
+import org.openmrs.module.muzima.xForm2MuzimaTransform.EnketoXslTransformer;
+import org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline;
 
 import javax.xml.transform.TransformerFactory;
 
-import static org.custommonkey.xmlunit.XMLAssert.assertXMLEqual;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline.xslTransformPipeline;
@@ -29,5 +29,4 @@ public class XFormToJavaRosaModelXSLTest extends ResourceTest {
         Diff diff = new Diff(result.getModel(), getText("xform/test-xform-model-multiple-result-expected.xml"));
         assertThat(diff.similar(), is(true));
     }
-
 }

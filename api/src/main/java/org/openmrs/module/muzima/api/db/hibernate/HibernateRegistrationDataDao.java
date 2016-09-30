@@ -21,7 +21,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.module.muzima.api.db.RegistrationDataDao;
-import org.openmrs.module.muzima.api.db.hibernate.HibernateSingleClassDao;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -3,10 +3,9 @@ package org.openmrs.module.muzima.api;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.openmrs.module.muzima.api.service.MuzimaTagService;
+import org.openmrs.module.muzima.model.MuzimaFormTag;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Collection;
 
@@ -15,7 +14,6 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.openmrs.module.muzima.MuzimaFormTagBuilder.tag;
 
-@ContextConfiguration(value = "classpath*:TestingApplicationContext.xml", inheritLocations = true)
 public class TagServiceTest extends BaseModuleContextSensitiveTest {
 
     private MuzimaTagService service;
