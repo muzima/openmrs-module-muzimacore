@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
+import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptSearchResult;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.context.Context;
@@ -43,9 +44,11 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.openmrs.util.LocaleUtility;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 /**
  * TODO: Write brief description about the class here.
@@ -101,9 +104,50 @@ public class ConceptResource extends DelegatingCrudResource<FakeConcept> {
      * @return the delegate for the given uniqueId
      */
     @Override
-    public FakeConcept getByUniqueId(String uniqueId) {
+    public Object retrieve(String uniqueId, RequestContext context) throws ResponseException {
+        //TODO: this is an overkill of a very simple method that would be solved simply by ConceptService.getConceptByUuid(uuid, locales)
+        //TODO: Observe for OpenMRS to implement such method
         Concept concept = Context.getConceptService().getConceptByUuid(uniqueId);
-        return FakeConcept.copyConcept(concept);
+        if (concept == null && StringUtils.isNumeric(uniqueId))
+            concept = Context.getConceptService().getConcept(Integer.parseInt(uniqueId));
+
+        Concept localizedConcept = concept;
+        if (concept != null) {
+            String acceptedLanguages = context.getRequest().getHeader("Accept-Language");
+            if (StringUtils.isNotBlank(acceptedLanguages)) {
+                StringTokenizer localeTokens = new StringTokenizer(acceptedLanguages, ",");
+                if (localeTokens.hasMoreElements()) {
+                    String strLocale = localeTokens.nextToken();
+                    StringTokenizer countrySplitter = new StringTokenizer(strLocale, "_-");
+                    if (countrySplitter.hasMoreElements()) {
+                        Locale parsedLocale = new Locale(countrySplitter.nextToken());
+                        if (concept.getNames(parsedLocale) != null && concept.getNames(parsedLocale).size() > 0 ) {
+                            localizedConcept.setNames(concept.getNames(parsedLocale));
+                            if (concept.getShortNameInLocale(parsedLocale) != null)
+                                localizedConcept.setShortName(concept.getShortNameInLocale(parsedLocale));
+                            if (concept.getPreferredName(parsedLocale) != null)
+                                localizedConcept.setPreferredName(concept.getPreferredName(parsedLocale));
+                            if (concept.getFullySpecifiedName(parsedLocale) != null)
+                                localizedConcept.setFullySpecifiedName(concept.getFullySpecifiedName(parsedLocale));
+                            if (concept.getDescription(parsedLocale) != null) {
+                                Collection<ConceptDescription> descriptions = new ArrayList<ConceptDescription>();
+                                descriptions.add(concept.getDescription(parsedLocale));
+                                localizedConcept.setDescriptions(descriptions);
+                            } else
+                                localizedConcept.setDescriptions(null);
+                        } else
+                            localizedConcept = null;
+                    }
+                }
+            }
+        }
+
+        return ConversionUtil.convertToRepresentation(FakeConcept.copyConcept(localizedConcept), context.getRepresentation());
+    }
+
+    @Override
+    public FakeConcept getByUniqueId(String s) {
+        throw new ResourceDoesNotSupportOperationException();
     }
 
     /**
@@ -199,6 +243,7 @@ public class ConceptResource extends DelegatingCrudResource<FakeConcept> {
         boolean canPage = true;
 
         // Collect information for answerTo and memberOf query parameters
+        String acceptedLanguages = context.getRequest().getHeader("Accept-Language");
         String answerToUuid = context.getRequest().getParameter("answerTo");
         String memberOfUuid = context.getRequest().getParameter("memberOf");
         Concept answerTo = null;
@@ -226,8 +271,35 @@ public class ConceptResource extends DelegatingCrudResource<FakeConcept> {
 
         List<ConceptSearchResult> searchResults;
 
-        // get the user's locales...and then convert that from a set to a list
-        List<Locale> locales = new ArrayList<Locale>(LocaleUtility.getLocalesInOrder());
+        List<Locale> locales = null;
+        if (StringUtils.isNotBlank(acceptedLanguages)) {
+            StringTokenizer localeTokens = new StringTokenizer(acceptedLanguages, ",");
+            if (localeTokens.hasMoreElements()){
+                String strLocale = localeTokens.nextToken();
+                //TODO: Agree if this is the Best approach. [If several locales pick the first one with priority 1]
+                /*
+                    A locale of format en-US has two parts
+                    <pre>en is the language (English in this case) and US is the country</pre>
+
+                    Since OpenMRS saves concepts names only using the language we will only take the first token
+
+                    Here we would expect a - but also lets support _ just in case
+                    e.g en-US vs en_US */
+                StringTokenizer countrySplitter = new StringTokenizer(strLocale, "_-");
+                if (countrySplitter.hasMoreElements()) {
+                    // We have a language, create a Locale for this language
+                    Locale parsedLocale = new Locale(countrySplitter.nextToken());
+                    locales = new ArrayList<Locale>();
+                    locales.add(parsedLocale); //
+
+                    //TODO: ConceptService searches only on Context.getLocale();
+                    Context.setLocale(parsedLocale);
+                }
+            }
+        } else {
+            // get the user's locales...and then convert that from a set to a list
+            locales = new ArrayList<Locale>(LocaleUtility.getLocalesInOrder());
+        }
 
         searchResults = service.getConcepts(context.getParameter("q"), locales, context.getIncludeAll(), null, null, null,
                 null, answerTo, startIndex, limit);

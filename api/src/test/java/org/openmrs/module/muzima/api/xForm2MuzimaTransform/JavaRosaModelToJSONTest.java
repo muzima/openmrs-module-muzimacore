@@ -24,7 +24,6 @@ public class JavaRosaModelToJSONTest extends ResourceTest {
         ModelXml2JsonTransformer jsonTransformer = new ModelXml2JsonTransformer(TransformerFactory.newInstance(), XslTransformPipeline.modelXml2JsonXSLPipeline());
         EnketoResult result = jsonTransformer.transform(getText("test-model-to-json-multiple.xml"));
         JsonNode node = new ObjectMapper().readTree(result.getModelAsJson());
-        //System.out.println(node.toString());
         form = node.get("form");
     }
 
