@@ -20,6 +20,7 @@ import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNumeric;
+import org.openmrs.api.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,12 @@ public class FakeConcept extends BaseOpenmrsMetadata {
 
     private static final String[] properties = new String[]{
             "uuid", "descriptions", "datatype", "names",
-            "creator", "dateCreated", "changedBy", "dateChanged", "retiredBy", "dateRetired", "retiredReason"
+            "creator", "dateCreated", "changedBy", "dateChanged", "retiredBy", "dateRetired", "retireReason"
     };
 
     private Integer id;
     private String units;
+    private String displayConcept;
     private Boolean precise;
     private Boolean numeric;
 
@@ -47,6 +49,7 @@ public class FakeConcept extends BaseOpenmrsMetadata {
     }
 
     public static FakeConcept copyConcept(final Concept concept) {
+        if (concept == null) return  null;
         FakeConcept fakeConcept = new FakeConcept();
         for (String property : properties) {
             try {
@@ -58,13 +61,14 @@ public class FakeConcept extends BaseOpenmrsMetadata {
         }
 
         if (concept.isNumeric()) {
-            ConceptNumeric numeric = (ConceptNumeric) concept;
+            ConceptNumeric numeric = Context.getConceptService().getConceptNumeric(concept.getConceptId());
             fakeConcept.setUnits(numeric.getUnits());
             fakeConcept.setPrecise(numeric.getPrecise());
             fakeConcept.setNumeric(concept.isNumeric());
         }
 
         fakeConcept.setRetired(concept.isRetired());
+        fakeConcept.setDisplayConcept(concept.getDisplayString());
         return fakeConcept;
     }
 
@@ -124,5 +128,13 @@ public class FakeConcept extends BaseOpenmrsMetadata {
 
     public void setDescriptions(Collection<ConceptDescription> descriptions) {
         this.descriptions = descriptions;
+    }
+
+    public String getDisplayConcept() {
+        return displayConcept;
+    }
+
+    public void setDisplayConcept(String displayConcept) {
+        this.displayConcept = displayConcept;
     }
 }

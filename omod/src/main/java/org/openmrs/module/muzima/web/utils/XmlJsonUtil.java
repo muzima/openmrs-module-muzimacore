@@ -123,13 +123,13 @@ public class XmlJsonUtil {
                 }
             }
         } catch (ParserConfigurationException e) {
-            System.out.println("ParserConfigurationException" + map.toString());
+            logger.error("ParserConfigurationException" + map.toString());
             throw new QueueProcessorException(e);
         } catch (SAXException e) {
-            System.out.println("SAXException" + map.toString());
+            logger.error("SAXException" + map.toString());
             throw new QueueProcessorException(e);
         } catch (Exception e) {
-            System.out.println("QueueProcessorException" + map.toString());
+            logger.error("QueueProcessorException" + map.toString());
             throw new QueueProcessorException(e);
         }
         return map;
