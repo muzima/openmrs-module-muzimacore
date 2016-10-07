@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaTagService;
 import org.openmrs.module.muzima.model.MuzimaFormTag;
-import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 

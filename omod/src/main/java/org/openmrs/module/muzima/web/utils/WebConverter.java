@@ -18,7 +18,6 @@ import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.openmrs.Cohort;
-import org.openmrs.Concept;
 import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Patient;
