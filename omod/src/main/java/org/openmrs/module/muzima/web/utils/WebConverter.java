@@ -33,6 +33,8 @@ import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +46,7 @@ import java.util.Map;
 public class WebConverter {
 
     public static String emptyString = "";
+    private static final Logger logger = LoggerFactory.getLogger(WebConverter.class.getSimpleName());
 
     public static Map<String, Object> convertDataSource(final DataSource dataSource) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -214,7 +217,7 @@ public class WebConverter {
         try {
             returnedString = JsonPath.read(jsonObject, path);
         } catch (Exception e) {
-            System.out.println("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
         }
         return returnedString;
     }
