@@ -1,18 +1,14 @@
 package org.openmrs.module.muzima.web.resource.muzima;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaConfigService;
-import org.openmrs.module.muzima.api.service.MuzimaConfigService;
-import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
-import org.openmrs.module.webservices.rest.web.representation.CustomRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
@@ -24,10 +20,7 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/config",
@@ -41,23 +34,6 @@ public class MuzimaConfigResource extends MetadataDelegatingCrudResource<MuzimaC
         MuzimaConfigService service = Context.getService(MuzimaConfigService.class);
         List<MuzimaConfig> all = service.getAll();
         return new NeedsPaging<MuzimaConfig>(all, context);
-    }
-
-    private Date parseDate(final String iso8601String) {
-        if (!StringUtils.isNotBlank(iso8601String)) {
-            return null;
-        }
-        Date date = null;
-        try {
-//            String s = iso8601String.replace("Z", "+00:00");
-//            s = s.substring(0, 22) + s.substring(23);
-//            date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").parse(s);
-            String s = iso8601String.substring(0, 10);
-            date = new SimpleDateFormat("yyyy-MM-dd").parse(s);
-        } catch (ParseException e) {
-            log.error("Unable to parse date information.");
-        }
-        return date;
     }
 
     @Override
