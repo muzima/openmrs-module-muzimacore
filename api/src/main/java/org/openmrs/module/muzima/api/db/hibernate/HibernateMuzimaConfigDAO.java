@@ -48,8 +48,9 @@ public class HibernateMuzimaConfigDAO implements MuzimaConfigDAO {
 
     @Override
     @Transactional
-    public void save(MuzimaConfig config) {
+    public MuzimaConfig save(MuzimaConfig config) {
         session().saveOrUpdate(config);
+        return config;
     }
 
     @Override
@@ -98,5 +99,14 @@ public class HibernateMuzimaConfigDAO implements MuzimaConfigDAO {
         }
         criteria.addOrder(Order.desc("dateCreated"));
         return criteria.list();
+    }
+
+    @Override
+    public List<MuzimaConfig> getConfigByName(String configName, boolean includeRetired) {
+        Criteria criteria = session().createCriteria(MuzimaConfig.class);
+        criteria.add(Restrictions.eq("name", configName));
+        if (!includeRetired)
+            criteria.add(Restrictions.eq("retired", false));
+        return (List<MuzimaConfig>) criteria.list();
     }
 }

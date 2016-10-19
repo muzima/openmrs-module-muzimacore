@@ -21,8 +21,8 @@ public class MuzimaConfigServiceImpl extends BaseOpenmrsService implements Muzim
     }
 
     @Override
-    public void save(MuzimaConfig config) {
-        dao.save(config);
+    public MuzimaConfig save(MuzimaConfig config) {
+        return dao.save(config);
     }
 
     @Override
@@ -48,5 +48,10 @@ public class MuzimaConfigServiceImpl extends BaseOpenmrsService implements Muzim
     @Override
     public List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize) {
         return dao.getPagedConfigs(search, pageNumber, pageSize);
+    }
+
+    @Override
+    public List<MuzimaConfig> getConfigByName(String configName, boolean includeRetired) {
+        return dao.getConfigByName(configName, includeRetired);
     }
 }

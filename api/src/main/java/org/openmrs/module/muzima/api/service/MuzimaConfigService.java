@@ -18,7 +18,7 @@ public interface MuzimaConfigService extends OpenmrsService {
     MuzimaConfig getConfigByUuid(String uuid);
 
     @Transactional
-    void save(MuzimaConfig config);
+    MuzimaConfig save(MuzimaConfig config);
 
     @Transactional
     void delete(MuzimaConfig config);
@@ -28,4 +28,6 @@ public interface MuzimaConfigService extends OpenmrsService {
 
     @Transactional
     List<MuzimaConfig> getPagedConfigs(final String search, final Integer pageNumber, final Integer pageSize);
+
+    List<MuzimaConfig> getConfigByName(String configName, boolean includeRetired);
 }
