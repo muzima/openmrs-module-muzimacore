@@ -52,7 +52,6 @@ public class MuzimaConfigResourceTest {
         configResource = new MuzimaConfigResource();
         mockStatic(Context.class);
         PowerMockito.when(Context.getService(MuzimaConfigService.class)).thenReturn(service);
-
     }
 
     private MuzimaConfig createConfig(String uuid) {
@@ -99,7 +98,6 @@ public class MuzimaConfigResourceTest {
         RestService restService = mock(RestService.class);
         when(restService.getResourceBySupportedClass(MuzimaConfigResource.class)).thenReturn(null);
         PowerMockito.when(Context.getService(RestService.class)).thenReturn(restService);
-
 
         when(representation.getRepresentation()).thenReturn("(uuid:uuid,id:id)");
         when(context.getRepresentation()).thenReturn(representation);

@@ -11,7 +11,6 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.module.muzima.api.db.MuzimaConfigDAO;
 import org.openmrs.module.muzima.model.MuzimaConfig;
-import org.openmrs.module.muzima.model.MuzimaForm;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
