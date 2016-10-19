@@ -11,11 +11,13 @@ public interface MuzimaConfigDAO {
 
     MuzimaConfig getConfigByUuid(String uuid);
 
-    void save(MuzimaConfig config);
+    MuzimaConfig save(MuzimaConfig config);
 
     void delete(MuzimaConfig config);
 
     Number countConfigs(String search);
 
     List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize);
+
+    List<MuzimaConfig> getConfigByName(String configName, boolean includeRetired);
 }
