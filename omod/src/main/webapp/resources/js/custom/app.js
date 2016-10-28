@@ -106,7 +106,7 @@ muzimaCoreModule.factory('$data', function ($http) {
 muzimaCoreModule.factory('FormService', function ($http) {
 
     var get = function (id) {
-        return $http.get('../../ws/rest/v1/muzima/form/' + id + "?v=custom:(id,uuid,name,model,modelJson,html,tags,version,description,discriminator)");
+        return $http.get('../../ws/rest/v1/muzima/form/' + id + "?v=custom:(id,uuid,name,modelXml,modelJson,metaJson,html,tags,version,description,discriminator)");
     };
     var save = function (form) {
         return $http.post('form.form', form);

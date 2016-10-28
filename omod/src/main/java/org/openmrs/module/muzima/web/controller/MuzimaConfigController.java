@@ -66,18 +66,18 @@ public class MuzimaConfigController {
                     config.setName(name);
                     config.setDescription(description);
                     config.setConfigJson(configJson);
-                    configService.save(config);
                 } else {
                     config.setRetired(true);
                     config.setRetireReason("Deleting a configuration source object!");
                     config.setRetiredBy(Context.getAuthenticatedUser());
                     config.setDateRetired(new Date());
-                    configService.save(config);
                 }
+                configService.save(config);
             } else {
                 MuzimaConfig config = new MuzimaConfig();
                 config.setName(name);
                 config.setDescription(description);
+                config.setConfigJson(configJson);
                 configService.save(config);
             }
         }
@@ -93,13 +93,18 @@ public class MuzimaConfigController {
 
             MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
             List<Object> objects = new ArrayList<Object>();
+            List<Object> concepts = new ArrayList<Object>();
+
             for (Form form : forms) {
                 List<MuzimaForm> muzimaForms = muzimaFormService.getMuzimaFormByForm(form.getUuid(), false);
-                if (muzimaForms != null && muzimaForms.size() > 0)
+                if (muzimaForms != null && muzimaForms.size() > 0) {
                     objects.add(WebConverter.convertMuzimaForm(form, muzimaForms.get(0)));
+                    concepts.add(WebConverter.convertMuzimaFormMeta(muzimaForms.get(0)));
+                }
             }
 
             response.put("objects", objects);
+            response.put("metaObjects", concepts);
         }
         return response;
     }

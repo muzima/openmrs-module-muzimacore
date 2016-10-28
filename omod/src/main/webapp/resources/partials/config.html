@@ -166,7 +166,7 @@
                                                     </td>
                                                     <td width="45%" align="left" valign="top">
                                                         <label for="extractedNotUsedConcepts" style="margin-top: 10px">Form Concepts</label>
-                                                        <select class="selectClass" size="14" id="extractedNotUsedConcepts" ng-model="selected.eConcepts" style="width: 100% ; font-size: 11px" multiple="multiple">
+                                                        <select class="selectClass" ng-disabled="specialFields.extractingMeta" size="14" id="extractedNotUsedConcepts" ng-model="selected.eConcepts" style="width: 100% ; font-size: 11px" multiple="multiple">
                                                             <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}">{{concept.name}}</option>
                                                         </select>
                                                     </td>
@@ -187,6 +187,9 @@
                     </tr>
                     </tbody>
                 </table>
+                <div ng-show="specialFields.extractingMeta" class='loader'>
+                    &nbsp;
+                </div>
             </div>
         </div>
     </div>
