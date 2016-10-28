@@ -39,7 +39,7 @@ describe('Html5Forms services', function () {
     describe('FormService', function () {
         var httpBackend, service;
         var setGetOneExpectation = function () {
-            httpBackend.expectGET("../../ws/rest/v1/muzima/form/foo?v=custom:(id,uuid,name,model,modelJson,html,tags)").
+            httpBackend.expectGET("../../ws/rest/v1/muzima/form/foo?v=custom:(id,uuid,name,modelXml,modelJson,html,tags)").
                 respond(
                 {"id": 1,"uuid":"foo" ,"name": "Patient Registration Form", "description": "Form for registering patients", "selected": false,
                     "tags": [
