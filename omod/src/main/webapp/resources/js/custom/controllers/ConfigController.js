@@ -1,9 +1,9 @@
-function ConfigCtrl($scope, $routeParams, $location, $configs) {
+function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
 
     // initialize control objects
     $scope.search = {forms: '', cohorts: '', locations: '', providers: '', concepts: ''};
     $scope.selected = {forms: '', cohorts: '', locations: '', providers: '', concepts: [], eConcepts: []};
-    $scope.specialFields = {showConfigJson: '', stillLoading: true};
+    $scope.specialFields = {showConfigJson: '', stillLoading: true, extractingMeta: false};
 
     // initialize the config objects
     $scope.config = {};
@@ -43,10 +43,10 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
     }
 
     $configs.searchConfigForms().then(function (response) {
-        var forms = response.data.objects;
-        angular.forEach(forms, function (form) {
-            if (form.metaJson != undefined && form.metaJson != null) {
-                var metaJson = JSON.parse(form.metaJson);
+        var metaObjects = response.data.metaObjects;
+        angular.forEach(metaObjects, function (object) {
+            if (object.metaJson != undefined && object.metaJson != null) {
+                var metaJson = JSON.parse(object.metaJson);
                 if (metaJson.concepts != undefined) {
                     $scope.extractedConcepts = _.unionWith($scope.extractedConcepts, metaJson.concepts, _.isEqual);
                 }
@@ -112,6 +112,36 @@ function ConfigCtrl($scope, $routeParams, $location, $configs) {
         if (!formExists) {
             $scope.configForms.push(form);
             $scope.search.forms = '';
+            $scope.specialFields.extractingMeta=true;
+
+            FormService.get(form.uuid).then(function (response) {
+
+                var formResult = response.data;
+                var metaJson = JSON.parse(formResult.metaJson);
+                if (metaJson.concepts != undefined) {
+                    angular.forEach(metaJson.concepts, function (mConcept) {
+                        var conceptExists = _.find($scope.extractedConcepts, function (eConcept) {
+                            return mConcept.uuid == eConcept.uuid
+                        });
+
+                        if (!conceptExists)
+                            $scope.extractedConcepts.push(mConcept);
+                    });
+                }
+                //pick only the not used concepts
+            }).then(function () {
+                $scope.extractedNotUsedConcepts = [];
+                angular.forEach($scope.extractedConcepts, function (eConcept) {
+                    var conceptExists = _.find($scope.configConcepts, function (configConcept) {
+                        return configConcept.uuid == eConcept.uuid
+                    });
+
+                    if (!conceptExists)
+                        $scope.extractedNotUsedConcepts.push(eConcept);
+                });
+
+                $scope.specialFields.extractingMeta=false;
+            });
         }
     };
 

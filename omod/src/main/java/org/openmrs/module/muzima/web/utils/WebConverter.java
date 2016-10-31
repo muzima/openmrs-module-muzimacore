@@ -236,10 +236,15 @@ public class WebConverter {
     public static Map<String, Object> convertMuzimaForm(final Form form, final MuzimaForm muzimaForm) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (form != null) {
-            map.put("uuid", form.getUuid());
+            map.put("uuid", muzimaForm.getUuid());
             map.put("name", form.getName());
-            map.put("metaJson", muzimaForm.getMetaJson());
         }
+        return map;
+    }
+
+    public static Map<String, Object> convertMuzimaFormMeta(final MuzimaForm muzimaForm) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("metaJson", muzimaForm.getMetaJson());
         return map;
     }
 
