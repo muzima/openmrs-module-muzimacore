@@ -35,8 +35,11 @@
                         <div class="panel panel-default panel-body">
                             <div class="form-group">
                                 <label for="xFormFormDefinition">Form Definition</label>
-                                <select class="form-control" id="xFormFormDefinition" ng-model="form" ng-options="form.name for form in forms" required="true" ng-change = loadData()>
+                                <select ng-show="forms.length <= 10" class="form-control" id="xFormFormDefinition" ng-model="form" ng-options="form.name for form in forms" required="true" ng-change = loadData()>
                                 </select>
+                                <input ng-show="forms.length > 10" type="text" class="form-control" ng-model="searchForm" placeholder="Search form by name ..." autocomplete="off"
+                                       uib-typeahead="form as form.name for form in searchForms | filter:$viewValue | limitTo:10"
+                                       uib-typeahead-wait-ms="500" typeahead-on-select="selectForm($item)" uib-typeahead-editable="false"/>
                             </div>
                             <div class="form-group">
                                 <label >Name</label>
@@ -50,13 +53,11 @@
                                 <label for="xFormDescription">Description</label>
                                 <textarea class="form-control" id="xFormDescription" rows="3" placeholder="Enter description" ng-model="description" readonly></textarea>
                             </div>
-
                             <div class="form-group">
                                 <label for="xFormDiscriminator">Select Form Discriminator </label>
                                 <select class="form-control" id="xFormDiscriminator" ng-model="discriminator" ng-options="discriminator for discriminator in discriminatorTypes" required="true" >
                                 </select>
                             </div>
-
                         </div>
                         <div class = "panel panel-default panel-body">
                             <div class="form-group">
@@ -102,4 +103,3 @@
         </div>
     </div>
 </div>
-
