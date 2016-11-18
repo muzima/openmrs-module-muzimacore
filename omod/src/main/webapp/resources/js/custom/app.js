@@ -22,7 +22,8 @@ muzimaCoreModule.
             when('/errors', {controller: ErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/errors.html'}).
             when('/edit/:uuid', {controller: EditCtrl, templateUrl: '../../moduleResources/muzimacore/partials/edit.html'}).
             otherwise({redirectTo: '/sources'});
-    }]);
+    }]
+);
 
 muzimaCoreModule.factory('$data', function ($http) {
     var getQueues = function (search, pageNumber, pageSize) {
@@ -120,9 +121,11 @@ muzimaCoreModule.factory('FormService', function ($http) {
     var retire = function (form, retireReason) {
         return $http.delete('retire/' + form.id +'.form' +'?retireReason=' + retireReason);
     };
-
     var getDiscriminatorTypes = function() {
         return $http.get('../../module/muzimacore/discriminator.json', {cache: false});
+    };
+    var searchForms = function(search) {
+        return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description)&q=' + (search === undefined ? '' : search));
     };
 
     return {
@@ -131,7 +134,8 @@ muzimaCoreModule.factory('FormService', function ($http) {
         save: save,
         getForms: getForms,
         retire: retire,
-        getDiscriminatorTypes: getDiscriminatorTypes
+        getDiscriminatorTypes: getDiscriminatorTypes,
+        searchForms: searchForms
     }
 });
 
