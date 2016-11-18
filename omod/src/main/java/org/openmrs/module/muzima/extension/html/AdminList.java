@@ -40,7 +40,7 @@ public class AdminList extends AdministrationSectionExt {
      * @see AdministrationSectionExt#getTitle()
      */
     public String getTitle() {
-        return "muzima.title";
+        return "muzimacore.title";
     }
 
     /**
