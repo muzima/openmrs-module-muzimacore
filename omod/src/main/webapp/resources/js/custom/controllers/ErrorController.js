@@ -212,11 +212,12 @@ function ErrorsCtrl($scope, $location, $data) {
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
+    $scope.totalItems = 0;
     $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
         $scope.errors = serverData.objects;
-        $scope.noOfPages = serverData.pages;
+        $scope.totalItems = serverData.totalItems;
     });
 
     $scope.queue = function () {
@@ -232,7 +233,7 @@ function ErrorsCtrl($scope, $location, $data) {
             then(function (response) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
-                $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         })
     };
@@ -243,7 +244,7 @@ function ErrorsCtrl($scope, $location, $data) {
             then(function (response) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
-                $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);
@@ -255,7 +256,7 @@ function ErrorsCtrl($scope, $location, $data) {
             then(function (response) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
-                $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);

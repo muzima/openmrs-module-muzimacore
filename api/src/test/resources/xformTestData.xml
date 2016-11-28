@@ -7,7 +7,7 @@
 
     <xforms_xform  form_id="1"/>
     <xforms_xform  form_id="2"/>
-    <xforms_xform  form_id="0"/>
+    <xforms_xform  form_id="3"/>
 
     <muzima_form form_id="1" form="c0c579b0-8e59-401d-8a4a-976a0b183519" discriminator="a" uuid= "foo" retired="0"/>
     <muzima_form form_id="2" form="c0c579b0-8e59-401d-8a4a-976a0b183520" discriminator="b" uuid= "bar" retired="0"/>

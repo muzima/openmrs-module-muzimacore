@@ -16,8 +16,11 @@ public interface MuzimaFormService extends OpenmrsService {
     @Transactional(readOnly = true)
     List<MuzimaXForm> getXForms();
 
-    @Transactional
-    MuzimaForm importExisting(Integer xFormId, String form, String discriminator) throws Exception;
+    @Transactional(readOnly = true)
+    Number countXForms(String search);
+
+    @Transactional(readOnly = true)
+    List<MuzimaXForm> getPagedXForms(final String search, final Integer pageNumber, final Integer pageSize);
 
     MuzimaForm getFormById(Integer id);
 
