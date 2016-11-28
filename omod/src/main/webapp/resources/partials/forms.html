@@ -26,7 +26,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="#/xforms" style="color: #323232 ;text-decoration: none">Existing</a></li>
                             <li class="divider"></li>
-                            <li><a href="#/import/xforms" style="color: #323232 ;text-decoration: none">Upload</a></li>
+                            <li><a href="#/import/forms" style="color: #323232 ;text-decoration: none">Upload</a></li>
                         </ul>
 					</span>
                 </div>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="row" ng-show="hasForms()  && !fetchingForms">
-                <table class="table table-bordered table-condensed table-hover">
+                <table class="table table-bordered table-hover">
                     <thead>
                     <tr>
                         <th></th>
@@ -114,7 +114,7 @@
                             <div class="retire-form" ng-show="muzimaform.retired">
                                 <input type="text" class="retire-reason" placeholder="Retire reason" ng-model="muzimaform.retireReason" ng-show="muzimaform.retired" style="margin-top: 15px;"/>
                                 <a class="btn btn-danger" ng-click="remove(muzimaform)" ng-show="muzimaform.retired">Retire</a>
-                                <a class="btn" ng-click="toggleRetireForm(muzimaform)" ng-show="muzimaform.retired">Cancel</a>
+                                <a class="btn btn-default" ng-click="toggleRetireForm(muzimaform)" ng-show="muzimaform.retired">Cancel</a>
                             </div>
                         </td>
                         <td></td>

@@ -56,7 +56,7 @@ function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
     };
 
     $scope.editForm = function(muzimaform){
-        $location.path('/update/xforms/' + muzimaform.form.uuid);
+        $location.path('/update/forms/' + muzimaform.form.uuid);
     };
 
     var tagColor = function (tagId) {

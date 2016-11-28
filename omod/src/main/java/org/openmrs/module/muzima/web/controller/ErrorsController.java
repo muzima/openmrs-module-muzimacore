@@ -45,12 +45,11 @@ public class ErrorsController {
         Map<String, Object> response = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
             DataService dataService = Context.getService(DataService.class);
-            int pages = (dataService.countErrorData(search).intValue() + pageSize - 1) / pageSize;
             List<Object> objects = new ArrayList<Object>();
             for (ErrorData errorData : dataService.getPagedErrorData(search, pageNumber, pageSize)) {
                 objects.add(WebConverter.convertErrorData(errorData));
             }
-            response.put("pages", pages);
+            response.put("totalItems", dataService.countErrorData(search).intValue());
             response.put("objects", objects);
         }
         return response;

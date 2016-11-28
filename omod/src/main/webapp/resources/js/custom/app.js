@@ -16,8 +16,8 @@ muzimaCoreModule.
             when('/registration/:uuid', {controller: ViewRegistrationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/registration.html'}).
             when('/forms', {controller: FormsCtrl,  templateUrl: '../../moduleResources/muzimacore/partials/forms.html'}).
             when('/xforms', {controller: XFormsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/xforms.html'}).
-            when('/import/xforms', {controller: ImportCtrl, templateUrl: '../../moduleResources/muzimacore/partials/import/xforms.html'}).
-            when('/update/xforms/:muzimaform_uuid',{controller: UpdateCtrl, templateUrl: '../../moduleResources/muzimacore/partials/update/xforms.html'}).
+            when('/import/forms', {controller: ImportCtrl, templateUrl: '../../moduleResources/muzimacore/partials/import/forms.html'}).
+            when('/update/forms/:muzimaform_uuid',{controller: UpdateCtrl, templateUrl: '../../moduleResources/muzimacore/partials/update/forms.html'}).
             when('/error/:uuid', {controller: ErrorCtrl, templateUrl: '../../moduleResources/muzimacore/partials/error.html'}).
             when('/errors', {controller: ErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/errors.html'}).
             when('/edit/:uuid', {controller: EditCtrl, templateUrl: '../../moduleResources/muzimacore/partials/edit.html'}).
@@ -140,8 +140,13 @@ muzimaCoreModule.factory('FormService', function ($http) {
 });
 
 muzimaCoreModule.factory('XFormService', function ($http) {
-    var all = function () {
-        return $http.get('xforms.form');
+
+    var moduleState = function () {
+        return $http.get('moduleStatus.form');
+    };
+
+    var getXForms = function (search, pageNumber, pageSize) {
+        return $http.get('xforms.form?search=' + (search === undefined ? '' : search) + '&pageNumber=' + pageNumber + '&pageSize=' + pageSize);
     };
 
     var save = function (data) {
@@ -153,7 +158,8 @@ muzimaCoreModule.factory('XFormService', function ($http) {
     };
 
     return {
-        all: all,
+        moduleState: moduleState,
+        getXForms: getXForms,
         save: save,
         getDiscriminatorTypes: getDiscriminatorTypes
     };
