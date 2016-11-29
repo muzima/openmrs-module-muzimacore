@@ -99,7 +99,7 @@
                     <div class="well edit">
                         <textarea id="editJson" ></textarea>
                         <button id = "btnValidate" type="submit"  class="btn btn-primary">Validate</button>
-                        <button id = "btnUpdate" type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#myModal">Save</button>
+                        <button id = "btnUpdate" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Save</button>
                         <button id = "btnCancel" type="submit"  class="btn btn-danger">Close</button>
                     </div>
 
@@ -107,8 +107,8 @@
             </tr>
             <tr>
                 <td colspan="4">
-                    <button type="submit"  click="queue()" id = "btnQueue" class="btn btn-primary">Queue</button>
-                    <button type="submit"  click="cancel()" id = "btnCancelQueue" class="btn btn-danger">Close</button>
+                    <button type="submit"  ng-click="queue()" id = "btnQueue" class="btn btn-primary">Queue</button>
+                    <button type="submit"  ng-click="cancel()" id = "btnCancelQueue" class="btn btn-danger">Close</button>
                     <a class="btn" id="editData" href="#/edit/e38d2d5b-877a-4e9f-a9dd-6874e45a7b79" style="display: none;">Edit Data</a>
                 </td>
             </tr>
@@ -130,8 +130,8 @@
                     Confirm and save changes to the database?
                 </div>
                 <div class="modal-footer">
-                    <button id = "btnNo" type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                    <button id = "btnYes" type="button" class="btn btn-primary" >Yes</button>
+                    <button id = "btnNo" type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+                    <button id = "btnYes" type="button" class="btn btn-success" >Yes</button>
                 </div>
             </div>
         </div>
