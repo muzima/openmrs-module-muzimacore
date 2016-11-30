@@ -12,6 +12,7 @@ import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline;
 import org.openmrs.module.xforms.Xform;
+import org.openmrs.module.xforms.XformsService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.xml.sax.SAXException;
 
@@ -26,7 +27,6 @@ import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 
 public class EnketoResultTest extends BaseModuleContextSensitiveTest {
     @Test(expected = NullPointerException.class)
@@ -55,6 +55,7 @@ public class EnketoResultTest extends BaseModuleContextSensitiveTest {
     @Test
     public void test() throws IOException, DocumentException, TransformerException, ParserConfigurationException {
         MuzimaFormDAO muzimaFormDAO = mock(MuzimaFormDAO.class);
+        XformsService xformsService = mock(XformsService.class);
         TransformerFactory transformerFactory = new TransformerFactoryImpl();
         EnketoXslTransformer enketoXslTransformer = new EnketoXslTransformer(transformerFactory, XslTransformPipeline.xform2HTML5Pipeline());
         ModelXml2JsonTransformer modelXml2JsonTransformer = new ModelXml2JsonTransformer(transformerFactory, XslTransformPipeline.modelXml2JsonXSLPipeline());
@@ -63,10 +64,10 @@ public class EnketoResultTest extends BaseModuleContextSensitiveTest {
         MuzimaFormServiceImpl muzimaFormService = new MuzimaFormServiceImpl(muzimaFormDAO, enketoXslTransformer, modelXml2JsonTransformer, odk2JavarosaTransformer, odk2HTML5Transformer);
         Xform xform = new Xform();
         xform.setXformXml(xformXml);
-        when(muzimaFormDAO.getXform(1)).thenReturn(xform);
+        when(xformsService.getXform(1)).thenReturn(xform);
 
         try {
-            muzimaFormService.importExisting(1, null, null);
+           muzimaFormService.create(xformXml, null, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -291,5 +292,4 @@ public class EnketoResultTest extends BaseModuleContextSensitiveTest {
             "    </xf:input>\n" +
             "  </xf:group>\n" +
             "</xf:xforms>";
-
 }
