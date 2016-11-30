@@ -15,7 +15,6 @@ import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.XForm2Html5Transformer;
-import org.openmrs.module.xforms.Xform;
 
 import java.io.StringReader;
 import java.util.Date;
@@ -47,9 +46,14 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         return dao.getXForms();
     }
 
-    public MuzimaForm importExisting(Integer xFormId, String form,  String discriminator) throws Exception {
-        Xform xform = dao.getXform(xFormId);
-        return create(xform.getXformXml(), form,  discriminator);
+    @Override
+    public Number countXForms(String search) {
+        return dao.countXForms(search);
+    }
+
+    @Override
+    public List<MuzimaXForm> getPagedXForms(String search, Integer pageNumber, Integer pageSize) {
+        return dao.getPagedXForms(search, pageNumber, pageSize);
     }
 
     public MuzimaForm create(String xformXml, String form,  String discriminator) throws Exception {

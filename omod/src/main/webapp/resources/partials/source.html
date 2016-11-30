@@ -13,37 +13,37 @@
         <div ng-switch="mode">
             <div ng-switch-when="view">
                 <div class="row">
-                    <input class="col-lg-10" placeholder="Source name ..." type="text" disabled="" ng-model="source.name">
+                    <input class="col-lg-10 form-control" placeholder="Source name ..." type="text" disabled="" ng-model="source.name">
                 </div>
                 <div class="row">
-                    <textarea class="col-lg-12" placeholder="Source description ..." rows="10" disabled="" ng-model="source.description">
+                    <textarea class="col-lg-12 form-control" placeholder="Source description ..." rows="10" disabled="" ng-model="source.description">
                     </textarea>
                 </div>
                 <div class="row">
-                    <input class="col-lg-10" placeholder="Source uuid ..." type="text" disabled="" ng-model="source.uuid">
+                    <input class="col-lg-10 form-control" placeholder="Source uuid ..." type="text" disabled="" ng-model="source.uuid">
                 </div>
                 <div class="row">
-                    <button type="submit" ng-click="edit()" class="btn">Edit</button>
-                    <button type="submit" ng-click="cancel()" class="btn">Close</button>
+                    <button type="submit" ng-click="edit()" class="btn btn-primary">Edit</button>
+                    <button type="submit" ng-click="cancel()" class="btn btn-danger">Close</button>
                 </div>
                 <span></span>
             </div>
             <div ng-switch-when="edit">
                 <form id="consult">
                     <div class="row">
-                        <input class="col-lg-10" placeholder="Source name ..." type="text" ng-model="source.name">
+                        <input class="col-lg-10 form-control" placeholder="Source name ..." type="text" ng-model="source.name">
                     </div>
                     <div class="row">
-                        <textarea class="col-lg-12" placeholder="Source description ..." rows="10" ng-model="source.description">
+                        <textarea class="col-lg-12 form-control" placeholder="Source description ..." rows="10" ng-model="source.description">
                         </textarea>
                     </div>
                     <div class="row">
-                        <input class="col-lg-10" placeholder="Source uuid ..." type="text" disabled="" ng-model="source.uuid">
+                        <input class="col-lg-10 form-control" placeholder="Source uuid ..." type="text" disabled="" ng-model="source.uuid">
                     </div>
                     <div class="row">
-                        <button type="submit" ng-click="save(source)" class="btn">Save</button>
-                        <button ng-show="source.uuid" type="submit" ng-click="delete()" class="btn">Delete</button>
-                        <button type="submit" ng-click="cancel()" class="btn">Cancel</button>
+                        <button type="submit" ng-click="save(source)" class="btn btn-success">Save</button>
+                        <button ng-show="source.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>
+                        <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
                     </div>
                     <span></span>
                 </form>
