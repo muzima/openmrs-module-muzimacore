@@ -21,6 +21,8 @@ import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.User;
+import org.openmrs.api.context.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +59,7 @@ public class FakeEncounter extends BaseOpenmrsData {
                 log.error("Copying property failed for property: '" + property + "' with message: " + e.getMessage(), e);
             }
         }
-        fakeEncounter.setProvider(encounter.getProvider());
+        fakeEncounter.setProvider(encounter.getPatient().getPerson());
         fakeEncounter.setVoided(encounter.getVoided());
         return fakeEncounter;
     }

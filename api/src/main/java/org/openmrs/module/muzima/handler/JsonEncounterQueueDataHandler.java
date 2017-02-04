@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Location;
@@ -30,6 +31,7 @@ import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
+import org.openmrs.Provider;
 import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.LocationService;
@@ -360,7 +362,9 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             queueProcessorException.addException(new Exception("Unable to find user using the id: " + providerString));
         } else {
             encounter.setCreator(user);
-            encounter.setProvider(user);
+            Provider provider = Context.getProviderService().getProviderByIdentifier("encounter.provider_id");
+            EncounterRole encounterRole = Context.getEncounterService().getEncounterRoleByName("Unknown");
+            encounter.setProvider(encounterRole, provider);
         }
 
         String locationString = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.location_id']");

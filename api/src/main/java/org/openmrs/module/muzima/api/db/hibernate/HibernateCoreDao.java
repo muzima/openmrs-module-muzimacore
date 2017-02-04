@@ -16,12 +16,15 @@ package org.openmrs.module.muzima.api.db.hibernate;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Cohort;
+import org.openmrs.CohortMembership;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -284,5 +287,24 @@ public class HibernateCoreDao implements CoreDao {
             query.setParameter("syncDate", syncDate);
         }
         return (Number) query.uniqueResult();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Number countCohortMemberships(final String cohortUuid, final Date syncDate) throws DAOException {
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(CohortMembership.class);
+        criteria.createAlias("cohort", "c");
+        criteria.add(Restrictions.eq("c.uuid", cohortUuid));
+        if (syncDate != null) {
+            criteria.add(Restrictions.ge("startDate", syncDate));
+            Disjunction orEndDate = Restrictions.disjunction();
+            orEndDate.add(Restrictions.isNull("endDate"));
+            orEndDate.add(Restrictions.gt("endDate", syncDate));
+            criteria.add(orEndDate);
+        }
+        criteria.add(Restrictions.eq("voided", false));
+        criteria.setResultTransformer(CriteriaSpecification.DISTINCT_ROOT_ENTITY);
+        criteria.setProjection(Projections.rowCount());
+        return (Number) criteria.uniqueResult();
     }
 }

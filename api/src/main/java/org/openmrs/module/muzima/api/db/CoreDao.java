@@ -56,4 +56,7 @@ public interface CoreDao {
 
     @Transactional(readOnly = true)
     Number countPatients(final String cohortUuid, final Date syncDate) throws DAOException;
+
+    @Transactional(readOnly = true)
+    Number countCohortMemberships(String cohortUuid, Date syncDate) throws DAOException;
 }

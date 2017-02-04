@@ -55,7 +55,7 @@ import java.util.StringTokenizer;
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/concept",
         supportedClass = FakeConcept.class,
-        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*"})
+        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","2.0.*","2.1.*"})
 public class ConceptResource extends DelegatingCrudResource<FakeConcept> {
 
     public ConceptResource() {

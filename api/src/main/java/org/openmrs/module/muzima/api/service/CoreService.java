@@ -48,4 +48,6 @@ public interface CoreService extends OpenmrsService {
                               final int startIndex, final int size) throws APIException;
 
     Number countPatients(final String cohortUuid, final Date syncDate) throws APIException;
+    
+    Number countCohortMemberships(final String cohortUuid, final Date syncDate) throws APIException;
 }
