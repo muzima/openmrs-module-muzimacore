@@ -143,6 +143,11 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     *
+     * @param queueData - QueueData
+     * @return boolean
+     */
     @Override
     public boolean validate(QueueData queueData) {
         log.info("validating registration form data: " + queueData.getUuid());
@@ -188,6 +193,11 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
         return date;
     }
 
+    /**
+     *
+     * @param payload - String representation of the payload
+     * @return Patient
+     */
     private Patient createPatientFromPayload(final String payload) {
         Patient unsavedPatient = new Patient();
         try {
@@ -303,6 +313,11 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
         return unsavedPatient;
     }
 
+    /**
+     * Sets initializes the TemporaryUuid 
+     * 
+     * @param temporaryUuid - String representation of the temporaryUuid
+     */
     private void setTemporaryPatientUuid(String temporaryUuid) {
         this.temporaryPatientUuid = temporaryUuid;
     }
@@ -311,6 +326,12 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
         return temporaryPatientUuid;
     }
 
+    /**
+     * 
+     * @param unsavedPatient -Patient
+     * @param patientElement - Element
+     * @param typeName - String type name
+     */
     private void extractIdentifier(final Patient unsavedPatient, final Element patientElement, final String typeName) {
         boolean identical = true;
         String identifierValue = StringUtils.EMPTY;
@@ -341,6 +362,12 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param patients
+     * @param unsavedPatient
+     * @return Patient
+     */
     private Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
         for (Patient patient : patients) {
             // match it using the person name and gender, what about the dob?
@@ -371,6 +398,11 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
         return null;
     }
 
+    /**
+     * 
+     * @param unsavedPatient -Patient
+     * @param value -String
+     */
     private void savePatientsFinger(final Patient unsavedPatient, final String value) {
         PersonService personService = Context.getPersonService();
         PersonAttributeType fingerAttributeType = personService.getPersonAttributeTypeByName("finger");
@@ -380,6 +412,11 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
         unsavedPatient.addAttribute(fingerAttribute);
     }
 
+    /**
+     * 
+     * @param unsavedPatient -Patient
+     * @param value - String
+     */
     private void savePatientsFingerprint(final Patient unsavedPatient, final String value) {
         PersonService personService = Context.getPersonService();
         PersonAttributeType fingerprintAttributeType = personService.getPersonAttributeTypeByName("fingerprint");
