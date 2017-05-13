@@ -3,12 +3,12 @@
  * Version 1.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
- *
+ * <p>
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- *
+ * <p>
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 package org.openmrs.module.muzima.handler;
@@ -63,6 +63,11 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     Set<PersonAttribute> personAttributes;
     private QueueProcessorException queueProcessorException;
 
+    /**
+     * 
+     * @param queueData
+     * @throws QueueProcessorException
+     */
     @Override
     public void process(final QueueData queueData) throws QueueProcessorException {
         log.info("Processing registration form data: " + queueData.getUuid());
@@ -121,14 +126,15 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
+   
     private void populateUnsavedPatientFromPayload() {
         setPatientIdentifiersFromPayload();
         setPatientBirthDateFromPayload();
         setPatientBirthDateEstimatedFromPayload();
         setPatientGenderFromPayload();
         setPatientNameFromPayload();
-        setPatientAddressesFromPayload();
-        setPersonAttributesFromPayload();
+        setPatientAddressesFromPayload(); 
+        setPersonAttributesFromPayload(); 
     }
 
     private void setPatientIdentifiersFromPayload() {
@@ -145,7 +151,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         unsavedPatient.setIdentifiers(patientIdentifiers);
     }
 
-    private PatientIdentifier getPreferredPatientIdentifierFromPayload(){
+    private PatientIdentifier getPreferredPatientIdentifierFromPayload() {
         String identifierValue = JsonUtils.readAsString(payload, "$['patient']['patient.medical_record_number']");
         String identifierTypeName = "AMRS Universal ID";
 
@@ -161,7 +167,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     private List<PatientIdentifier> getOtherPatientIdentifiersFromPayload() {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         Object identifierTypeNameObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_type']");
-        Object identifierValueObject =JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
+        Object identifierValueObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
 
         if (identifierTypeNameObject instanceof JSONArray) {
             JSONArray identifierTypeName = (JSONArray) identifierTypeNameObject;
@@ -184,6 +190,12 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         return otherIdentifiers;
     }
 
+    /**
+     * 
+     * @param identifierTypeName
+     * @param identifierValue
+     * @return PatientIdentifier
+     */
     private PatientIdentifier createPatientIdentifier(String identifierTypeName, String identifierValue) {
         PatientIdentifierType identifierType = Context.getPatientService()
                 .getPatientIdentifierTypeByName(identifierTypeName);
@@ -202,16 +214,20 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         return null;
     }
 
+    /**
+     * 
+     * @param patientIdentifiers Set of patientIdentifier objects
+     */
     private void setIdentifierTypeLocation(final Set<PatientIdentifier> patientIdentifiers) {
         String locationIdString = JsonUtils.readAsString(payload, "$['encounter']['encounter.location_id']");
         Location location = null;
         int locationId;
 
-        if(locationIdString != null){
+        if (locationIdString != null) {
             locationId = Integer.parseInt(locationIdString);
             location = Context.getLocationService().getLocation(locationId);
         }
-        
+
         if (location == null) {
             queueProcessorException.addException(
                     new Exception("Unable to find encounter location using the id: " + locationIdString));
@@ -224,28 +240,28 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    private void setPatientBirthDateFromPayload(){
+    private void setPatientBirthDateFromPayload() {
         Date birthDate = JsonUtils.readAsDate(payload, "$['patient']['patient.birth_date']");
         unsavedPatient.setBirthdate(birthDate);
     }
 
-    private void setPatientBirthDateEstimatedFromPayload(){
+    private void setPatientBirthDateEstimatedFromPayload() {
         boolean birthdateEstimated = JsonUtils.readAsBoolean(payload, "$['patient']['patient.birthdate_estimated']");
         unsavedPatient.setBirthdateEstimated(birthdateEstimated);
     }
 
-    private void setPatientGenderFromPayload(){
+    private void setPatientGenderFromPayload() {
         String gender = JsonUtils.readAsString(payload, "$['patient']['patient.sex']");
         unsavedPatient.setGender(gender);
     }
 
-    private void setPatientNameFromPayload(){
+    private void setPatientNameFromPayload() {
         String givenName = JsonUtils.readAsString(payload, "$['patient']['patient.given_name']");
         String familyName = JsonUtils.readAsString(payload, "$['patient']['patient.family_name']");
-        String middleName="";
-        try{
-            middleName= JsonUtils.readAsString(payload, "$['patient']['patient.middle_name']");
-        } catch(Exception e){
+        String middleName = "";
+        try {
+            middleName = JsonUtils.readAsString(payload, "$['patient']['patient.middle_name']");
+        } catch (Exception e) {
             log.error(e);
         }
 
@@ -270,11 +286,12 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    private String getPatientUuidFromPayload(){
+    private String getPatientUuidFromPayload() {
         return JsonUtils.readAsString(payload, "$['patient']['patient.uuid']");
     }
 
-    private void setPatientAddressesFromPayload(){
+    private void setPatientAddressesFromPayload() {
+
         PersonAddress patientAddress = new PersonAddress();
 
         String county = JsonUtils.readAsString(payload, "$['patient']['patient.county']");
@@ -294,26 +311,48 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         unsavedPatient.setAddresses(addresses);
     }
 
-    private void setPersonAttributesFromPayload(){
+    public JSONArray getJSONArrayFromObject() {
+        /**
+         * Process JSONObject and extract attribute values.
+         */
+        Iterator iterator personAttributes.keys();
+        JSONArray personAttributesJSONArray = new JSONArray();
+
+        while (iterator.hasNext()) {
+            String key = (String) iterator.next();
+            personAttributesJSONArray.put(personAttributes.get(key));
+        }
+    }
+
+
+    private void setPersonAttributesFromPayload() {
         personAttributes = new TreeSet<PersonAttribute>();
         PersonService personService = Context.getPersonService();
 
+        JSONObject personAttributes = JsonUtils.readAsObject(payload, "$['person','person.person_attribute']");
+
         String mothersName = JsonUtils.readAsString(payload, "$['patient']['patient.mothers_name']");
-        setAsAttribute("Mother's Name",mothersName);
+        setAsAttribute("Mother's Name", mothersName);
 
         String phoneNumber = JsonUtils.readAsString(payload, "$['patient']['patient.phone_number']");
-        setAsAttribute("Contact Phone Number",phoneNumber);
+        setAsAttribute("Contact Phone Number", phoneNumber);
 
         unsavedPatient.setAttributes(personAttributes);
     }
 
-    private void setAsAttribute(String attributeTypeName, String value){
+    /**
+     * 
+     * @param attributeTypeUuid - String
+     * @param value - String
+     */
+    
+    private void setAsAttribute(String attributeTypeUuid, String value) {
         PersonService personService = Context.getPersonService();
         PersonAttributeType attributeType = personService.getPersonAttributeTypeByName(attributeTypeName);
-        if(attributeType !=null && value != null){
+        if (attributeType != null && value != null) {
             PersonAttribute personAttribute = new PersonAttribute(attributeType, value);
             personAttributes.add(personAttribute);
-        } else if(attributeType ==null){
+        } else if (attributeType == null) {
             queueProcessorException.addException(
                     new Exception("Unable to find Person Attribute type by name '" + attributeTypeName + "'")
             );
@@ -336,6 +375,13 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         return savedPatient;
     }
 
+
+    /**
+     * 
+     * @param patients - List Holding Patient type Objects
+     * @param unsavedPatient - Patient Object
+     * @return Patient - Object
+     */
     private Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
         for (Patient patient : patients) {
             // match it using the person name and gender, what about the dob?
@@ -366,6 +412,11 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         return null;
     }
 
+    /**
+     * 
+     * @param queueData - QueueData Object
+     * @return boolean 
+     */
     @Override
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
