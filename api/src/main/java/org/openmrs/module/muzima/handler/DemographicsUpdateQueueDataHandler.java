@@ -48,6 +48,11 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     private QueueProcessorException queueProcessorException;
     private Patient unsavedPatient;
 
+    /**
+     * 
+     * @param queueData - QueueData
+     * @throws QueueProcessorException 
+     */
     @Override
     public void process(final QueueData queueData) throws QueueProcessorException {
         log.info("Processing demographics update form data: " + queueData.getUuid());
@@ -66,6 +71,11 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param queueData
+     * @return boolean
+     */
     @Override
     public boolean validate(QueueData queueData) {
         log.info("Processing registration form data: " + queueData.getUuid());
@@ -91,6 +101,11 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         return DISCRIMINATOR_VALUE;
     }
 
+    /**
+     * 
+     * @param patientObject
+     * @throws QueueProcessorException
+     */
     private void processPatient(final Object patientObject) throws QueueProcessorException {
         String patientPayload = patientObject.toString();
         String uuid = JsonUtils.readAsString(patientPayload, "$['patient.uuid']");
@@ -141,6 +156,12 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param queueData
+     * @return
+     */
+    
     @Override
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
