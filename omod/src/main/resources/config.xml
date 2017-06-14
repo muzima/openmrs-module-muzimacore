@@ -16,8 +16,12 @@
     <!-- / Module Properties -->
 
     <require_modules>
-        <require_module version="2.1">org.openmrs.module.webservices.rest</require_module>
+        <require_module>org.openmrs.module.webservices.rest</require_module>
     </require_modules>
+    
+    <aware_of_modules>
+        <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
+    </aware_of_modules>
 
     <!-- Module Activator -->
     <activator>org.openmrs.module.muzima.MuzimaCoreModuleActivator</activator>

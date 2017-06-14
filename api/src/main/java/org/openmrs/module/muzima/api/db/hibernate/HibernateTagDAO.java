@@ -1,7 +1,7 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 import org.openmrs.module.muzima.api.db.TagDAO;
 import org.openmrs.module.muzima.model.MuzimaFormTag;
 

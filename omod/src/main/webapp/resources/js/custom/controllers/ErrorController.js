@@ -180,7 +180,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
     };
 
     $scope.cancel = function () {
-        $location.path('/errors');
+        $location.path("/errors");
     };
 
     $('#btnYes').click(function(){

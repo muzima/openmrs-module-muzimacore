@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/config",
-        supportedClass = MuzimaConfig.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*"})
+        supportedClass = MuzimaConfig.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","2.0.*","2.1.*"})
 @Handler(supports = MuzimaConfig.class)
 public class MuzimaConfigResource extends MetadataDelegatingCrudResource<MuzimaConfig> {
     private static final Log log = LogFactory.getLog(MuzimaConfigResource.class);
