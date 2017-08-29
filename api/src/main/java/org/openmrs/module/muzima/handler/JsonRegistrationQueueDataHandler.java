@@ -147,7 +147,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
 
     private PatientIdentifier getPreferredPatientIdentifierFromPayload(){
         String identifierValue = JsonUtils.readAsString(payload, "$['patient']['patient.medical_record_number']");
-        String identifierTypeName = "AMRS Universal ID";
+        String identifierTypeName = "National ID";
 
         PatientIdentifier preferredPatientIdentifier = createPatientIdentifier(identifierTypeName, identifierValue);
         if (preferredPatientIdentifier != null) {
@@ -211,7 +211,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             locationId = Integer.parseInt(locationIdString);
             location = Context.getLocationService().getLocation(locationId);
         }
-        
+
         if (location == null) {
             queueProcessorException.addException(
                     new Exception("Unable to find encounter location using the id: " + locationIdString));
@@ -302,7 +302,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         setAsAttribute("Mother's Name",mothersName);
 
         String phoneNumber = JsonUtils.readAsString(payload, "$['patient']['patient.phone_number']");
-        setAsAttribute("Contact Phone Number",phoneNumber);
+        setAsAttribute("Telephone contact",phoneNumber);
 
         unsavedPatient.setAttributes(personAttributes);
     }

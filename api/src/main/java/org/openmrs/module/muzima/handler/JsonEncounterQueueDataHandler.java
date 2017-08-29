@@ -20,20 +20,11 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
-import org.openmrs.Encounter;
-import org.openmrs.EncounterType;
-import org.openmrs.Form;
-import org.openmrs.Location;
-import org.openmrs.Obs;
-import org.openmrs.Patient;
-import org.openmrs.PatientIdentifier;
-import org.openmrs.PatientIdentifierType;
-import org.openmrs.PersonName;
-import org.openmrs.User;
+import org.openmrs.*;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
+import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
@@ -43,11 +34,14 @@ import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
+import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -108,7 +102,26 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
 
         try {
             if (validate(queueData)) {
+                assignToVisit(encounter);
                 Context.getEncounterService().saveEncounter(encounter);
+/*
+                VisitService vs = Context.getVisitService();
+                List<Visit> visits = vs.getActiveVisitsByPatient(encounter.getPatient());
+                if(!visits.isEmpty()) {
+                    for (Visit visit : visits) {
+                        Date visitDate = visit.getStartDatetime();
+                        Date encounterDate = encounter.getEncounterDatetime();
+                        if ( dateFormat.format(visitDate).equals(dateFormat.format(encounterDate))) {
+                            vs.saveVisit(visit);
+                            setVisitOfEncounter(visit, encounter);
+                            break;
+                        }
+                    }
+                }
+                else{
+                    useNewVisit(encounter);
+                }*/
+
             }
         } catch (Exception e) {
             if (!e.getClass().equals(QueueProcessorException.class))
@@ -390,4 +403,128 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
     }
+
+    protected static void useNewVisit(Encounter encounter) {
+        String VISIT_SOURCE_FORM = "8bfab185-6947-4958-b7ab-dfafae1a3e3d";
+        Visit visit = new Visit();
+        visit.setStartDatetime(OpenmrsUtil.firstSecondOfDay(encounter.getEncounterDatetime()));
+        visit.setStopDatetime(OpenmrsUtil.getLastMomentOfDay(encounter.getEncounterDatetime()));
+        visit.setLocation(encounter.getLocation());
+        visit.setPatient(encounter.getPatient());
+        visit.setVisitType(Context.getVisitService().getVisitTypeByUuid("3371a4d4-f66f-4454-a86d-92c7b3da990c"));
+
+        VisitAttribute sourceAttr = new VisitAttribute();
+        sourceAttr.setAttributeType(Context.getVisitService().getVisitAttributeTypeByUuid(VISIT_SOURCE_FORM));
+        sourceAttr.setOwner(visit);
+        sourceAttr.setValue(encounter.getForm());
+        visit.addAttribute(sourceAttr);
+
+        Context.getVisitService().saveVisit(visit);
+
+        setVisitOfEncounter(visit, encounter);
+    }
+
+    protected static void setVisitOfEncounter(Visit visit, Encounter encounter) {
+        // Remove from old visit
+        if (encounter.getVisit() != null) {
+            encounter.getVisit().getEncounters().remove(encounter);
+        }
+
+        // Set to new visit
+        encounter.setVisit(visit);
+
+        if (visit != null) {
+            visit.addEncounter(encounter);
+        }
+    }
+
+    /**
+     * Checks whether a date has any time value
+     * @param date the date
+     * @return true if the date has time
+     * @should return true only if date has time
+     */
+    protected  boolean dateHasTime(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.HOUR) != 0 || cal.get(Calendar.MINUTE) != 0 || cal.get(Calendar.SECOND) != 0 || cal.get(Calendar.MILLISECOND) != 0;
+    }
+
+    /**
+     * Uses an existing visit for the given encounter
+     * @param encounter the encounter
+     * @return true if a suitable visit was found
+     */
+    protected boolean useExistingVisit(Encounter encounter) {
+        // If encounter has time, then we need an exact fit for an existing visit
+            List<Visit> visits = Context.getVisitService().getVisits(null, Collections.singletonList(encounter.getPatient()), null, null, null,
+                    encounter.getEncounterDatetime(), null, null, null, true, false);
+
+            for (Visit visit : visits) {
+                // Skip visits which ended before the encounter date
+                if (visit.getStopDatetime() != null && visit.getStopDatetime().before(encounter.getEncounterDatetime())) {
+                    continue;
+                }
+
+                if (checkLocations(visit, encounter)) {
+                    setVisitOfEncounter(visit, encounter);
+                    return true;
+                }
+            }
+        return false;
+    }
+
+    /**
+     * Convenience method to check whether the location of a visit and an encounter are compatible
+     * @param visit the visit
+     * @param encounter the encounter
+     * @return true if locations won't conflict
+     */
+    protected boolean checkLocations(Visit visit, Encounter encounter) {
+        return visit.getLocation() == null || Location.isInHierarchy(encounter.getLocation(), visit.getLocation());
+    }
+
+    /**
+     * Does the actual assignment of the encounter to a visit
+     * @param encounter the encounter
+     */
+    protected void assignToVisit(Encounter encounter) {
+        // Do nothing if the encounter already belongs to a visit and can't be moved
+        if (encounter.getVisit() != null) {
+            return;
+        }
+
+        // Try using an existing visit
+        if (!useExistingVisit(encounter)) {
+                useNewVisit(encounter);
+
+        }
+    }
+
+    /**
+     * Can't save patients unless they have required OpenMRS IDs
+     */
+    private void addMissingOpenmrsIdentifiers(Location location, Patient patient) {
+        PatientIdentifierType openmrsIDType = Context.getPatientService().getPatientIdentifierTypeByUuid("dfacd928-0370-4315-99d7-6ec1c9f7ae76");
+        OpenmrsIDSource source = new OpenmrsIDSource();
+            PatientIdentifier identifier = new PatientIdentifier(source.next(), openmrsIDType, location);
+            if (patient.getPatientIdentifier() == null || !patient.getPatientIdentifier().isPreferred()) {
+                identifier.setPreferred(true);
+            }
+            patient.addIdentifier(identifier);
+    }
+
+    /**
+     * Helper class to make valid OpenMRS ID identifier values without using IDGEN
+     */
+    private static class OpenmrsIDSource {
+
+        private int index = 0;
+        private static String[] OPENMRS_IDS = { "M3G", "M4E", "M6C", "M79", "M96", "MA3", "MDV", "MET" };
+
+        public String next() {
+            return OPENMRS_IDS[index++];
+        }
+    }
+
 }

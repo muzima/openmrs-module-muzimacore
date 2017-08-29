@@ -25,6 +25,14 @@
             <column name="name" type="varchar(255)"/>
         </createTable>
     </changeSet>
+    <changeSet id="muzima-20170828-1811" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE html5forms_tag CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
 
     <changeSet id="html5form-2013-06-12-05:30" author="ThoughtWorks">
         <comment>
@@ -42,6 +50,15 @@
                        tableName="html5forms_form_tag_mapping"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1813" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE html5forms_form_tag_mapping CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
+
     <changeSet id="html5form-2013-06-13-07:15" author="ThoughtWorks">
         <comment>
             Table for forms
@@ -52,6 +69,15 @@
             </column>
         </createTable>
         <addPrimaryKey columnNames="form_id" constraintName="html5forms_form_id_pk" tableName="html5forms_form"/>
+    </changeSet>
+
+    <changeSet id="muzima-20170828-1814" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE html5forms_form CONVERT TO CHARACTER SET utf8
+        </sql>
     </changeSet>
 
     <changeSet id="html5form-2013-06-25-18:15" author="ThoughtWorks">
@@ -365,6 +391,15 @@
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1942" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_data_source CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
+
     <changeSet id="muzima-2013-04-18-10-51" author="nribeka">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -407,6 +442,14 @@
                                  referencedTableName="muzima_data_source" referencedColumnNames="id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1943" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_queue_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
     <changeSet id="muzima-2013-04-18-10-52" author="nribeka">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -455,6 +498,15 @@
                                  referencedTableName="muzima_data_source" referencedColumnNames="id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1944" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_archive_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
+
     <changeSet id="muzima-2013-04-18-10-53" author="nribeka">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -501,6 +553,15 @@
         <addForeignKeyConstraint constraintName="muzima_error_data_data_source"
                                  baseTableName="muzima_error_data" baseColumnNames="data_source"
                                  referencedTableName="muzima_data_source" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="muzima-20170828-1945" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_error_data CONVERT TO CHARACTER SET utf8
+        </sql>
     </changeSet>
 
     <changeSet id="muzima-2013-04-18-10-54" author="nribeka">
@@ -560,6 +621,14 @@
                                  referencedTableName="person" referencedColumnNames="person_id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1947" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_notification_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
     <changeSet id="nribeka" author="muzima-2014-02-04-07-10-54">
         <preConditions onFail="MARK_RAN">
             <and>
@@ -681,7 +750,14 @@
                                  baseTableName="muzima_error_message" baseColumnNames="muzima_error_data_id"
                                  referencedTableName="muzima_error_data" referencedColumnNames="id"/>
     </changeSet>
-
+    <changeSet id="muzima-20170828-1948" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_error_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
     <changeSet id="muzima-20150819-111000" author="shwetha">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -973,7 +1049,14 @@
                                  baseTableName="muzimaregistration_registration_data" baseColumnNames="voided_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
-
+    <changeSet id="muzima-20170828-1949" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzimaregistration_registration_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
     <changeSet id="muzima-20160901-093538" author="smbugua">
         <comment>
             Renames tables - prefix muzimaform to muzima and rename columns and constraints appropriately
@@ -1081,6 +1164,15 @@
         <addForeignKeyConstraint constraintName="muzima_config_retired_by"
                                  baseTableName="muzima_config" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
+
+    <changeSet id="muzima-20170828-1950" author="aojwang">
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_config CONVERT TO CHARACTER SET utf8
+        </sql>
     </changeSet>
 
     <changeSet id="muzima-20160922-145252" author="smbugua">
