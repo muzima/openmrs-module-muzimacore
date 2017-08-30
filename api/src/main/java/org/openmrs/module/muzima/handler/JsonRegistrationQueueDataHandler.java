@@ -64,6 +64,18 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     Set<PersonAttribute> personAttributes;
     private QueueProcessorException queueProcessorException;
 
+    public static final String NEXT_OF_KIN_ADDRESS = "7cf22bec-d90a-46ad-9f48-035952261294";
+    public static final String NEXT_OF_KIN_CONTACT = "342a1d39-c541-4b29-8818-930916f4c2dc";
+    public static final String NEXT_OF_KIN_NAME = "830bef6d-b01f-449d-9f8d-ac0fede8dbd3";
+    public static final String NEXT_OF_KIN_RELATIONSHIP = "d0aa9fd1-2ac5-45d8-9c5e-4317c622c8f5";
+    public static final String SUBCHIEF_NAME = "40fa0c9c-7415-43ff-a4eb-c7c73d7b1a7a";
+    public static final String TELEPHONE_CONTACT = "b2c38640-2603-4629-aebd-3b54f33f1e3a";
+    public static final String EMAIL_ADDRESS = "b8d0b331-1d2d-4a9a-b741-1816f498bdb6";
+    public static final String ALTERNATE_PHONE_CONTACT = "94614350-84c8-41e0-ac29-86bc107069be";
+    public static final String NEAREST_HEALTH_CENTER = "27573398-4651-4ce5-89d8-abec5998165c";
+    public static final String GUARDIAN_FIRST_NAME = "8caf6d06-9070-49a5-b715-98b45e5d427b";
+    public static final String GUARDIAN_LAST_NAME = "0803abbd-2be4-4091-80b3-80c6940303df";
+
     @Override
     public void process(final QueueData queueData) throws QueueProcessorException {
         log.info("Processing registration form data: " + queueData.getUuid());
@@ -147,7 +159,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     }
 
     private PatientIdentifier getPreferredPatientIdentifierFromPayload(){
-        String identifierValue = JsonUtils.readAsString(payload, "$['patient']['patient.medical_record_number']");
+        String identifierValue = JsonUtils.readAsString(payload, "$['patient']['patient.national_id']");
         String identifierTypeName = "National ID";
 
         PatientIdentifier preferredPatientIdentifier = createPatientIdentifier(identifierTypeName, identifierValue);
@@ -282,7 +294,13 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         PersonAddress patientAddress = new PersonAddress();
 
         String county = JsonUtils.readAsString(payload, "$['patient']['patient.county']");
-        patientAddress.setStateProvince(county);
+        patientAddress.setCountyDistrict(county);
+
+        String subCounty = JsonUtils.readAsString(payload, "$['patient']['patient.sub_county']");
+        patientAddress.setStateProvince(subCounty);
+
+        String ward = JsonUtils.readAsString(payload, "$['patient']['patient.ward']");
+        patientAddress.setCountyDistrict(ward);
 
         String location = JsonUtils.readAsString(payload, "$['patient']['patient.location']");
         patientAddress.setAddress6(location);
@@ -293,9 +311,16 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         String village = JsonUtils.readAsString(payload, "$['patient']['patient.village']");
         patientAddress.setCityVillage(village);
 
+        String postal_address = JsonUtils.readAsString(payload, "$['patient']['patient.postal_address']");
+        patientAddress.setAddress1(postal_address);
+
+        String landmark = JsonUtils.readAsString(payload, "$['patient']['patient.landmark']");
+        patientAddress.setAddress2(landmark);
+
         Set<PersonAddress> addresses = new TreeSet<PersonAddress>();
         addresses.add(patientAddress);
         unsavedPatient.setAddresses(addresses);
+
     }
 
     private void setPersonAttributesFromPayload(){
@@ -306,7 +331,34 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         setAsAttribute("Mother's Name",mothersName);
 
         String phoneNumber = JsonUtils.readAsString(payload, "$['patient']['patient.phone_number']");
-        setAsAttribute("Telephone contact",phoneNumber);
+        setAsAttributeByUUID(TELEPHONE_CONTACT,phoneNumber);
+
+        String nearestHealthCenter = JsonUtils.readAsString(payload, "$['patient']['patient.nearest_health_center']");
+        setAsAttributeByUUID(NEAREST_HEALTH_CENTER,nearestHealthCenter);
+
+        String emailAddress = JsonUtils.readAsString(payload, "$['patient']['patient.email_address']");
+        setAsAttributeByUUID(EMAIL_ADDRESS,emailAddress);
+
+        String guardianFirstName = JsonUtils.readAsString(payload, "$['patient']['patient.guardian_first_name']");
+        setAsAttributeByUUID(GUARDIAN_FIRST_NAME,guardianFirstName);
+
+        String guardianLastName = JsonUtils.readAsString(payload, "$['patient']['patient.guardian_last_name']");
+        setAsAttributeByUUID(GUARDIAN_LAST_NAME,guardianLastName);
+
+        String alternativePhoneContact = JsonUtils.readAsString(payload, "$['patient']['patient.alternate_phone_contact']");
+        setAsAttributeByUUID(ALTERNATE_PHONE_CONTACT,alternativePhoneContact);
+
+        String nextOfKinName = JsonUtils.readAsString(payload, "$['patient']['patient.next_of_kin_name']");
+        setAsAttributeByUUID(NEXT_OF_KIN_NAME,nextOfKinName);
+
+        String nextOfKinRelationship = JsonUtils.readAsString(payload, "$['patient']['patient.next_of_kin_relationship']");
+        setAsAttributeByUUID(NEXT_OF_KIN_RELATIONSHIP,nextOfKinRelationship);
+
+        String nextOfKinContact = JsonUtils.readAsString(payload, "$['patient']['patient.next_of_kin_contact']");
+        setAsAttributeByUUID(NEXT_OF_KIN_CONTACT,nextOfKinContact);
+
+        String nextOfKinAddress = JsonUtils.readAsString(payload, "$['patient']['patient.next_of_kin_address']");
+        setAsAttributeByUUID(NEXT_OF_KIN_ADDRESS,nextOfKinAddress);
 
         unsavedPatient.setAttributes(personAttributes);
     }
@@ -320,6 +372,19 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         } else if(attributeType ==null){
             queueProcessorException.addException(
                     new Exception("Unable to find Person Attribute type by name '" + attributeTypeName + "'")
+            );
+        }
+    }
+
+    private void setAsAttributeByUUID(String uuid, String value){
+        PersonService personService = Context.getPersonService();
+        PersonAttributeType attributeType = personService.getPersonAttributeTypeByUuid(uuid);
+        if(attributeType !=null && value != null){
+            PersonAttribute personAttribute = new PersonAttribute(attributeType, value);
+            personAttributes.add(personAttribute);
+        } else if(attributeType ==null){
+            queueProcessorException.addException(
+                    new Exception("Unable to find Person Attribute type by uuid '" + uuid + "'")
             );
         }
     }
