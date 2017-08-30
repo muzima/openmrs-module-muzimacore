@@ -501,30 +501,4 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    /**
-     * Can't save patients unless they have required OpenMRS IDs
-     */
-    private void addMissingOpenmrsIdentifiers(Location location, Patient patient) {
-        PatientIdentifierType openmrsIDType = Context.getPatientService().getPatientIdentifierTypeByUuid("dfacd928-0370-4315-99d7-6ec1c9f7ae76");
-        OpenmrsIDSource source = new OpenmrsIDSource();
-            PatientIdentifier identifier = new PatientIdentifier(source.next(), openmrsIDType, location);
-            if (patient.getPatientIdentifier() == null || !patient.getPatientIdentifier().isPreferred()) {
-                identifier.setPreferred(true);
-            }
-            patient.addIdentifier(identifier);
-    }
-
-    /**
-     * Helper class to make valid OpenMRS ID identifier values without using IDGEN
-     */
-    private static class OpenmrsIDSource {
-
-        private int index = 0;
-        private static String[] OPENMRS_IDS = { "M3G", "M4E", "M6C", "M79", "M96", "MA3", "MDV", "MET" };
-
-        public String next() {
-            return OPENMRS_IDS[index++];
-        }
-    }
-
 }

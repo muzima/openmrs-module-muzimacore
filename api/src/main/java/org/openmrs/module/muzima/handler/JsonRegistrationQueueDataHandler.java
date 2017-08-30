@@ -29,6 +29,7 @@ import org.openmrs.PersonName;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
 import org.openmrs.module.muzima.model.QueueData;
@@ -160,6 +161,9 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
 
     private List<PatientIdentifier> getOtherPatientIdentifiersFromPayload() {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
+
+        // add OpenMRS ID to the list. The system requires this in order to create new patient
+        otherIdentifiers.add(generateOpenMRSID());
         Object identifierTypeNameObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_type']");
         Object identifierValueObject =JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
 
@@ -370,4 +374,25 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
     }
+
+    /**
+     * Can't save patients unless they have required OpenMRS IDs
+     */
+    private PatientIdentifier generateOpenMRSID() {
+        PatientIdentifierType openmrsIDType = Context.getPatientService().getPatientIdentifierTypeByUuid("dfacd928-0370-4315-99d7-6ec1c9f7ae76");
+
+        String locationIdString = JsonUtils.readAsString(payload, "$['encounter']['encounter.location_id']");
+        Location location = null;
+        int locationId;
+
+        if(locationIdString != null){
+            locationId = Integer.parseInt(locationIdString);
+            location = Context.getLocationService().getLocation(locationId);
+        }
+
+        String generated = Context.getService(IdentifierSourceService.class).generateIdentifier(openmrsIDType, "Registration");
+        PatientIdentifier identifier = new PatientIdentifier(generated, openmrsIDType, location);
+        return identifier;
+    }
+
 }
