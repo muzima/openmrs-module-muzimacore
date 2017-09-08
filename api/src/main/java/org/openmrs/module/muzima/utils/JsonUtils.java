@@ -199,7 +199,7 @@ public class JsonUtils {
     /**
      * Utility method to check if object is a JsonObject or JsonArray
      */
-    public static boolean isPathAJSONArray(Object path){
+    public static Boolean isPathAJSONArray(Object path){
 
         Boolean isJSONArray = false;
 
