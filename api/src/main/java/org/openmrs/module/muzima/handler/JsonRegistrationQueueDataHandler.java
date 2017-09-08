@@ -3,12 +3,12 @@
  * Version 1.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
- * <p>
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- * <p>
+ *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 package org.openmrs.module.muzima.handler;
@@ -55,7 +55,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     private static final String DISCRIMINATOR_VALUE = "json-registration";
 
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    
+
     private final Log log = LogFactory.getLog(JsonRegistrationQueueDataHandler.class);
 
     private Patient unsavedPatient;
@@ -127,8 +127,8 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         setPatientBirthDateEstimatedFromPayload();
         setPatientGenderFromPayload();
         setPatientNameFromPayload();
-        setPatientAddressesFromPayload(); 
-        setPersonAttributesFromPayload(); 
+        setPatientAddressesFromPayload();
+        setPersonAttributesFromPayload();
     }
 
     private void setPatientIdentifiersFromPayload() {
@@ -145,9 +145,9 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         unsavedPatient.setIdentifiers(patientIdentifiers);
     }
 
-    private PatientIdentifier getPreferredPatientIdentifierFromPayload() {
+    private PatientIdentifier getPreferredPatientIdentifierFromPayload(){
         String identifierValue = JsonUtils.readAsString(payload, "$['patient']['patient.medical_record_number']");
-        String identifierTypeName = "AMRS Universal ID"; //TODO refactor
+        String identifierTypeName = "AMRS Universal ID";
 
         PatientIdentifier preferredPatientIdentifier = createPatientIdentifier(identifierTypeName, identifierValue);
         if (preferredPatientIdentifier != null) {
@@ -161,7 +161,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     private List<PatientIdentifier> getOtherPatientIdentifiersFromPayload() {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         Object identifierTypeNameObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_type']");
-        Object identifierValueObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
+        Object identifierValueObject =JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
 
         if (identifierTypeNameObject instanceof JSONArray) {
             JSONArray identifierTypeName = (JSONArray) identifierTypeNameObject;
@@ -207,7 +207,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         Location location = null;
         int locationId;
 
-        if (locationIdString != null) {
+        if(locationIdString != null){
             locationId = Integer.parseInt(locationIdString);
             location = Context.getLocationService().getLocation(locationId);
         }
@@ -224,28 +224,28 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    private void setPatientBirthDateFromPayload() {
+    private void setPatientBirthDateFromPayload(){
         Date birthDate = JsonUtils.readAsDate(payload, "$['patient']['patient.birth_date']");
         unsavedPatient.setBirthdate(birthDate);
     }
 
-    private void setPatientBirthDateEstimatedFromPayload() {
+    private void setPatientBirthDateEstimatedFromPayload(){
         boolean birthdateEstimated = JsonUtils.readAsBoolean(payload, "$['patient']['patient.birthdate_estimated']");
         unsavedPatient.setBirthdateEstimated(birthdateEstimated);
     }
 
-    private void setPatientGenderFromPayload() {
+    private void setPatientGenderFromPayload(){
         String gender = JsonUtils.readAsString(payload, "$['patient']['patient.sex']");
         unsavedPatient.setGender(gender);
     }
 
-    private void setPatientNameFromPayload() {
+    private void setPatientNameFromPayload(){
         String givenName = JsonUtils.readAsString(payload, "$['patient']['patient.given_name']");
         String familyName = JsonUtils.readAsString(payload, "$['patient']['patient.family_name']");
-        String middleName = "";
-        try {
-            middleName = JsonUtils.readAsString(payload, "$['patient']['patient.middle_name']");
-        } catch (Exception e) {
+        String middleName="";
+        try{
+            middleName= JsonUtils.readAsString(payload, "$['patient']['patient.middle_name']");
+        } catch(Exception e){
             log.error(e);
         }
 
@@ -270,13 +270,24 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    private String getPatientUuidFromPayload() {
+    private String getPatientUuidFromPayload(){
         return JsonUtils.readAsString(payload, "$['patient']['patient.uuid']");
     }
 
-    private void setPatientAddressesFromPayload() {
-
+    private void setPatientAddressesFromPayload(){
         PersonAddress patientAddress = new PersonAddress();
+        Object patientAddressObject = JsonUtils.readAsObject(payload,"$['patient']['patient.personaddress']");
+        if (JsonUtils.isPathAJSONArray(patientAddressObject)){
+            //process as JSONArray
+            String county = JsonUtils.readAsString(payload, "$['patient']['patient.county']");
+            patientAddress.setStateProvince(county);
+
+        }else{
+            //process as JSONObject
+
+        }
+
+
 
         String county = JsonUtils.readAsString(payload, "$['patient']['patient.county']");
         patientAddress.setStateProvince(county);
@@ -295,45 +306,26 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         unsavedPatient.setAddresses(addresses);
     }
 
-    /**
-    * Builds JSONArray from JSONObject
-    */
-    public JSONArray getJSONArrayFromObject() {
-        /**
-         * Process JSONObject and build JSONArray.
-         */
-        Iterator iterator personAttributes.keys();
-        JSONArray personAttributesJSONArray = new JSONArray();
-
-        while (iterator.hasNext()) {
-            String key = (String) iterator.next();
-            personAttributesJSONArray.put(personAttributes.get(key));
-        }
-    }
-
-
-    private void setPersonAttributesFromPayload() {
+    private void setPersonAttributesFromPayload(){
         personAttributes = new TreeSet<PersonAttribute>();
         PersonService personService = Context.getPersonService();
 
-        JSONObject personAttributes = JsonUtils.readAsObject(payload, "$['person','person.person_attribute']");
-
         String mothersName = JsonUtils.readAsString(payload, "$['patient']['patient.mothers_name']");
-        setAsAttribute("Mother's Name", mothersName);
+        setAsAttribute("Mother's Name",mothersName);
 
         String phoneNumber = JsonUtils.readAsString(payload, "$['patient']['patient.phone_number']");
-        setAsAttribute("Contact Phone Number", phoneNumber);
+        setAsAttribute("Contact Phone Number",phoneNumber);
 
         unsavedPatient.setAttributes(personAttributes);
     }
 
-    private void setAsAttribute(String attributeTypeUuid, String value) {
+    private void setAsAttribute(String attributeTypeName, String value){
         PersonService personService = Context.getPersonService();
         PersonAttributeType attributeType = personService.getPersonAttributeTypeByName(attributeTypeName);
-        if (attributeType != null && value != null) {
+        if(attributeType !=null && value != null){
             PersonAttribute personAttribute = new PersonAttribute(attributeType, value);
             personAttributes.add(personAttribute);
-        } else if (attributeType == null) {
+        } else if(attributeType ==null){
             queueProcessorException.addException(
                     new Exception("Unable to find Person Attribute type by name '" + attributeTypeName + "'")
             );

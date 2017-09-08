@@ -14,6 +14,7 @@
 package org.openmrs.module.muzima.utils;
 
 import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ public class JsonUtils {
     private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class.getSimpleName());
 
     private static final String DATE_PATTERN = "dd-MM-yyyy";
+
 
     /**
      * Write boolean value into the json object. The method will only write the boolean value if the object passed
@@ -192,6 +194,23 @@ public class JsonUtils {
             logger.error("Unable to read object value with path: " + path + " from: " + String.valueOf(jsonObject));
         }
         return object;
+    }
+
+    /**
+     * Utility method to check if object is a JsonObject or JsonArray
+     */
+    public static boolean isPathAJSONArray(Object path){
+
+        Boolean isJSONArray = false;
+
+        if (path instanceof JSONObject){
+            //value is JSONObject
+            isJSONArray = false;
+        }else if (path instanceof JSONArray){
+            //value is JSONArray
+            isJSONArray = true;
+        }
+        return isJSONArray;
     }
 
     /**
