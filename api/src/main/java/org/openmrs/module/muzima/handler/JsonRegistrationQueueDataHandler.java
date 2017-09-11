@@ -3,18 +3,19 @@
  * Version 1.0 (the "License"); you may not use this file except in
  * compliance with the License. You may obtain a copy of the License at
  * http://license.openmrs.org
- *
+ * <p>
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
  * License for the specific language governing rights and limitations
  * under the License.
- *
+ * <p>
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
 package org.openmrs.module.muzima.handler;
 
 import com.jayway.jsonpath.Criteria;
 import com.jayway.jsonpath.Filter;
+import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -22,16 +23,24 @@ import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.javarosa.core.services.Logger;
-import org.openmrs.*;
+import org.openmrs.PersonAddress;
 import org.openmrs.annotation.Handler;
+import com.jayway.jsonpath.InvalidPathException;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.PersonName;
+import org.openmrs.Patient;
+import org.openmrs.PersonAttribute;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
+import org.openmrs.PatientIdentifier;
+import org.openmrs.Location;
+import org.openmrs.PersonAttributeType;
+import org.openmrs.PatientIdentifierType;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -142,7 +151,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         unsavedPatient.setIdentifiers(patientIdentifiers);
     }
 
-    private PatientIdentifier getPreferredPatientIdentifierFromPayload(){
+    private PatientIdentifier getPreferredPatientIdentifierFromPayload() {
         String identifierValue = JsonUtils.readAsString(payload, "$['patient']['patient.medical_record_number']");
         String identifierTypeName = "AMRS Universal ID";
 
@@ -158,7 +167,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     private List<PatientIdentifier> getOtherPatientIdentifiersFromPayload() {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         Object identifierTypeNameObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_type']");
-        Object identifierValueObject =JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
+        Object identifierValueObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
 
         if (identifierTypeNameObject instanceof JSONArray) {
             JSONArray identifierTypeName = (JSONArray) identifierTypeNameObject;
@@ -204,7 +213,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         Location location = null;
         int locationId;
 
-        if(locationIdString != null){
+        if (locationIdString != null) {
             locationId = Integer.parseInt(locationIdString);
             location = Context.getLocationService().getLocation(locationId);
         }
@@ -221,28 +230,28 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    private void setPatientBirthDateFromPayload(){
+    private void setPatientBirthDateFromPayload() {
         Date birthDate = JsonUtils.readAsDate(payload, "$['patient']['patient.birth_date']");
         unsavedPatient.setBirthdate(birthDate);
     }
 
-    private void setPatientBirthDateEstimatedFromPayload(){
+    private void setPatientBirthDateEstimatedFromPayload() {
         boolean birthdateEstimated = JsonUtils.readAsBoolean(payload, "$['patient']['patient.birthdate_estimated']");
         unsavedPatient.setBirthdateEstimated(birthdateEstimated);
     }
 
-    private void setPatientGenderFromPayload(){
+    private void setPatientGenderFromPayload() {
         String gender = JsonUtils.readAsString(payload, "$['patient']['patient.sex']");
         unsavedPatient.setGender(gender);
     }
 
-    private void setPatientNameFromPayload(){
+    private void setPatientNameFromPayload() {
         String givenName = JsonUtils.readAsString(payload, "$['patient']['patient.given_name']");
         String familyName = JsonUtils.readAsString(payload, "$['patient']['patient.family_name']");
-        String middleName="";
-        try{
-            middleName= JsonUtils.readAsString(payload, "$['patient']['patient.middle_name']");
-        } catch(Exception e){
+        String middleName = "";
+        try {
+            middleName = JsonUtils.readAsString(payload, "$['patient']['patient.middle_name']");
+        } catch (Exception e) {
             log.error(e);
         }
 
@@ -267,108 +276,130 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    private String getPatientUuidFromPayload(){
+    private String getPatientUuidFromPayload() {
         return JsonUtils.readAsString(payload, "$['patient']['patient.uuid']");
     }
 
-    private void setPatientAddressesFromPayload(){
+    private void setPatientAddressesFromPayload() {
+        Set<PersonAddress> addresses = new TreeSet<PersonAddress>();
 
-        Object patientAddressObject = JsonUtils.readAsObject(payload,"$['patient.personaddress']");
-        if (JsonUtils.isPathAJSONArray(patientAddressObject).equals(true)){
-            //process as JSONArray
-            PersonAddress firstSetPatientAddress = new PersonAddress();
-            PersonAddress secondSetPatientAddress = new PersonAddress();
-            JSONArray jsonArray = (JSONArray) patientAddressObject;
-            JSONObject firstSetPersonAddressAttributes = new JSONObject();
-            JSONObject secondSetPersonAddressAttributes = new JSONObject();
-            Iterator iterator = jsonArray.iterator();
-            while (iterator.hasNext()){
-                 secondSetPersonAddressAttributes = (JSONObject)jsonArray.get(1);
-                 firstSetPersonAddressAttributes = (JSONObject)jsonArray.get(2);
+        try {
+            Object patientAddressObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personaddress']");
+            if (JsonUtils.isPathAJSONArray(patientAddressObject).equals(true)) {
+                //process as JSONArray
+
+                JSONArray jsonArray = (JSONArray) patientAddressObject;
+                Iterator iterator = jsonArray.iterator();
+                while (iterator.hasNext()) {
+                    JSONObject personAddressJSONObject = (JSONObject) iterator.next();
+
+                    String county = (String) personAddressJSONObject.get("countyDistrict");
+                    String address6 = (String) personAddressJSONObject.get("address6");
+                    String address5 = (String) personAddressJSONObject.get("address5");
+                    String cityVillage = (String) personAddressJSONObject.get("cityVillage");
+
+                    PersonAddress patientAddress = new PersonAddress();
+
+                    patientAddress.setStateProvince(county);
+                    patientAddress.setAddress6(address6);
+                    patientAddress.setAddress5(address5);
+                    patientAddress.setCityVillage(cityVillage);
+
+                    addresses.add(patientAddress);
+
+                }
+                unsavedPatient.setAddresses(addresses);
+
+
+            } else if (JsonUtils.isPathAJSONArray(patientAddressObject).equals(false)) {
+                //process as JSONObject
+                PersonAddress patientAddress = new PersonAddress();
+                JSONObject patientAddressJSONObject = (JSONObject) patientAddressObject;
+                /**
+                 * Extract individual values from JSONObject
+                 * Am guessing this section is good to go since it handles scenarios where there is one personaddress object with
+                 * non-similar keys.
+                 */
+                String county = (String) patientAddressJSONObject.get("countyDistrict");
+                String address6 = (String) patientAddressJSONObject.get("address6");
+                String address5 = (String) patientAddressJSONObject.get("address5");
+                String cityVillage = (String) patientAddressJSONObject.get("cityVillage");
+
+                patientAddress.setStateProvince(county);
+                patientAddress.setAddress6(address6);
+                patientAddress.setAddress5(address5);
+                patientAddress.setCityVillage(cityVillage);
+
+                Set<PersonAddress> personAddresses = new TreeSet<PersonAddress>();
+                addresses.add(patientAddress);
+                unsavedPatient.setAddresses(personAddresses);
+
             }
+        } catch (InvalidPathException ex) {
+            Logger.log("The JsonPath", "$['patient']['patient.personaddress'] was not found falling back to patient.personaddress^n nodes.");
 
+            //check is there exists more than on patient.personaddress^n NODES
+
+            JSONObject jsonPayloadObject = (JSONObject) JsonUtils.readAsObject(payload, "$['patient']");
             /**
-             * First set of person address values
+             * Confirm if payload indeed contains patient.personaddress^n Nodes
              */
-            String county1 = (String)secondSetPersonAddressAttributes.get("countyDistrict");
-            String address6_1 = (String)secondSetPersonAddressAttributes.get("address6");
-            String address5_1 = (String)secondSetPersonAddressAttributes.get("address5");
-            String cityVillage1 = (String)secondSetPersonAddressAttributes.get("cityVillage");
+            if (JsonUtils.isPersonAddressMultiNode(jsonPayloadObject)) {
+                //iterate through the numbered nodes
+                JSONArray patientNodeValues = (JSONArray) JsonUtils.readAsObject(payload, "$['patient']");
+                Iterator patientNodesIterator = patientNodeValues.iterator();
+                for (int i = 1; patientNodesIterator.hasNext(); i++) {
+                    try {
+                        JSONObject personAddressObject = (JSONObject) JsonUtils.readAsObject(payload, "$['patient']['patient.personaddress^" + i + "']");
 
-            /**
-             * Second set of person address values
-             */
-            String county2 = (String)firstSetPersonAddressAttributes.get("countyDistrict");
-            String address6_2 = (String)firstSetPersonAddressAttributes.get("address6");
-            String address5_2 = (String)firstSetPersonAddressAttributes.get("address5");
-            String cityVillage2 = (String)firstSetPersonAddressAttributes.get("cityVillage");
+                        String county = (String) personAddressObject.get("countyDistrict");
+                        String address6 = (String) personAddressObject.get("address6");
+                        String address5 = (String) personAddressObject.get("address5");
+                        String cityVillage = (String) personAddressObject.get("cityVillage");
 
+                        PersonAddress patientAddress = new PersonAddress();
 
-            firstSetPatientAddress.setCountyDistrict(county1);
-            firstSetPatientAddress.setAddress5(address5_1);
-            firstSetPatientAddress.setAddress6(address6_1);
-            firstSetPatientAddress.setCityVillage(cityVillage1);
+                        patientAddress.setStateProvince(county);
+                        patientAddress.setAddress6(address6);
+                        patientAddress.setAddress5(address5);
+                        patientAddress.setCityVillage(cityVillage);
 
-            secondSetPatientAddress.setCountyDistrict(county2);
-            secondSetPatientAddress.setAddress5(address5_2);
-            secondSetPatientAddress.setAddress6(address6_2);
-            secondSetPatientAddress.setCityVillage(cityVillage2);
+                        addresses.add(patientAddress);
 
-            Set<PersonAddress> addresses = new TreeSet<PersonAddress>();
-            addresses.add(firstSetPatientAddress);
-            addresses.add(secondSetPatientAddress);
-            unsavedPatient.setAddresses(addresses);
+                    } catch (InvalidPathException e) {
+                        /**
+                         * Skip if node is not patient.personaddress^n
+                         */
+                        Logger.log("JsonRegistrationQueueDataHandler.setPatientAddressesFromPayload()", ex.getMessage());
+                    }
 
-        }else if(JsonUtils.isPathAJSONArray(patientAddressObject).equals(false)){
-            //process as JSONObject
-            PersonAddress patientAddress = new PersonAddress();
-            JSONObject patientAddressJSONObject = (JSONObject)patientAddressObject;
-            /**
-             * Extrat individual values from JSONObject
-             * Am guessing this section is good to go since it handles scenarios where there is one personaddress object with
-             * non-similar keys.
-             */
-            String county = (String)patientAddressJSONObject.get("countyDistrict");
-            String address6 = (String)patientAddressJSONObject.get("address6");
-            String address5 = (String)patientAddressJSONObject.get("address5");
-            String cityVillage = (String)patientAddressJSONObject.get("cityVillage");
-
-            patientAddress.setStateProvince(county);
-            patientAddress.setAddress6(address6);
-            patientAddress.setAddress5(address5);
-            patientAddress.setCityVillage(cityVillage);
-
-            Set<PersonAddress> addresses = new TreeSet<PersonAddress>();
-            addresses.add(patientAddress);
-            unsavedPatient.setAddresses(addresses);
-
-        }else {
-            //process as POJO value i.e. double, bolean,string,int e.t.c.
+                }
+                unsavedPatient.setAddresses(addresses);
+            }
         }
-
 
     }
 
-    private void setPersonAttributesFromPayload(){
+    private void setPersonAttributesFromPayload() {
         personAttributes = new TreeSet<PersonAttribute>();
         PersonService personService = Context.getPersonService();
 
         String mothersName = JsonUtils.readAsString(payload, "$['patient']['patient.mothers_name']");
-        setAsAttribute("Mother's Name",mothersName);
+        setAsAttribute("Mother's Name", mothersName);
 
         String phoneNumber = JsonUtils.readAsString(payload, "$['patient']['patient.phone_number']");
-        setAsAttribute("Contact Phone Number",phoneNumber);
+        setAsAttribute("Contact Phone Number", phoneNumber);
 
         unsavedPatient.setAttributes(personAttributes);
     }
 
-    private void setAsAttribute(String attributeTypeName, String value){
+    private void setAsAttribute(String attributeTypeName, String value) {
         PersonService personService = Context.getPersonService();
         PersonAttributeType attributeType = personService.getPersonAttributeTypeByName(attributeTypeName);
-        if(attributeType !=null && value != null){
+        if (attributeType != null && value != null) {
             PersonAttribute personAttribute = new PersonAttribute(attributeType, value);
             personAttributes.add(personAttribute);
-        } else if(attributeType ==null){
+        } else if (attributeType == null) {
             queueProcessorException.addException(
                     new Exception("Unable to find Person Attribute type by name '" + attributeTypeName + "'")
             );
