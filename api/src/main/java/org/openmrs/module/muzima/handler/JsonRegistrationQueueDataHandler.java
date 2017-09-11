@@ -383,14 +383,40 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     private void setPersonAttributesFromPayload() {
         personAttributes = new TreeSet<PersonAttribute>();
         PersonService personService = Context.getPersonService();
+        Object personAttributesObject= JsonUtils.readAsObject(payload,"$['patient']['patient.personattribute']");
+        /**
+         * Check if node contains an array or single JSONObject
+         */
+        if (JsonUtils.isPathAJSONArray(personAttributesObject)){
+            //processing as JSONArray
+            JSONArray personAtrributeJsonArray = (JSONArray)personAttributesObject;
+            Iterator personAttributesIterator = personAtrributeJsonArray.iterator();
+            while (personAttributesIterator.hasNext()){
+                JSONObject personAttributeJSONObject = (JSONObject) personAttributesIterator.next();
 
-        String mothersName = JsonUtils.readAsString(payload, "$['patient']['patient.mothers_name']");
-        setAsAttribute("Mother's Name", mothersName);
+                String attribute_Type_Uuid = (String)personAttributeJSONObject.get("attribute_type_uuid");
+                String attribute_value = (String)personAttributeJSONObject.get("attribute_value");
 
-        String phoneNumber = JsonUtils.readAsString(payload, "$['patient']['patient.phone_number']");
-        setAsAttribute("Contact Phone Number", phoneNumber);
+                //obtain person attribute type  name by uuid
+                PersonAttributeType personAttributeType = new PersonAttributeType(new Integer(attribute_Type_Uuid));
+                String attributeName = personAttributeType.getName();
+                setAsAttribute(attributeName,attribute_value);
+            }
+        }else{
+            //processing as JSONObject
+            JSONObject personAttributeJSONObject = (JSONObject)personAttributesObject;
+            String attribute_Type_Uuid = (String)personAttributeJSONObject.get("attribute_type_uuid");
+            String attribute_value = (String)personAttributeJSONObject.get("attribute_value");
 
+            //obtain person attribute type  name by uuid
+            PersonAttributeType personAttributeType = new PersonAttributeType(new Integer(attribute_Type_Uuid));
+            String attributeName = personAttributeType.getName();
+            setAsAttribute(attributeName,attribute_value);
+
+        }
         unsavedPatient.setAttributes(personAttributes);
+
+        //TODO add facility to process patient.personatrribute^n Nodes
     }
 
     private void setAsAttribute(String attributeTypeName, String value) {
