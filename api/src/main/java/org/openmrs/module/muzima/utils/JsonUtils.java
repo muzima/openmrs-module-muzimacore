@@ -214,6 +214,19 @@ public class JsonUtils {
     }
 
     /**
+     * Check if payload contains several patient.personaddress^n nodes
+     */
+    public static Boolean isPersonAddressMultiNode(JSONObject jsonPayload){
+        Boolean hasMultiplePersonAddressNodes = false;
+        if (jsonPayload.containsKey("patient.personaddress^1")){
+            hasMultiplePersonAddressNodes  = true;
+        }else  if (jsonPayload.containsKey("patient.personaddress")){
+            hasMultiplePersonAddressNodes = false;
+        }
+        return hasMultiplePersonAddressNodes;
+    }
+
+    /**
      * Read list of object value from the json object.
      *
      * @param jsonObject the json object.
