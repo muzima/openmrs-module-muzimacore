@@ -13,9 +13,13 @@
  */
 package org.openmrs.module.muzima.api.db.hibernate;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.module.muzima.api.db.MuzimaSettingDao;
@@ -36,6 +40,58 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
         Criteria criteria = session().createCriteria(MuzimaSetting.class);
         criteria.add(Restrictions.eq("retired", false));
         return criteria.list();
+    }
+
+    /**
+     * Get settings with matching search term for particular page.
+     *
+     * @param search     the search term.
+     * @param pageNumber the page number.
+     * @param pageSize   the size of the page.
+     * @return list of settings for the page.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<MuzimaSetting> getPagedSettings(final String search, final Integer pageNumber, final Integer pageSize) {
+        Criteria criteria = session().createCriteria(mappedClass);
+        if (StringUtils.isNotEmpty(search)) {
+            Disjunction disjunction = Restrictions.disjunction();
+            disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("property", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("description", search, MatchMode.ANYWHERE));
+            criteria.add(disjunction);
+        }
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        if (pageNumber != null) {
+            criteria.setFirstResult((pageNumber - 1) * pageSize);
+        }
+        if (pageSize != null) {
+            criteria.setMaxResults(pageSize);
+        }
+        criteria.addOrder(Order.desc("dateCreated"));
+        return criteria.list();
+    }
+
+    /**
+     * Get the total number of settings with matching search term.
+     *
+     *
+     * @param search the search term.
+     * @return total number of settings in the database.
+     */
+    @Override
+    public Number countDataSource(final String search) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
+        if (StringUtils.isNotEmpty(search)) {
+            Disjunction disjunction = Restrictions.disjunction();
+            disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("property", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("description", search, MatchMode.ANYWHERE));
+            criteria.add(disjunction);
+        }
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.setProjection(Projections.rowCount());
+        return (Number) criteria.uniqueResult();
     }
 
     @Override

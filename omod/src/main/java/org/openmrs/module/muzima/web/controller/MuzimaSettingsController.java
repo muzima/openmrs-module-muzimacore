@@ -1,7 +1,9 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaSettingService;
+import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,17 @@ public class MuzimaSettingsController {
     public Map<String, Object> getSettings(final @RequestParam(value = "search") String search,
                                           final @RequestParam(value = "pageNumber") Integer pageNumber,
                                           final @RequestParam(value = "pageSize") Integer pageSize) {
-
-        return null;
+        Map<String, Object> response = new HashMap<String, Object>();
+        if (Context.isAuthenticated()) {
+            MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);
+            int pages = (settingService.countDataSource(search).intValue() + pageSize - 1) / pageSize;
+            List<Object> objects = new ArrayList<Object>();
+            for (MuzimaSetting setting : settingService.getPagedSettings(search, pageNumber, pageSize)) {
+                objects.add(WebConverter.convertMuzimaSetting(setting));
+            }
+            response.put("pages", pages);
+            response.put("objects", objects);
+        }
+        return response;
     }
 }

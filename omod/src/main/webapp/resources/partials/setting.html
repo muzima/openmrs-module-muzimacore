@@ -1,13 +1,13 @@
 <div id="wide-sidebar" class="row">
     <div class="col-lg-2">
         <ul class="nav nav-tabs nav-stacked">
-            <li class="navigation-active"><a href="#/sources">Data Source</a></li>
+            <li><a href="#/sources">Data Source</a></li>
             <li><a href="#/configs">Setup Configurations</a></li>
             <li><a href="#/queues">Queue Data</a></li>
             <li><a href="#/registrations">Registrations</a></li>
             <li><a href="#/forms">Muzima Forms</a></li>
             <li><a href="#/errors">Error Data</a></li>
-            <li><a href="#/settings">Settings</a></li>
+            <li class="navigation-active"><a href="#/settings">Settings</a></li>
         </ul>
     </div>
     <div class="col-lg-8">
@@ -48,7 +48,7 @@
                         <input class="col-lg-10 form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
                     </div>
                     <div class="row">
-                        <button type="submit" ng-click="save(source)" class="btn btn-success">Save</button>
+                        <button type="submit" ng-click="save(setting)" class="btn btn-success">Save</button>
                         <button ng-show="setting.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>
                         <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
                     </div>

@@ -21,6 +21,17 @@ public interface MuzimaSettingDao {
 
     List<MuzimaSetting> getAll();
 
+    List<MuzimaSetting> getPagedSettings(final String search, final Integer pageNumber, final Integer pageSize);
+
+    /**
+     * Get the total number of data source with matching search term.
+     *
+     *
+     * @param search the search term.
+     * @return total number of data source in the database.
+     */
+    Number countDataSource(final String search);
+
     Number countSettings();
 
     MuzimaSetting getSettingById(Integer id);
