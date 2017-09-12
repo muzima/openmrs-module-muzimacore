@@ -1,4 +1,4 @@
-function SettingCtrl($scope, $routeParams, $location, $data) {
+function SettingCtrl($scope, $routeParams, $location, $muzimaSettings) {
     $scope.setting = {};
     // initialize the view to be read only
     $scope.mode = "view";
@@ -6,7 +6,7 @@ function SettingCtrl($scope, $routeParams, $location, $data) {
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
     } else {
-        $data.getSource($scope.uuid).
+        $muzimaSettings.getSetting($scope.uuid).
         then(function (response) {
             $scope.setting = response.data;
         });
@@ -28,27 +28,27 @@ function SettingCtrl($scope, $routeParams, $location, $data) {
         }
     };
 
-    $scope.save = function (source) {
-        $data.saveSource(source.uuid, source.name, source.description).
+    $scope.save = function (setting) {
+        $muzimaSettings.saveSetting(setting.uuid, setting.property, setting.name, setting.description).
         then(function () {
             $location.path("/settings");
         })
     };
 
     $scope.delete = function () {
-        $data.deleteSource($scope.uuid).
+        $muzimaSettings.deleteSetting($scope.uuid).
         then(function () {
             $location.path("/settings");
         })
     };
 }
 
-function SettingsCtrl($scope, $location, $data) {
+function SettingsCtrl($scope, $location, $muzimaSettings) {
     // initialize the paging structure
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
-    $data.getSettings($scope.search, $scope.currentPage, $scope.pageSize).
+    $muzimaSettings.getSettings($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
         $scope.settings = serverData.objects;
@@ -57,7 +57,7 @@ function SettingsCtrl($scope, $location, $data) {
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
         if (newValue != oldValue) {
-            $data.getSettings($scope.search, $scope.currentPage, $scope.pageSize).
+            $muzimaSettings.getSettings($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
                 $scope.settings = serverData.objects;
@@ -69,7 +69,7 @@ function SettingsCtrl($scope, $location, $data) {
     $scope.$watch('search', function (newValue, oldValue) {
         if (newValue != oldValue) {
             $scope.currentPage = 1;
-            $data.getSettings($scope.search, $scope.currentPage, $scope.pageSize).
+            $muzimaSettings.getSettings($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
                 $scope.settings = serverData.objects;

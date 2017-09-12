@@ -86,23 +86,6 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.post("error.json?uuid="+uuid+"&formData="+formData);
     };
 
-    var getSettings = function (search, pageNumber, pageSize) {
-        if (search === undefined) {
-            // replace undefined search term with empty string
-            search = '';
-        }
-        return $http.get("settings.json?search=" + search + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
-    };
-    var getSetting = function (uuid) {
-        return $http.get("setting.json?uuid=" + uuid);
-    };
-    var saveSetting = function (uuid, property, name, description) {
-        return $http.post("setting.json", {"uuid": uuid, "property": property, "name": name, "description": description});
-    };
-    var deleteSetting = function (uuid) {
-        return $http.post("source.json", {"uuid": uuid});
-    };
-
     return {
         getQueues: getQueues,
         getQueue: getQueue,
@@ -120,12 +103,7 @@ muzimaCoreModule.factory('$data', function ($http) {
 
         getEdit: getEdit,
         editErrors: editErrors,
-        validateData: validateData,
-
-        getSettings: getSettings,
-        getSetting: getSetting,
-        saveSetting: saveSetting,
-        deleteSetting: deleteSetting
+        validateData: validateData
     }
 });
 
@@ -273,5 +251,32 @@ muzimaCoreModule.factory('$configs', function($http) {
         searchConfigLocations: searchConfigLocations,
         searchConfigProviders: searchConfigProviders,
         searchConfigConcepts: searchConfigConcepts
+    }
+});
+
+muzimaCoreModule.factory('$muzimaSettings', function($http) {
+
+    var getSettings = function (search, pageNumber, pageSize) {
+        if (search === undefined) {
+            // replace undefined search term with empty string
+            search = '';
+        }
+        return $http.get("settings.json?search=" + search + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+    };
+    var getSetting = function (uuid) {
+        return $http.get("setting.json?uuid=" + uuid);
+    };
+    var saveSetting = function (uuid, property, name, description) {
+        return $http.post("setting.json", {"uuid": uuid, "property": property, "name": name, "description": description});
+    };
+    var deleteSetting = function (uuid) {
+        return $http.post("source.json", {"uuid": uuid});
+    };
+
+    return {
+        getSettings: getSettings,
+        getSetting: getSetting,
+        saveSetting: saveSetting,
+        deleteSetting: deleteSetting
     }
 });
