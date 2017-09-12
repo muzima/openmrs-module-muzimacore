@@ -24,7 +24,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * TODO: Write brief description about the class here.
@@ -194,6 +196,17 @@ public class JsonUtils {
             logger.error("Unable to read object value with path: " + path + " from: " + String.valueOf(jsonObject));
         }
         return object;
+    }
+
+    public static JSONArray toJsonArray(JSONObject jsonObject){
+        Set keys = jsonObject.keySet();
+        Iterator iterator = keys.iterator();
+        JSONArray jsonArray = new JSONArray();
+        while (iterator.hasNext()){
+            String key = (String)iterator.next();
+            jsonArray.add(jsonObject.get(key));
+        }
+        return jsonArray;
     }
 
     /**
