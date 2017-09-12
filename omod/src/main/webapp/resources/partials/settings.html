@@ -14,7 +14,7 @@
         <div class="clearfix">
             <div class="row">
                 <div class="col-lg-4 pull-left">
-                    <a href="#/createSource">Create Source</a>
+                    <a href="#/createSetting">Create Setting</a>
                 </div>
                 <div class="col-lg-3 pull-right">
                     <input type="text" ng-model="search" class="form-control" placeholder="search..." style="padding-left: 10px;"/>
@@ -26,19 +26,19 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>UUID</th>
+                        <th>Property</th>
                         <th>Created On</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-hide="sources.length">
-                        <td colspan="4">No sources created in the system.</td>
+                    <tr ng-hide="settings.length">
+                        <td colspan="4">No settings created in the system.</td>
                     </tr>
-                    <tr ng-repeat="source in sources | filter:filterSource() | orderBy:'created':true">
-                        <td><a href="#/source/{{source.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
-                        <td>{{source.name}}</td>
-                        <td>{{source.uuid}}</td>
-                        <td>{{source.created}}</td>
+                    <tr ng-repeat="setting in settings | filter:filterSource() | orderBy:'created':true">
+                        <td><a href="#/setting/{{setting.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
+                        <td>{{setting.name}}</td>
+                        <td>{{setting.property}}</td>
+                        <td>{{setting.created}}</td>
                     </tr>
                     </tbody>
                 </table>

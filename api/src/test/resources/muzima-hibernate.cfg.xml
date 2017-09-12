@@ -16,5 +16,6 @@
         <mapping resource="MuzimaConfig.hbm.xml" />
         <mapping resource="MuzimaFormTag.hbm.xml" />
         <mapping resource="MuzimaXForm.hbm.xml" />
+        <mapping resource="MuzimaSetting.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
