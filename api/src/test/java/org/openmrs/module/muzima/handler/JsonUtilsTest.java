@@ -1,5 +1,6 @@
 package org.openmrs.module.muzima.handler;
 
+import net.minidev.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.module.muzima.utils.JsonUtils;
@@ -8,6 +9,14 @@ import org.openmrs.module.muzima.utils.JsonUtils;
  * Created by HACKER on 07/09/2017.
  */
 public class JsonUtilsTest {
+    @Test
+    public void toJsonArrayTest(){
+        String samplePayload = "";
+        String path = "";
+        JSONObject jsonObject = (JSONObject)JsonUtils.readAsObject(samplePayload,path);
+
+    }
+
     @Test
     public void isPathAJSONArrayTest(){
         String payload = "{\n" +

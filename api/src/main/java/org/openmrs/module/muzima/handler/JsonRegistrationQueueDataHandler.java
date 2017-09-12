@@ -152,9 +152,9 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     }
 
     private PatientIdentifier getPreferredPatientIdentifierFromPayload() {
-        JSONObject medicalRecordNumberObject =  (JSONObject) JsonUtils.readAsObject(payload, "$['patient']['patient.medical_record_number']");
-        String identifierTypeName = (String)medicalRecordNumberObject.get("identifier_type_name");
-        String identifierValue = (String)medicalRecordNumberObject.get("identifier_value");
+        JSONObject medicalRecordNumberObject = (JSONObject) JsonUtils.readAsObject(payload, "$['patient']['patient.medical_record_number']");
+        String identifierTypeName = (String) medicalRecordNumberObject.get("identifier_type_name");
+        String identifierValue = (String) medicalRecordNumberObject.get("identifier_value");
         PatientIdentifier preferredPatientIdentifier = createPatientIdentifier(identifierTypeName, identifierValue);
         if (preferredPatientIdentifier != null) {
             preferredPatientIdentifier.setPreferred(true);
@@ -166,27 +166,64 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
 
     private List<PatientIdentifier> getOtherPatientIdentifiersFromPayload() {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
-        Object identifierTypeNameObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_type']");
-        Object identifierValueObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
+        try {
+            Object otheridentifierObject = JsonUtils.readAsObject(payload, "$['patient']['patient.otheridentifier']");
+            if (JsonUtils.isPathAJSONArray(otheridentifierObject).equals(true)) {
+                JSONArray otheridentfierJsonArray = (JSONArray) otheridentifierObject;
+                Iterator iterator = otheridentfierJsonArray.iterator();
+                for (int i = 0; iterator.hasNext(); i++) {
+                    JSONObject otherIdentifierJsonObject = (JSONObject) iterator.next();
+                    String identifierTypeName = (String) otherIdentifierJsonObject.get("identifier_type_name");
+                    String identifierValue = (String) otherIdentifierJsonObject.get("identifier_value");
 
-        if (identifierTypeNameObject instanceof JSONArray) {
-            JSONArray identifierTypeName = (JSONArray) identifierTypeNameObject;
-            JSONArray identifierValue = (JSONArray) identifierValueObject;
-            for (int i = 0; i < identifierTypeName.size(); i++) {
-                PatientIdentifier identifier = createPatientIdentifier(identifierTypeName.get(i).toString(),
-                        identifierValue.get(i).toString());
+                    PatientIdentifier identifier = createPatientIdentifier(identifierTypeName, identifierValue);
+                    if (identifier != null) {
+                        otherIdentifiers.add(identifier);
+                    }
+                }
+            } else if (JsonUtils.isPathAJSONArray(otheridentifierObject).equals(false)) {
+                JSONObject otheridentifierJsonObject = (JSONObject) otheridentifierObject;
+
+                String identifierTypeName = (String) otheridentifierJsonObject.get("identifier_type_name");
+                String identifierValue = (String) otheridentifierJsonObject.get("identifier_value");
+
+                PatientIdentifier identifier = createPatientIdentifier(identifierTypeName, identifierValue);
                 if (identifier != null) {
                     otherIdentifiers.add(identifier);
                 }
+
             }
-        } else if (identifierTypeNameObject instanceof String) {
-            String identifierTypeName = (String) identifierTypeNameObject;
-            String identifierValue = (String) identifierValueObject;
-            PatientIdentifier identifier = createPatientIdentifier(identifierTypeName, identifierValue);
-            if (identifier != null) {
-                otherIdentifiers.add(identifier);
-            }
+        } catch (InvalidPathException ex) {
+            Logger.log("The JsonPath", "$['patient']['patient.otheridentifier'] was not found falling back to patient.otheridentifier^n nodes.");
+
+            /**
+             * Process as patient.otheridentifier^n
+             */
+            Object otherattributeObject = JsonUtils.readAsObject(payload, "$[patient]");
+
         }
+
+
+//        Object identifierValueObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
+//
+//        if (identifierTypeNameObject instanceof JSONArray) {
+//            JSONArray identifierTypeName = (JSONArray) identifierTypeNameObject;
+//            JSONArray identifierValue = (JSONArray) identifierValueObject;
+//            for (int i = 0; i < identifierTypeName.size(); i++) {
+//                PatientIdentifier identifier = createPatientIdentifier(identifierTypeName.get(i).toString(),
+//                        identifierValue.get(i).toString());
+//                if (identifier != null) {
+//                    otherIdentifiers.add(identifier);
+//                }
+//            }
+//        } else if (identifierTypeNameObject instanceof String) {
+//            String identifierTypeName = (String) identifierTypeNameObject;
+//            String identifierValue = (String) identifierValueObject;
+//            PatientIdentifier identifier = createPatientIdentifier(identifierTypeName, identifierValue);
+//            if (identifier != null) {
+//                otherIdentifiers.add(identifier);
+//            }
+//        }
         return otherIdentifiers;
     }
 
@@ -338,7 +375,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         } catch (InvalidPathException ex) {
             Logger.log("The JsonPath", "$['patient']['patient.personaddress'] was not found falling back to patient.personaddress^n nodes.");
 
-            //check is there exists more than on patient.personaddress^n NODES
+            //check if there exists more than one patient.personaddress^n NODES
 
             JSONObject jsonPayloadObject = (JSONObject) JsonUtils.readAsObject(payload, "$['patient']");
             /**
@@ -371,6 +408,9 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                          * Skip if node is not patient.personaddress^n
                          */
                         Logger.log("JsonRegistrationQueueDataHandler.setPatientAddressesFromPayload()", ex.getMessage());
+
+
+
                     }
 
                 }
@@ -383,6 +423,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     private void setPersonAttributesFromPayload() {
         personAttributes = new TreeSet<PersonAttribute>();
         PersonService personService = Context.getPersonService();
+
         try {
             Object personAttributesObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personattribute']");
             /**
@@ -399,7 +440,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                     String attribute_value = (String) personAttributeJSONObject.get("attribute_value");
 
                     //obtain person attribute type  name by uuid
-                    PersonAttributeType personAttributeType = new PersonAttributeType(new Integer(attribute_Type_Uuid));
+                    PersonAttributeType personAttributeType = personService.getPersonAttributeTypeByUuid(attribute_Type_Uuid);
                     String attributeName = personAttributeType.getName();
                     setAsAttribute(attributeName, attribute_value);
                 }
@@ -411,7 +452,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                 String attribute_value = (String) personAttributeJSONObject.get("attribute_value");
 
                 //obtain person attribute type  name by uuid
-                PersonAttributeType personAttributeType = new PersonAttributeType(new Integer(attribute_Type_Uuid));
+                PersonAttributeType personAttributeType = personService.getPersonAttributeTypeByUuid(attribute_Type_Uuid);
                 String attributeName = personAttributeType.getName();
                 setAsAttribute(attributeName, attribute_value);
 
@@ -424,16 +465,21 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
 
             JSONArray personAttributesArray = (JSONArray) JsonUtils.readAsObject(payload, "$['patient']");
             Iterator iterator = personAttributesArray.iterator();
-            for (int i = 0; iterator.hasNext();i++){
-                JSONObject personAttributeJsonObject = (JSONObject) JsonUtils.readAsObject(payload,"$[patient][patient.personattribute^"+i+"]");
+            for (int i = 0; iterator.hasNext(); i++) {
+                try {
+                    JSONObject personAttributeJsonObject = (JSONObject) JsonUtils.readAsObject(payload, "$[patient][patient.personattribute^" + i + "]");
 
-                String attribute_Type_Uuid = (String) personAttributeJsonObject.get("attribute_type_uuid");
-                String attribute_value = (String) personAttributeJsonObject.get("attribute_value");
+                    String attribute_Type_Uuid = (String) personAttributeJsonObject.get("attribute_type_uuid");
+                    String attribute_value = (String) personAttributeJsonObject.get("attribute_value");
 
-                //obtain person attribute type  name by uuid
-                PersonAttributeType personAttributeType = new PersonAttributeType(new Integer(attribute_Type_Uuid));
-                String attributeName = personAttributeType.getName();
-                setAsAttribute(attributeName, attribute_value);
+                    //obtain person attribute type  name by uuid
+                    PersonAttributeType personAttributeType = new PersonAttributeType(new Integer(attribute_Type_Uuid));
+                    String attributeName = personAttributeType.getName();
+                    setAsAttribute(attributeName, attribute_value);
+                } catch (InvalidPathException ex) {
+                    Logger.log("Skipping Json node",ex.getMessage());
+                }
+
             }
             unsavedPatient.setAttributes(personAttributes);
         }
