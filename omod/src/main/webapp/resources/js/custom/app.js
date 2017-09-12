@@ -21,6 +21,9 @@ muzimaCoreModule.
             when('/error/:uuid', {controller: ErrorCtrl, templateUrl: '../../moduleResources/muzimacore/partials/error.html'}).
             when('/errors', {controller: ErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/errors.html'}).
             when('/edit/:uuid', {controller: EditCtrl, templateUrl: '../../moduleResources/muzimacore/partials/edit.html'}).
+            when('/setting/:uuid', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
+            when('/settings', {controller: SettingsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/settings.html'}).
+            when('/createSetting/', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
             otherwise({redirectTo: '/sources'});
     }]
 );
@@ -83,6 +86,23 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.post("error.json?uuid="+uuid+"&formData="+formData);
     };
 
+    var getSettings = function (search, pageNumber, pageSize) {
+        if (search === undefined) {
+            // replace undefined search term with empty string
+            search = '';
+        }
+        return $http.get("settings.json?search=" + search + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+    };
+    var getSetting = function (uuid) {
+        return $http.get("setting.json?uuid=" + uuid);
+    };
+    var saveSetting = function (uuid, property, name, description) {
+        return $http.post("setting.json", {"uuid": uuid, "property": property, "name": name, "description": description});
+    };
+    var deleteSetting = function (uuid) {
+        return $http.post("source.json", {"uuid": uuid});
+    };
+
     return {
         getQueues: getQueues,
         getQueue: getQueue,
@@ -100,7 +120,12 @@ muzimaCoreModule.factory('$data', function ($http) {
 
         getEdit: getEdit,
         editErrors: editErrors,
-        validateData: validateData
+        validateData: validateData,
+
+        getSettings: getSettings,
+        getSetting: getSetting,
+        saveSetting: saveSetting,
+        deleteSetting: deleteSetting
     }
 });
 
