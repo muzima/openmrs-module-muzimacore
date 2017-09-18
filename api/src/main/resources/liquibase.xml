@@ -26,6 +26,9 @@
         </createTable>
     </changeSet>
     <changeSet id="muzima-20170828-1811" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+                <tableExists tableName="html5forms_tag" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -51,6 +54,9 @@
     </changeSet>
 
     <changeSet id="muzima-20170828-1813" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="html5forms_form_tag_mapping" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -72,6 +78,9 @@
     </changeSet>
 
     <changeSet id="muzima-20170828-1814" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="html5forms_form" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -392,6 +401,9 @@
     </changeSet>
 
     <changeSet id="muzima-20170828-1942" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_data_source" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -443,6 +455,9 @@
     </changeSet>
 
     <changeSet id="muzima-20170828-1943" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_queue_data" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -499,6 +514,9 @@
     </changeSet>
 
     <changeSet id="muzima-20170828-1944" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_archive_data" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -556,6 +574,9 @@
     </changeSet>
 
     <changeSet id="muzima-20170828-1945" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_error_data" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -622,6 +643,9 @@
     </changeSet>
 
     <changeSet id="muzima-20170828-1947" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_notification_data" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -751,11 +775,14 @@
                                  referencedTableName="muzima_error_data" referencedColumnNames="id"/>
     </changeSet>
     <changeSet id="muzima-20170828-1948" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_error_message" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
         <sql>
-            ALTER TABLE muzima_error_data CONVERT TO CHARACTER SET utf8
+            ALTER TABLE muzima_error_message CONVERT TO CHARACTER SET utf8
         </sql>
     </changeSet>
     <changeSet id="muzima-20150819-111000" author="shwetha">
@@ -1050,6 +1077,9 @@
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
     <changeSet id="muzima-20170828-1949" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzimaregistration_registration_data" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>
@@ -1167,6 +1197,9 @@
     </changeSet>
 
     <changeSet id="muzima-20170828-1950" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_config" schemaName="openmrs"/>
+        </preConditions>
         <comment>
             change charset to utf-8
         </comment>

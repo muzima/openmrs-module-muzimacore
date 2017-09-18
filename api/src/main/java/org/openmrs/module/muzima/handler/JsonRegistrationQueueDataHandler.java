@@ -159,7 +159,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     }
 
     private PatientIdentifier getPreferredPatientIdentifierFromPayload(){
-        String identifierValue = JsonUtils.readAsString(payload, "$['patient']['patient.national_id']");
+        String identifierValue = JsonUtils.readAsString(payload, "$['patient']['patient.medical_record_number']");
         String identifierTypeName = "National ID";
 
         PatientIdentifier preferredPatientIdentifier = createPatientIdentifier(identifierTypeName, identifierValue);
