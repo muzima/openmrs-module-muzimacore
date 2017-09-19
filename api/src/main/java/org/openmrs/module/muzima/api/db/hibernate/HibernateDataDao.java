@@ -17,13 +17,13 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.DataDao;
 import org.openmrs.module.muzima.model.Data;
 import org.openmrs.module.muzima.model.handler.DataHandler;
@@ -51,7 +51,7 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
     /**
      * @return the sessionFactory
      */
-    protected SessionFactory getSessionFactory() {
+    protected DbSessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
