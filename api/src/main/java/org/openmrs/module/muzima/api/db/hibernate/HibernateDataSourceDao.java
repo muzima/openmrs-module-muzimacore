@@ -15,12 +15,12 @@ package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.DataSourceDao;
 import org.openmrs.module.muzima.model.DataSource;
 
@@ -37,7 +37,7 @@ public class HibernateDataSourceDao extends HibernateSingleClassDao<DataSource> 
     /**
      * @return the sessionFactory
      */
-    protected SessionFactory getSessionFactory() {
+    protected DbSessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
