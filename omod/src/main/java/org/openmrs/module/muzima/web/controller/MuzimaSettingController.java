@@ -1,12 +1,3 @@
-package org.openmrs.module.muzima.web.controller;
-
-import org.apache.commons.lang.StringUtils;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.service.MuzimaSettingService;
-import org.openmrs.module.muzima.model.MuzimaSetting;
-import org.openmrs.module.muzima.web.utils.WebConverter;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 /**
  * The contents of this file are subject to the OpenMRS Public License
  * Version 1.0 (the "License"); you may not use this file except in
@@ -20,6 +11,19 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
+package org.openmrs.module.muzima.web.controller;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.MuzimaSettingService;
+import org.openmrs.module.muzima.exception.InvalidSettingException;
+import org.openmrs.module.muzima.model.MuzimaSetting;
+import org.openmrs.module.muzima.model.MuzimaSettingDataType;
+import org.openmrs.module.muzima.web.utils.WebConverter;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,10 +31,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
+/**
+ * This class defines handler methods that map web requests for accessing and managing mUzima Settings
+ */
+
 @Controller
 @RequestMapping(value = "/module/muzimacore/setting.json")
 public class MuzimaSettingController {
-
+    private final Log log = LogFactory.getLog(this.getClass());
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getSetting(final @RequestParam(value = "uuid") String uuid) {
@@ -43,31 +51,19 @@ public class MuzimaSettingController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void deleteSetting(final @RequestBody Map<String, Object> map) {
+    public void saveSetting(final @RequestBody Map<String, Object> map) {
         if (Context.isAuthenticated()) {
             String uuid = (String) map.get("uuid");
-            String property = (String) map.get("property");
-            String name = (String) map.get("name");
-            String description = (String) map.get("description");
+            Object value = map.get("value");
             MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);
             if (StringUtils.isNotBlank(uuid)) {
-                MuzimaSetting setting = settingService.getMuzimaSettingByUuid(uuid);
-                if (StringUtils.isNotBlank(name) || StringUtils.isNotBlank(property)
-                        || StringUtils.isNotBlank(description)) {
-                    setting.setName(name);
-                    setting.setProperty(property);
-                    setting.setDescription(description);
+                try {
+                    MuzimaSetting setting = settingService.getMuzimaSettingByUuid(uuid);
+                    setting.setSettingValue(value);
                     settingService.saveMuzimaSetting(setting);
-                } else {
-                    setting.setRetired(true);
-                    setting.setRetireReason("Deleting a setting!");
-                    settingService.saveMuzimaSetting(setting);
+                } catch (InvalidSettingException e){
+                    log.error("Cannot save setting.", e);
                 }
-            } else {
-                MuzimaSetting setting = new MuzimaSetting();
-                setting.setName(name);
-                setting.setDescription(description);
-                settingService.saveMuzimaSetting(setting);
             }
         }
     }

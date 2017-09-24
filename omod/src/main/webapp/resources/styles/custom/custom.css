@@ -6,6 +6,7 @@
     font-size: 0.9em;
 }
 
+
 .navigation-active {
     font-weight: bold;
     text-decoration: none;
@@ -121,6 +122,12 @@
 
 .label {
     font-size: 11px;
+}
+
+.label-input {
+    font-size: 14px;
+    font-weight:normal;
+    color:#000;
 }
 
 .form-tag {

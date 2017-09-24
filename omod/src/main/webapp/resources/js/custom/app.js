@@ -266,8 +266,8 @@ muzimaCoreModule.factory('$muzimaSettings', function($http) {
     var getSetting = function (uuid) {
         return $http.get("setting.json?uuid=" + uuid);
     };
-    var saveSetting = function (uuid, property, name, description) {
-        return $http.post("setting.json", {"uuid": uuid, "property": property, "name": name, "description": description});
+    var saveSetting = function (uuid, property, name, description, value) {
+        return $http.post("setting.json", {"uuid": uuid, "property": property, "name": name, "description": description,"value": value});
     };
     var deleteSetting = function (uuid) {
         return $http.post("source.json", {"uuid": uuid});

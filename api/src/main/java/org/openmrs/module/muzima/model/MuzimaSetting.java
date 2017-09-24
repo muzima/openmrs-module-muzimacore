@@ -13,55 +13,112 @@
  */
 package org.openmrs.module.muzima.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
+import org.openmrs.module.muzima.exception.InvalidSettingException;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MuzimaSetting extends BaseOpenmrsMetadata {
+    private static final long serialVersionUID = 1L;
 
     private Integer id;
     private String property;
-    private String value;
+    private String valueString;
+    private Boolean valueBoolean;
+    private MuzimaSettingDataType settingDataType;
 
-    /**
-     * @return id - The unique Identifier for the setting object
-     */
+    public MuzimaSetting(){
+    }    // used by hibernate
+
+    public MuzimaSetting(String property, MuzimaSettingDataType settingDataType){
+        setProperty(property);
+        setSettingDataType(settingDataType);
+    }
+
     @Override
     public Integer getId() {
         return id;
     }
 
-    /**
-     * @param id - The unique Identifier for the setting object
-     */
     @Override
     public void setId(final Integer id) {
         this.id = id;
     }
 
-    /**
-     * @return property - The unique property for the setting object
-     */
     public String getProperty(){
         return property;
     }
 
-    /**
-     * @param property - The unique property for the setting object
-     */
     public void setProperty(String property) {
         this.property = property;
     }
 
-    /**
-     * @return value - The value for the setting object
-     */
-    public String getValue() {
-        return value;
+    public MuzimaSettingDataType getSettingDataType() {
+        return settingDataType;
     }
 
-    /**
-     * @param value - The value for the setting object
-     */
-    public void setValue(String value) {
-        this.value = value;
+    public void setSettingDataType(MuzimaSettingDataType settingDataType) {
+        this.settingDataType = settingDataType;
+    }
+
+    public Boolean getValueBoolean() {
+        return valueBoolean;
+    }
+
+    public void setValueBoolean(Boolean valueBoolean) {
+        this.valueBoolean = valueBoolean;
+    }
+
+    public String getValueString() {
+        return valueString;
+    }
+
+    public void setValueString(String valueString) {
+        this.valueString = valueString;
+    }
+
+    public Object getSettingValue() {
+        if (MuzimaSettingDataType.BOOLEAN.equals(getSettingDataType())) {
+            return valueBoolean;
+        } else {
+            return valueString;
+        }
+    }
+
+    public void setSettingValue(Object value, MuzimaSettingDataType settingDataType) throws InvalidSettingException {
+        if(settingDataType.equals(MuzimaSettingDataType.BOOLEAN)) {
+            setValueBoolean((Boolean)value);
+        } else if(value instanceof String){
+            setValueString((String)value);
+        } else {
+            throw new InvalidSettingException("Cannot set Setting value. Value object type not supported");
+        }
+    }
+
+    public void setSettingValue(Object value) throws InvalidSettingException {
+        if(getSettingDataType() == null){
+            throw new InvalidSettingException("Cannot set Setting value. Setting DataType is not defined");
+        }
+        setSettingValue(value, getSettingDataType());
+    }
+
+    @Override
+    public String toString() {
+        return "MuzimaSetting{" +
+                "id=" + id +
+                ", uuid=" + getUuid() +
+                ", name='" + getName() +
+                ", property='" + getProperty() +
+                ", description='" + getDescription() +
+                ", value='" + getSettingValue().toString() +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        return true;
     }
 }
