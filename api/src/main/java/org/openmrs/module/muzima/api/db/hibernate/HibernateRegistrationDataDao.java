@@ -17,9 +17,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.RegistrationDataDao;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +40,7 @@ public class HibernateRegistrationDataDao extends HibernateSingleClassDao<Regist
     /**
      * @return the sessionFactory
      */
-    protected SessionFactory getSessionFactory() {
+    protected DbSessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
