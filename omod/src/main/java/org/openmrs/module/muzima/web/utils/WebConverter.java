@@ -273,7 +273,8 @@ public class WebConverter {
             map.put("name", setting.getName());
             map.put("property", setting.getProperty());
             map.put("description", setting.getDescription());
-            map.put("created", Context.getDateFormat().format(setting.getDateCreated()));
+            map.put("datatype", setting.getSettingDataType());
+            map.put("value", setting.getSettingValue());
         }
         return map;
     }

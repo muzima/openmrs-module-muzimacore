@@ -30,7 +30,7 @@ public interface MuzimaSettingDao {
      * @param search the search term.
      * @return total number of data source in the database.
      */
-    Number countDataSource(final String search);
+    Number countSettings(final String search);
 
     Number countSettings();
 

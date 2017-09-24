@@ -14,6 +14,8 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,20 +24,26 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.module.muzima.api.db.MuzimaSettingDao;
 import org.openmrs.module.muzima.model.MuzimaSetting;
+import org.springframework.transaction.annotation.Transactional;
+
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 
 import java.util.List;
 
 public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
-    private SessionFactory sessionFactory;
+    private DbSessionFactory sessionFactory;
     protected Class mappedClass = MuzimaSetting.class;
+    private final Log log = LogFactory.getLog(this.getClass());
 
-    public HibernateMuzimaSettingDao(SessionFactory sessionFactory){
+    public HibernateMuzimaSettingDao(DbSessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
     }
 
     @Override
+    @Transactional
     public List<MuzimaSetting> getAll() {
         Criteria criteria = session().createCriteria(MuzimaSetting.class);
         criteria.add(Restrictions.eq("retired", false));
@@ -80,7 +88,8 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
      * @return total number of settings in the database.
      */
     @Override
-    public Number countDataSource(final String search) {
+    @Transactional
+    public Number countSettings(final String search) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -95,36 +104,43 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
     }
 
     @Override
+    @Transactional
     public Number countSettings(){
         Criteria criteria = session().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
     }
 
     @Override
+    @Transactional
     public MuzimaSetting getSettingById(Integer id){
         return (MuzimaSetting)session().get(mappedClass,id);
     }
 
     @Override
+    @Transactional
     public MuzimaSetting getSettingByUuid(String uuid){
+        MuzimaSetting setting = null;
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
-        criteria.add(Restrictions.eq("voided", Boolean.FALSE));
-        return (MuzimaSetting)criteria.uniqueResult();
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        setting = (MuzimaSetting)criteria.uniqueResult();
+        return setting;
     }
 
     @Override
+    @Transactional
     public MuzimaSetting getSettingByProperty(String property){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("property", property));
-        criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         return (MuzimaSetting)criteria.uniqueResult();
     }
 
     @Override
-    public MuzimaSetting saveOrUpdateSetting(MuzimaSetting setting){
+    @Transactional
+    public MuzimaSetting saveOrUpdateSetting(final MuzimaSetting setting){
         session().saveOrUpdate(setting);
         return setting;
     }
@@ -134,7 +150,7 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
         session().delete(setting);
     }
 
-    private Session session() {
+    private DbSession session() {
         return sessionFactory.getCurrentSession();
     }
 }

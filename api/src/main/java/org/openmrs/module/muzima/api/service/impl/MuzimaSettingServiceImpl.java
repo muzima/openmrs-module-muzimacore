@@ -82,7 +82,7 @@ public class MuzimaSettingServiceImpl extends BaseOpenmrsService implements Muzi
      */
     @Override
     public Number countDataSource(final String search) {
-        return dao.countDataSource(search);
+        return dao.countSettings(search);
     }
 
     /**

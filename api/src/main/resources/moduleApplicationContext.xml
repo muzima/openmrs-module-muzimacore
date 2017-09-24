@@ -51,7 +51,7 @@
     </bean>
 
     <bean id="muzimaSettingDAO" class="org.openmrs.module.muzima.api.db.hibernate.HibernateMuzimaSettingDao">
-        <constructor-arg ref="sessionFactory"/>
+        <constructor-arg ref="dbSessionFactory"/>
     </bean>
 
     <!-- Services accessible via Context.getService() -->

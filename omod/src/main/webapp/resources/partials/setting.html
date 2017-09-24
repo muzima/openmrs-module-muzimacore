@@ -14,43 +14,139 @@
         <div ng-switch="mode">
             <div ng-switch-when="view">
                 <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+                    <div class="col-lg-1">
+                        Name:
+                    </div>
+                    <div class="col-lg-11">
+                        <input class="col-lg-10 form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+                    </div>
                 </div>
                 <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+                    <div class="col-lg-1">
+                        Property:
+                    </div>
+                    <div class="col-lg-11">
+                        <input class="col-lg-10 form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+
+                    </div>
                 </div>
                 <div class="row">
-                    <textarea class="col-lg-12 form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
-                    </textarea>
+                    <div class="col-lg-1">
+                        Description:
+                    </div>
+                    <div class="col-lg-11">
+                        <textarea class="col-lg-8 form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
+                        </textarea>
+                    </div>
                 </div>
                 <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
+                    <div class="col-lg-1">
+                        Value:
+                    </div>
+                    <div class="col-lg-11" ng-show="setting.datatype == 'STRING'">
+                        <input class="col-lg-10 form-control" placeholder="Setting value ..." type="text" disabled="" ng-model="setting.value">
+                    </div>
+                    <div class="col-lg-11" ng-show="setting.datatype == 'PASSWORD'">
+                        <input class="col-lg-10 form-control" placeholder="Setting value ..." type="password" disabled="" ng-model="setting.value">
+                    </div>
+                    <div class="col-lg-11" ng-show="setting.datatype == 'BOOLEAN'">
+                        <div class="col-lg-3">
+                            <label class="label-input">
+                                <input type="radio" name="datatype" ng-model="setting.value" ng-value="true" disabled=""/> Enabled
+                            </label>
+                        </div>
+                        <div class="col-lg-3">
+                            <label class="label-input">
+                                <input type="radio" name="datatype" ng-model="setting.value" ng-value="false" disabled=""/>  Disabled
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
-                    <button type="submit" ng-click="edit()" class="btn btn-primary">Edit</button>
-                    <button type="submit" ng-click="cancel()" class="btn btn-danger">Close</button>
+                    <div class="col-lg-1">
+                        Uuid:
+                    </div>
+                    <div class="col-lg-11">
+                        <input class="col-lg-10 form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-lg-offset-3">
+                        <button type="submit" ng-show="setting.uuid" ng-click="edit()" class="btn btn-primary btn-block">Edit</button>
+                    </div>
+                    <div class="col-lg-3">
+                        <button type="submit" ng-click="cancel()" class="btn btn-danger btn-block">Close</button>
+                    </div>
                 </div>
                 <span></span>
             </div>
             <div ng-switch-when="edit">
                 <form id="consult">
                     <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Setting name ..." type="text" ng-model="setting.name">
+                        <div class="col-lg-1">
+                            Name:
+                        </div>
+                        <div class="col-lg-11">
+                            <input class="col-lg-10 form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+                        </div>
                     </div>
                     <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Setting property ..." type="text" ng-model="setting.property">
+                        <div class="col-lg-1">
+                            Property:
+                        </div>
+                        <div class="col-lg-11">
+                            <input class="col-lg-10 form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+
+                        </div>
                     </div>
                     <div class="row">
-                        <textarea class="col-lg-12 form-control" placeholder="Setting description ..." rows="10" ng-model="source.description">
+                        <div class="col-lg-1">
+                            Description:
+                        </div>
+                        <div class="col-lg-11">
+                        <textarea class="col-lg-8 form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
                         </textarea>
+                        </div>
                     </div>
                     <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
+                        <div class="col-lg-1">
+                            Value:
+                        </div>
+                        <div class="col-lg-11" ng-show="setting.datatype == 'STRING'">
+                            <input class="col-lg-10 form-control" placeholder="Setting value ..." type="text" ng-model="setting.value">
+                        </div>
+                        <div class="col-lg-11" ng-show="setting.datatype == 'PASSWORD'">
+                            <input class="col-lg-10 form-control" placeholder="Setting value ..." type="password" ng-model="setting.value">
+                        </div>
+                        <div class="col-lg-11" ng-show="setting.datatype == 'BOOLEAN'">
+                            <div class="col-lg-3">
+                                <label class="label-input">
+                                    <input type="radio" name="datatype" ng-model="setting.value" ng-value="true"/> Enabled
+                                </label>
+                            </div>
+                            <div class="col-lg-3">
+                                <label class="label-input">
+                                    <input type="radio" name="datatype" ng-model="setting.value" ng-value="false"/>  Disabled
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
-                        <button type="submit" ng-click="save(setting)" class="btn btn-success">Save</button>
-                        <button ng-show="setting.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>
-                        <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
+                        <div class="col-lg-1">
+                            Uuid:
+                        </div>
+                        <div class="col-lg-11">
+                            <input class="col-lg-10 form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-lg-offset-3">
+                            <button type="submit" ng-click="save(setting)" class="btn btn-primary btn-block">Save</button>
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="submit" ng-click="cancel()" class="btn btn-danger btn-block">Cancel</button>
+                        </div>
                     </div>
                     <span></span>
                 </form>

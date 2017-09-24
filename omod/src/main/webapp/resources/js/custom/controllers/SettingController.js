@@ -29,7 +29,7 @@ function SettingCtrl($scope, $routeParams, $location, $muzimaSettings) {
     };
 
     $scope.save = function (setting) {
-        $muzimaSettings.saveSetting(setting.uuid, setting.property, setting.name, setting.description).
+        $muzimaSettings.saveSetting(setting.uuid, setting.property, setting.name, setting.description, setting.value).
         then(function () {
             $location.path("/settings");
         })
@@ -77,4 +77,20 @@ function SettingsCtrl($scope, $location, $muzimaSettings) {
             });
         }
     }, true);
+
+    $scope.settingDisplayValue = function(setting){
+        if(setting.datatype == 'STRING'){
+            return setting.value
+        } else if(setting.datatype == 'PASSWORD'){
+            var str = setting.value;
+            return str.replace(/./g, '*');
+        } else if(setting.datatype == 'BOOLEAN'){
+            if(setting.value == true){
+                return 'Enabled';
+            } else if(setting.value == false){
+                return 'Disabled';
+            }
+            return setting.value
+        }
+    }
 }

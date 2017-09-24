@@ -12,7 +12,14 @@
         <property name="property" type="java.lang.String" column="property" not-null="true" length="255"/>
         <property name="name" type="java.lang.String" column="name" length="255"/>
         <property name="description" type="java.lang.String" column="description" length="255"/>
-        <property name="value" column="value"/>
+        <property name="valueString" column="value_string" />
+        <property name="valueBoolean" column="value_boolean" />
+        <property name="settingDataType" column="setting_data_type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.openmrs.module.muzima.model.MuzimaSettingDataType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
 
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">
             <column name="creator"/>
