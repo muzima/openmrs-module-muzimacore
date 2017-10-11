@@ -1,3 +1,7 @@
+package org.openmrs.module.muzima.handler;
+
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
@@ -5,4 +9,10 @@ import static org.junit.Assert.*;
  */
 public class JsonRegistrationQueueDataHandlerTest {
 
+    String mockPayload = "";
+
+    @Test
+    public void setPersonAttributesFromPayloadTest(){
+
+    }
 }

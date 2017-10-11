@@ -9,51 +9,44 @@ import org.openmrs.module.muzima.utils.JsonUtils;
  * Created by HACKER on 07/09/2017.
  */
 public class JsonUtilsTest {
-    @Test
-    public void toJsonArrayTest(){
-        String samplePayload = "";
-        String path = "";
-        JSONObject jsonObject = (JSONObject)JsonUtils.readAsObject(samplePayload,path);
-
-    }
 
     @Test
     public void isPathAJSONArrayTest(){
-        String payload = "{\n" +
-                "\t\"patient\": {\n" +
-                "\t\t\"personaddress\": {\n" +
-                "\t\t\t\"countyDistrict\": \"county\",\n" +
-                "\t\t\t\"address6\": \"location\",\n" +
-                "\t\t\t\"address5\": \"sublocation\",\n" +
-                "\t\t\t\"cityVillage\": \"village\"\n" +
-                "\t\t}\n" +
-                "\t}\n" +
+        String payload = "{" +
+                "\"patient\": {" +
+                "\"personaddress\": {" +
+                "\"countyDistrict\": \"county\"," +
+                "\"address6\": \"location\"," +
+                "\"address5\": \"sublocation\"," +
+                "\"cityVillage\": \"village\"" +
+                "}" +
+                "}" +
                 "}";
-        Object testPath = JsonUtils.readAsObject(payload,"$['patient']['personaddress']");
+        Object testPath = JsonUtils.readAsObject(payload,"$['patient']['patient.personaddress']");
         Assert.assertFalse(JsonUtils.isPathAJSONArray(testPath));
     }
 
     @Test
     public  void isPathAJSONArrayNegativeTest(){
-        String payload = "{\n" +
-                "\t\"patient\": {\n" +
-                "\t\t\"personaddress\": [{\n" +
-                "\t\t\t\t\"countyDistrict\": \"county1\",\n" +
-                "\t\t\t\t\"address6\": \"location1\",\n" +
-                "\t\t\t\t\"address5\": \"sublocation1\",\n" +
-                "\t\t\t\t\"cityVillage\": \"village1\"\n" +
-                "\t\t\t},\n" +
-                "\t\t\t{\n" +
-                "\t\t\t\t\"countyDistrict\": \"county2\",\n" +
-                "\t\t\t\t\"address6\": \"location2\",\n" +
-                "\t\t\t\t\"address5\": \"sublocation2\",\n" +
-                "\t\t\t\t\"cityVillage\": \"village2\"\n" +
-                "\t\t\t}\n" +
-                "\t\t]\n" +
-                "\t}\n" +
+        String payload = "{" +
+                "\"patient\": {" +
+                "\"patient.personaddress\": [{" +
+                "\"countyDistrict\": \"county1\"," +
+                "\"address6\": \"location1\"," +
+                "\"address5\": \"sublocation1\"," +
+                "\"cityVillage\": \"village1\"" +
+                "}," +
+                "{" +
+                "\"countyDistrict\": \"county2\"," +
+                "\"address6\": \"location2\"," +
+                "\"address5\": \"sublocation2\"," +
+                "\"cityVillage\": \"village2\"" +
+                "}" +
+                "]" +
+                "}" +
                 "}";
 
-        Object testPath = JsonUtils.readAsObject(payload,"$['patient']['personaddress']");
+        Object testPath = JsonUtils.readAsObject(payload,"$['patient']['patient.personaddress']");
         Assert.assertTrue(JsonUtils.isPathAJSONArray(testPath));
     }
 }
