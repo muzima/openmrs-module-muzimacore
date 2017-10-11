@@ -24,8 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -136,6 +139,22 @@ public class JsonUtils {
     }
 
     /**
+     * Utility method for parsing LinkedHashMap return by calling jsonutil.readAsObject to a net.minidev.JSONObject.
+     *
+     * @param hashMap LinkedHashMap
+     * @return net.minidev.JSONObject
+     * @see JsonUtils readAsObject
+     */
+    public static JSONObject parseLinkedHashMapToJsonObject(LinkedHashMap hashMap){
+        HashMap<Object,Object> map = hashMap;
+        JSONObject jsonObject = new JSONObject();
+        for (Map.Entry<Object,Object> entry:map.entrySet()){
+            jsonObject.put(entry.getKey().toString(),entry.getValue());
+        }
+        return jsonObject;
+    }
+
+    /**
      * Write date value into the json object. The method will only write the date value if the object passed
      * as the first argument is an instance of <code>{@link net.minidev.json.JSONObject}</code>. Internally, the date will be
      * converted into string following the ISO-8601 format and write the value to the json object. If the date
@@ -216,8 +235,9 @@ public class JsonUtils {
 
         Boolean isJSONArray = false;
 
-        if (path instanceof JSONObject){
+        if (path instanceof LinkedHashMap){
             //value is JSONObject
+            logger.debug("Value is a potential JSONObject after parsing from LinkedHashMap.");
             isJSONArray = false;
         }else if (path instanceof JSONArray){
             //value is JSONArray
