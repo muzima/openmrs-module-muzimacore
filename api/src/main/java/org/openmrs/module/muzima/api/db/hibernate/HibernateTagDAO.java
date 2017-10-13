@@ -1,7 +1,6 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.classic.Session;
 import org.openmrs.module.muzima.api.db.TagDAO;
 import org.openmrs.module.muzima.model.MuzimaFormTag;
 
@@ -15,15 +14,11 @@ public class HibernateTagDAO implements TagDAO {
     }
 
     public List<MuzimaFormTag> getAll() {
-        return (List<MuzimaFormTag>) session().createCriteria(MuzimaFormTag.class).list();
+        return (List<MuzimaFormTag>) factory.getCurrentSession().createCriteria(MuzimaFormTag.class).list();
     }
 
     public void save(MuzimaFormTag tag) {
-        session().save(tag);
-    }
-
-    private Session session() {
-        return factory.getCurrentSession();
+        factory.getCurrentSession().save(tag);
     }
 
 }
