@@ -334,10 +334,10 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                     LinkedHashMap linkedHashMap = (LinkedHashMap)iterator.next();
                     JSONObject personAddressJSONObject = JsonUtils.parseLinkedHashMapToJsonObject(linkedHashMap);
 
-                    String county = (String) personAddressJSONObject.get("patient.countyDistrict");
-                    String address6 = (String) personAddressJSONObject.get("patient.address6");
-                    String address5 = (String) personAddressJSONObject.get("patient.address5");
-                    String cityVillage = (String) personAddressJSONObject.get("patient.cityVillage");
+                    String county = (String) personAddressJSONObject.get("countyDistrict");
+                    String address6 = (String) personAddressJSONObject.get("address6");
+                    String address5 = (String) personAddressJSONObject.get("address5");
+                    String cityVillage = (String) personAddressJSONObject.get("cityVillage");
 
                     PersonAddress patientAddress = new PersonAddress();
 
@@ -362,10 +362,10 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                  * Assuming this section is good to go since it handles scenarios where there is one personaddress object with
                  * non-similar keys.
                  */
-                String county = (String) patientAddressJSONObject.get("patient.countyDistrict");
-                String address6 = (String) patientAddressJSONObject.get("patient.address6");
-                String address5 = (String) patientAddressJSONObject.get("patient.address5");
-                String cityVillage = (String) patientAddressJSONObject.get("patient.cityVillage");
+                String county = (String) patientAddressJSONObject.get("countyDistrict");
+                String address6 = (String) patientAddressJSONObject.get("address6");
+                String address5 = (String) patientAddressJSONObject.get("address5");
+                String cityVillage = (String) patientAddressJSONObject.get("cityVillage");
 
                 patientAddress.setStateProvince(county);
                 patientAddress.setAddress6(address6);
@@ -395,10 +395,10 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                     try {
                         JSONObject personAddressObject = (JSONObject) JsonUtils.readAsObject(payload, "$['patient']['patient.personaddress^" + i + "']");
 
-                        String county = (String) personAddressObject.get("patient.countyDistrict");
-                        String address6 = (String) personAddressObject.get("patient.address6");
-                        String address5 = (String) personAddressObject.get("patient.address5");
-                        String cityVillage = (String) personAddressObject.get("patient.cityVillage");
+                        String county = (String) personAddressObject.get("countyDistrict");
+                        String address6 = (String) personAddressObject.get("address6");
+                        String address5 = (String) personAddressObject.get("address5");
+                        String cityVillage = (String) personAddressObject.get("cityVillage");
 
                         PersonAddress patientAddress = new PersonAddress();
 
@@ -442,8 +442,8 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                 while (personAttributesIterator.hasNext()) {
                     LinkedHashMap personAttributeLinkedHashMap = (LinkedHashMap) personAttributesIterator.next();
                     JSONObject personAttributeJSONObject = JsonUtils.parseLinkedHashMapToJsonObject(personAttributeLinkedHashMap);
-                    String attribute_Type_Uuid = (String) personAttributeJSONObject.get("patient.attribute_type_uuid");
-                    String attribute_value = (String) personAttributeJSONObject.get("patient.attribute_value");
+                    String attribute_Type_Uuid = (String) personAttributeJSONObject.get("attribute_type_uuid");
+                    String attribute_value = (String) personAttributeJSONObject.get("attribute_value");
 
                     //obtain person attribute type  name by uuid
                     PersonAttributeType personAttributeType = personService.getPersonAttributeTypeByUuid(attribute_Type_Uuid);
@@ -455,8 +455,8 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                 //processing as JSONObject
                 LinkedHashMap personAttributeLinkedHashMap = (LinkedHashMap) personAttributesObject;
                 JSONObject personAttributeJSONObject = JsonUtils.parseLinkedHashMapToJsonObject(personAttributeLinkedHashMap);
-                String attribute_Type_Uuid = (String) personAttributeJSONObject.get("patient.attribute_type_uuid");
-                String attribute_value = (String) personAttributeJSONObject.get("patient.attribute_value");
+                String attribute_Type_Uuid = (String) personAttributeJSONObject.get("attribute_type_uuid");
+                String attribute_value = (String) personAttributeJSONObject.get("attribute_value");
 
                 //obtain person attribute type  name by uuid
                 PersonAttributeType personAttributeType = personService.getPersonAttributeTypeByUuid(attribute_Type_Uuid);
@@ -476,8 +476,8 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
                 try {
                     LinkedHashMap personAttributeLinkedHashMap = (LinkedHashMap) JsonUtils.readAsObject(payload, "$['patient']['patient.personattribute^" + i + "']");
                     JSONObject personAttributeJsonObject = JsonUtils.parseLinkedHashMapToJsonObject(personAttributeLinkedHashMap);
-                    String attribute_Type_Uuid = (String) personAttributeJsonObject.get("patient.attribute_type_uuid");
-                    String attribute_value = (String) personAttributeJsonObject.get("patient.attribute_value");
+                    String attribute_Type_Uuid = (String) personAttributeJsonObject.get("attribute_type_uuid");
+                    String attribute_value = (String) personAttributeJsonObject.get("attribute_value");
 
                     //obtain person attribute type  name by uuid
                     PersonAttributeType personAttributeType = new PersonAttributeType(new Integer(attribute_Type_Uuid));
