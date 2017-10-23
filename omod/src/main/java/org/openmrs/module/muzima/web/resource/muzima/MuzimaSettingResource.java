@@ -38,14 +38,21 @@ public class MuzimaSettingResource extends MetadataDelegatingCrudResource<Muzima
     @Override
     protected PageableResult doSearch(final RequestContext context) {
         HttpServletRequest request = context.getRequest();
-        Integer startIndex = context.getStartIndex();;
-        Integer limit =  context.getLimit();;
-
-        String nameParameter = request.getParameter("q");
+        Integer startIndex = context.getStartIndex();
+        Integer limit =  context.getLimit();
         List<MuzimaSetting> muzimaSettings = new ArrayList<MuzimaSetting>();
 
-        if (nameParameter != null) {
-            muzimaSettings = Context.getService(MuzimaSettingService.class).getPagedSettings(nameParameter, startIndex, limit);
+        String propertyParameter = request.getParameter("property");
+        if(propertyParameter != null){
+            MuzimaSetting setting = Context.getService(MuzimaSettingService.class).getMuzimaSettingByProperty(propertyParameter);
+            if(setting != null){
+                muzimaSettings.add(setting);
+            }
+        } else {
+            String nameParameter = request.getParameter("q");
+            if (nameParameter != null) {
+                muzimaSettings = Context.getService(MuzimaSettingService.class).getPagedSettings(nameParameter, startIndex, limit);
+            }
         }
         return new NeedsPaging<MuzimaSetting>(muzimaSettings, context);
     }

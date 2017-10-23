@@ -17,6 +17,9 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.module.muzima.exception.InvalidSettingException;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MuzimaSetting extends BaseOpenmrsMetadata {
     private static final long serialVersionUID = 1L;
@@ -25,6 +28,7 @@ public class MuzimaSetting extends BaseOpenmrsMetadata {
     private String property;
     private String valueString;
     private Boolean valueBoolean;
+
     private MuzimaSettingDataType settingDataType;
 
     public MuzimaSetting(){
@@ -53,6 +57,7 @@ public class MuzimaSetting extends BaseOpenmrsMetadata {
         this.property = property;
     }
 
+    @Enumerated(EnumType.STRING)
     public MuzimaSettingDataType getSettingDataType() {
         return settingDataType;
     }
