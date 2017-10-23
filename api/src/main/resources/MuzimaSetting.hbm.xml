@@ -17,6 +17,7 @@
         <property name="settingDataType" column="setting_data_type">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">org.openmrs.module.muzima.model.MuzimaSettingDataType</param>
+                <param name="type">12</param>
                 <param name="useNamed">true</param>
             </type>
         </property>

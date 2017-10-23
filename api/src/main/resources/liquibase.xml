@@ -1160,4 +1160,17 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20171017151600" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="PatientIdentifier.AutoGenerationSourceName" />
+            <column name="name" value="Patient Identifier auto-generation Source name" />
+            <column name="description" value="Specifies name of auto-generation source defined in ID-GEN module" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2017-10-17T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="aae1a60f-f6ac-4d00-8af7-80270d715114" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
