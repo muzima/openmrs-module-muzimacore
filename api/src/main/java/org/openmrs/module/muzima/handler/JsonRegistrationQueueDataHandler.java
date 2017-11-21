@@ -140,7 +140,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         setPersonAttributesFromPayload();
     }
 
-    private void setPatientIdentifiersFromPayload() {
+    public void setPatientIdentifiersFromPayload() {
         Set<PatientIdentifier> patientIdentifiers = new TreeSet<PatientIdentifier>();
 
         //get setting for identifier autogeneration
