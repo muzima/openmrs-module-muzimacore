@@ -55,7 +55,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * TODO: Write brief description about the class here.
+ * Payload serialization class that extract patient attributes and details from json payload.
  */
 @Handler(supports = QueueData.class, order = 1)
 public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
@@ -69,7 +69,6 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
 
     private Patient unsavedPatient;
     private String payload;
-    Set<PersonAttribute> personAttributes;
     private QueueProcessorException queueProcessorException;
 
     @Override
@@ -105,9 +104,11 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             return true;
         } catch (Exception e) {
             queueProcessorException.addException(e);
+            log.error("queue processor exception "+queueProcessorException.getMessage());
             return false;
         } finally {
             if (queueProcessorException.anyExceptions()) {
+                log.error("queue processor exception "+queueProcessorException.getMessage());
                 throw queueProcessorException;
             }
         }
@@ -140,7 +141,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         setPersonAttributesFromPayload();
     }
 
-    public void setPatientIdentifiersFromPayload() {
+    private void setPatientIdentifiersFromPayload() {
         Set<PatientIdentifier> patientIdentifiers = new TreeSet<PatientIdentifier>();
 
         //get setting for identifier autogeneration
@@ -221,7 +222,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         return null;
     }
 
-    private PatientIdentifier getMedicalRecordNumberFromPayload() {
+    public PatientIdentifier getMedicalRecordNumberFromPayload() {
         JSONObject medicalRecordNumberObject = (JSONObject) JsonUtils.readAsObject(payload, "$['patient']['patient.medical_record_number']");
         return createPatientIdentifier(medicalRecordNumberObject);
     }
@@ -416,7 +417,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
 
     private PersonAddress getPatientAddressFromJsonObject(JSONObject addressJsonObject){
         if(addressJsonObject == null){
-            return null;
+            return new PersonAddress();
         }
         PersonAddress patientAddress = new PersonAddress();
         patientAddress.setAddress1((String)getElementFromJsonObject(addressJsonObject,"address1"));
@@ -436,7 +437,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         patientAddress.setPreferred((Boolean) getElementFromJsonObject(addressJsonObject,"preferred"));
 
         if(patientAddress.isBlank()){
-            return null;
+            return new PersonAddress();
         } else {
             return patientAddress;
         }
@@ -538,5 +539,18 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     @Override
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
+    }
+
+    @Override
+    public String toString() {
+        return "JsonRegistrationQueueDataHandler{" +
+                "unsavedPatient=" + unsavedPatient.toString() +
+                ", payload='" + payload + '\'' +
+                ", queueProcessorException=" + queueProcessorException +
+                '}';
+    }
+
+    public void setUnsavedPatient(Patient unsavedPatient) {
+        this.unsavedPatient = unsavedPatient;
     }
 }
