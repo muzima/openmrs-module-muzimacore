@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MuzimaForm extends BaseOpenmrsMetadata {
+
     private Integer id;
     private String discriminator;
     private String modelXml;

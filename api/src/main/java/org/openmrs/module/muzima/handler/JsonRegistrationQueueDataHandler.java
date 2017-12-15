@@ -55,7 +55,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Payload serialization class that extract patient attributes and details from json payload.
+ * Payload serialization class [Handler] that extract patient attributes and details from json payload
+ * and use the values to constuct an instance of org.openmrs.Patient instance. The payload used here is ectracted from
+ * is extrated from QueueData.
+
  */
 @Handler(supports = QueueData.class, order = 1)
 public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
@@ -529,6 +532,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         return savedPatient;
     }
 
+    //null return type is prone to a NullPointer runtime Exception
     private Object getElementFromJsonObject(JSONObject jsonObject, String key){
         if(jsonObject.containsKey(key)) {
             return jsonObject.get(key);
