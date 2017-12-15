@@ -124,6 +124,8 @@
         </dependency>
     </dependencies>
 
+    <!-- end spring boot test dependencies -->
+
     <build>
         <resources>
             <resource>
