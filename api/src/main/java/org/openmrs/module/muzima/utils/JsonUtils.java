@@ -32,7 +32,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * TODO: Write brief description about the class here.
+ * Utility Class for json objects and arrays processing by path analysis using jayway's JsonPath
+ * implementation.
+ * TODO; determine whether class qualifies as a Service layer stereotype component can live in the bean factory
+ *
  */
 public class JsonUtils {
 

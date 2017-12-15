@@ -19,14 +19,14 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 public class JsonRegistrationQueueDataHandlerTest {
 
 
-    private JsonRegistrationQueueDataHandler jsonRegistrationQueueDataHandler;
+    private JsonGenericRegistrationQueueDataHandler jsonRegistrationQueueDataHandler;
     @Autowired
     private QueueData queueData;
 
     @Before
     public void setUp() {
-        ApplicationContext testApplicationContext = new ClassPathXmlApplicationContext("handlerTestingApplicationContect.xml");
-        jsonRegistrationQueueDataHandler = new JsonRegistrationQueueDataHandler();
+        ApplicationContext testApplicationContext = new ClassPathXmlApplicationContext("handlerTestingApplicationContext.xml");
+        jsonRegistrationQueueDataHandler = new JsonGenericRegistrationQueueDataHandler();
 
     }
 
