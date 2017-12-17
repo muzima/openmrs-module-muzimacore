@@ -225,7 +225,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         try {
             Object otheridentifierObject = JsonUtils.readAsObject(payload, "$['demographicsupdate']['demographicsupdate.otheridentifier']");
-            if (JsonUtils.isPathAJSONArray(otheridentifierObject)) {
+            if (JsonUtils.isPayloadAJsonArray(otheridentifierObject)) {
                 for (Object otherIdentifier : (JSONArray) otheridentifierObject) {
                     PatientIdentifier identifier = createPatientIdentifier((JSONObject) otherIdentifier);
                     if (identifier != null) {
@@ -377,7 +377,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
 
         try {
             Object patientAddressObject = JsonUtils.readAsObject(payload, "$['demographicsupdate']['demographicsupdate.personaddress']");
-            if (JsonUtils.isPathAJSONArray(patientAddressObject)) {
+            if (JsonUtils.isPayloadAJsonArray(patientAddressObject)) {
                 for (Object personAddressJSONObject:(JSONArray) patientAddressObject) {
                     PersonAddress patientAddress = getPatientAddressFromJsonObject((JSONObject) personAddressJSONObject);
                     if(patientAddress != null){
@@ -442,7 +442,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         Set<PersonAttribute> attributes = new TreeSet<PersonAttribute>();
         try {
             Object patientAttributeObject = JsonUtils.readAsObject(payload, "$['demographicsupdate']['demographicsupdate.personattribute']");
-            if (JsonUtils.isPathAJSONArray(patientAttributeObject)) {
+            if (JsonUtils.isPayloadAJsonArray(patientAttributeObject)) {
                 for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
                     PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
                     if(personAttribute != null){

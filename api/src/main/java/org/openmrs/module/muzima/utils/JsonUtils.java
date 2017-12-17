@@ -56,6 +56,8 @@ public class JsonUtils {
         if (object instanceof JSONObject) {
             JSONObject jsonObject = (JSONObject) object;
             jsonObject.put(path, value);
+        } else {
+            logger.error("Unable to write boolean value with path: " + path + " from: " + String.valueOf(object)+" Object Not instanceof JsonObject");
         }
     }
 
@@ -233,20 +235,23 @@ public class JsonUtils {
 
     /**
      * Utility method to check if object is a JsonObject or JsonArray
+     * @Param Object payload
      */
-    public static Boolean isPathAJSONArray(Object path){
+    public static Boolean isPayloadAJsonArray(Object payload){
 
-        Boolean isJSONArray = false;
+        boolean isJsonArray = false;
 
-        if (path instanceof LinkedHashMap){
+        if (payload instanceof JSONArray){
             //value is JSONObject
             logger.debug("Value is a potential JSONObject after parsing from LinkedHashMap.");
-            isJSONArray = false;
-        }else if (path instanceof JSONArray){
+            isJsonArray = true;
+        }else if (!(payload instanceof JSONArray)){
             //value is JSONArray
-            isJSONArray = true;
+            isJsonArray = false;
+        }else {
+            logger.debug("Unexpected payload object as argument of isPayloadAJsonArraycallBack("+payload+"");
         }
-        return isJSONArray;
+        return isJsonArray;
     }
 
     /**
@@ -254,9 +259,9 @@ public class JsonUtils {
      */
     public static Boolean isPersonAddressMultiNode(JSONObject jsonPayload){
         Boolean hasMultiplePersonAddressNodes = false;
-        if (jsonPayload.containsKey("patient.personaddress^1")){
+        if (jsonPayload.containsKey("patient.personaddress^1") && !jsonPayload.containsKey("patient.personaddress")){
             hasMultiplePersonAddressNodes  = true;
-        }else  if (jsonPayload.containsKey("patient.personaddress")){
+        }else  if (jsonPayload.containsKey("patient.personaddress") && !jsonPayload.containsKey("patient.personaddress^1")){
             hasMultiplePersonAddressNodes = false;
         }
         return hasMultiplePersonAddressNodes;

@@ -16,13 +16,11 @@ package org.openmrs.module.muzima.handler;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.PersonAddress;
 import org.openmrs.annotation.Handler;
 import com.jayway.jsonpath.InvalidPathException;
-import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.idgen.IdentifierSource;
@@ -230,7 +228,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         try {
             Object otheridentifierObject = JsonUtils.readAsObject(payload, "$['patient']['patient.otheridentifier']");
-            if (JsonUtils.isPathAJSONArray(otheridentifierObject)) {
+            if (JsonUtils.isPayloadAJsonArray(otheridentifierObject)) {
                 for (Object otherIdentifier : (JSONArray) otheridentifierObject) {
                     PatientIdentifier identifier = createPatientIdentifier((JSONObject) otherIdentifier);
                     if (identifier != null) {
@@ -380,7 +378,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
 
         try {
             Object patientAddressObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personaddress']");
-            if (JsonUtils.isPathAJSONArray(patientAddressObject)) {
+            if (JsonUtils.isPayloadAJsonArray(patientAddressObject)) {
                 for (Object personAddressJSONObject:(JSONArray) patientAddressObject) {
                     PersonAddress patientAddress = getPatientAddressFromJsonObject((JSONObject) personAddressJSONObject);
                     if(patientAddress != null){
@@ -446,7 +444,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         Set<PersonAttribute> attributes = new TreeSet<PersonAttribute>();
         try {
             Object patientAttributeObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personattribute']");
-            if (JsonUtils.isPathAJSONArray(patientAttributeObject)) {
+            if (JsonUtils.isPayloadAJsonArray(patientAttributeObject)) {
                 for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
                     PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
                     if(personAttribute != null){
