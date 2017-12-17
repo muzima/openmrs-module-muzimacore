@@ -144,13 +144,13 @@ public class JsonUtilsTest {
     }
 
     @Test
-    @Ignore //TODO - determine the workflow employeed for DateTime usage in muzima- to facilitate testing
+     //TODO - determine the workflow employeed for DateTime usage in muzima- to facilitate testing
     /**
      * TODO : View and Integrate the correct DateAndTime representation @ href="http://en.wikipedia.org/wiki/ISO_8601">ISO-8601 Wikipedia Page
      */
     public void writeAsDateTimeTest() throws Exception {
         logger.debug("Executing Write as DateTime Test");
-        String dateTimeSamplePayload = "{\"key\":\"1984-04-16 06:15:00\"}";
+        String dateTimeSamplePayload = "{\"key\":\"2008-03-01T13:00:00+01:00\"}";
         Date dateTimeValue = JsonUtils.readAsDateTime(dateTimeSamplePayload, "key");
         assertThat(JsonUtils.readAsDateTime(dateTimeSamplePayload, "key")).isNotNull();
         assertThat(JsonUtils.readAsDateTime(dateTimeSamplePayload, "key")).isEqualTo("1984-04-16 06:15:00");
@@ -166,9 +166,9 @@ public class JsonUtilsTest {
     public void readAsDateTimeTest() throws Exception {
         logger.debug("Executing Read as DataTime ");
         String currentDate = new Date().toString();
-        String datePayload = "{\"key\":\"1984-04-16 06:15:00\"}";
+        String datePayload = "{\"key\":\"2008-03-01T13:00:00+01:00\"}";
         Date value = JsonUtils.readAsDateTime(datePayload, "$.key");
-        assertEquals("1984-04-16 06:15:00", value.toString());
+        assertEquals("2008-03-01T13:00:00+01:00", value.toString());
         Assertions.assertThat(value).isNotNull();
         logger.debug("Expected to read value of 1984-04-16 06:15:00 returned " + JsonUtils.readAsDateTime(datePayload, "$.key"));
     }
