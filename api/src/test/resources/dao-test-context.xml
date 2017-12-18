@@ -27,13 +27,6 @@
       database specific dependencies or configurations such as DbSessionFactory and
       org.openmrs.api.db/hibernate.HibernateSessionFactory are abstracted.[ignored].
     -->
-    <!--<bean id="testDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">-->
-        <!--&lt;!&ndash; Database connection settings datasource &ndash;&gt;-->
-        <!--<property name="driverClassName" value="com.mysql.Driver"/>-->
-        <!--<property name="url" value="jdbc:mysql://localhost:3306/muzima_test_db"/>-->
-        <!--<property name="username" value="root"/>-->
-        <!--<property name="password" value=""/>-->
-    <!--</bean>-->
 
     <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
         <property name="configLocations">
