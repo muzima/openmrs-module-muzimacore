@@ -20,6 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ *  This is test case that test the functionalities and features provided by the {org.openmrs.module.muzimcore.utils.JsonUtils}
+ *  @see org.openmrs.module.muzima.utils.JsonUtils
+ */
 @RunWith(JUnit4.class)
 public class JsonUtilsTest {
 
