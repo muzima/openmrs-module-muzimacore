@@ -1,42 +1,38 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
-import org.hibernate.SessionFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
-import org.openmrs.api.db.hibernate.DbSessionFactory;
+import org.openmrs.api.db.hibernate.HibernateSessionFactoryBean;
 import org.openmrs.module.muzima.api.db.RegistrationDataDao;
-import org.openmrs.module.muzima.testContexts.DaoTestContextsConfigurations;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.annotation.Timed;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 public class HibernateRegistrationDataDaoTest {
 
 
-    private HibernateRegistrationDataDao hibernateRegistrationDao;
+    private HibernateRegistrationDataDao hibernateRegistrationDataDao;
 
-    private SessionFactory dbSessionFactory;
+    private HibernateSessionFactoryBean hibernateSessionFactoryBean;
 
     @InjectMocks
     private RegistrationDataDao registrationDataDao;
 
     @Before
+    @Timed(millis = 5000)
     public void setUp() throws Exception {
+        System.out.print("Loading app ctx");
         ApplicationContext testApplicationContext =
-                new AnnotationConfigApplicationContext(DaoTestContextsConfigurations.class);
-        this.hibernateRegistrationDao = testApplicationContext.getBean(HibernateRegistrationDataDao.class);
-        this.dbSessionFactory = testApplicationContext.getBean(SessionFactory.class);
+                new ClassPathXmlApplicationContext("dao-test-context.xml");
+        this.hibernateSessionFactoryBean = testApplicationContext.getBean(HibernateSessionFactoryBean.class);
     }
 
     @Test
     public void creationTest() throws Exception {
-      assertThat(hibernateRegistrationDao).isNotNull();
-      assertThat(hibernateRegistrationDao).isInstanceOf(HibernateRegistrationDataDao.class);
-      assertThat(dbSessionFactory).isNotNull();
-      assertThat(dbSessionFactory).isInstanceOf(DbSessionFactory.class);
+        assertThat(this.hibernateSessionFactoryBean).isNotNull();
     }
 
     @Test
@@ -74,7 +70,7 @@ public class HibernateRegistrationDataDaoTest {
 
     @After
     public void tearDown() throws Exception {
-        dbSessionFactory.getCurrentSession().close();
+    //    dbSessionFactory.getCurrentSession().close();
     }
 
 }

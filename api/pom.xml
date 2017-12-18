@@ -122,15 +122,23 @@
             <version>2.6.0</version>
             <scope>test</scope>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.sonatype.sisu</groupId>-->
+            <!--<artifactId>sisu-guice</artifactId>-->
+            <!--<version>3.1.0</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
+        <!-- start test dependencies -->
+
         <dependency>
-            <groupId>org.sonatype.sisu</groupId>
-            <artifactId>sisu-guice</artifactId>
-            <version>3.1.0</version>
-            <scope>test</scope>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.1.1</version>
         </dependency>
+        <!-- end  test dependencies -->
     </dependencies>
 
-    <!-- end spring boot test dependencies -->
 
     <build>
         <resources>
