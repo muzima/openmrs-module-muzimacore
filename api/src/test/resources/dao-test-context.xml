@@ -24,7 +24,7 @@
 
     <!--
       Used to test the health of muzima specific persistence entities, openmrs
-      database specific dependencies or configurations such as DbSessionFactory and 
+      database specific dependencies or configurations such as DbSessionFactory and
       org.openmrs.api.db/hibernate.HibernateSessionFactory are abstracted.[ignored].
     -->
     <!--<bean id="testDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">-->
@@ -58,6 +58,16 @@
             </list>
         </property>
     </bean>
+
+    <bean class="org.openmrs.api.db.hibernate.DbSessionFactory" id="dbSessionFatory">
+        <constructor-arg name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager" id="txManager">
+        <constructor-arg name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <tx:annotation-driven/>
 
 
 </beans>

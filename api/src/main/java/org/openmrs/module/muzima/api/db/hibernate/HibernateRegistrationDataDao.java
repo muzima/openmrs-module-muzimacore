@@ -63,6 +63,7 @@ public class HibernateRegistrationDataDao extends HibernateSingleClassDao<Regist
      */
     @Override
     public RegistrationData getRegistrationDataByUuid(final String uuid) {
+
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
