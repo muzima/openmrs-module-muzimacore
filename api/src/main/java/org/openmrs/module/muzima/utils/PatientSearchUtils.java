@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.muzima.utils;
 
+import junit.framework.Assert;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -20,7 +21,6 @@ import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.model.RegistrationData;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Patients search operations utility method that use apache commons implementation of the Levenshtein Distance algorithm.
@@ -48,7 +48,7 @@ public class PatientSearchUtils {
      */
     public static Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
 
-        List<Patient> filteredPatient = patients.parallelStream()
+        foundPatient = patients.parallelStream()
                 .filter(patient -> StringUtils.isNotBlank(patient.getPersonName().getFullName()) && StringUtils.isNotBlank(unsavedPatient.getPersonName().getFullName()))
                 .filter(patient -> StringUtils.equalsIgnoreCase(patient.getGender(), unsavedPatient.getGender()))
                 .filter(patient -> patient.getBirthdate() != null && unsavedPatient.getBirthdate() != null)
@@ -57,15 +57,20 @@ public class PatientSearchUtils {
                         &&
                         StringUtils.getLevenshteinDistance(StringUtils.lowerCase(patient.getPersonName().getFamilyName()),
                                                            StringUtils.lowerCase(unsavedPatient.getPersonName().getFamilyName())) < 3)
-                .collect(Collectors.toList());
+                .findFirst().get();
+        
         return foundPatient;
     }
 
+
     public static Patient findSavedPatient(Patient candidatePatient, boolean searchRegistrationData) {
+        Assert.assertNotNull(searchRegistrationData);
+
         Patient savedPatient = null;
+
         if (StringUtils.isNotEmpty(candidatePatient.getUuid())) {
             savedPatient = Context.getPatientService().getPatientByUuid(candidatePatient.getUuid());
-            if (savedPatient == null && searchRegistrationData == true) {
+            if (savedPatient == null && searchRegistrationData) {
                 String temporaryUuid = candidatePatient.getUuid();
                 RegistrationDataService dataService = Context.getService(RegistrationDataService.class);
                 RegistrationData registrationData = dataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
@@ -74,6 +79,7 @@ public class PatientSearchUtils {
                 }
             }
         }
+
         if (savedPatient == null && !(candidatePatient.getPatientIdentifier() != null
                 && StringUtils.isNotEmpty(candidatePatient.getPatientIdentifier().getIdentifier()))) {
             List<Patient> patients = Context.getPatientService()
