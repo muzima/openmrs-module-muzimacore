@@ -26,10 +26,14 @@ import java.util.List;
 /**
  */
 public class PatientSearchUtils {
+
+    private static Patient foundPatient = null;
+
     private PatientSearchUtils(){}
+
     public static Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
-        for (Patient patient : patients) {
-            // match it using the person name and gender.
+
+        patients.forEach( patient -> {
             PersonName savedPersonName = patient.getPersonName();
             PersonName unsavedPersonName = unsavedPatient.getPersonName();
             if (StringUtils.isNotBlank(savedPersonName.getFullName())
@@ -48,13 +52,14 @@ public class PatientSearchUtils {
                                 StringUtils.lowerCase(savedFamilyName),
                                 StringUtils.lowerCase(unsavedFamilyName));
                         if (givenNameEditDistance < 3 && familyNameEditDistance < 3) {
-                            return patient;
+                            foundPatient = patient;
                         }
                     }
                 }
             }
-        }
-        return null;
+        });
+
+        return foundPatient;
     }
 
     public static Patient findSavedPatient(Patient candidatePatient, boolean searchRegistrationData){
