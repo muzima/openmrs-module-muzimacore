@@ -67,6 +67,8 @@
         </property>
     </bean>
 
+    <bean id="openmrsServiceContext" class="org.openmrs.api.context.ServiceContext"/>
+
     <tx:annotation-driven/>
 
 

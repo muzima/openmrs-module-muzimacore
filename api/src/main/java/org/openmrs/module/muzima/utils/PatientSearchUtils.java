@@ -61,9 +61,8 @@ public class PatientSearchUtils {
                                                            StringUtils.lowerCase(unsavedPatient.getPersonName().getFamilyName())) < 3)
                 .findFirst()
                 .orElse(null);
-
-
     }
+
 
 
     public static Patient findSavedPatient(Patient candidatePatient, boolean searchRegistrationData) {
