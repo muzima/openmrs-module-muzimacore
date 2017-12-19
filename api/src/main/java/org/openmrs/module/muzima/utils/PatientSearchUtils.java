@@ -59,7 +59,8 @@ public class PatientSearchUtils {
                         &&
                         StringUtils.getLevenshteinDistance(StringUtils.lowerCase(patient.getPersonName().getFamilyName()),
                                                            StringUtils.lowerCase(unsavedPatient.getPersonName().getFamilyName())) < 3)
-                .findFirst().get();
+                .findFirst()
+                .orElse(null);
 
 
     }
