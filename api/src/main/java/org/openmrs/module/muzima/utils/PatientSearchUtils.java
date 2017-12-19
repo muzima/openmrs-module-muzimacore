@@ -15,6 +15,7 @@ package org.openmrs.module.muzima.utils;
 
 import junit.framework.Assert;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
@@ -48,18 +49,19 @@ public class PatientSearchUtils {
      */
     public static Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
 
-        foundPatient = patients.parallelStream()
+        return  patients.parallelStream()
                 .filter(patient -> StringUtils.isNotBlank(patient.getPersonName().getFullName()) && StringUtils.isNotBlank(unsavedPatient.getPersonName().getFullName()))
                 .filter(patient -> StringUtils.equalsIgnoreCase(patient.getGender(), unsavedPatient.getGender()))
                 .filter(patient -> patient.getBirthdate() != null && unsavedPatient.getBirthdate() != null)
+                .filter(patient -> DateUtils.isSameDay(patient.getBirthdate(),unsavedPatient.getBirthdate()))
                 .filter(patient -> StringUtils.getLevenshteinDistance(StringUtils.lowerCase(patient.getPersonName().getGivenName()),
                                                                       StringUtils.lowerCase(unsavedPatient.getPersonName().getGivenName())) <3
                         &&
                         StringUtils.getLevenshteinDistance(StringUtils.lowerCase(patient.getPersonName().getFamilyName()),
                                                            StringUtils.lowerCase(unsavedPatient.getPersonName().getFamilyName())) < 3)
                 .findFirst().get();
-        
-        return foundPatient;
+
+
     }
 
 

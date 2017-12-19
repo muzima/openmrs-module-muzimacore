@@ -237,6 +237,7 @@ public class HibernateRegistrationDataDaoTest {
         dbSessionFactory.getCurrentSession().close();
     }
 
+    @Transactional
     @Test
     public void countRegistrationDataTest() throws Exception {
         Transaction transaction = null;
