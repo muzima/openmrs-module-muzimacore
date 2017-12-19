@@ -4,6 +4,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests methods on the {@link RegistrationData} class
+ */
 public class RegistrationDataTest {
 
     private RegistrationData registrationData;

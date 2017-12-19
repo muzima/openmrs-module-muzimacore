@@ -11,6 +11,8 @@ import org.openmrs.module.muzima.api.db.RegistrationDataDao;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,9 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Tests methods on the {@link HibernateRegistrationDataDao} class
+ */
 public class HibernateRegistrationDataDaoTest {
 
 
@@ -48,6 +53,8 @@ public class HibernateRegistrationDataDaoTest {
     }
 
     @Test
+    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+    @Repeat(1)
     public void creationTest() throws Exception {
         assertThat(this.hibernateSessionFactoryBean).isNotNull();
         assertThat(this.dbSessionFactory).isNotNull();
@@ -73,6 +80,7 @@ public class HibernateRegistrationDataDaoTest {
         registrationData.setDateCreated(new Date());
         registrationData.setTemporaryUuid("074108d9-4lel-4b1c-8f58-8ea34c3bff8b");
         registrationData.setAssignedUuid("074119d9-3fbf-4b1c-8f58-8ea34c3bff8b");
+
         transaction = dbSessionFactory.getCurrentSession().beginTransaction();
 
         this.hibernateRegistrationDataDao.saveRegistrationData(this.registrationData);

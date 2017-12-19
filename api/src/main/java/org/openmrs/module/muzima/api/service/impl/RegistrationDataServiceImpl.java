@@ -107,6 +107,7 @@ public class RegistrationDataServiceImpl extends BaseOpenmrsService implements R
      */
     @Override
     public RegistrationData saveRegistrationData(final RegistrationData registrationData) {
+        System.out.println("registrationDateDao is ["+dao);
         return dao.saveRegistrationData(registrationData);
     }
 

@@ -30,7 +30,7 @@
     <bean class="org.openmrs.api.db.hibernate.DbSessionFactory" id="dbSessionFactory">
         <constructor-arg name="sessionFactory" ref="sessionFactory"/>
     </bean>
-    <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager" id="txManager">
+    <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager" id="transactionManager">
         <constructor-arg name="sessionFactory" ref="sessionFactory"/>
     </bean>
     <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
@@ -54,6 +54,16 @@
             <list merge="true">
 
             </list>
+        </property>
+    </bean>
+
+    <bean id="registrationDataService" class="org.openmrs.module.muzima.api.service.impl.RegistrationDataServiceImpl">
+        <property name="dao" ref ="hibernateRegistrationDataDao"/>
+    </bean>
+
+    <bean id="hibernateRegistrationDataDao" class="org.openmrs.module.muzima.api.db.hibernate.HibernateRegistrationDataDao">
+        <property name="sessionFactory">
+            <ref bean="dbSessionFactory" />
         </property>
     </bean>
 
