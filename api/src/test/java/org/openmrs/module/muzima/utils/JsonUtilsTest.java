@@ -27,30 +27,11 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JUnit4.class)
 public class JsonUtilsTest {
 
-    private String mockPayload;
     private final Log logger = LogFactory.getLog(JsonUtilsTest.class);
 
     @Before
     public void setUp() throws Exception {
-        mockPayload = "{\n" +
-                "    \"dataSource\": \"Mobile Device\",\n" +
-                "    \"discriminator\": \"registration\",\n" +
-                "    \"payload\": {\n" +
-                "        \"patient.identifier\":\"\",\n" +
-                "        \"patient.medical_record_number\": \"9999-4\",\n" +
-                "        \"patient.identifier_type\": 3,\n" +
-                "        \"patient.identifier_location\": 1,\n" +
-                "        \"patient.uuid\":\"6e698d66-9f59-4a3b-b3d7-91efb7b297d3\",\n" +
-                "        \"patient.birthdate\": \"1984-04-16 06:15:00\",\n" +
-                "        \"patient.birthdate_estimated\": false,\n" +
-                "        \"patient.given_name\": \"Example\",\n" +
-                "        \"patient.middle_name\": \"of\",\n" +
-                "        \"patient.family_name\": \"Patient\",\n" +
-                "        \"patient.gender\": \"M\",\n" +
-                "        \"person_address.address1\": \"Adress 1\",\n" +
-                "        \"person_address.address2\": \"Adress 2\"\n" +
-                "    }\n" +
-                "}";
+
     }
 
     @Test

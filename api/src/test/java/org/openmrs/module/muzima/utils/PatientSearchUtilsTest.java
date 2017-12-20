@@ -65,9 +65,6 @@ public class PatientSearchUtilsTest {
         patientList.add(gsolingPatient);
         patientList.add(unsavedPatient);
 
-//        ApplicationContext applicationContext =
-//                new ClassPathXmlApplicationContext("service-test-context.xml");
-//        serviceContext = applicationContext.getBean(ServiceContext.getInstance())
     }
 
     @Test

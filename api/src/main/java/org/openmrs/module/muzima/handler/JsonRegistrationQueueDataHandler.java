@@ -230,16 +230,16 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     public List<PatientIdentifier> getOtherPatientIdentifiersFromPayload() {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         try {
-            Object otheridentifierObject = JsonUtils.readAsObject(payload, "$['patient']['patient.otheridentifier']");
-            if (JsonUtils.isPayloadAJsonArray(otheridentifierObject)) {
-                for (Object otherIdentifier : (JSONArray) otheridentifierObject) {
+            Object otherIdentifierObject = JsonUtils.readAsObject(payload, "$['patient']['patient.otheridentifier']");
+            if (JsonUtils.isPayloadAJsonArray(otherIdentifierObject)) {
+                for (Object otherIdentifier : (JSONArray) otherIdentifierObject) {
                     PatientIdentifier identifier = createPatientIdentifier((JSONObject) otherIdentifier);
                     if (identifier != null) {
                         otherIdentifiers.add(identifier);
                     }
                 }
             } else {
-                PatientIdentifier identifier = createPatientIdentifier((JSONObject) otheridentifierObject);
+                PatientIdentifier identifier = createPatientIdentifier((JSONObject) otherIdentifierObject);
                 if (identifier != null) {
                     otherIdentifiers.add(identifier);
                 }
@@ -328,6 +328,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
 
     public void setPatientBirthDateFromPayload() {
         Date birthDate = JsonUtils.readAsDate(payload, "$['patient']['patient.birth_date']");
+        System.out.println("Birthdate"+birthDate);
         unsavedPatient.setBirthdate(birthDate);
     }
 
@@ -449,13 +450,13 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             Object patientAttributeObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personattribute']");
             if (JsonUtils.isPayloadAJsonArray(patientAttributeObject)) {
                 for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
-                    PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
+                    PersonAttribute personAttribute = getPatientAttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
                     if(personAttribute != null){
                         attributes.add(personAttribute);
                     }
                 }
             } else {
-                PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) patientAttributeObject);
+                PersonAttribute personAttribute = getPatientAttributeFromJsonObject((JSONObject) patientAttributeObject);
                 if(personAttribute != null){
                     attributes.add(personAttribute);
                 }
@@ -465,7 +466,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             Set keys = patientObject.keySet();
             for(Object key:keys){
                 if(((String)key).startsWith("patient.personattribute^")){
-                    PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) patientObject.get(key));
+                    PersonAttribute personAttribute = getPatientAttributeFromJsonObject((JSONObject) patientObject.get(key));
                     if(personAttribute != null){
                         attributes.add(personAttribute);
                     }
@@ -480,7 +481,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    public PersonAttribute getPatientAdttributeFromJsonObject(JSONObject attributeJsonObject){
+    public PersonAttribute getPatientAttributeFromJsonObject(JSONObject attributeJsonObject){
         if(attributeJsonObject == null){
             return null;
         }
