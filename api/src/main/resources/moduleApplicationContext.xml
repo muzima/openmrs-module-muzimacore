@@ -54,6 +54,8 @@
         <constructor-arg ref="dbSessionFactory"/>
     </bean>
 
+    <bean id="serviceContext" class="org.openmrs.api.context.ServiceContext" factory-method="getInstance" destroy-method="destroyInstance"/>
+
     <!-- Services accessible via Context.getService() -->
     <bean parent="serviceContext">
         <property name="moduleService">
@@ -119,6 +121,7 @@
             </list>
         </property>
     </bean>
+
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">

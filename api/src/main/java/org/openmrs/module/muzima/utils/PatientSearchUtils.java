@@ -38,7 +38,7 @@ public class PatientSearchUtils {
     }
 
     /**
-     * Utility method for extracting a matching org.openmrs.Patient instances from<br>
+     * Utility method for extracting a matching org.openmrs.Patient instances from a<br>
      *     <code> List<Patient> </code>
      *
      * Class has potential for a Generic implementation.
