@@ -34,6 +34,7 @@ import org.openmrs.module.muzima.exception.QueueProcessorException;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
+import org.openmrs.module.muzima.utils.PatientSearchUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -114,12 +115,12 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
                     PatientIdentifier identifier = unsavedPatient.getPatientIdentifier();
                     if (identifier != null) {
                         List<Patient> patients = patientService.getPatients(identifier.getIdentifier());
-                        savedPatient = findPatient(patients, unsavedPatient);
+                        savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
                     }
                 } else {
                     PersonName personName = unsavedPatient.getPersonName();
                     List<Patient> patients = patientService.getPatients(personName.getFullName());
-                    savedPatient = findPatient(patients, unsavedPatient);
+                    savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
                 }
 
                 registrationData = new RegistrationData();
@@ -339,36 +340,6 @@ public class XmlRegistrationQueueDataHandler implements QueueDataHandler {
                 queueProcessorException.addException(new Exception("Unable to find identifier type with name: " + typeName));
             }
         }
-    }
-
-    private Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
-        for (Patient patient : patients) {
-            // match it using the person name and gender, what about the dob?
-            PersonName savedPersonName = patient.getPersonName();
-            PersonName unsavedPersonName = unsavedPatient.getPersonName();
-            if (StringUtils.isNotBlank(savedPersonName.getFullName())
-                    && StringUtils.isNotBlank(unsavedPersonName.getFullName())) {
-                if (StringUtils.equalsIgnoreCase(patient.getGender(), unsavedPatient.getGender())) {
-                    if (patient.getBirthdate() != null && unsavedPatient.getBirthdate() != null
-                            && DateUtils.isSameDay(patient.getBirthdate(), unsavedPatient.getBirthdate())) {
-                        String savedGivenName = savedPersonName.getGivenName();
-                        String unsavedGivenName = unsavedPersonName.getGivenName();
-                        int givenNameEditDistance = StringUtils.getLevenshteinDistance(
-                                StringUtils.lowerCase(savedGivenName),
-                                StringUtils.lowerCase(unsavedGivenName));
-                        String savedFamilyName = savedPersonName.getFamilyName();
-                        String unsavedFamilyName = unsavedPersonName.getFamilyName();
-                        int familyNameEditDistance = StringUtils.getLevenshteinDistance(
-                                StringUtils.lowerCase(savedFamilyName),
-                                StringUtils.lowerCase(unsavedFamilyName));
-                        if (givenNameEditDistance < 3 && familyNameEditDistance < 3) {
-                            return patient;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     private void savePatientsFinger(final Patient unsavedPatient, final String value) {
