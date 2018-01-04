@@ -43,6 +43,7 @@ import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
+import org.openmrs.module.muzima.utils.PatientSearchUtils;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
@@ -178,10 +179,10 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             }
         } else if (!StringUtils.isBlank(patientIdentifier.getIdentifier())) {
             List<Patient> patients = Context.getPatientService().getPatients(patientIdentifier.getIdentifier());
-            candidatePatient = findPatient(patients, unsavedPatient);
+            candidatePatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
         } else {
             List<Patient> patients = Context.getPatientService().getPatients(unsavedPatient.getPersonName().getFullName());
-            candidatePatient = findPatient(patients, unsavedPatient);
+            candidatePatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
         }
 
         if (candidatePatient == null) {
@@ -190,36 +191,6 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         } else {
             encounter.setPatient(candidatePatient);
         }
-    }
-
-    private Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
-        String unsavedGivenName = unsavedPatient.getGivenName();
-        String unsavedFamilyName = unsavedPatient.getFamilyName();
-        PersonName unsavedPersonName = unsavedPatient.getPersonName();
-        for (Patient patient : patients) {
-            // match it using the person name and gender, what about the dob?
-            PersonName savedPersonName = patient.getPersonName();
-            if (StringUtils.isNotBlank(savedPersonName.getFullName())
-                    && StringUtils.isNotBlank(unsavedPersonName.getFullName())) {
-                String savedGivenName = savedPersonName.getGivenName();
-                int givenNameEditDistance = StringUtils.getLevenshteinDistance(
-                        StringUtils.lowerCase(savedGivenName),
-                        StringUtils.lowerCase(unsavedGivenName));
-                String savedFamilyName = savedPersonName.getFamilyName();
-                int familyNameEditDistance = StringUtils.getLevenshteinDistance(
-                        StringUtils.lowerCase(savedFamilyName),
-                        StringUtils.lowerCase(unsavedFamilyName));
-                if (givenNameEditDistance < 3 && familyNameEditDistance < 3) {
-                    if (StringUtils.equalsIgnoreCase(patient.getGender(), unsavedPatient.getGender())) {
-                        if (patient.getBirthdate() != null && unsavedPatient.getBirthdate() != null
-                                && DateUtils.isSameDay(patient.getBirthdate(), unsavedPatient.getBirthdate())) {
-                            return patient;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     private void processObs(final Encounter encounter, final Obs parentObs, final Object obsObject) {

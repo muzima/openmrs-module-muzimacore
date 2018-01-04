@@ -54,6 +54,7 @@ public class AdminList extends AdministrationSectionExt {
         map.put("/module/muzimacore/view.list#/registrations", "muzimacore.view.registrations");
         map.put("/module/muzimacore/view.list#/forms", "muzimacore.form.manage");
         map.put("/module/muzimacore/view.list#/errors", "muzimacore.view.errors");
+        map.put("/module/muzimacore/view.list#/settings", "muzimacore.view.settings");
         return map;
     }
 }

@@ -5,6 +5,31 @@
 
 <hibernate-configuration>
     <session-factory>
+
+        <!-- Database connection settings datasource -->
+        <property name="connection.driver_class">com.mysql.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/cto</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password"></property>
+
+        <!-- JDBC Connection pool to use -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL Dialoect -->
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+        <!-- Enable automatice session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- Disable second level caching -->
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and recreate the database column on startup -->
+        <property name="hbm2ddl.auto">create</property>
+
         <mapping resource="ArchiveData.hbm.xml"/>
         <mapping resource="ErrorData.hbm.xml"/>
         <mapping resource="QueueData.hbm.xml"/>
@@ -16,5 +41,6 @@
         <mapping resource="MuzimaConfig.hbm.xml" />
         <mapping resource="MuzimaFormTag.hbm.xml" />
         <mapping resource="MuzimaXForm.hbm.xml" />
+        <mapping resource="MuzimaSetting.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
