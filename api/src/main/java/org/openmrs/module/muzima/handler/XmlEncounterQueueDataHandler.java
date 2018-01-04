@@ -62,6 +62,7 @@ import java.util.List;
 @Handler(supports = QueueData.class, order = 2)
 public class XmlEncounterQueueDataHandler implements QueueDataHandler {
 
+    
     private static final String DISCRIMINATOR_VALUE = "xml-encounter";
 
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -72,6 +73,11 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
 
     private Encounter encounter;
 
+    /**
+     * 
+     * @param queueData - QueueData
+     * @throws QueueProcessorException
+     */
     @Override
     public void process(final QueueData queueData) throws QueueProcessorException {
 
@@ -94,6 +100,11 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
 
     }
 
+    /**
+     * 
+     * @param queueData - QueueData
+     * @return boolean
+     */
     @Override
     public boolean validate(QueueData queueData) {
 
@@ -128,11 +139,21 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @return - String Discriminator
+     */
     @Override
     public String getDiscriminator() {
         return DISCRIMINATOR_VALUE;
     }
 
+    /**
+     * 
+     * @param encounter - Encounter
+     * @param patientNodeList NodeList
+     * @throws QueueProcessorException
+     */
     private void processPatient(final Encounter encounter, final NodeList patientNodeList) throws QueueProcessorException {
         Node patientNode = patientNodeList.item(0);
         NodeList patientElementNodes = patientNode.getChildNodes();
@@ -195,6 +216,12 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
         encounter.setPatient(candidatePatient);
     }
 
+    /**
+     * 
+     * @param name - String
+     * @param node - Node
+     * @return Node
+     */
     private Node findSubNode(final String name, final Node node) {
         if (!node.hasChildNodes()) {
             return null;
@@ -210,6 +237,12 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
         return null;
     }
 
+    /**
+     * 
+     * @param encounter - Encounter
+     * @param obsNodeList - NodeList
+     * @throws QueueProcessorException
+     */
     private void processObs(final Encounter encounter, final NodeList obsNodeList) throws QueueProcessorException {
         Node obsNode = obsNodeList.item(0);
         NodeList obsElementNodes = obsNode.getChildNodes();
@@ -224,6 +257,12 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param encounter -Encounter
+     * @param parentObs - Obs
+     * @param obsElementNode -  Node
+     */
     private void processObsNode(final Encounter encounter, final Obs parentObs, final Node obsElementNode) {
         Element obsElement = (Element) obsElementNode;
         String[] conceptElements = StringUtils.split(obsElement.getAttribute("concept"), "\\^");
@@ -320,6 +359,13 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
+
+    /**
+     * 
+     * @param encounter - Encounter
+     * @param encounterNodeList - NodeList
+     * @throws QueueProcessorException
+     */
     private void processEncounter(final Encounter encounter, final NodeList encounterNodeList) throws QueueProcessorException {
         Node encounterNode = encounterNodeList.item(0);
         NodeList encounterElementNodes = encounterNode.getChildNodes();
@@ -375,6 +421,11 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param dateValue - String representation of the date 
+     * @return java.util.Date
+     */
     private Date parseDate(final String dateValue) {
         Date date = null;
         try {
@@ -385,6 +436,11 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
         return date;
     }
 
+    /**
+     * 
+     * @param queueData -QueueData
+     * @return boolean
+     */
     @Override
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());

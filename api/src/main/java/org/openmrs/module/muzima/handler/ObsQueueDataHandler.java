@@ -32,21 +32,40 @@ public class ObsQueueDataHandler implements QueueDataHandler {
 
     private final Log log = LogFactory.getLog(ObsQueueDataHandler.class);
 
+    /**
+     * 
+     * @param queueData - QueueData
+     * @throws QueueProcessorException
+     */
     @Override
     public void process(final QueueData queueData) throws QueueProcessorException {
         log.info("Processing encounter form data: " + queueData.getUuid());
     }
 
+    /**
+     * 
+     * @param queueData - QueueData
+     * @return boolean
+     */
     @Override
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
     }
 
+    /**
+     * 
+     * @param queueData - QueueDate
+     * @return boolean
+     */
     @Override
     public boolean validate(QueueData queueData) {
         return false;
     }
 
+    /**
+     * 
+     * @return String
+     */
     @Override
     public String getDiscriminator() {
         return DISCRIMINATOR_VALUE;
