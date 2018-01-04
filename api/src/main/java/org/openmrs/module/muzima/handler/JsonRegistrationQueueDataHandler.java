@@ -337,7 +337,6 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         return savedPatient;
     }
 
-
     @Override
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
