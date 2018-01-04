@@ -51,7 +51,7 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/queuedata",
-        supportedClass = QueueData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*"})
+        supportedClass = QueueData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*"})
 public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
 
     /**

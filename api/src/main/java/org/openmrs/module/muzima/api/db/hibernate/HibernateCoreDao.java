@@ -26,6 +26,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.CoreDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,13 +41,13 @@ import java.util.List;
 public class HibernateCoreDao implements CoreDao {
 
     @Autowired
-    protected SessionFactory sessionFactory;
+    protected DbSessionFactory sessionFactory;
 
-    public SessionFactory getSessionFactory() {
+    public DbSessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
-    public void setSessionFactory(final SessionFactory sessionFactory) {
+    public void setSessionFactory(final DbSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

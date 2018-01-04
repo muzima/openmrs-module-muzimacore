@@ -14,7 +14,7 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.SingleClassDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * TODO: Write brief description about the class here.
+ * This is a default implementation of SingleClassDao<T>.
  */
 public class HibernateSingleClassDao<T> implements SingleClassDao<T> {
 
     @Autowired
-    protected SessionFactory sessionFactory;
+    protected DbSessionFactory sessionFactory;
 
     protected Class<T> mappedClass;
 
@@ -49,7 +49,7 @@ public class HibernateSingleClassDao<T> implements SingleClassDao<T> {
         this.mappedClass = mappedClass;
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
+    public void setSessionFactory(DbSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
