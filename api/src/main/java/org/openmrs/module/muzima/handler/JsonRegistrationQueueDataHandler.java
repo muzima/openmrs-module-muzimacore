@@ -53,10 +53,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Payload serialization class [Handler] that extract patient attributes and details from json payload
- * and use the values to construct an instance of org.openmrs.Patient instance. The payload used here is extracted from
- * is extracted from QueueData.
-
+ * Payload deserialization class [Handler] that extracts patient attributes and details from json payload
+ * and use the values to construct an instance of org.openmrs.Patient instance. The payload used here
+ * is obtained from QueueData.
  */
 @Handler(supports = QueueData.class, order = 1)
 public class JsonRegistrationQueueDataHandler implements QueueDataHandler {

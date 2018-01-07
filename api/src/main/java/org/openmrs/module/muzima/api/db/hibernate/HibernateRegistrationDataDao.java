@@ -144,6 +144,7 @@ public class HibernateRegistrationDataDao extends HibernateSingleClassDao<Regist
     public Number countRegistrationData() {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+        System.out.println(Projections.rowCount());
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
     }

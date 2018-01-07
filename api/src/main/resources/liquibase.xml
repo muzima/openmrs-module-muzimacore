@@ -1098,6 +1098,7 @@
             <column name="meta_json" type="${clob.type}"/>
         </addColumn>
     </changeSet>
+
     <changeSet id="muzima-20170912151100" author="mssavai">
         <preConditions onFail="MARK_RAN">
             <not>

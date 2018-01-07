@@ -17,13 +17,13 @@ import junit.framework.Assert;
 import org.hibernate.Transaction;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.RegistrationDataDao;
 import org.openmrs.module.muzima.api.db.hibernate.HibernateRegistrationDataDao;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.model.RegistrationData;
+import org.openmrs.test.BaseContextMockTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
@@ -39,7 +39,7 @@ import static org.junit.Assert.assertNotNull;
 /**
  * Tests Service layer tests case for  {@link RegistrationDataService}.
  */
-public class RegistrationDataServiceTest {
+public class RegistrationDataServiceTest extends BaseContextMockTest{
 
     private RegistrationDataServiceImpl service;
 
@@ -47,11 +47,11 @@ public class RegistrationDataServiceTest {
 
     private DbSessionFactory dbSessionFactory;
 
-    @InjectMocks
     private RegistrationDataDao registrationDataDao;
 
     @Test
     public void shouldSetupContext() {
+
         assertNotNull(service);
 
         RegistrationData registrationData = new RegistrationData();

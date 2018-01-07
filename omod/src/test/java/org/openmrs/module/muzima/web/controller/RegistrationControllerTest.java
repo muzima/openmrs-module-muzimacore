@@ -6,42 +6,55 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
+import org.openmrs.PatientIdentifierType;
+import org.openmrs.PersonName;
+import org.openmrs.api.PatientService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.model.RegistrationData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
+import org.openmrs.test.BaseContextMockTest;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(JUnit4.class)
-
-@ContextConfiguration(locations ="/TestingApplicationContext.xml")
-public class RegistrationControllerTest {
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(Context.class)
+public class RegistrationControllerTest extends BaseContextMockTest{
 
     private Log logger = LogFactory.getLog(RegistrationControllerTest.class);
     private static final String TAG = "RegistrationControllerTest";
 
     @Mock
     private RegistrationDataService registrationDataService;
-
-    @Autowired
-    private MockMvc mockMvc;
-
+    private RegistrationController registrationController;
+    private PatientService patientService;
+    private SimpleDateFormat dateFormat;
     @Before
-    public void setUp() throws Exception {
+    public void beforeClass() throws Exception {
         logger.info("Attempting to bootstrap test dependency set up");
-        MockitoAnnotations.initMocks(this);
-
+        registrationController = new RegistrationController();
+        registrationDataService = mock(RegistrationDataService.class);
+        patientService = mock(PatientService.class);
+        dateFormat = new SimpleDateFormat("yyyyMMdd");
+        mockStatic(Context.class);
+        when(Context.getService(RegistrationDataService.class)).thenReturn(registrationDataService);
+        when(Context.getPatientService()).thenReturn(patientService);
+        when(Context.getDateFormat()).thenReturn(dateFormat);
         Assert.assertNotNull(registrationDataService);
+        Assert.assertNotNull(registrationController);
+
     }
 
     @Test
@@ -54,13 +67,31 @@ public class RegistrationControllerTest {
         registrationData.setDateCreated( new Date());
         registrationData.setUuid("8d871d18-c2cc-11de-8d13-0010c6dffd0f");
 
-        when(registrationDataService.getRegistrationDataByTemporaryUuid(java.util.UUID.randomUUID().toString()))
-                .thenReturn(registrationData);
+        Patient patient = new Patient();
+        Set<PersonName> personNames = new HashSet<>();
+        PersonName fullName = new PersonName();
+        fullName.setMiddleName("John");
+        fullName.setGivenName("Doe");
+        fullName.setFamilyName("Jane");
+        personNames.add(fullName);
+        patient.setNames(personNames);
+        patient.setGender("male");
+        patient.setBirthdate( new Date());
+        Set<PatientIdentifier> identifiers = new HashSet<>();
+        PatientIdentifier patientIdentifier = new PatientIdentifier();
+        PatientIdentifierType patientIdentifierType = new PatientIdentifierType();
+        patientIdentifierType.setId(1);
+        patientIdentifierType.setName("KENYA NATIONAL ID");
+        patientIdentifier.setId(1);
+        patientIdentifier.setPreferred(true);
+        patientIdentifier.setIdentifier("32332271");
+        patient.addIdentifier(patientIdentifier);
 
-        mockMvc.perform(get("/module/muzimacore/registration.json"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(print());
+        when(registrationDataService.getRegistrationDataByUuid("8d871d18-c2cc-11de-8d13-0010c6dffd0f"))
+                .thenReturn(registrationData);
+        when(patientService.getPatientByUuid("8d871d18-c2cc-11de-8d13-0010c6dffd0f")).thenReturn(patient);
+        Map<String,Object> obtainedRegistrationData = registrationController.getRegistration("8d871d18-c2cc-11de-8d13-0010c6dffd0f");
+        System.out.println(obtainedRegistrationData);
     }
 
 }

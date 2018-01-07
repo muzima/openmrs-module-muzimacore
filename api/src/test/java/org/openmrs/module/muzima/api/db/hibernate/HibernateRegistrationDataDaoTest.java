@@ -1,21 +1,21 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
+import org.hibernate.FlushMode;
 import org.hibernate.Transaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
+import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.api.db.hibernate.HibernateSessionFactoryBean;
 import org.openmrs.module.muzima.api.db.RegistrationDataDao;
 import org.openmrs.module.muzima.model.RegistrationData;
+import org.openmrs.test.BaseContextMockTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Repeat;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.annotation.Timed;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Tests methods on the {@link HibernateRegistrationDataDao} class
  */
-public class HibernateRegistrationDataDaoTest {
+public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
 
 
     private HibernateRegistrationDataDao hibernateRegistrationDataDao;
@@ -36,7 +36,6 @@ public class HibernateRegistrationDataDaoTest {
 
     private RegistrationData registrationData;
 
-    @InjectMocks
     private RegistrationDataDao registrationDataDao;
 
     @Before
@@ -54,7 +53,6 @@ public class HibernateRegistrationDataDaoTest {
 
     @Test
     @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-    @Repeat(1)
     public void creationTest() throws Exception {
         assertThat(this.hibernateSessionFactoryBean).isNotNull();
         assertThat(this.dbSessionFactory).isNotNull();
@@ -69,8 +67,7 @@ public class HibernateRegistrationDataDaoTest {
         assertThat(this.hibernateRegistrationDataDao.getSessionFactory()).isInstanceOf(DbSessionFactory.class);
     }
 
-    @Transactional
-    @Rollback(true)
+    @Rollback
     @Test
     public void getRegistrationDataByIdTest() throws Exception {
         Transaction transaction = null; //TODO refactor to use aop driven declarative tx management.
@@ -83,8 +80,9 @@ public class HibernateRegistrationDataDaoTest {
 
         transaction = dbSessionFactory.getCurrentSession().beginTransaction();
 
-        this.hibernateRegistrationDataDao.saveRegistrationData(this.registrationData);
-        RegistrationData flushedRegistrationData = this.hibernateRegistrationDataDao
+        hibernateRegistrationDataDao.saveRegistrationData(registrationData);
+
+        RegistrationData flushedRegistrationData = hibernateRegistrationDataDao
                 .getRegistrationDataById(1);
 
         assertThat(flushedRegistrationData).isNotNull();
@@ -98,8 +96,7 @@ public class HibernateRegistrationDataDaoTest {
         dbSessionFactory.getCurrentSession().close();
     }
 
-    @Transactional
-    @Rollback(true)
+    @Rollback
     @Test
     public void getRegistrationDataByUuidTest() throws Exception {
 
@@ -136,8 +133,7 @@ public class HibernateRegistrationDataDaoTest {
         dbSessionFactory.getCurrentSession().close();
     }
 
-    @Transactional
-    @Rollback(true)
+    @Rollback
     @Test
     public void getRegistrationDataTest() throws Exception {
         Transaction transaction = null;
@@ -154,10 +150,10 @@ public class HibernateRegistrationDataDaoTest {
         registrationData.setVoided(Boolean.FALSE);
 
         transaction = dbSessionFactory.getCurrentSession().beginTransaction();
+        dbSessionFactory.getCurrentSession().setFlushMode(FlushMode.COMMIT);
+        this.hibernateRegistrationDataDao.saveRegistrationData(registrationData);
 
-        this.hibernateRegistrationDataDao.saveRegistrationData(this.registrationData);
-
-        List<RegistrationData> flushedRegistrationData = this.hibernateRegistrationDataDao
+        List<RegistrationData> flushedRegistrationData = hibernateRegistrationDataDao
                 .getRegistrationData("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b","074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
 
         System.out.println("flushedRegistrationDate ["+flushedRegistrationData.toString());
@@ -172,10 +168,10 @@ public class HibernateRegistrationDataDaoTest {
         assertThat(flushedRegistrationData.iterator().next().getTemporaryUuid()).isEqualTo(registrationData.getTemporaryUuid());
         assertThat(flushedRegistrationData.iterator().next().getAssignedUuid()).isEqualTo(registrationData.getAssignedUuid());
 
-        transaction.rollback();
         dbSessionFactory.getCurrentSession().close();
     }
 
+    @Rollback
     @Test
     public void saveRegistrationDataTest() throws Exception {
 
@@ -189,7 +185,7 @@ public class HibernateRegistrationDataDaoTest {
         registrationData.setVoided(Boolean.FALSE);
 
         transaction = dbSessionFactory.getCurrentSession().beginTransaction();
-
+        dbSessionFactory.getCurrentSession().setFlushMode(FlushMode.COMMIT);
         RegistrationData savedRegistrationDate = this.hibernateRegistrationDataDao
                 .saveRegistrationData(this.registrationData);
         System.out.println("flushedRegistrationDate ["+savedRegistrationDate.toString());
@@ -204,7 +200,6 @@ public class HibernateRegistrationDataDaoTest {
         dbSessionFactory.getCurrentSession().close();
     }
 
-    @Transactional
     @Rollback
     @Test
     public void deleteRegistrationDataTest() throws Exception {
@@ -237,7 +232,7 @@ public class HibernateRegistrationDataDaoTest {
         dbSessionFactory.getCurrentSession().close();
     }
 
-    @Transactional
+    @Rollback
     @Test
     public void countRegistrationDataTest() throws Exception {
         Transaction transaction = null;
@@ -254,13 +249,17 @@ public class HibernateRegistrationDataDaoTest {
         registrationData.setVoided(Boolean.FALSE);
 
         transaction = dbSessionFactory.getCurrentSession().beginTransaction();
+        DbSession session = dbSessionFactory.getCurrentSession();//.setFlushMode(FlushMode.COMMIT);
+        session.setFlushMode(FlushMode.MANUAL);
 
-        this.hibernateRegistrationDataDao.saveRegistrationData(this.registrationData);
+        hibernateRegistrationDataDao.saveRegistrationData(registrationData);
 
-        int rowCount = (Integer)this.hibernateRegistrationDataDao.countRegistrationData();
+        Long rowCount = (Long)hibernateRegistrationDataDao.countRegistrationData();
         assertThat(rowCount).isEqualTo(1);
+        assertThat(rowCount).isGreaterThan(0);
         assertThat(this.hibernateRegistrationDataDao.countRegistrationData().intValue()).isLessThan(2);
 
+        session.flush();
         dbSessionFactory.getCurrentSession().close();
     }
 

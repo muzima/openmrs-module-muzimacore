@@ -189,19 +189,14 @@ public class RegistrationDataDaoTest {
 
         this.registrationDataDao.deleteRegistrationData(registrationData);
 
-        RegistrationData deletedFlushedregistrationData = this.hibernateRegistrationDataDao
+        RegistrationData deletedFlushedRegistrationData = this.hibernateRegistrationDataDao
                 .getRegistrationDataByUuid("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
 
-        System.out.println("flushedRegistrationDate ["+deletedFlushedregistrationData);
+        System.out.println("flushedRegistrationDate ["+deletedFlushedRegistrationData);
 
-        assertThat(deletedFlushedregistrationData).isNull();
+        assertThat(deletedFlushedRegistrationData).isNull();
 
         dbSessionFactory.getCurrentSession().close();
-    }
-
-
-    @Test
-    public void methodTwo_getRegistrationDataTest() throws Exception {
     }
 
     @Transactional
