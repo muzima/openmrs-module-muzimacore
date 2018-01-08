@@ -32,9 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Utility Class for json objects and arrays processing by path analysis using jayway's JsonPath
- * implementation.
- *
+ * TODO: Write brief description about the class here.
  */
 public class JsonUtils {
 
@@ -55,8 +53,6 @@ public class JsonUtils {
         if (object instanceof JSONObject) {
             JSONObject jsonObject = (JSONObject) object;
             jsonObject.put(path, value);
-        } else {
-            logger.error("Unable to write boolean value with path: " + path + " from: " + String.valueOf(object)+" Object Not instanceof JsonObject");
         }
     }
 
@@ -234,23 +230,20 @@ public class JsonUtils {
 
     /**
      * Utility method to check if object is a JsonObject or JsonArray
-     * @Param Object payload
      */
-    public static Boolean isPayloadAJsonArray(Object payload){
+    public static Boolean isJSONArrayObject(Object path){
 
-        boolean isJsonArray = false;
+        Boolean isJSONArray = false;
 
-        if (payload instanceof JSONArray){
+        if (path instanceof LinkedHashMap){
             //value is JSONObject
             logger.debug("Value is a potential JSONObject after parsing from LinkedHashMap.");
-            isJsonArray = true;
-        }else if (!(payload instanceof JSONArray)){
+            isJSONArray = false;
+        }else if (path instanceof JSONArray){
             //value is JSONArray
-            isJsonArray = false;
-        }else {
-            logger.debug("Unexpected payload object as argument of isPayloadAJsonArraycallBack("+payload+"");
+            isJSONArray = true;
         }
-        return isJsonArray;
+        return isJSONArray;
     }
 
     /**
@@ -258,9 +251,9 @@ public class JsonUtils {
      */
     public static Boolean isPersonAddressMultiNode(JSONObject jsonPayload){
         Boolean hasMultiplePersonAddressNodes = false;
-        if (jsonPayload.containsKey("patient.personaddress^1") && !jsonPayload.containsKey("patient.personaddress")){
+        if (jsonPayload.containsKey("patient.personaddress^1")){
             hasMultiplePersonAddressNodes  = true;
-        }else  if (jsonPayload.containsKey("patient.personaddress") && !jsonPayload.containsKey("patient.personaddress^1")){
+        }else  if (jsonPayload.containsKey("patient.personaddress")){
             hasMultiplePersonAddressNodes = false;
         }
         return hasMultiplePersonAddressNodes;

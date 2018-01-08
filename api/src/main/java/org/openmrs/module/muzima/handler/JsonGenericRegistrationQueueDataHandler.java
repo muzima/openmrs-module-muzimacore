@@ -228,7 +228,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         try {
             Object otheridentifierObject = JsonUtils.readAsObject(payload, "$['patient']['patient.otheridentifier']");
-            if (JsonUtils.isPayloadAJsonArray(otheridentifierObject)) {
+            if (JsonUtils.isJSONArrayObject(otheridentifierObject)) {
                 for (Object otherIdentifier : (JSONArray) otheridentifierObject) {
                     PatientIdentifier identifier = createPatientIdentifier((JSONObject) otherIdentifier);
                     if (identifier != null) {
@@ -378,7 +378,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
 
         try {
             Object patientAddressObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personaddress']");
-            if (JsonUtils.isPayloadAJsonArray(patientAddressObject)) {
+            if (JsonUtils.isJSONArrayObject(patientAddressObject)) {
                 for (Object personAddressJSONObject:(JSONArray) patientAddressObject) {
                     PersonAddress patientAddress = getPatientAddressFromJsonObject((JSONObject) personAddressJSONObject);
                     if(patientAddress != null){
@@ -444,7 +444,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         Set<PersonAttribute> attributes = new TreeSet<PersonAttribute>();
         try {
             Object patientAttributeObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personattribute']");
-            if (JsonUtils.isPayloadAJsonArray(patientAttributeObject)) {
+            if (JsonUtils.isJSONArrayObject(patientAttributeObject)) {
                 for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
                     PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
                     if(personAttribute != null){

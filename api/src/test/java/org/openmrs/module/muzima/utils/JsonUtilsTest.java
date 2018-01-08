@@ -173,9 +173,9 @@ public class JsonUtilsTest {
         System.out.println(jsonArrayPayload);
         JSONArray jsonArray = (JSONArray) JsonUtils.readAsObject(jsonArrayPayload, "$");
         System.out.println(jsonArray.toString());
-        assertThat(JsonUtils.isPayloadAJsonArray(jsonArray)).isEqualTo(true);
+        assertThat(JsonUtils.isJSONArrayObject(jsonArray)).isEqualTo(true);
         String jsonObjectPayload = "{\"key\":\"hello\"}";
-        assertThat(JsonUtils.isPayloadAJsonArray(jsonObjectPayload)).isEqualTo(false);
+        assertThat(JsonUtils.isJSONArrayObject(jsonObjectPayload)).isEqualTo(false);
         logger.debug("Test executed against sample payload " + jsonArrayPayload);
     }
 
