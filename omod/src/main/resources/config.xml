@@ -12,13 +12,15 @@
         ${project.parent.description}
     </description>
     <updateURL>https://modules.openmrs.org/modules/download/${project.parent.artifactId}/update.rdf</updateURL>
-    <require_version>${openMRSVersion}</require_version>
+    <require_version>1.11.3, 1.10.2 - 1.10.*, 1.9.9 - 1.9.*</require_version>
     <!-- / Module Properties -->
 
     <require_modules>
-        <require_module>org.openmrs.module.webservices.rest</require_module>
+        <aware_of_module version="3.9.5">org.openmrs.module.xforms</aware_of_module>
+        <aware_of_module version="2.6">org.openmrs.module.idgen</aware_of_module>
+        <require_module version="2.1">org.openmrs.module.webservices.rest</require_module>
     </require_modules>
-    
+
     <aware_of_modules>
         <aware_of_module>org.openmrs.module.legacyui</aware_of_module>
     </aware_of_modules>
@@ -45,6 +47,7 @@
         NotificationData.hbm.xml
         QueueData.hbm.xml
         RegistrationData.hbm.xml
+        MuzimaSetting.hbm.xml
     </mappingFiles>
 
     <!-- Internationalization -->

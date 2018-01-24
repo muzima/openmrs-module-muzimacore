@@ -14,6 +14,7 @@
 package org.openmrs.module.muzima.utils;
 
 import com.jayway.jsonpath.JsonPath;
+import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * TODO: Write brief description about the class here.
@@ -33,6 +39,7 @@ public class JsonUtils {
     private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class.getSimpleName());
 
     private static final String DATE_PATTERN = "dd-MM-yyyy";
+
 
     /**
      * Write boolean value into the json object. The method will only write the boolean value if the object passed
@@ -132,6 +139,22 @@ public class JsonUtils {
     }
 
     /**
+     * Utility method for parsing LinkedHashMap return by calling jsonutil.readAsObject to a net.minidev.JSONObject.
+     *
+     * @param hashMap LinkedHashMap
+     * @return net.minidev.JSONObject
+     * @see JsonUtils readAsObject
+     */
+    public static JSONObject parseLinkedHashMapToJsonObject(LinkedHashMap hashMap){
+        HashMap<Object,Object> map = hashMap;
+        JSONObject jsonObject = new JSONObject();
+        for (Map.Entry<Object,Object> entry:map.entrySet()){
+            jsonObject.put(entry.getKey().toString(),entry.getValue());
+        }
+        return jsonObject;
+    }
+
+    /**
      * Write date value into the json object. The method will only write the date value if the object passed
      * as the first argument is an instance of <code>{@link net.minidev.json.JSONObject}</code>. Internally, the date will be
      * converted into string following the ISO-8601 format and write the value to the json object. If the date
@@ -192,6 +215,48 @@ public class JsonUtils {
             logger.error("Unable to read object value with path: " + path + " from: " + String.valueOf(jsonObject));
         }
         return object;
+    }
+
+    public static JSONArray toJsonArray(JSONObject jsonObject){
+        Set keys = jsonObject.keySet();
+        Iterator iterator = keys.iterator();
+        JSONArray jsonArray = new JSONArray();
+        while (iterator.hasNext()){
+            String key = (String)iterator.next();
+            jsonArray.add(jsonObject.get(key));
+        }
+        return jsonArray;
+    }
+
+    /**
+     * Utility method to check if object is a JsonObject or JsonArray
+     */
+    public static Boolean isJSONArrayObject(Object path){
+
+        Boolean isJSONArray = false;
+
+        if (path instanceof LinkedHashMap){
+            //value is JSONObject
+            logger.debug("Value is a potential JSONObject after parsing from LinkedHashMap.");
+            isJSONArray = false;
+        }else if (path instanceof JSONArray){
+            //value is JSONArray
+            isJSONArray = true;
+        }
+        return isJSONArray;
+    }
+
+    /**
+     * Check if payload contains several patient.personaddress^n nodes
+     */
+    public static Boolean isPersonAddressMultiNode(JSONObject jsonPayload){
+        Boolean hasMultiplePersonAddressNodes = false;
+        if (jsonPayload.containsKey("patient.personaddress^1")){
+            hasMultiplePersonAddressNodes  = true;
+        }else  if (jsonPayload.containsKey("patient.personaddress")){
+            hasMultiplePersonAddressNodes = false;
+        }
+        return hasMultiplePersonAddressNodes;
     }
 
     /**

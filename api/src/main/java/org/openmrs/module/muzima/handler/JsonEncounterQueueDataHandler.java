@@ -45,6 +45,7 @@ import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
+import org.openmrs.module.muzima.utils.PatientSearchUtils;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
@@ -56,6 +57,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * TODO brief class desceription.
  */
 @Component
 @Handler(supports = QueueData.class, order = 5)
@@ -71,6 +73,11 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
 
     private Encounter encounter;
 
+    /**
+     * 
+     * @param queueData
+     * @return
+     */
     @Override
     public boolean validate(QueueData queueData) {
         try {
@@ -122,6 +129,11 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param encounter
+     * @param patientObject
+     */
     private void processPatient(final Encounter encounter, final Object patientObject) {
         Patient unsavedPatient = new Patient();
         String patientPayload = patientObject.toString();
@@ -180,10 +192,10 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             }
         } else if (!StringUtils.isBlank(patientIdentifier.getIdentifier())) {
             List<Patient> patients = Context.getPatientService().getPatients(patientIdentifier.getIdentifier());
-            candidatePatient = findPatient(patients, unsavedPatient);
+            candidatePatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
         } else {
             List<Patient> patients = Context.getPatientService().getPatients(unsavedPatient.getPersonName().getFullName());
-            candidatePatient = findPatient(patients, unsavedPatient);
+            candidatePatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
         }
 
         if (candidatePatient == null) {
@@ -194,36 +206,12 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
-    private Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
-        String unsavedGivenName = unsavedPatient.getGivenName();
-        String unsavedFamilyName = unsavedPatient.getFamilyName();
-        PersonName unsavedPersonName = unsavedPatient.getPersonName();
-        for (Patient patient : patients) {
-            // match it using the person name and gender, what about the dob?
-            PersonName savedPersonName = patient.getPersonName();
-            if (StringUtils.isNotBlank(savedPersonName.getFullName())
-                    && StringUtils.isNotBlank(unsavedPersonName.getFullName())) {
-                String savedGivenName = savedPersonName.getGivenName();
-                int givenNameEditDistance = StringUtils.getLevenshteinDistance(
-                        StringUtils.lowerCase(savedGivenName),
-                        StringUtils.lowerCase(unsavedGivenName));
-                String savedFamilyName = savedPersonName.getFamilyName();
-                int familyNameEditDistance = StringUtils.getLevenshteinDistance(
-                        StringUtils.lowerCase(savedFamilyName),
-                        StringUtils.lowerCase(unsavedFamilyName));
-                if (givenNameEditDistance < 3 && familyNameEditDistance < 3) {
-                    if (StringUtils.equalsIgnoreCase(patient.getGender(), unsavedPatient.getGender())) {
-                        if (patient.getBirthdate() != null && unsavedPatient.getBirthdate() != null
-                                && DateUtils.isSameDay(patient.getBirthdate(), unsavedPatient.getBirthdate())) {
-                            return patient;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
+    /**
+     * 
+     * @param encounter - Encounter
+     * @param parentObs - Obs
+     * @param obsObject - Object
+     */
     private void processObs(final Encounter encounter, final Obs parentObs, final Object obsObject) {
         if (obsObject instanceof JSONObject) {
             JSONObject obsJsonObject = (JSONObject) obsObject;
@@ -263,6 +251,13 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param encounter - Encounter
+     * @param parentObs - Obs
+     * @param concept - Concept
+     * @param o - java.lang.Object
+     */
     private void createObs(final Encounter encounter, final Obs parentObs, final Concept concept, final Object o) {
         String value=null;
         Obs obs = new Obs();
@@ -308,6 +303,12 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param encounter - Encounter
+     * @param parentObs Obs
+     * @param childObsObject - java.lang.Object
+     */
     private void processObsObject(final Encounter encounter, final Obs parentObs, final Object childObsObject) {
         //Object o = JsonUtils.readAsObject(childObsObject.toString(), "$");
         if (childObsObject instanceof JSONArray) {
@@ -328,6 +329,12 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    /**
+     * 
+     * @param encounter - Encounter
+     * @param encounterObject - java.lang.Object
+     * @throws QueueProcessorException
+     */
     private void processEncounter(final Encounter encounter, final Object encounterObject) throws QueueProcessorException {
         String encounterPayload = encounterObject.toString();
 
@@ -380,6 +387,11 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         encounter.setEncounterDatetime(encounterDatetime);
     }
 
+    /**
+     * 
+     * @param dateValue - String representation of the date value.
+     * @return java.util.Date Object
+     */
     private Date parseDate(final String dateValue) {
         Date date = null;
         try {

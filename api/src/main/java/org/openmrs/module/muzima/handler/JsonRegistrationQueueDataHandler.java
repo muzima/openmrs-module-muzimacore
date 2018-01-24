@@ -35,6 +35,7 @@ import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
+import org.openmrs.module.muzima.utils.PatientSearchUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -161,7 +162,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     private List<PatientIdentifier> getOtherPatientIdentifiersFromPayload() {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         Object identifierTypeNameObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_type']");
-        Object identifierValueObject =JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
+        Object identifierValueObject = JsonUtils.readAsObject(payload, "$['observation']['other_identifier_value']");
 
         if (identifierTypeNameObject instanceof JSONArray) {
             JSONArray identifierTypeName = (JSONArray) identifierTypeNameObject;
@@ -211,7 +212,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             locationId = Integer.parseInt(locationIdString);
             location = Context.getLocationService().getLocation(locationId);
         }
-        
+
         if (location == null) {
             queueProcessorException.addException(
                     new Exception("Unable to find encounter location using the id: " + locationIdString));
@@ -326,44 +327,14 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             PatientIdentifier identifier = unsavedPatient.getPatientIdentifier();
             if (identifier != null) {
                 List<Patient> patients = Context.getPatientService().getPatients(identifier.getIdentifier());
-                savedPatient = findPatient(patients, unsavedPatient);
+                savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
             }
         } else {
             PersonName personName = unsavedPatient.getPersonName();
             List<Patient> patients = Context.getPatientService().getPatients(personName.getFullName());
-            savedPatient = findPatient(patients, unsavedPatient);
+            savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
         }
         return savedPatient;
-    }
-
-    private Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
-        for (Patient patient : patients) {
-            // match it using the person name and gender, what about the dob?
-            PersonName savedPersonName = patient.getPersonName();
-            PersonName unsavedPersonName = unsavedPatient.getPersonName();
-            if (StringUtils.isNotBlank(savedPersonName.getFullName())
-                    && StringUtils.isNotBlank(unsavedPersonName.getFullName())) {
-                if (StringUtils.equalsIgnoreCase(patient.getGender(), unsavedPatient.getGender())) {
-                    if (patient.getBirthdate() != null && unsavedPatient.getBirthdate() != null
-                            && DateUtils.isSameDay(patient.getBirthdate(), unsavedPatient.getBirthdate())) {
-                        String savedGivenName = savedPersonName.getGivenName();
-                        String unsavedGivenName = unsavedPersonName.getGivenName();
-                        int givenNameEditDistance = StringUtils.getLevenshteinDistance(
-                                StringUtils.lowerCase(savedGivenName),
-                                StringUtils.lowerCase(unsavedGivenName));
-                        String savedFamilyName = savedPersonName.getFamilyName();
-                        String unsavedFamilyName = unsavedPersonName.getFamilyName();
-                        int familyNameEditDistance = StringUtils.getLevenshteinDistance(
-                                StringUtils.lowerCase(savedFamilyName),
-                                StringUtils.lowerCase(unsavedFamilyName));
-                        if (givenNameEditDistance < 3 && familyNameEditDistance < 3) {
-                            return patient;
-                        }
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     @Override

@@ -19,8 +19,7 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/tag",
-        supportedClass = MuzimaFormTag.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","2.0.*",
-        "2.1.*"})
+        supportedClass = MuzimaFormTag.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
 @Handler(supports = MuzimaFormTag.class)
 public class MuzimaTagResource extends DataDelegatingCrudResource<MuzimaFormTag> {
     private static final Log log = LogFactory.getLog(MuzimaTagResource.class);

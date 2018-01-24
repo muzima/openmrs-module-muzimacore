@@ -25,7 +25,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Map;
 
 /**
- * TODO: Write brief description about the class here.
+ * Registration rest controller class, http request made to URI module/muzimacore/registration.json are
+ * delegated to this controller by spring DispatcherServlet.
+ * This class is responsible for handling, that is, verifying, processing and returning if necessary a
+ * httpResponse to the requests.
  */
 @Controller
 @RequestMapping(value = "module/muzimacore/registration.json")
