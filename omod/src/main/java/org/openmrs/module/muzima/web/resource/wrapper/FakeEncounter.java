@@ -31,7 +31,7 @@ public class FakeEncounter extends BaseOpenmrsData {
     private static final Logger log = LoggerFactory.getLogger(FakeCohort.class.getSimpleName());
 
     private static final String[] properties = new String[]{
-            "uuid", "encounterDatetime", "patient", "location", "form", "encounterType",
+            "uuid","id","encounterDatetime", "patient", "location", "form", "encounterType",
             "creator", "dateCreated", "changedBy", "dateChanged", "voidedBy", "dateVoided", "voidReason"
     };
 
