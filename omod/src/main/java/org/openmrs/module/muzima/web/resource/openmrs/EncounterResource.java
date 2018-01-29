@@ -161,6 +161,7 @@ public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter>
         if (rep instanceof DefaultRepresentation) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("uuid");
+            description.addProperty("id");
             description.addProperty("encounterDatetime");
             description.addProperty("patient", Representation.REF);
             description.addProperty("location", Representation.REF);
@@ -174,6 +175,7 @@ public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter>
         } else if (rep instanceof FullRepresentation) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("uuid");
+            description.addProperty("id");
             description.addProperty("encounterDatetime");
             description.addProperty("patient", Representation.REF);
             description.addProperty("location");
