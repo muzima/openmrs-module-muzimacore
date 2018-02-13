@@ -2,6 +2,7 @@ package org.openmrs.module.muzima.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
+import org.openmrs.EncounterType;
 import org.openmrs.Form;
 
 import java.util.HashSet;
@@ -20,6 +21,7 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
     private String form; ///uuid to form table
     private Set<MuzimaFormTag> tags = new HashSet<MuzimaFormTag>();
     private Form formDefinition;
+    private EncounterType encounterType;
 
     public MuzimaForm() {
     }    // used by hibernate
@@ -47,6 +49,10 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public EncounterType getEncounterType() { return formDefinition.getEncounterType(); }
+
+    public void setEncounterType(EncounterType encounterType){  this.encounterType = formDefinition.getEncounterType(); }
 
     public String getName() {
         return formDefinition.getName() == null ? "" : formDefinition.getName();
@@ -134,7 +140,7 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
         if (getForm() != null ? !getForm().equals(muzimaForm.getForm()) : muzimaForm.getForm() != null) return false;
         if (getDiscriminator() != null ? !getDiscriminator().equals(muzimaForm.getDiscriminator()) : muzimaForm.getDiscriminator() != null) return false;
         if (tags != null ? !tags.equals(muzimaForm.tags) : muzimaForm.tags != null) return false;
-
+        if (getFormDefinition().getEncounterType()!= null ? !getFormDefinition().getEncounterType().equals(muzimaForm.getFormDefinition().getEncounterType()) : muzimaForm.getFormDefinition().getEncounterType() != null) return false;
         return true;
     }
 
@@ -146,6 +152,7 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
         result = 31 * result + (getDiscriminator() != null ? getDiscriminator().hashCode() : 0);
         result = 31 * result + (getFormDefinition().getDescription() != null ? getFormDefinition().getDescription().hashCode() : 0);
         result = 31 * result + (tags != null ? tags.hashCode() : 0);
+        result = 31 * result + (getFormDefinition().getEncounterType() != null ? getFormDefinition().getEncounterType().hashCode() : 0);
         return result;
     }
 
@@ -157,6 +164,7 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
                 ", form='" + getForm() + '\'' +
                 ", discriminator='" + getDiscriminator() + '\'' +
                 ", tags=" + tags +
+                ", encounterType"+getFormDefinition().getEncounterType()+
                 '}';
     }
 
