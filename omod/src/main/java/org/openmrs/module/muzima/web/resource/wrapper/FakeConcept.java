@@ -31,7 +31,7 @@ public class FakeConcept extends BaseOpenmrsMetadata {
     private static final Logger log = LoggerFactory.getLogger(FakeConcept.class.getSimpleName());
 
     private static final String[] properties = new String[]{
-            "uuid", "descriptions", "datatype", "names",
+            "uuid", "id", "descriptions", "datatype", "names",
             "creator", "dateCreated", "changedBy", "dateChanged", "retiredBy", "dateRetired", "retireReason"
     };
 
