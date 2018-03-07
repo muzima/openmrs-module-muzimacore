@@ -17,6 +17,7 @@ import org.openmrs.module.muzima.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Collections;
@@ -112,7 +113,7 @@ public class JsonRegistrationQueueDataHandlerTest {
     }
 
     @Before
- //   @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
     public void setUp() {
 
         ApplicationContext testApplicationContext = new ClassPathXmlApplicationContext("service-test-context.xml");
