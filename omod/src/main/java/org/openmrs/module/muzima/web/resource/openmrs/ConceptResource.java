@@ -67,6 +67,7 @@ public class ConceptResource extends DelegatingCrudResource<FakeConcept> {
     public SimpleObject asRef(FakeConcept delegate) throws ConversionException {
         DelegatingResourceDescription description = new DelegatingResourceDescription();
         description.addProperty("uuid");
+        description.addProperty("id");
         description.addProperty("display", "displayConcept", Representation.DEFAULT);
         if (delegate.isRetired()) {
             description.addProperty("retired");
@@ -79,6 +80,7 @@ public class ConceptResource extends DelegatingCrudResource<FakeConcept> {
     public SimpleObject asFull(FakeConcept delegate) throws ConversionException {
         DelegatingResourceDescription description = new DelegatingResourceDescription();
         description.addProperty("uuid");
+        description.addProperty("id");
         description.addProperty("datatype", Representation.DEFAULT);
 
         description.addProperty("retired");
@@ -210,7 +212,7 @@ public class ConceptResource extends DelegatingCrudResource<FakeConcept> {
         if (rep instanceof DefaultRepresentation) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("uuid");
-
+            description.addProperty("id");
             description.addProperty("names", Representation.REF);
             description.addProperty("datatype", Representation.REF);
             description.addProperty("descriptions", Representation.REF);

@@ -35,7 +35,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
  * TODO: Write brief description about the class here.
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/registration",
-        supportedClass = Patient.class,
+        supportedClass = FakePatient.class,
         supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*"})
 public class RegistrationResource extends DataDelegatingCrudResource<FakePatient> {
     /**
