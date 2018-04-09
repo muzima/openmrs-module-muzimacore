@@ -130,21 +130,21 @@ public class JsonGenericRegistrationQueueDataHandlerTest {
         /**
          * Access private methods using @see reflection
          */
-        setPatientIdentifiersFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientIdentifiersFromPayload", JsonRegistrationQueueDataHandler.class);
+        setPatientIdentifiersFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientIdentifiersFromPayload", JsonGenericRegistrationQueueDataHandler.class);
         setPatientIdentifiersFromPayloadMethod.setAccessible(true);
-        getOtherPatientIdentifiersFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("getOtherPatientIdentifiersFromPayload",JsonRegistrationQueueDataHandler.class);
-        getMedicalRecordNumberFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("getMedicalRecordNumberFromPayload",JsonRegistrationQueueDataHandler.class);
-        setPatientBirthDateFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientBirthDateFromPayload",JsonRegistrationQueueDataHandler.class);
-        setPatientGenderFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientGenderFromPayload",JsonRegistrationQueueDataHandler.class);
-        setPatientNameFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientNameFromPayload",JsonRegistrationQueueDataHandler.class);
-        getPatientUuidFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("getPatientUuidFromPayload",JsonRegistrationQueueDataHandler.class);
-        setPatientAddressesFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientAddressesFromPayload",JsonRegistrationQueueDataHandler.class);
-        setPersonAttributesFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPersonAttributesFromPayload",JsonRegistrationQueueDataHandler.class);
-        findSimilarSavedPatientMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("findSimilarSavedPatient",JsonRegistrationQueueDataHandler.class);
-        getElementFromJsonObjectMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("getElementFromJsonObject",JsonRegistrationQueueDataHandler.class);
-        getPatientAddressFromJsonObjectMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("getPatientAddressFromJsonObject",JsonRegistrationQueueDataHandler.class);
-        setIdentifierTypeLocationMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setIdentifierTypeLocation",JsonRegistrationQueueDataHandler.class);
-        createPatientIdentifierMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("createPatientIdentifier",JsonRegistrationQueueDataHandler.class);
+        getOtherPatientIdentifiersFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getOtherPatientIdentifiersFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        getMedicalRecordNumberFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getMedicalRecordNumberFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPatientBirthDateFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientBirthDateFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPatientGenderFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientGenderFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPatientNameFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientNameFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        getPatientUuidFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getPatientUuidFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPatientAddressesFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientAddressesFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPersonAttributesFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPersonAttributesFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        findSimilarSavedPatientMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("findSimilarSavedPatient",JsonGenericRegistrationQueueDataHandler.class);
+        getElementFromJsonObjectMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getElementFromJsonObject",JsonGenericRegistrationQueueDataHandler.class);
+        getPatientAddressFromJsonObjectMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getPatientAddressFromJsonObject",JsonGenericRegistrationQueueDataHandler.class);
+        setIdentifierTypeLocationMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setIdentifierTypeLocation",JsonGenericRegistrationQueueDataHandler.class);
+        createPatientIdentifierMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("createPatientIdentifier",JsonGenericRegistrationQueueDataHandler.class);
 
         unsavedPatient = new Patient();
 
@@ -170,15 +170,15 @@ public class JsonGenericRegistrationQueueDataHandlerTest {
         /**
          * Access private Fields using @see reflection
          */
-        Field unsavedPatientField = JsonRegistrationQueueDataHandler.class.getDeclaredField("unsavedPatient");
+        Field unsavedPatientField = JsonGenericRegistrationQueueDataHandler.class.getDeclaredField("unsavedPatient");
         unsavedPatientField.setAccessible(true);
         unsavedPatientField.set(unsavedPatientField, unsavedPatient);
 
-        Field payloadField = JsonRegistrationQueueDataHandler.class.getDeclaredField("payload");
+        Field payloadField = JsonGenericRegistrationQueueDataHandler.class.getDeclaredField("payload");
         payloadField.setAccessible(true);
         payloadField.set(payloadField, testJsonPayload);
 
-        Field queueProcessorExceptionField = JsonRegistrationQueueDataHandler.class.getDeclaredField("queueProcessorException");
+        Field queueProcessorExceptionField = JsonGenericRegistrationQueueDataHandler.class.getDeclaredField("queueProcessorException");
         queueProcessorExceptionField.setAccessible(true);
         queueProcessorExceptionField.set(queueProcessorExceptionField, queueProcessorException);
     }

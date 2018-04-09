@@ -3,13 +3,10 @@ package org.openmrs.module.muzima.api.service;
 import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.muzima.model.ArchiveData;
-import org.openmrs.module.muzima.model.DataSource;
-import org.openmrs.module.muzima.model.ErrorData;
-import org.openmrs.module.muzima.model.ErrorMessage;
-import org.openmrs.module.muzima.model.NotificationData;
-import org.openmrs.module.muzima.model.QueueData;
+import org.openmrs.module.muzima.model.*;
+import org.openmrs.module.muzimaconsultation.api.model.Message;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -398,6 +395,52 @@ public interface DataService extends OpenmrsService {
      */
     NotificationData voidNotificationData(final NotificationData notificationData, final String reason);
 
+    /**
+     * Return the message date by given uuid
+     * @param uuid String - the uuid of the requested message.
+     * @return Message
+     */
+    MessageData getMessageDataByUuid(final String uuid);
+
+    /**
+     * Return the message data by given id.
+     * @param id -Integer
+     * @return Message
+     */
+    MessageData getMessageDataById(final Integer id);
+
+    /**
+     * Returns the message data by the sender of the message.
+     * @param sender org.openmrs.Sender
+     * @return org.openmrs.module.muzimaconsultation.api.model.Message
+     */
+    List<MessageData> getMessageDataBySender(final Person sender);
+
+    /**
+     * Return the Message data by receiver of the message as filter
+     * of the collection.
+     * @param receiver org.openmrs.Person
+     * @return org.openmrs.module.muzimaconsultation.api.model.Message
+     */
+    List<MessageData> getMessageDataByReceiver(final Person receiver);
+
+    /**
+     * Saves the message.
+     */
+    void saveMessageData(final MessageData messageData);
+
+    /**
+     * Purge the defined MessageData passed to this method call.
+     * @param messageData MessageData.
+     */
+    void purgeMessageData(final MessageData messageData);
+
+    /**
+     * Void the given MessageData
+     * @param uuid String
+     * @param messageData MessageData.
+     */
+    void voidMessageData(final String uuid,final MessageData messageData,final Date voidedDate,final String voidReason);
 
     /**
      * Return the error message with the given id.

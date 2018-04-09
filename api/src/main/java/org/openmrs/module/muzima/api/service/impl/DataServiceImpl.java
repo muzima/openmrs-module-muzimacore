@@ -18,20 +18,10 @@ import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.muzima.api.db.ArchiveDataDao;
-import org.openmrs.module.muzima.api.db.DataSourceDao;
-import org.openmrs.module.muzima.api.db.ErrorDataDao;
-import org.openmrs.module.muzima.api.db.ErrorMessageDao;
-import org.openmrs.module.muzima.api.db.NotificationDataDao;
-import org.openmrs.module.muzima.api.db.QueueDataDao;
+import org.openmrs.module.muzima.api.db.*;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
-import org.openmrs.module.muzima.model.ArchiveData;
-import org.openmrs.module.muzima.model.DataSource;
-import org.openmrs.module.muzima.model.ErrorData;
-import org.openmrs.module.muzima.model.ErrorMessage;
-import org.openmrs.module.muzima.model.NotificationData;
-import org.openmrs.module.muzima.model.QueueData;
+import org.openmrs.module.muzima.model.*;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.util.HandlerUtil;
 
@@ -54,6 +44,8 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
     private NotificationDataDao notificationDataDao;
 
     private ErrorMessageDao errorMessageDao;
+
+    private MessageDataDao messageDataDao;
 
     public QueueDataDao getQueueDataDao() {
         return queueDataDao;
@@ -616,6 +608,91 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
         notificationData.setDateVoided(new Date());
         notificationData.setVoidReason(reason);
         return saveNotificationData(notificationData);
+    }
+
+    /**
+     * Return the message date by given uuid
+     *
+     * @param uuid String - the uuid of the requested message.
+     * @return Message
+     */
+    @Override
+    public MessageData getMessageDataByUuid(String uuid) {
+        MessageDataDao messageDataDao = getMessageDataDao();
+        return messageDataDao.getMessageDataByUuid(uuid);
+    }
+
+    private MessageDataDao getMessageDataDao() {
+        return messageDataDao;
+    }
+
+    /**
+     * Return the message data by given id.
+     *
+     * @param id -Integer
+     * @return Message
+     */
+    @Override
+    public MessageData getMessageDataById(Integer id) {
+        return getMessageDataDao().getMessageDataById(id);
+    }
+
+    /**
+     * Returns the message data by the sender of the message.
+     *
+     * @param sender org.openmrs.Sender
+     * @return org.openmrs.module.muzimaconsultation.api.model.Message
+     */
+    @Override
+    public List<MessageData> getMessageDataBySender(Person sender) {
+        return getMessageDataDao().getMessageDataBySender(sender);
+    }
+
+    /**
+     * Return the Message data by receiver of the message as filter
+     * of the collection.
+     *
+     * @param receiver org.openmrs.Person
+     * @return org.openmrs.module.muzimaconsultation.api.model.Message
+     */
+    @Override
+    public List<MessageData> getMessageDataByReceiver(Person receiver) {
+        return getMessageDataDao().getMessageDataByReceiver(receiver);
+    }
+
+    /**
+     * Saves the message.
+     *
+     * @param messageData
+     */
+    @Override
+    public void saveMessageData(MessageData messageData) {
+        getMessageDataDao().saveData(messageData);
+    }
+
+    /**
+     * Purge the defined MessageData passed to this method call.
+     *
+     * @param messageData MessageData.
+     */
+    @Override
+    public void purgeMessageData(MessageData messageData) {
+        getMessageDataDao().purgeData(messageData);
+    }
+
+    /**
+     * Void the given MessageData
+     *
+     * @param uuid        String
+     * @param messageData MessageData.
+     */
+    @Override
+    public void voidMessageData(String uuid, MessageData messageData,Date voidedDate,String voidReason) {
+        messageData.setVoided(Boolean.TRUE);
+        messageData.setVoidedBy(Context.getAuthenticatedUser());
+        messageData.setVoidReason(voidReason);
+        messageData.setDateVoided(voidedDate);
+        saveMessageData(messageData);
     }
 
     @Override
