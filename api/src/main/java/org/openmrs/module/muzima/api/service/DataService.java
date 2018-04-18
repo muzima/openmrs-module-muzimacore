@@ -4,7 +4,6 @@ import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.muzima.model.*;
-import org.openmrs.module.muzimaconsultation.api.model.Message;
 
 import java.util.Date;
 import java.util.List;
@@ -496,6 +495,12 @@ public interface DataService extends OpenmrsService {
      * @return the total number of the error message in the messagebase.
      */
     Number countErrorMessage(final String search);
+
+    Number countMessageDataBySender(final Person sender);
+
+    Number countMessageDataByReceiver(final Person receiver);
+
+    Number countMessageData();
 
     /**
      * Get error message with matching search term for a particular page.

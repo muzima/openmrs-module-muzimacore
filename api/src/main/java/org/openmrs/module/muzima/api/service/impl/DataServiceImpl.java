@@ -726,6 +726,21 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
     }
 
     @Override
+    public Number countMessageDataBySender(Person sender) {
+        return getMessageDataDao().countData(sender.getFamilyName());
+    }
+
+    @Override
+    public Number countMessageDataByReceiver(Person receiver) {
+        return getMessageDataDao().countData(receiver.getFamilyName());
+    }
+
+    @Override
+    public Number countMessageData() {
+        return getMessageDataDao().countData("");
+    }
+
+    @Override
     public List<ErrorMessage> getPagedErrorMessage(String search, Integer pageNumber, Integer pageSize) {
         return null;
     }

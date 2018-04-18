@@ -3,11 +3,8 @@ package org.openmrs.module.muzima.model;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Person;
 
-public class MessageData extends BaseOpenmrsData implements Data {
+public class MessageData extends BaseOpenmrsData implements Data{
 
-    private int id;
-
-    private String uuid;
 
     private String source;
 
@@ -33,25 +30,6 @@ public class MessageData extends BaseOpenmrsData implements Data {
     @Override
     public void setId(Integer integer) {
 
-    }
-
-    @Override
-    public String getPayload() {
-        return null;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getUuid() {
-        return uuid;
-    }
-
-    @Override
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     /**
@@ -184,5 +162,15 @@ public class MessageData extends BaseOpenmrsData implements Data {
     @Override
     public void setVoided(Boolean voided) {
         this.voided = voided;
+    }
+
+    /**
+     * Get the data payload of this data.
+     *
+     * @return the payload of this data.
+     */
+    @Override
+    public String getPayload() {
+        return null;
     }
 }
