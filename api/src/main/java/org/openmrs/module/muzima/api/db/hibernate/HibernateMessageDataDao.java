@@ -1,6 +1,5 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
@@ -13,14 +12,14 @@ import org.openmrs.module.muzima.model.MessageData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HibernateMessageData extends HibernateDataDao<MessageData> implements MessageDataDao {
+public class HibernateMessageDataDao extends HibernateDataDao<MessageData> implements MessageDataDao {
 
-    private Log log = LogFactory.getLog(HibernateMessageData.class);
+    private Log log = LogFactory.getLog(HibernateMessageDataDao.class);
 
     /**
      * Default constructor.
      */
-    protected HibernateMessageData() {
+    protected HibernateMessageDataDao() {
         super(MessageData.class);
     }
 

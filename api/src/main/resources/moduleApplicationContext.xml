@@ -102,6 +102,13 @@
                                     </property>
                                 </bean>
                             </property>
+                            <property name="messageDataDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateMessageDataDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="dbSessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
                             <property name="errorMessageDao">
                                 <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateErrorMessageDao">
                                     <property name="sessionFactory">
