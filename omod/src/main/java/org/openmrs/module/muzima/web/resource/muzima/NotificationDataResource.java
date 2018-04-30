@@ -201,7 +201,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         notificationData.setPayload(message);
         notificationData.setSubject(subject);
         notificationData.setSource(source);
-        notificationData.setStatus("unread");
+        notificationData.setStatus("incoming");
 
         propertiesToCreate.put("sender",sender);
         propertiesToCreate.put("receiver",receiver);
