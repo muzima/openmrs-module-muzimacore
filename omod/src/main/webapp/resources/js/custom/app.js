@@ -80,10 +80,10 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.post("edit.json",{"formData": formData});
     };
     var validateData = function (uuid, formData) {
-        return $http.post("validate.json?uuid="+uuid+"&formData="+formData);
+        return $http.post("validate.json?uuid="+uuid,formData);
     };
     var saveEditedFormData = function (uuid, formData) {
-        return $http.post("error.json?uuid="+uuid+"&formData="+formData);
+        return $http.post("error.json?uuid="+uuid,formData);
     };
 
     return {
