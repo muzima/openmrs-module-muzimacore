@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
 import org.openmrs.Location;
@@ -30,6 +31,7 @@ import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
+import org.openmrs.Provider;
 import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.LocationService;
@@ -66,6 +68,8 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
     private static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     private final Log log = LogFactory.getLog(JsonEncounterQueueDataHandler.class);
+
+    private static final String DEFAULT_ENCOUNTER_ROLE_UUID = "a0b03050-c99b-11e0-9572-0800200c9a66";
 
     private QueueProcessorException queueProcessorException;
 
@@ -361,13 +365,26 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             encounter.setEncounterType(form.getEncounterType());
         }
 
-        String providerString = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.provider_id']");
-        User user = Context.getUserService().getUserByUsername(providerString);
-        if (user == null) {
-            queueProcessorException.addException(new Exception("Unable to find user using the id: " + providerString));
+        String encounterRoleString = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.provider_role_uuid']");
+        EncounterRole encounterRole = null;
+
+        if(StringUtils.isBlank(encounterRoleString)){
+            encounterRole = Context.getEncounterService().getEncounterRoleByUuid(DEFAULT_ENCOUNTER_ROLE_UUID);
         } else {
-            encounter.setCreator(user);
-            encounter.setProvider(user);
+            encounterRole = Context.getEncounterService().getEncounterRoleByUuid(encounterRoleString);
+        }
+
+        if(encounterRole == null){
+            queueProcessorException.addException(new Exception("Unable to find encounter role using the uuid: ["
+                    + encounterRoleString + "] or the default role [" + DEFAULT_ENCOUNTER_ROLE_UUID +"]"));
+        }
+
+        String providerString = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.provider_id']");
+        Provider provider = Context.getProviderService().getProviderByIdentifier(providerString);
+        if (provider == null) {
+            queueProcessorException.addException(new Exception("Unable to find provider using the id: " + providerString));
+        } else {
+            encounter.setProvider(encounterRole,provider);
         }
 
         String locationString = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.location_id']");
