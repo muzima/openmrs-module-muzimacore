@@ -1172,5 +1172,16 @@
             <column name="uuid" value="aae1a60f-f6ac-4d00-8af7-80270d715114" />
         </insert>
     </changeSet>
+    
+    <changeSet id="muzima-20180214100000" author="bmokaya">
+        <comment>Creating a default mUzima data source with the name Mobile Devices</comment>
+        <insert tableName="muzima_data_source">
+            <column name="name" value="Mobile Devices"/>
+            <column name="description" value="Default data source"/>
+            <column name="creator" value="1"/>
+            <column name="date_created" valueDate="2018-02-14T10:00:00"/>
+            <column name="uuid" value="0d62b128-010e-4c1b-ba86-ef963b7f8a72"/>
+        </insert>
+    </changeSet>
 
 </databaseChangeLog>
