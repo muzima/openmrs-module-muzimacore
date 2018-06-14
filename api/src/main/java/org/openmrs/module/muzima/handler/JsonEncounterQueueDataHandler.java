@@ -65,6 +65,8 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
 
     private static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+
     private final Log log = LogFactory.getLog(JsonEncounterQueueDataHandler.class);
 
     private QueueProcessorException queueProcessorException;
@@ -379,7 +381,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             encounter.setLocation(location);
         }
 
-        Date encounterDatetime = JsonUtils.readAsDate(encounterPayload, "$['encounter']['encounter.encounter_datetime']");
+        Date encounterDatetime = JsonUtils.readAsDateTime(encounterPayload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat);
         encounter.setEncounterDatetime(encounterDatetime);
     }
 
