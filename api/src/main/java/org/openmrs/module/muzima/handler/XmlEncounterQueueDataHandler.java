@@ -39,6 +39,7 @@ import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
+import org.openmrs.module.muzima.utils.ISO8601Util;
 import org.openmrs.module.muzima.utils.PatientSearchUtils;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
@@ -53,6 +54,7 @@ import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -375,7 +377,7 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
                 Element encounterElement = (Element) encounterElementNode;
                 String encounterElementValue = encounterElement.getTextContent();
                 if (encounterElement.getTagName().equals("encounter.encounter_datetime")) {
-                    Date date = parseDate(encounterElementValue);
+                    Date date = parseDateTime(encounterElementValue);
                     encounter.setEncounterDatetime(date);
                 } else if (encounterElement.getTagName().equals("encounter.location_id")) {
                     int locationId = NumberUtils.toInt(encounterElementValue, -999);
@@ -434,6 +436,22 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
             log.error("Unable to parse date data for encounter!", e);
         }
         return date;
+    }
+
+    /**
+         *
+         * @param dateTimeValue - String representation of the datetime
+         * @return DateTime
+         */
+    private Date parseDateTime(final String dateTimeValue) {
+        Date datetime = null;
+        try {
+            Calendar calendar = ISO8601Util.toCalendar(dateTimeValue);
+                 datetime = calendar.getTime();
+        } catch (ParseException e) {
+            log.error("Unable to parse date data for encounter!", e);
+        }
+        return datetime;
     }
 
     /**
