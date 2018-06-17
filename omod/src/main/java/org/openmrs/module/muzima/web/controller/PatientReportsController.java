@@ -32,7 +32,7 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Controller
-@RequestMapping(value = "/module/muzimacore/patientReport.json")
+@RequestMapping(value = "/module/muzimacore/patientReports.json")
 public class PatientReportsController {
 
     @RequestMapping(method = RequestMethod.GET)
