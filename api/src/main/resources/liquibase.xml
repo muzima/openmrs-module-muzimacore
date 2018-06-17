@@ -1184,6 +1184,7 @@
         </insert>
     </changeSet>
 
+<!--
      <changeSet id="muzima-20180616154129" author="dileka">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1250,5 +1251,6 @@
                                  referencedTableName="report" referencedColumnNames="id"/>
 
     </changeSet>
+-->
 
 </databaseChangeLog>
