@@ -14,8 +14,8 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.service.DataService;
-import org.openmrs.module.muzima.model.DataSource;
+import org.openmrs.module.muzima.api.service.MuzimaReportConfigurationService;
+import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,21 +32,23 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Controller
-@RequestMapping(value = "/module/muzimacore/patientReports.json")
-public class PatientReportsController {
+@RequestMapping(value = "/module/muzimacore/reportConfigs.json")
+public class ReportConfigurationsController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getSources(final @RequestParam(value = "search") String search,
+    public Map<String, Object> getReportConfigurations(final @RequestParam(value = "search") String search,
                                           final @RequestParam(value = "pageNumber") Integer pageNumber,
                                           final @RequestParam(value = "pageSize") Integer pageSize) {
         Map<String, Object> response = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
-            DataService dataService = Context.getService(DataService.class);
-            int pages = (dataService.countDataSource(search).intValue() + pageSize - 1) / pageSize;
+    
+            MuzimaReportConfigurationService reportConfigurationService = Context.getService(MuzimaReportConfigurationService.class);
+           
+            int pages = (reportConfigurationService.countDataSource(search).intValue() + pageSize - 1) / pageSize;
             List<Object> objects = new ArrayList<Object>();
-            for (DataSource dataSource : dataService.getPagedDataSource(search, pageNumber, pageSize)) {
-                objects.add(WebConverter.convertDataSource(dataSource));
+            for (ReportConfiguration reportConfiguration : reportConfigurationService.getPagedSettings(search, pageNumber, pageSize)) {
+                objects.add(WebConverter.convertMuzimaReportConfiguration(reportConfiguration));
             }
             response.put("pages", pages);
             response.put("objects", objects);

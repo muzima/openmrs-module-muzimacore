@@ -31,12 +31,12 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Controller
-@RequestMapping(value = "/module/muzimacore/patientReport.json")
-public class PatientReportController {
+@RequestMapping(value = "/module/muzimacore/reportConfig.json")
+public class ReportConfigurationController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getSource(final @RequestParam(value = "uuid") String uuid) {
+    public Map<String, Object> getReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
         DataSource dataSource = null;
         if (Context.isAuthenticated()) {
             DataService dataService = Context.getService(DataService.class);
@@ -46,7 +46,7 @@ public class PatientReportController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void deleteSource(final @RequestBody Map<String, Object> map) {
+    public void deleteReportConfiguration(final @RequestBody Map<String, Object> map) {
         if (Context.isAuthenticated()) {
             String uuid = (String) map.get("uuid");
             String name = (String) map.get("name");

@@ -24,9 +24,9 @@ muzimaCoreModule.
             when('/setting/:uuid', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
             when('/settings', {controller: SettingsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/settings.html'}).
             when('/createSetting/', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
-            when('/patientReport/', {controller: PatientReportCtrl, templateUrl: '../../moduleResources/muzimacore/partials/patientReport.html'}).
-            when('/patientReports', {controller: PatientReportsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/patientReports.html'}).  
-            when('/createConfiguration/', {controller: SourceCtrl, templateUrl: '../../moduleResources/muzimacore/partials/patientReport.html'}).
+            when('/reportConfig/:uuid', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
+            when('/reportConfigs', {controller: ReportConfigurationsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfigurations.html'}).  
+            when('/createReportConfig/', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
             otherwise({redirectTo: '/sources'});
     }]
 );
@@ -281,5 +281,32 @@ muzimaCoreModule.factory('$muzimaSettings', function($http) {
         getSetting: getSetting,
         saveSetting: saveSetting,
         deleteSetting: deleteSetting
+    }
+});
+
+muzimaCoreModule.factory('$reportConfigurations', function($http) {
+
+    var getReportConfigurations = function (search, pageNumber, pageSize) {
+        if (search === undefined) {
+            // replace undefined search term with empty string
+            search = '';
+        }
+        return $http.get("reportConfigs.json?search=" + search + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+    };
+    var getReportConfiguration = function (uuid) {
+        return $http.get("reportConfig.json?uuid=" + uuid);
+    };
+    var saveReportConfiguration = function (uuid, property, name, description, value) {
+        return $http.post("reportConfig.json", {"uuid": uuid, "property": property, "name": name, "description": description,"value": value});
+    };
+    var deleteReportConfiguration = function (uuid) {
+        return $http.post("reportConfig.json", {"uuid": uuid});
+    };
+
+    return {
+        getReportConfigurations: getReportConfigurations,
+        getReportConfiguration: getReportConfiguration,
+        saveReportConfiguration: saveReportConfiguration,
+        deleteReportConfiguration: deleteReportConfiguration
     }
 });
