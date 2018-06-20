@@ -7,7 +7,7 @@
             <li><a href="#/registrations">Registrations</a></li>
             <li><a href="#/forms">Muzima Forms</a></li>
             <li><a href="#/errors">Error Data</a></li>
-            <li><a href="#/patientReports">Patient Reports</a></li>
+            <li><a href="#/reportConfigs">Patient Reports</a></li>
             <li><a href="#/settings">Settings</a></li>
         </ul>
     </div>
@@ -16,7 +16,7 @@
         <div class="clearfix">
             <div class="row">
                 <div class="col-lg-4 pull-left">
-                    <a href="#/createConfiguration">Add Configuration</a>
+                    <a href="#/createReportConfig">Add Configuration</a>
                 </div>
                 <div class="col-lg-3 pull-right">
                     <input type="text" ng-model="search" class="form-control" placeholder="search..." style="padding-left: 10px;"/>
@@ -33,13 +33,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-hide="sources.length">
-                        <td colspan="4">No sources created in the system.</td>
+                    <tr ng-hide="reportConfigurations.length">
+                        <td colspan="4">No reportConfigurations created in the system.</td>
                     </tr>
-                    <tr ng-repeat="source in sources | filter:filterSource() | orderBy:'created':true">
-                        <td><a href="#/source/{{source.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
-                        <td>{{source.name}}</td>
-                        <td>{{source.uuid}}</td>
+                    <tr ng-repeat="reportConfiguration in reportConfigurations | filter:filterReportConfiguration() | orderBy:'created':true">
+                        <td><a href="#/reportConfig/{{reportConfiguration.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
+                        <td>{{reportConfiguration.reportId}}</td>
+                        <td>{{reportConfiguration.uuid}}</td>
                     </tr>
                     </tbody>
                 </table>

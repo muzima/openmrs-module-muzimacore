@@ -8,7 +8,7 @@
             <li><a href="#/registrations">Registrations</a></li>
             <li><a href="#/forms">Muzima Forms</a></li>
             <li><a href="#/errors">Error Data</a></li>
-            <li><a href="#/patientReports">Patient Reports</a></li>
+            <li><a href="#/reportConfigs">Patient Reports</a></li>
             <li><a href="#/settings">Settings</a></li>
         </ul>
     </div>
@@ -18,11 +18,11 @@
                 
 
                 <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Cohort ..." type="text" disabled="" ng-model="source.uuid">
+                    <input class="col-lg-10 form-control" placeholder="Cohort ..." type="text" disabled="" ng-model="reportConfiguration.uuid">
                 </div>
 
                 <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Report name ..." type="text" disabled="" ng-model="source.name">
+                    <input class="col-lg-10 form-control" placeholder="Report name ..." type="text" disabled="" ng-model="reportConfiguration.report_id">
                 </div>
                 
                 <div class="row">
@@ -31,8 +31,8 @@
                     </div>
                    </div>
 
-                <div class="row" style="margin-top: 14px; padding: 0>
-                    <textarea class="col-lg-12 form-control" placeholder="." rows="10" disabled="" ng-model="source.description">
+                <div class="row" style="margin-top: 14px; padding: 0">
+                    <textarea class="col-lg-12 form-control" placeholder="." rows="10" disabled="" ng-model="reportConfiguration.report_id">
                     </textarea>
                 </div>
                
@@ -45,11 +45,11 @@
             <div ng-switch-when="edit">
                 <form id="consult">
                     <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="source.name">
+                        <input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="reportConfiguration.report_id">
                     </div>
 
                     <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Report" type="text" disabled="" ng-model="source.uuid">
+                        <input class="col-lg-10 form-control" placeholder="Report" type="text" disabled="" ng-model="reportConfiguration.uuid">
                     </div>
                    
 
@@ -60,13 +60,13 @@
                     </div>
 
                     <div class="row" style="margin-top: 14px; padding: 0">
-                        <textarea class="col-lg-12 form-control" placeholder="Report ..." rows="10" ng-model="source.description">
+                        <textarea class="col-lg-12 form-control" placeholder="Report ..." rows="10" ng-model="reportConfiguration.uuid">
                         </textarea>
                     </div>
                    
                     <div class="row">
-                        <button type="submit" ng-click="save(source)" class="btn btn-success">Save</button>
-                        <button ng-show="source.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>
+                        <button type="submit" ng-click="save(reportConfiguration)" class="btn btn-success">Save</button>
+                        <button ng-show="reportConfiguration.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>
                         <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
                     </div>
                     <span></span>

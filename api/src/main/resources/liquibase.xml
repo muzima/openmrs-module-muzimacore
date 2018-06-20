@@ -1098,6 +1098,7 @@
             <column name="meta_json" type="${clob.type}"/>
         </addColumn>
     </changeSet>
+    
     <changeSet id="muzima-20170912151100" author="mssavai">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1173,7 +1174,7 @@
         </insert>
     </changeSet>
 
-   <!-- <changeSet id="muzima-20180620158900" author="dileka">
+   <changeSet id="muzima-20180620158900" author="dileka">
         <insert tableName="muzima_setting">
             <column name="property" value="PatientCohort.AutoDownload" />
             <column name="name" value="Patient Cohort auto-download" />
@@ -1184,8 +1185,7 @@
             <column name="creator" value="1" />
             <column name="uuid" value="aae1a60f-f6ac-4d00-ffff-80270d715114" />
         </insert>
-    </changeSet>-->
-    
+    </changeSet>
     <changeSet id="muzima-20180214100000" author="bmokaya">
         <comment>Creating a default mUzima data source with the name Mobile Devices</comment>
         <insert tableName="muzima_data_source">
@@ -1197,7 +1197,7 @@
         </insert>
     </changeSet>
 
-<!--
+
      <changeSet id="muzima-20180616154129" author="dileka">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1211,13 +1211,16 @@
             <column name="cohort_id" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="report_id" type="int">
+                <constraints nullable="false"/>
+            </column>
             <column name="creator" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="date_created" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="changed_by" type="int"/>
+            <column name="changed_by" type="int" />
             <column name="date_changed" type="datetime"/>
             <column name="retired" type="tinyint" defaultValueNumeric="0">
                 <constraints nullable="false"/>
@@ -1238,32 +1241,20 @@
         <addForeignKeyConstraint constraintName="cohort_report_config_retired_by"
                                  baseTableName="cohort_report_config" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
-        <addForeignKeyConstraint constraintName="cohort_report_config_cohort_id"
+       <!-- <addForeignKeyConstraint constraintName="cohort_report_config_cohort_id"
                                  baseTableName="cohort_report_config" baseColumnNames="cohort_id"
-                                 referencedTableName="cohort" referencedColumnNames="cohort_id"/>
-
+                                 referencedTableName="cohort" referencedColumnNames="cohort_id"/>-->
     </changeSet>
-    
-    <changeSet id="muzima-20180616154129" author="dileka">
-        <createTable tableName="cohort_report_mapping">
-            <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="cohort_report_config_id" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="report_id" type="int">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <addForeignKeyConstraint constraintName="cohort_report_mapping_config_id"
-                                 baseTableName="cohort_report_mapping" baseColumnNames="cohort_report_config_id"
-                                 referencedTableName="cohort_report_config" referencedColumnNames="id"/>
-        <addForeignKeyConstraint constraintName="cohort_report_mapping_report_id"
-                                 baseTableName="cohort_report_mapping" baseColumnNames="report_id"
-                                 referencedTableName="report" referencedColumnNames="id"/>
 
+    <changeSet id="muzima-20180621158900" author="dileka">
+        <insert tableName="cohort_report_config">
+            <column name="cohort_id" value="1" />
+            <column name="report_id" value="1" />
+            <column name="creator" value="1" />
+            <column name="date_created" valueDate="2018-06-20T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="aae1a60f-f6ac-4d00-2222-80270d715114" />
+        </insert>
     </changeSet>
--->
 
 </databaseChangeLog>
