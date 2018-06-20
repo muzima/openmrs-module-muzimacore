@@ -1172,6 +1172,19 @@
             <column name="uuid" value="aae1a60f-f6ac-4d00-8af7-80270d715114" />
         </insert>
     </changeSet>
+
+   <!-- <changeSet id="muzima-20180620158900" author="dileka">
+        <insert tableName="muzima_setting">
+            <column name="property" value="PatientCohort.AutoDownload" />
+            <column name="name" value="Patient Cohort auto-download" />
+            <column name="description" value="Defines wether cohorts are downloaded automatically to muzima" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="true" />
+            <column name="date_created" valueDate="2018-06-20T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="aae1a60f-f6ac-4d00-ffff-80270d715114" />
+        </insert>
+    </changeSet>-->
     
     <changeSet id="muzima-20180214100000" author="bmokaya">
         <comment>Creating a default mUzima data source with the name Mobile Devices</comment>

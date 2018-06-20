@@ -25,7 +25,8 @@ muzimaCoreModule.
             when('/settings', {controller: SettingsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/settings.html'}).
             when('/createSetting/', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
             when('/patientReport/', {controller: PatientReportCtrl, templateUrl: '../../moduleResources/muzimacore/partials/patientReport.html'}).
-            when('/patientReports', {controller: PatientReportsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/patientReports.html'}).                       
+            when('/patientReports', {controller: PatientReportsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/patientReports.html'}).  
+            when('/createConfiguration/', {controller: SourceCtrl, templateUrl: '../../moduleResources/muzimacore/partials/patientReport.html'}).
             otherwise({redirectTo: '/sources'});
     }]
 );

@@ -7,16 +7,16 @@
             <li><a href="#/registrations">Registrations</a></li>
             <li><a href="#/forms">Muzima Forms</a></li>
             <li><a href="#/errors">Error Data</a></li>
-            <li><a href="#/patientReport">Patient Reports</a></li>
+            <li><a href="#/patientReports">Patient Reports</a></li>
             <li><a href="#/settings">Settings</a></li>
         </ul>
     </div>
-    Patient Report 
+    Patients Report 
     <div class="col-lg-8">
         <div class="clearfix">
             <div class="row">
                 <div class="col-lg-4 pull-left">
-                    <a href="#/createSource">Create Source</a>
+                    <a href="#/createConfiguration">Add Configuration</a>
                 </div>
                 <div class="col-lg-3 pull-right">
                     <input type="text" ng-model="search" class="form-control" placeholder="search..." style="padding-left: 10px;"/>
@@ -27,10 +27,9 @@
                 <table class="table table-striped table-bordered table-condensed table-hover">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>UUID</th>
-                        <th>Created On</th>
+                        <th>Action</th>
+                        <th>Cohort</th>
+                        <th>Report</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -41,7 +40,6 @@
                         <td><a href="#/source/{{source.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
                         <td>{{source.name}}</td>
                         <td>{{source.uuid}}</td>
-                        <td>{{source.created}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -54,4 +52,4 @@
         </div>
     </div>
 </div>
-Patient Reportss
+Patient Reports
