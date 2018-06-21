@@ -202,7 +202,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         notificationData.setPayload(message);
         notificationData.setSubject(subject);
         notificationData.setSource(source);
-        notificationData.setStatus("incoming");
+        notificationData.setStatus("unread");
 
         propertiesToCreate.put("sender",sender);
         propertiesToCreate.put("receiver",receiver);
@@ -210,7 +210,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         propertiesToCreate.put("payload", message);
         propertiesToCreate.put("subject",subject);
         propertiesToCreate.put("source", source);
-        propertiesToCreate.put("status", "incoming");
+        propertiesToCreate.put("status", "unread");
         setConvertedProperties(notificationData, propertiesToCreate, getCreatableProperties(), true);
         notificationData = save(notificationData);
         return ConversionUtil.convertToRepresentation(notificationData, Representation.DEFAULT);
