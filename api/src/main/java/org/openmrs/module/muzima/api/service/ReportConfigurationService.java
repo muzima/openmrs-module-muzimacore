@@ -18,7 +18,7 @@ import org.openmrs.module.muzima.model.ReportConfiguration;
 
 import java.util.List;
 
-public interface MuzimaReportConfigurationService extends OpenmrsService {
+public interface ReportConfigurationService extends OpenmrsService {
 
     ReportConfiguration getReportConfigurationById(final Integer id);
 
@@ -51,6 +51,6 @@ public interface MuzimaReportConfigurationService extends OpenmrsService {
      * @param pageSize   the size of the page.
      * @return list of all settings with matching search term for a particular page.
      */
-    List<ReportConfiguration> getPagedSettings(final String search, final Integer pageNumber, final Integer pageSize);
+    List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize);
 
 }

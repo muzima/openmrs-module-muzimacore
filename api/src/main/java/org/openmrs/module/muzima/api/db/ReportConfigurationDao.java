@@ -17,7 +17,7 @@ import org.openmrs.module.muzima.model.ReportConfiguration;
 
 import java.util.List;
 
-public interface MuzimaReportConfigurationDao {
+public interface ReportConfigurationDao {
 
     List<ReportConfiguration> getAll();
 

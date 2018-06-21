@@ -1,4 +1,4 @@
-function ReportConfigurationCtrl($scope, $routeParams, $location, $reportConfigurations) {
+function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportConfigurations) {
     $scope.reportConfiguration = {};
     // initialize the view to be read only
     $scope.mode = "view";
@@ -6,7 +6,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $reportConfigu
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
     } else {
-        $reportConfigurations.getReportConfiguration($scope.uuid).
+        $muzimaReportConfigurations.getReportConfiguration($scope.uuid).
         then(function (response) {
             $scope.reportConfiguration = response.data;
         });
@@ -29,7 +29,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $reportConfigu
     };
 
     $scope.save = function (setting) {
-        $reportConfigurations.saveReportConfiguration(setting.uuid, setting.property, setting.name, setting.description, setting.value).
+        $muzimaReportConfigurations.saveReportConfiguration(setting.uuid, setting.property, setting.name, setting.description, setting.value).
         then(function () {
             $location.path("/reportConfigs");
         })
@@ -43,22 +43,22 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $reportConfigu
     };
 }
 
-function ReportConfigurationsCtrl($scope, $location, $reportConfigurations) {
+function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations) {
     // initialize the paging structure
-    $scope.reportConfigurations = [];
+  
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
-    $reportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
+    $muzimaReportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
-        $scope.reportConfigurations = serverData.objects | [];
+        $scope.reportConfigurations = serverData.objects;
         $scope.noOfPages = serverData.pages;
     });
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
         if (newValue != oldValue) {
-            $reportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
+            $muzimaReportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
                 $scope.reportConfigurations = serverData.objects;
@@ -70,7 +70,7 @@ function ReportConfigurationsCtrl($scope, $location, $reportConfigurations) {
     $scope.$watch('search', function (newValue, oldValue) {
         if (newValue != oldValue) {
             $scope.currentPage = 1;
-            $reportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
+            $muzimaReportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
                 $scope.reportConfigurations = serverData.objects;
