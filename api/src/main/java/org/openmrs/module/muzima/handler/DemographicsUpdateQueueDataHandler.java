@@ -509,10 +509,16 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     }
 
     private  void setUnsavedPatientChangedByFromPayload(){
+        String userString = JsonUtils.readAsString(payload, "$['encounter']['encounter.user_system_id']");
         String providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
-        User user = Context.getUserService().getUserByUsername(providerString);
+
+        User user = Context.getUserService().getUserByUsername(userString);
         if (user == null) {
-            queueProcessorException.addException(new Exception("Unable to find user using the id: " + providerString));
+            providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
+            user = Context.getUserService().getUserByUsername(providerString);
+        }
+        if (user == null) {
+            queueProcessorException.addException(new Exception("Unable to find user using the User Id: " + userString + " or Provider Id: "+providerString));
         } else {
             unsavedPatient.setChangedBy(user);
         }
