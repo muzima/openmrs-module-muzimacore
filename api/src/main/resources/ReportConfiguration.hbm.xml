@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="org.openmrs.module.muzima.model">
 
-    <class name="ReportConfiguration" table="muzima_report_configuration">
+    <class name="ReportConfiguration" table="muzima_cohort_report_config">
         <id name="id" type="java.lang.Integer" column="id" unsaved-value="0">
             <generator class="native"/>
         </id>

@@ -46,6 +46,7 @@
         QueueData.hbm.xml
         RegistrationData.hbm.xml
         MuzimaSetting.hbm.xml
+        ReportConfiguration.hbm.xml
     </mappingFiles>
 
     <!-- Internationalization -->
