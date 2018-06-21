@@ -96,6 +96,7 @@ public class ReportConfigurationServiceImpl extends BaseOpenmrsService implement
      */
     @Override
     public List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize) {
+        System.out.println("dddddddddddddddddddddddddddddddd\n");
         return dao.getPagedReportConfigurations(search, pageNumber, pageSize);
     }
 }

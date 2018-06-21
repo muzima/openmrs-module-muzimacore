@@ -21,13 +21,13 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    private String reportId;
-    private String cohortId;
+    private Integer reportId;
+    private Integer cohortId;
 
     public ReportConfiguration(){
     }    // used by hibernate
 
-    public ReportConfiguration(String reportId, String cohortId){
+    public ReportConfiguration(Integer reportId, Integer cohortId){
         setReportId(reportId);
         setCohortId(cohortId);
        
@@ -43,19 +43,19 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
         this.id = id;
     }
     
-    public void setReportId(final String reportId) {
+    public void setReportId(final Integer reportId) {
         this.reportId = reportId;
     }
     
-    public String getReportId(){
+    public Integer getReportId(){
         return reportId;
     }
 
-    public String getCohortId(){
+    public Integer getCohortId(){
         return cohortId;
     }
 
-    public void setCohortId(String property) {
+    public void setCohortId(final Integer cohortId) {
         this.cohortId = cohortId;
     }
 

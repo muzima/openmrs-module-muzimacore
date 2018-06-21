@@ -32,7 +32,7 @@
         <class>org.openmrs.module.muzima.extension.html.AdminList</class>
     </extension>
 
-    <!-- Maps hibernate file's, if present -->
+    <!-- Maps hibernate file's, if present  ReportConfiguration.hbm.xml -->
     <mappingFiles>
         ArchiveData.hbm.xml
         DataSource.hbm.xml
