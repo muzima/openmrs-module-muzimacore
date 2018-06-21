@@ -1098,7 +1098,6 @@
             <column name="meta_json" type="${clob.type}"/>
         </addColumn>
     </changeSet>
-    
     <changeSet id="muzima-20170912151100" author="mssavai">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1173,7 +1172,6 @@
             <column name="uuid" value="aae1a60f-f6ac-4d00-8af7-80270d715114" />
         </insert>
     </changeSet>
-
    <changeSet id="muzima-20180620158900" author="dileka">
         <insert tableName="muzima_setting">
             <column name="property" value="PatientCohort.AutoDownload" />
@@ -1241,12 +1239,12 @@
         <addForeignKeyConstraint constraintName="muzima_cohort_report_config_retired_by"
                                  baseTableName="muzima_cohort_report_config" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
-       <!-- <addForeignKeyConstraint constraintName="cohort_report_config_cohort_id"
-                                 baseTableName="cohort_report_config" baseColumnNames="cohort_id"
+    <!--   <addForeignKeyConstraint constraintName="muzima_cohort_report_config_cohort_id"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="cohort_id"
                                  referencedTableName="cohort" referencedColumnNames="cohort_id"/>-->
     </changeSet>
 
-    <changeSet id="muzima-20180621158900" author="dileka">
+<!--    <changeSet id="muzima-20180621158900" author="dileka">
         <insert tableName="muzima_cohort_report_config">
             <column name="cohort_id" value="1" />
             <column name="report_id" value="1" />
@@ -1255,6 +1253,6 @@
             <column name="creator" value="1" />
             <column name="uuid" value="aae1a60f-f6ac-4d00-2222-80270d715114" />
         </insert>
-    </changeSet>
+    </changeSet>-->
 
 </databaseChangeLog>
