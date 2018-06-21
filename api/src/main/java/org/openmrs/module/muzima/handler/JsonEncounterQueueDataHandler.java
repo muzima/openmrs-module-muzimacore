@@ -389,6 +389,18 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             encounter.setProvider(encounterRole,provider);
         }
 
+        String userString = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.user_system_id']");
+        User user = Context.getUserService().getUserByUsername(userString);
+
+        if(user == null ){
+            user = Context.getUserService().getUserByUsername(providerString);
+        }
+        if(user == null) {
+            queueProcessorException.addException(new Exception("Unable to find user using the User Id: " + userString + " or Provider Id: "+providerString));
+        } else {
+            encounter.setCreator(user);
+        }
+
         String locationString = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.location_id']");
         int locationId = NumberUtils.toInt(locationString, -999);
         Location location = Context.getLocationService().getLocation(locationId);
