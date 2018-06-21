@@ -284,7 +284,7 @@ muzimaCoreModule.factory('$muzimaSettings', function($http) {
     }
 });
 
-muzimaCoreModule.factory('$reportConfigurations', function($http) {
+muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
 
     var getReportConfigurations = function (search, pageNumber, pageSize) {
         if (search === undefined) {

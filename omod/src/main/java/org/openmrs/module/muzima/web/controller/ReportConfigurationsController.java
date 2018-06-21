@@ -14,7 +14,7 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.service.MuzimaReportConfigurationService;
+import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
@@ -41,15 +41,20 @@ public class ReportConfigurationsController {
                                           final @RequestParam(value = "pageNumber") Integer pageNumber,
                                           final @RequestParam(value = "pageSize") Integer pageSize) {
         Map<String, Object> response = new HashMap<String, Object>();
+        System.out.println("1111111111111111111111111111\n");
         if (Context.isAuthenticated()) {
-    
-            MuzimaReportConfigurationService reportConfigurationService = Context.getService(MuzimaReportConfigurationService.class);
-           
+            System.out.println("2222222222222222222222222222222\n");
+            ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
+            System.out.println("3333333333333333333333333333333333\n");
+            System.out.println("ppppppppppppp"+reportConfigurationService.countDataSource(search));
             int pages = (reportConfigurationService.countDataSource(search).intValue() + pageSize - 1) / pageSize;
+            System.out.println("4444444444444444444444444444444\n");
             List<Object> objects = new ArrayList<Object>();
-            for (ReportConfiguration reportConfiguration : reportConfigurationService.getPagedSettings(search, pageNumber, pageSize)) {
+            for (ReportConfiguration reportConfiguration : reportConfigurationService.getPagedReportConfigurations(search, pageNumber, pageSize)) {
+                System.out.println("5555555555555555555555555555555555\n");
                 objects.add(WebConverter.convertMuzimaReportConfiguration(reportConfiguration));
             }
+            System.out.println("llllllllllllllllllllllllllllll\n"+objects);
             response.put("pages", pages);
             response.put("objects", objects);
         }

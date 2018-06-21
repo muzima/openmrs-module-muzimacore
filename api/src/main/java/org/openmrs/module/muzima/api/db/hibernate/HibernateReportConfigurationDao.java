@@ -24,18 +24,18 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
-import org.openmrs.module.muzima.api.db.MuzimaReportConfigurationDao;
+import org.openmrs.module.muzima.api.db.ReportConfigurationDao;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class HibernateMuzimaReportConfigurationDao implements MuzimaReportConfigurationDao{
+public class HibernateReportConfigurationDao implements ReportConfigurationDao {
     private DbSessionFactory sessionFactory;
     protected Class mappedClass = ReportConfiguration.class;
     private final Log log = LogFactory.getLog(this.getClass());
 
-    public HibernateMuzimaReportConfigurationDao(DbSessionFactory sessionFactory){
+    public HibernateReportConfigurationDao(DbSessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
     }
 
@@ -62,8 +62,8 @@ public class HibernateMuzimaReportConfigurationDao implements MuzimaReportConfig
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
             //disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
-            disjunction.add(Restrictions.ilike("report_id", search, MatchMode.ANYWHERE));
-            disjunction.add(Restrictions.ilike("cohort_id", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("reportId", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("cohortId", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
         }
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
@@ -73,7 +73,7 @@ public class HibernateMuzimaReportConfigurationDao implements MuzimaReportConfig
         if (pageSize != null) {
             criteria.setMaxResults(pageSize);
         }
-        criteria.addOrder(Order.desc("date_created"));
+        criteria.addOrder(Order.desc("dateCreated"));
         return criteria.list();
     }
 
@@ -87,17 +87,22 @@ public class HibernateMuzimaReportConfigurationDao implements MuzimaReportConfig
     @Override
     @Transactional
     public Number countReportConfigurations(final String search) {
+        System.out.println("7777777777777777777777777777\n");
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
+            System.out.println("888888888888888888888888888888\n");
             Disjunction disjunction = Restrictions.disjunction();
             //disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
-            disjunction.add(Restrictions.ilike("report_id", search, MatchMode.ANYWHERE));
-            disjunction.add(Restrictions.ilike("cohort_id", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("reportId", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("cohortId", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
         }
+        System.out.println("99999999999999999999999999999999\n");
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.setProjection(Projections.rowCount());
+        System.out.println("1010101010101010101010101010\n");
         return (Number) criteria.uniqueResult();
+        
     }
 
     @Override
@@ -130,7 +135,7 @@ public class HibernateMuzimaReportConfigurationDao implements MuzimaReportConfig
     @Transactional
     public ReportConfiguration getReportConfigurationByReportId(String reportId){
         Criteria criteria = session().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("report_id", reportId));
+        criteria.add(Restrictions.eq("reportId", reportId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         return (ReportConfiguration)criteria.uniqueResult();
     }

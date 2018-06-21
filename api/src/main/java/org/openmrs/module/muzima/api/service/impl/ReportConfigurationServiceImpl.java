@@ -16,25 +16,25 @@ package org.openmrs.module.muzima.api.service.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.muzima.api.db.MuzimaReportConfigurationDao;
-import org.openmrs.module.muzima.api.service.MuzimaReportConfigurationService;
+import org.openmrs.module.muzima.api.db.ReportConfigurationDao;
+import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 
 import java.util.List;
 
-public class MuzimaReportConfigurationServiceImpl extends BaseOpenmrsService implements MuzimaReportConfigurationService{
+public class ReportConfigurationServiceImpl extends BaseOpenmrsService implements ReportConfigurationService {
     private final Log log = LogFactory.getLog(this.getClass());
-    private MuzimaReportConfigurationDao dao;
+    private ReportConfigurationDao dao;
 
-    public MuzimaReportConfigurationServiceImpl(MuzimaReportConfigurationDao dao){
+    public ReportConfigurationServiceImpl(ReportConfigurationDao dao){
         this.dao = dao;
     }
 
-    public MuzimaReportConfigurationDao getDao() {
+    public ReportConfigurationDao getDao() {
         return dao;
     }
 
-    public void setDao(MuzimaReportConfigurationDao dao) {
+    public void setDao(ReportConfigurationDao dao) {
         this.dao = dao;
     }
 
@@ -82,6 +82,7 @@ public class MuzimaReportConfigurationServiceImpl extends BaseOpenmrsService imp
      */
     @Override
     public Number countDataSource(final String search) {
+        System.out.println("6666666666666666666666666\n");
         return dao.countReportConfigurations(search);
     }
 
@@ -94,7 +95,7 @@ public class MuzimaReportConfigurationServiceImpl extends BaseOpenmrsService imp
      * @return list of all settings with matching search term for a particular page.
      */
     @Override
-    public List<ReportConfiguration> getPagedSettings(final String search, final Integer pageNumber, final Integer pageSize) {
+    public List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize) {
         return dao.getPagedReportConfigurations(search, pageNumber, pageSize);
     }
 }
