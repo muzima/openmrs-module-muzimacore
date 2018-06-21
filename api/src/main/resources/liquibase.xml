@@ -1201,10 +1201,10 @@
      <changeSet id="muzima-20180616154129" author="dileka">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="cohort_report_config"/>
+                <tableExists tableName="muzima_cohort_report_config"/>
             </not>
         </preConditions>
-        <createTable tableName="cohort_report_config">
+        <createTable tableName="muzima_cohort_report_config">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -1232,14 +1232,14 @@
                 <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint constraintName="cohort_report_config_creator"
-                                 baseTableName="cohort_report_config" baseColumnNames="creator"
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_creator"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="creator"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
-        <addForeignKeyConstraint constraintName="cohort_report_config_changed_by"
-                                 baseTableName="cohort_report_config" baseColumnNames="changed_by"
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_changed_by"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="changed_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
-        <addForeignKeyConstraint constraintName="cohort_report_config_retired_by"
-                                 baseTableName="cohort_report_config" baseColumnNames="retired_by"
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_retired_by"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
        <!-- <addForeignKeyConstraint constraintName="cohort_report_config_cohort_id"
                                  baseTableName="cohort_report_config" baseColumnNames="cohort_id"
@@ -1247,7 +1247,7 @@
     </changeSet>
 
     <changeSet id="muzima-20180621158900" author="dileka">
-        <insert tableName="cohort_report_config">
+        <insert tableName="muzima_cohort_report_config">
             <column name="cohort_id" value="1" />
             <column name="report_id" value="1" />
             <column name="creator" value="1" />
