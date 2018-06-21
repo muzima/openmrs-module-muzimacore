@@ -137,7 +137,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         setPatientNameFromPayload();
         setPatientAddressesFromPayload();
         setPersonAttributesFromPayload();
-        setUnsavedPatientCreatedByFromPayload();
+        setUnsavedPatientCreatorFromPayload();
     }
 
     private void setPatientIdentifiersFromPayload() {
@@ -512,7 +512,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         return personAttribute;
     }
 
-    private  void setUnsavedPatientCreatedByFromPayload(){
+    private  void setUnsavedPatientCreatorFromPayload(){
         String userString = JsonUtils.readAsString(payload, "$['encounter']['encounter.user_system_id']");
         String providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
 
