@@ -26,6 +26,7 @@ import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
+import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
@@ -130,6 +131,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         setPatientNameFromPayload();
         setPatientAddressesFromPayload();
         setPersonAttributesFromPayload();
+        setUnsavedPatientCreatedByFromPayload();
     }
 
     private void setPatientIdentifiersFromPayload() {
@@ -318,6 +320,23 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             queueProcessorException.addException(
                     new Exception("Unable to find Person Attribute type by name '" + attributeTypeName + "'")
             );
+        }
+    }
+
+
+    private  void setUnsavedPatientCreatedByFromPayload(){
+        String userString = JsonUtils.readAsString(payload, "$['encounter']['encounter.user_system_id']");
+        String providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
+
+        User user = Context.getUserService().getUserByUsername(userString);
+        if (user == null) {
+            providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
+            user = Context.getUserService().getUserByUsername(providerString);
+        }
+        if (user == null) {
+            queueProcessorException.addException(new Exception("Unable to find user using the User Id: " + userString + " or Provider Id: "+providerString));
+        } else {
+            unsavedPatient.setCreator(user);
         }
     }
 

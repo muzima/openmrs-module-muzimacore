@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.PersonAddress;
+import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import com.jayway.jsonpath.InvalidPathException;
 import org.openmrs.api.PersonService;
@@ -136,6 +137,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         setPatientNameFromPayload();
         setPatientAddressesFromPayload();
         setPersonAttributesFromPayload();
+        setUnsavedPatientCreatedByFromPayload();
     }
 
     private void setPatientIdentifiersFromPayload() {
@@ -508,6 +510,22 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         personAttribute.setAttributeType(attributeType);
         personAttribute.setValue(attributeValue);
         return personAttribute;
+    }
+
+    private  void setUnsavedPatientCreatedByFromPayload(){
+        String userString = JsonUtils.readAsString(payload, "$['encounter']['encounter.user_system_id']");
+        String providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
+
+        User user = Context.getUserService().getUserByUsername(userString);
+        if (user == null) {
+            providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
+            user = Context.getUserService().getUserByUsername(providerString);
+        }
+        if (user == null) {
+            queueProcessorException.addException(new Exception("Unable to find user using the User Id: " + userString + " or Provider Id: "+providerString));
+        } else {
+            unsavedPatient.setCreator(user);
+        }
     }
 
     private Patient findSimilarSavedPatient() {
