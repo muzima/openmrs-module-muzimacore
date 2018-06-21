@@ -11,6 +11,7 @@
         </id>
         <property name="cohortId" type="java.lang.Integer" column="cohort_id" not-null="true"/>
         <property name="reportId" type="java.lang.Integer" column="report_id" not-null="true"/>
+        
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">
             <column name="creator"/>
         </many-to-one>

@@ -58,6 +58,7 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize) {
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaa\n");
         Criteria criteria = session().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -66,6 +67,7 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
             disjunction.add(Restrictions.ilike("cohortId", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
         }
+        System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
@@ -74,6 +76,7 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
             criteria.setMaxResults(pageSize);
         }
         criteria.addOrder(Order.desc("dateCreated"));
+        System.out.println("cccccccccccccccccccccccccccccccccc\n");
         return criteria.list();
     }
 
