@@ -17,6 +17,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.model.DataSource;
@@ -209,7 +210,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         propertiesToCreate.put("payload", message);
         propertiesToCreate.put("subject",subject);
         propertiesToCreate.put("source", source);
-        propertiesToCreate.put("status", "unread");
+        propertiesToCreate.put("status", "incoming");
         setConvertedProperties(notificationData, propertiesToCreate, getCreatableProperties(), true);
         notificationData = save(notificationData);
         return ConversionUtil.convertToRepresentation(notificationData, Representation.DEFAULT);
@@ -266,6 +267,9 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
     private Person extractReceiverFromPayload(String payload){
         String receiverUuid = JsonUtils.readAsString(payload,"$['receiver']");
         Person receiver = Context.getPersonService().getPersonByUuid(receiverUuid);
+        if(receiver == null){
+            receiver = Context.getProviderService().getProviderByUuid(receiverUuid).getPerson();
+        }
         return  receiver;
     }
 
