@@ -22,17 +22,12 @@
                 </div>
 
                 <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Report name ..." type="text" disabled="" ng-model="reportConfiguration.report_id">
+                    <input class="col-lg-10 form-control" placeholder="Report name ..." type="text" disabled="" ng-model="reportConfiguration.cohortId">
                 </div>
                 
-                <div class="row">
-                    <div class="col-lg-4 col-lg-offset-4 margin-top-lg pad-5 p-2 padding-5 style="margin-top: 14px; padding: 0">
-                        <button type="submit" ng-click="" class="btn btn-success btn-large btn-lg btn-block ">Add to List</button>
-                    </div>
-                   </div>
-
+               
                 <div class="row" style="margin-top: 14px; padding: 0">
-                    <textarea class="col-lg-12 form-control" placeholder="." rows="10" disabled="" ng-model="reportConfiguration.report_id">
+                    <textarea class="col-lg-12 form-control" placeholder="." rows="10" disabled="" ng-model="reportConfiguration.reportId">
                     </textarea>
                 </div>
                
@@ -43,13 +38,14 @@
                 <span></span>
             </div>
             <div ng-switch-when="edit">
+                1111111111111111
                 <form id="consult">
                     <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="reportConfiguration.report_id">
+                        <input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="reportConfiguration.cohortId">
                     </div>
 
                     <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Report" type="text" disabled="" ng-model="reportConfiguration.uuid">
+                        <input class="col-lg-10 form-control" placeholder="Report" type="text">
                     </div>
                    
 
@@ -60,7 +56,7 @@
                     </div>
 
                     <div class="row" style="margin-top: 14px; padding: 0">
-                        <textarea class="col-lg-12 form-control" placeholder="Report ..." rows="10" ng-model="reportConfiguration.uuid">
+                        <textarea class="col-lg-12 form-control" placeholder="Report ..." rows="10" ng-model="reportConfiguration.reportId">
                         </textarea>
                     </div>
                    

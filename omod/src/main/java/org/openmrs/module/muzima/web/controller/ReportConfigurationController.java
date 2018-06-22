@@ -16,7 +16,9 @@ package org.openmrs.module.muzima.web.controller;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
+import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.DataSource;
+import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,37 +39,45 @@ public class ReportConfigurationController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
-        DataSource dataSource = null;
+        ReportConfiguration reportConfiguration = null;
         if (Context.isAuthenticated()) {
-            DataService dataService = Context.getService(DataService.class);
-            dataSource = dataService.getDataSourceByUuid(uuid);
+            ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
+            reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
         }
-        return WebConverter.convertDataSource(dataSource);
+        return WebConverter.convertMuzimaReportConfiguration(reportConfiguration);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public void deleteReportConfiguration(final @RequestBody Map<String, Object> map) {
+        System.out.println("ssssss111111111111111111");
         if (Context.isAuthenticated()) {
+            System.out.println("sssssss22222222222222222222");
             String uuid = (String) map.get("uuid");
-            String name = (String) map.get("name");
-            String description = (String) map.get("description");
-            DataService dataService = Context.getService(DataService.class);
+            ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             if (StringUtils.isNotBlank(uuid)) {
-                DataSource dataSource = dataService.getDataSourceByUuid(uuid);
-                if (StringUtils.isNotBlank(name) || StringUtils.isNotBlank(description)) {
-                    dataSource.setName(name);
-                    dataSource.setDescription(description);
-                    dataService.saveDataSource(dataSource);
+                Integer reportId =  (Integer)map.get("reportId");
+                System.out.println("sssssss3333333333333333333333333333333");
+                Integer cohortId =  (Integer)map.get("cohortId");
+                ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
+                if (reportId !=0 && cohortId !=0){
+                    System.out.println("sssssss4444444444444444444444444444");
+                    reportConfiguration.setReportId(reportId);
+                    reportConfiguration.setCohortId(cohortId);
+                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 } else {
-                    dataSource.setRetired(true);
-                    dataSource.setRetireReason("Deleting a data source object!");
-                    dataService.saveDataSource(dataSource);
+                    System.out.println("sssssss5555555555555555555555555555");
+                    reportConfiguration.setRetired(true);
+                    reportConfiguration.setRetireReason("Deleting a data source object!");
+                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             } else {
-                DataSource dataSource = new DataSource();
-                dataSource.setName(name);
-                dataSource.setDescription(description);
-                dataService.saveDataSource(dataSource);
+                String reportId =  (String)map.get("reportId");
+                String cohortId = (String)map.get("cohortId");
+                System.out.println("sssssssss666666666666666666666666666");
+                ReportConfiguration reportConfiguration = new ReportConfiguration();
+                reportConfiguration.setReportId(Integer.parseInt(reportId));
+                reportConfiguration.setCohortId(Integer.parseInt(cohortId));
+                reportConfigurationService.saveReportConfiguration(reportConfiguration);
             }
         }
     }

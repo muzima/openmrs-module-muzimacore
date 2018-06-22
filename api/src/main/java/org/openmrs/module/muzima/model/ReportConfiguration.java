@@ -15,6 +15,8 @@ package org.openmrs.module.muzima.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
+import org.openmrs.Cohort;
+import org.openmrs.User;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ReportConfiguration extends BaseOpenmrsMetadata {
@@ -23,6 +25,8 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
     private Integer id;
     private Integer reportId;
     private Integer cohortId;
+    private Cohort cohort;
+    private User user;
 
     public ReportConfiguration(){
     }    // used by hibernate
@@ -50,6 +54,14 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
     public Integer getReportId(){
         return reportId;
     }
+    
+    public void setCohort(Cohort cohort){
+        this.cohort = cohort;
+    }
+    
+    public Cohort getCohort(){
+        return cohort;
+    }
 
     public Integer getCohortId(){
         return cohortId;
@@ -57,6 +69,13 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
 
     public void setCohortId(final Integer cohortId) {
         this.cohortId = cohortId;
+    }
+    
+    public User getCreator(){
+        return user;
+    }
+    public void setCreator(User creator){
+        this.user = creator;
     }
 
     @Override
