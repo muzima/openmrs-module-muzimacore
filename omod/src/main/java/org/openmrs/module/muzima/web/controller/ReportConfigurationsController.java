@@ -46,9 +46,8 @@ public class ReportConfigurationsController {
             System.out.println("2222222222222222222222222222222\n");
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             System.out.println("3333333333333333333333333333333333\n");
-            System.out.println("ppppppppppppp"+reportConfigurationService.countDataSource(search));
             int pages = (reportConfigurationService.countDataSource(search).intValue() + pageSize - 1) / pageSize;
-            System.out.println("4444444444444444444444444444444\n");
+            System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk" +search);
             List<Object> objects = new ArrayList<Object>();
             for (ReportConfiguration reportConfiguration : reportConfigurationService.getPagedReportConfigurations(search, pageNumber, pageSize)) {
                 System.out.println("5555555555555555555555555555555555\n");
