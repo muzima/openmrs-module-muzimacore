@@ -302,11 +302,21 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
     var deleteReportConfiguration = function (uuid) {
         return $http.post("reportConfig.json", {"uuid": uuid});
     };
+    
+    var searchReportConfigCohorts = function(search) {
+           return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
+     };
+       
+     var searchReportConfigReports = function(search) {
+               return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
+     };
 
     return {
         getReportConfigurations: getReportConfigurations,
         getReportConfiguration: getReportConfiguration,
         saveReportConfiguration: saveReportConfiguration,
-        deleteReportConfiguration: deleteReportConfiguration
+        deleteReportConfiguration: deleteReportConfiguration,
+        searchReportConfigCohorts: searchReportConfigCohorts,
+        searchReportConfigReports: searchReportConfigReports
     }
 });
