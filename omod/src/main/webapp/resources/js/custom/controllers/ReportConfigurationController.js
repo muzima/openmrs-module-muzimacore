@@ -1,5 +1,9 @@
 function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportConfigurations) {
     $scope.reportConfiguration = {};
+     $scope.search = { cohorts: '', reports: ''};
+     $scope.selected = {cohorts: '', reports: ''};
+     $scope.configReports = [];
+        
     // initialize the view to be read only
     $scope.mode = "view";
     $scope.uuid = $routeParams.uuid;
@@ -41,6 +45,55 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
             $location.path("/reportConfigs");
         })
     };
+    
+     /****************************************************************************************
+         ***** Group of methods to manipulate Cohorts
+         *****************************************************************************************/
+        $scope.$watch('search.cohorts', function (newValue, oldValue) {
+            if (newValue != oldValue) {
+                $muzimaReportConfigurations.searchReportConfigCohorts($scope.search.cohorts).
+                then(function (response) {
+                    $scope.cohorts = response.data.objects;
+                });
+            }
+        }, true);
+        
+         /****************************************************************************************
+          ***** Group of methods to manipulate Reports
+          *****************************************************************************************/
+                
+         $scope.$watch('search.reports', function (newValue, oldValue) {
+                    if (newValue != oldValue) {
+                        $muzimaReportConfigurations.searchReportConfigReports($scope.search.reports).
+                        then(function (response) {
+                            $scope.reports = response.data.objects;
+                        });
+                    }
+                }, true);
+        
+          $scope.addReport = function(report) {
+                var reportExists = _.find($scope.configReports, function (configReport) {
+                    return configReport.uuid == report.uuid
+                });
+                if (!reportExists) {
+                    $scope.configReports.push(report);
+                    $scope.search.reports = '';
+                }
+            };
+        
+            $scope.chosenReport = function (value) {
+                $scope.selected.report= value;
+            };
+            
+            $scope.removeReport = function () {
+                    angular.forEach($scope.configReports, function (configReport, index) {
+                        if (configReport.uuid === $scope.selected.report) {
+                            $scope.configReports.splice(index, 1);
+                            $scope.selected.report = '';
+                        }
+                    });
+                };
+        
 }
 
 function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations) {

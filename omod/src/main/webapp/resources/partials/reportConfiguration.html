@@ -41,13 +41,39 @@
                 1111111111111111
                 <form id="consult">
                     <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="reportConfiguration.cohortId">
+                        <!--<input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="reportConfiguration.cohortId">
+                        -->
+                        <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
+                               uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
+                               uib-typeahead-wait-ms="500"  uib-typeahead-editable="false"/>
                     </div>
 
                     <div class="row">
                         <input class="col-lg-10 form-control" placeholder="Report" type="text">
                     </div>
-                   
+
+                    <div class="panel panel-default panel-body col-lg-12">
+                        <uib-tabset active="active">
+                            <uib-tab index="1" heading="Reports">
+                                <div class="row col-lg-12">
+                                    <div class="col-md-2" style="margin-top: 14px; padding: 0">
+                                        <strong>Add Report</strong>
+                                    </div>
+                                    <div class="col-md-5" style="margin-top: 8px">
+                                        <input type="text" ng-model="search.reports" class="form-control" placeholder="Search report by name ..." autocomplete="off"
+                                               uib-typeahead="report as report.name for report in reports | filter:$viewValue | limitTo:8"
+                                               uib-typeahead-wait-ms="500" typeahead-on-select="addReport($item)" uib-typeahead-editable="false"/>
+                                    </div>
+                                </div>
+                                <div class="row col-lg-12">
+                                    <select class="col-lg-10 selectClass" size="8">
+                                        <option ng-click="chosenReport(report.uuid)" ng-repeat="report in configReports">{{report.name}}</option>
+                                    </select>
+                                    <button type="submit" ng-disabled="!selected.report" ng-click="removeReport()" class="btn btn-sm">Remove Report</button>
+                                </div>
+                            </uib-tab>
+                        </uib-tabset>
+                    </div>
 
                     <div class="row">
                         <div class="col-lg-4 col-lg-offset-4 margin-top-lg pad-5 p-2 padding-5">
