@@ -53,8 +53,8 @@
                     </div>
 
                     <div class="panel panel-default panel-body col-lg-12">
-                        <uib-tabset active="active">
-                            <uib-tab index="1" heading="Reports">
+                        <div active="active">
+                            <div index="1" heading="Reports">
                                 <div class="row col-lg-12">
                                     <div class="col-md-2" style="margin-top: 14px; padding: 0">
                                         <strong>Add Report</strong>
@@ -71,20 +71,20 @@
                                     </select>
                                     <button type="submit" ng-disabled="!selected.report" ng-click="removeReport()" class="btn btn-sm">Remove Report</button>
                                 </div>
-                            </uib-tab>
-                        </uib-tabset>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-4 col-lg-offset-4 margin-top-lg pad-5 p-2 padding-5">
-                            <button type="submit" ng-click="" class="btn btn-success btn-large btn-lg btn-block">Add to List</button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row" style="margin-top: 14px; padding: 0">
+                    <!--<div class="row">
+                        <div class="col-lg-4 col-lg-offset-4 margin-top-lg pad-5 p-2 padding-5">
+                            <button type="submit" ng-click="" class="btn btn-success btn-large btn-lg btn-block">Add to List</button>
+                        </div>
+                    </div>-->
+
+                  <!--  <div class="row" style="margin-top: 14px; padding: 0">
                         <textarea class="col-lg-12 form-control" placeholder="Report ..." rows="10" ng-model="reportConfiguration.reportId">
                         </textarea>
-                    </div>
+                    </div>-->
                    
                     <div class="row">
                         <button type="submit" ng-click="save(reportConfiguration)" class="btn btn-success">Save</button>

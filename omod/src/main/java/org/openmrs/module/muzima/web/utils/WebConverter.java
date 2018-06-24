@@ -255,6 +255,7 @@ public class WebConverter {
         if (cohort != null) {
             map.put("uuid", cohort.getUuid());
             map.put("name", cohort.getName());
+            map.put("id", cohort.getId());
         }
         return map;
     }
@@ -288,6 +289,16 @@ public class WebConverter {
             map.put("reportId", reportConfiguration.getReportId());
             map.put("cohortId", reportConfiguration.getCohortId());
             map.put("user",reportConfiguration.getCreator().toString());
+        }
+        return map;
+    }
+    
+    public static Map<String, Object> convertMuzimaReport(final Cohort cohort) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (cohort != null) {
+            map.put("uuid", cohort.getUuid());
+            map.put("name", cohort.getName());
+            map.put("id", cohort.getId());
         }
         return map;
     }

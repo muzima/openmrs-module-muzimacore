@@ -13,7 +13,10 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
+import jdk.nashorn.internal.parser.JSONParser;
+import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.Cohort;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.ReportConfigurationService;
@@ -27,6 +30,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,15 +77,45 @@ public class ReportConfigurationController {
                     reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             } else {
-                String reportId =  (String)map.get("reportId");
-                String cohortId = (String)map.get("cohortId");
+              
+                Integer cohortId = (Integer) map.get("cohortId");
                 System.out.println("sssssssss666666666666666666666666666");
-                ReportConfiguration reportConfiguration = new ReportConfiguration();
-                reportConfiguration.setReportId(Integer.parseInt(reportId));
-                reportConfiguration.setCohortId(Integer.parseInt(cohortId));
-                reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                String reportConfigJson = (String)map.get("reportConfigJson");
+                System.out.println("sssssssss77777777777777777"+reportConfigJson.substring(12,reportConfigJson.length()-2));
+                String [] reports = reportConfigJson.substring(12,reportConfigJson.length()-2).split("},");
+                
+                for(String report:reports){
+                    System.out.println("fffff1111111"+report);
+                    Integer index1 = report.indexOf("id");
+                    System.out.println("fffff22222222"+index1);
+                    String s1 = report.substring(index1+3,report.length());
+                    System.out.println("fffff333333333333"+s1);
+                    Integer index2 = s1.indexOf(",");
+                    System.out.println("fffff44444444444"+index2);
+                    String reportId = s1.substring(1,index2);
+                    System.out.println("fffff555555555"+reportId);
+                    ReportConfiguration reportConfiguration = new ReportConfiguration();
+                    reportConfiguration.setReportId(Integer.parseInt(reportId));
+                    reportConfiguration.setCohortId(cohortId);
+                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                }
             }
         }
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/module/muzimacore/reportConfigReports.json", method = RequestMethod.GET)
+    public Map<String, Object> getReports(final @RequestParam(value = "search") String search) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        
+        if (Context.isAuthenticated()) {
+            List<Object> objects = new ArrayList<Object>();
+            for (Cohort cohort : Context.getCohortService().getCohorts(search)) {
+                objects.add(WebConverter.convertMuzimaReport(cohort));
+            }
+            response.put("objects", objects);
+        }
+        return response;
     }
 
 }
