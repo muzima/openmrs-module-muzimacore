@@ -296,8 +296,8 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
     var getReportConfiguration = function (uuid) {
         return $http.get("reportConfig.json?uuid=" + uuid);
     };
-    var saveReportConfiguration = function (uuid, reportId, cohortId) {
-        return $http.post("reportConfig.json", {"uuid": uuid, "reportId": reportId, "cohortId": cohortId});
+    var saveReportConfiguration = function (uuid, id,configJson) {
+        return $http.post("reportConfig.json", {"uuid": uuid,"cohortId": id, "reportConfigJson": configJson});
     };
     var deleteReportConfiguration = function (uuid) {
         return $http.post("reportConfig.json", {"uuid": uuid});
@@ -308,7 +308,7 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
      };
        
      var searchReportConfigReports = function(search) {
-               return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
+               return $http.get("reportConfigReports.json?search=" + (search === undefined ? '' : search));
      };
 
     return {

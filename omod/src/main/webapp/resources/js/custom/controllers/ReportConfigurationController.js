@@ -3,6 +3,12 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
      $scope.search = { cohorts: '', reports: ''};
      $scope.selected = {cohorts: '', reports: ''};
      $scope.configReports = [];
+     
+      var createJson = function () {
+             var reportConfigurationJsonString = {"reports":$scope.configReports};
+             //reportConfigurationJsonString.reports["reports"] = $scope.configReports;
+             return angular.toJson(reportConfigurationJsonString);
+         };
         
     // initialize the view to be read only
     $scope.mode = "view";
@@ -33,7 +39,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     };
 
     $scope.save = function (reportConfiguration) {
-        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, reportConfiguration.reportId, reportConfiguration.cohortId).
+        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.id, createJson()).
         then(function () {
             $location.path("/reportConfigs");
         })
