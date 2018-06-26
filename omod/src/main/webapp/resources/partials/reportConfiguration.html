@@ -38,7 +38,6 @@
                 <span></span>
             </div>
             <div ng-switch-when="edit">
-                1111111111111111
                 <form id="consult">
                     <div class="row">
                         <!--<input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="reportConfiguration.cohortId">
@@ -47,11 +46,7 @@
                                uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
                                uib-typeahead-wait-ms="500"  uib-typeahead-editable="false"/>
                     </div>
-
-                    <div class="row">
-                        <input class="col-lg-10 form-control" placeholder="Report" type="text">
-                    </div>
-
+                    
                     <div class="panel panel-default panel-body col-lg-12">
                         <div active="active">
                             <div index="1" heading="Reports">

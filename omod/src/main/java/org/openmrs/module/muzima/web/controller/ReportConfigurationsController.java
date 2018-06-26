@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
+import org.openmrs.api.ReportService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.ReportConfiguration;
@@ -57,6 +58,7 @@ public class ReportConfigurationsController {
             response.put("pages", pages);
             response.put("objects", objects);
         }
-        return response;
+        ReportService rs = Context.getService(ReportService.class);
+      return response;
     }
 }
