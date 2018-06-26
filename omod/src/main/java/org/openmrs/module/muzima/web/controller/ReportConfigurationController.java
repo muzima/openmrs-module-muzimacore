@@ -39,11 +39,11 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Controller
-@RequestMapping(value = "/module/muzimacore/reportConfig.json")
 public class ReportConfigurationController {
 
-    @RequestMapping(method = RequestMethod.GET)
+ 
     @ResponseBody
+    @RequestMapping(value = "/module/muzimacore/reportConfig.json", method = RequestMethod.GET)
     public Map<String, Object> getReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
         ReportConfiguration reportConfiguration = null;
         if (Context.isAuthenticated()) {
@@ -52,8 +52,8 @@ public class ReportConfigurationController {
         }
         return WebConverter.convertMuzimaReportConfiguration(reportConfiguration);
     }
-
-    @RequestMapping(method = RequestMethod.POST)
+    
+    @RequestMapping(value = "/module/muzimacore/reportConfig.json", method = RequestMethod.POST)
     public void deleteReportConfiguration(final @RequestBody Map<String, Object> map) {
         System.out.println("ssssss111111111111111111");
         if (Context.isAuthenticated()) {

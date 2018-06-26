@@ -38,8 +38,8 @@
                     </tr>
                     <tr ng-repeat="reportConfiguration in reportConfigurations | filter:filterReportConfiguration() | orderBy:'created':true">
                         <td><a href="#/reportConfig/{{reportConfiguration.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
+                        <td>{{reportConfiguration.cohort}}</td>
                         <td>{{reportConfiguration.reportId}}</td>
-                        <td>{{reportConfiguration.uuid}}</td>
                     </tr>
                     </tbody>
                 </table>

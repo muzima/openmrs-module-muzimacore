@@ -288,6 +288,7 @@ public class WebConverter {
             //map.put("name", reportConfiguration.getName());
             map.put("reportId", reportConfiguration.getReportId());
             map.put("cohortId", reportConfiguration.getCohortId());
+            map.put("cohort", Context.getCohortService().getCohort(reportConfiguration.getCohortId()).getName());
             map.put("user",reportConfiguration.getCreator().toString());
         }
         return map;

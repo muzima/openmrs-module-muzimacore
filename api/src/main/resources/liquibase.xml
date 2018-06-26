@@ -1250,6 +1250,24 @@
                                  baseTableName="muzima_cohort_report_config" baseColumnNames="report_id"
                                  referencedTableName="reporting_report_design" referencedColumnNames="id"/>
     </changeSet>
+
+    <changeSet id="muzima-20180626154129" author="dileka" context="rel3">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM scheduler_task_config where schedulable_class =
+                'org.openmrs.module.muzima.task.ReportDesignTask'
+            </sqlCheck>
+        </preConditions>
+        <comment>rel3</comment>
+        <sql>
+            INSERT INTO  scheduler_task_config  (name, description, schedulable_class,
+            start_time, start_time_pattern, repeat_interval, start_on_startup, started,
+            created_by, date_created, changed_by, date_changed, last_execution_time, uuid )
+            VALUES ('Auto Generate Patient Reports', NULL, 'org.openmrs.module.muzima.task.ReportDesignTask',
+            '2018-06-26 00:00:00','MM/dd/yyyy HH:mm:ss',86400, 1, 1,
+            1, now(), NULL, NULL, NULL, uuid());
+        </sql>
+    </changeSet>
     
 
 </databaseChangeLog>
