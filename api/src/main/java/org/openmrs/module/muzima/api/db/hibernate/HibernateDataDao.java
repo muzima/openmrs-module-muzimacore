@@ -194,7 +194,6 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
 		        disjunction.add(Restrictions.in("id", errorIds));
 	        }
 	        criteria.add(disjunction);
-
         }
 	    if (pageNumber != null) {
 		    criteria.setFirstResult((pageNumber - 1) * pageSize);
@@ -207,7 +206,7 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
     }
 
 	public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize) {
-		this.getPagedData(search, pageNumber, pageSize, ArrayList())
+		return this.getPagedData(search, pageNumber,pageSize, new Integer[] { 123, 456, 789});
 	}
 
     /**
