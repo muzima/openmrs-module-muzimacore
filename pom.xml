@@ -202,10 +202,8 @@
 
             <dependency>
                 <groupId>org.openmrs.module</groupId>
-                <artifactId>reporting</artifactId>
-                <version>0.7.1</version>
-                <type>jar</type>
-
+                <artifactId>reporting-api</artifactId>
+                <version>${reportingModuleVersion}</version>
                 <scope>provided</scope>
             </dependency>
 
