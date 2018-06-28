@@ -42,7 +42,6 @@
         <jsonPathVersion>0.8.1</jsonPathVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <github.global.server>github</github.global.server>
-        <maven.version>3.0.5</maven.version>
     </properties>
 
     <dependencyManagement>
