@@ -128,7 +128,7 @@ muzimaCoreModule.factory('FormService', function ($http) {
         return $http.get('../../module/muzimacore/discriminator.json', {cache: false});
     };
     var searchForms = function(search) {
-        return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description)&q=' + (search === undefined ? '' : search));
+        return forms = $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description,retired)');
     };
 
     return {
