@@ -108,13 +108,13 @@ public class ReportConfigurationController {
     public Map<String, Object> getReports(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
         
-        if (Context.isAuthenticated()) {
+        /*if (Context.isAuthenticated()) {
             List<Object> objects = new ArrayList<Object>();
-            for (Cohort cohort : Context.getCohortService().getCohorts(search)) {
-                objects.add(WebConverter.convertMuzimaReport(cohort));
+            for (ReportRenderer reportRenderer : Context.getService(ReportService.class).getReportRenderers()) {
+                objects.add(WebConverter.convertMuzimaReport(reportRenderer));
             }
             response.put("objects", objects);
-        }
+        }*/
         return response;
     }
 
