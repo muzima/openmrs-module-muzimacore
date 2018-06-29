@@ -34,7 +34,7 @@ import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.ReportConfiguration;
-import org.openmrs.report.ReportRenderer;
+import org.openmrs.module.reporting.report.ReportDesign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -295,12 +295,12 @@ public class WebConverter {
         return map;
     }
     
-    /*public static Map<String, Object> convertMuzimaReport(final ReportRenderer reportRenderer) {
+    public static Map<String, Object> convertMuzimaReport(final ReportDesign reportDesign) {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (reportRenderer != null) {
-            map.put("uuid", reportRenderer.getLabel());
-            map.put("name", reportRenderer.toString());
+        if (reportDesign != null) {
+            map.put("uuid", reportDesign.getUuid());
+            map.put("name", reportDesign.getName());
         }
         return map;
-    }*/
+    }
 }

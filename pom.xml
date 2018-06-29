@@ -177,6 +177,13 @@
                 <scope>test</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>reporting-api</artifactId>
+                <version>1.16.0</version>
+                <scope>provided</scope>
+            </dependency>
+
             <!-- End OpenMRS core -->
 
             <dependency>
