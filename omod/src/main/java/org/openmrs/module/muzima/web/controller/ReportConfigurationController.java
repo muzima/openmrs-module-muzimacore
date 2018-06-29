@@ -13,18 +13,13 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
-import jdk.nashorn.internal.parser.JSONParser;
-import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.openmrs.Cohort;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.ReportConfigurationService;
-import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.muzima.web.utils.WebConverter;
-import org.openmrs.module.reporting.report.ReportDesign;
-import org.openmrs.module.reporting.report.service.ReportService;
+import org.openmrs.module.reporting.definition.DefinitionSummary;
+import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,15 +104,24 @@ public class ReportConfigurationController {
     @RequestMapping(value = "/module/muzimacore/reportConfigReports.json", method = RequestMethod.GET)
     public Map<String, Object> getReports(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
-        
+    
+        ReportDefinitionService rds = Context.getService(ReportDefinitionService.class);
+        List<DefinitionSummary> definitionSummaries = rds.getAllDefinitionSummaries(true);
+    
+    
         if (Context.isAuthenticated()) {
-            List<Object> objects = new ArrayList<Object>();
+            /*List<Object> objects = new ArrayList<Object>();
             System.out.println("rrrrrrrrrrrrrrrrr11111111111111111Inside reports Design");
             ReportService rs = Context.getService(ReportService.class);
             System.out.println("rrrrrrrrrrrrrrrrr22222222222222222Inside reports Design");
             ReportDesign reportDesign = rs.getReportDesignByUuid("155562ad-0988-4ae8-a6ae-cee2039a807b");
             System.out.println("rrrrrrrrrrrrrrrrr3333333333333333333Inside reports Design");
             objects.add(WebConverter.convertMuzimaReport(reportDesign));
+            response.put("objects", objects);*/
+            List<Object> objects = new ArrayList<Object>();
+            for (DefinitionSummary summary : definitionSummaries) {
+                objects.add(WebConverter.convertMuzimaReport(summary));
+            }
             response.put("objects", objects);
         }
         
