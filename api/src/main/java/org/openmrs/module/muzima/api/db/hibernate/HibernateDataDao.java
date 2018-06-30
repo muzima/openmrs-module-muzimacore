@@ -172,7 +172,6 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
      * @return list of data for the page.
      */
     @Override
-    @SuppressWarnings("unchecked")
     public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize, final List<Integer> errorIds) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         criteria.createAlias("location", "location", CriteriaSpecification.LEFT_JOIN);
@@ -190,7 +189,7 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
 	        if(StringUtils.isNumeric(search)) {
 		        disjunction.add(Restrictions.eq("location.locationId", Integer.parseInt(search)));
 	        }
-	        if(errorIds.length) {
+	        if(errorIds.size() > 0) {
 		        disjunction.add(Restrictions.in("id", errorIds));
 	        }
 	        criteria.add(disjunction);
@@ -206,7 +205,8 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
     }
 
 	public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize) {
-		return this.getPagedData(search, pageNumber,pageSize, new Integer[] { 123, 456, 789});
+        List<Integer> tmp = new ArrayList<Integer>();
+		return this.getPagedData(search, pageNumber,pageSize, tmp);
 	}
 
     /**
