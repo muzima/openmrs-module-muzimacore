@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.muzima.task;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
@@ -118,16 +119,23 @@ public class MuzimaReportProcessor {
                 
                 System.out.println("199999999999999"+file1.toString());
                 
-                for (ReportProcessorConfiguration c : ReportUtil
-                        .getAvailableReportProcessorConfigurations(rr, ReportProcessorConfiguration.ProcessorMode.values())) {
-                    ReportProcessorConfiguration.ProcessorMode m = c.getProcessorMode();
-                }
                 System.out.println("2020202020202020202020"+file1.toString());
                 ReportData reportData = rs.loadReportData(rr);
                 System.out.println("212121212121212121212121"+reportData);
                 byte[] data = rs.loadRenderedOutput(rr);
-                System.out.println("22 22 22 22 22 22 22 22 22 2 22 222"+data);
-                System.out.println("22 22 22 22 22 22 22 22 22 2 22 222"+data.toString());
+                
+                String filename = selectedRenderingMode.getRenderer().getFilename(rr).replace(" ", "_");
+                System.out.println("rrrrrrrrrrrrrrrrrrrrrrrr"+filename);
+                System.out.println("23333333333333"+selectedRenderingMode.getRenderer().getRenderedContentType(rr));
+                
+    
+                if (data != null) {
+                    System.out.println("22 22 22 22 22 22 22 22 22 2 22 222"+data);
+                    System.out.println("22 22 22 22 22 22 22 22 22 2 22 222"+data.toString());
+                }
+                else {
+                    System.out.println("ffffffffffffffffffffffffffffffffffffffffffffailed");
+                }
             }
         }
     }

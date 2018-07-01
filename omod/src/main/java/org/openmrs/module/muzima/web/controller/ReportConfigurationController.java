@@ -104,12 +104,12 @@ public class ReportConfigurationController {
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
                     reportConfiguration.setReportUuid(s1);
                     reportConfiguration.setCohortUuid(cohortUuid);
-                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                    //reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             }
             System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqConfigs are saved");
             MuzimaReportProcessor muzimaReportProcessor = new MuzimaReportProcessor();
-            //muzimaReportProcessor.processAllReports();
+            muzimaReportProcessor.processAllReports();
         }
     }
     
