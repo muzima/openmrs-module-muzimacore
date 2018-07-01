@@ -38,7 +38,7 @@ public interface ReportConfigurationDao {
 
     ReportConfiguration getReportConfigurationByUuid(String Uuid);
 
-    ReportConfiguration getReportConfigurationByReportId(String reportId);
+    ReportConfiguration getReportConfigurationByReportUuid(String reportUuid);
 
     ReportConfiguration saveOrUpdateReportConfiguration(ReportConfiguration reportConfiguration);
 

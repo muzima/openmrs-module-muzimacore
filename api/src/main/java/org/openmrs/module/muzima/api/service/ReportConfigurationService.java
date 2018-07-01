@@ -23,8 +23,7 @@ public interface ReportConfigurationService extends OpenmrsService {
     ReportConfiguration getReportConfigurationById(final Integer id);
 
     ReportConfiguration getReportConfigurationByUuid(final String uuid);
-
-    ReportConfiguration getReportConfigurationByReportId(final String reportId);
+    
 
     ReportConfiguration saveReportConfiguration(ReportConfiguration reportConfiguration);
 

@@ -48,10 +48,7 @@ public class ReportConfigurationServiceImpl extends BaseOpenmrsService implement
         return dao.getReportConfigurationByUuid(uuid);
     }
 
-    @Override
-    public ReportConfiguration getReportConfigurationByReportId(final String reportId){
-        return dao.getReportConfigurationByReportId(reportId);
-    }
+    
 
     @Override
     public ReportConfiguration saveReportConfiguration(ReportConfiguration reportConfiguration){

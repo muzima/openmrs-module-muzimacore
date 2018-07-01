@@ -5,13 +5,14 @@
 
 <hibernate-mapping package="org.openmrs.module.muzima.model">
 
-    <class name="ReportConfiguration" table="muzima_cohort_report_config">
+    <class name="MuzimaGeneratedReport" table="muzima_generated_report">
         <id name="id" type="java.lang.Integer" column="id" unsaved-value="0">
             <generator class="native"/>
         </id>
-        <property name="cohortUuid" type="java.lang.String" column="cohort_uuid"  length="38" not-null="true"/>
-        <property name="reportUuid" type="java.lang.String" column="report_design_uuid" length="38" not-null="true"/>
-        
+        <property name="cohortReportConfigId" type="java.lang.Integer" column="cohort_report_config_id"  not-null="true"/>
+        <property name="patientId" type="java.lang.Integer" column="cohort_patient_id"  not-null="true"/>
+
+        <property name="reportJson" column="report_json"/>
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">
             <column name="creator"/>
         </many-to-one>

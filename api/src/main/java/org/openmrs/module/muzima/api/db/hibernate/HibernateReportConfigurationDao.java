@@ -136,9 +136,9 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
 
     @Override
     @Transactional
-    public ReportConfiguration getReportConfigurationByReportId(String reportId){
+    public ReportConfiguration getReportConfigurationByReportUuid(String reportUuid){
         Criteria criteria = session().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("reportId", reportId));
+        criteria.add(Restrictions.eq("reportUuid", reportUuid));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         return (ReportConfiguration)criteria.uniqueResult();
     }

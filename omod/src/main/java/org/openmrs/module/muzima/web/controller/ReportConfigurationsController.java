@@ -58,7 +58,6 @@ public class ReportConfigurationsController {
             response.put("pages", pages);
             response.put("objects", objects);
         }
-        ReportService rs = Context.getService(ReportService.class);
       return response;
     }
 }
