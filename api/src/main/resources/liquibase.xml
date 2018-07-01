@@ -1209,10 +1209,10 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="cohort_id" type="int">
+            <column name="cohort_uuid" type="char(38)">
                 <constraints nullable="false"/>
             </column>
-            <column name="report_id" type="int">
+            <column name="report_design_uuid" type="char(38)">
                 <constraints nullable="false"/>
                 
             </column>
@@ -1243,12 +1243,50 @@
         <addForeignKeyConstraint constraintName="muzima_cohort_report_config_retired_by"
                                  baseTableName="muzima_cohort_report_config" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
-         <addForeignKeyConstraint constraintName="muzima_cohort_report_config_cohort_id"
-                                     baseTableName="muzima_cohort_report_config" baseColumnNames="cohort_id"
-                                     referencedTableName="cohort" referencedColumnNames="cohort_id"/>
-        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_report_design_id"
-                                 baseTableName="muzima_cohort_report_config" baseColumnNames="report_id"
-                                 referencedTableName="reporting_report_design" referencedColumnNames="id"/>
+         <addForeignKeyConstraint constraintName="muzima_cohort_report_config_cohort_uuid"
+                                     baseTableName="muzima_cohort_report_config" baseColumnNames="cohort_uuid"
+                                     referencedTableName="cohort" referencedColumnNames="uuid"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_report_design_uuid"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="report_design_uuid"
+                                 referencedTableName="reporting_report_design" referencedColumnNames="uuid"/>
+    </changeSet>
+
+    <changeSet id="muzima-20180630154129" author="dileka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_generated_report"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_generated_report">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_report_config_id" type="int">
+            </column>
+            <column name="patient_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="report_json" type="${clob.type}">
+                
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int" />
+            <column name="date_changed" type="datetime"/>
+            <column name="retired" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="datetime"/>
+            <column name="retire_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
     </changeSet>
 
     <changeSet id="muzima-20180626154129" author="dileka" context="rel3">
@@ -1264,7 +1302,7 @@
             start_time, start_time_pattern, repeat_interval, start_on_startup, started,
             created_by, date_created, changed_by, date_changed, last_execution_time, uuid )
             VALUES ('Auto Generate Patient Reports', NULL, 'org.openmrs.module.muzima.task.ReportDesignTask',
-            '2018-06-26 00:00:00','MM/dd/yyyy HH:mm:ss',86400, 1, 1,
+            '2020-06-26 00:00:00','MM/dd/yyyy HH:mm:ss',86400, 1, 1,
             1, now(), NULL, NULL, NULL, uuid());
         </sql>
     </changeSet>

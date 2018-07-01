@@ -39,7 +39,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     };
 
     $scope.save = function (reportConfiguration) {
-        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.id, createJson()).
+        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson()).
         then(function () {
             $location.path("/reportConfigs");
         })

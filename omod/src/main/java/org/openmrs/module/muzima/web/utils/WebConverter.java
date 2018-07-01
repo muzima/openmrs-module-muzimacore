@@ -35,6 +35,7 @@ import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.reporting.definition.DefinitionSummary;
+import org.openmrs.module.reporting.report.ReportDesign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -287,19 +288,18 @@ public class WebConverter {
         if (reportConfiguration!= null) {
             map.put("uuid", reportConfiguration.getUuid());
             //map.put("name", reportConfiguration.getName());
-            map.put("reportId", reportConfiguration.getReportId());
-            map.put("cohortId", reportConfiguration.getCohortId());
-            map.put("cohort", Context.getCohortService().getCohort(reportConfiguration.getCohortId()).getName());
+            map.put("report", reportConfiguration.getReportUuid());
+            map.put("cohort", reportConfiguration.getCohortUuid());
             map.put("user",reportConfiguration.getCreator().toString());
         }
         return map;
     }
     
-    public static Map<String, Object> convertMuzimaReport( DefinitionSummary definitionSummary) {
+    public static Map<String, Object> convertMuzimaReport( ReportDesign reportDesign) {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (definitionSummary != null) {
-            map.put("uuid", definitionSummary.getUuid());
-            map.put("name", definitionSummary.getName());
+        if (reportDesign != null) {
+            map.put("uuid", reportDesign.getUuid());
+            map.put("name", reportDesign.getName());
         }
         return map;
     }

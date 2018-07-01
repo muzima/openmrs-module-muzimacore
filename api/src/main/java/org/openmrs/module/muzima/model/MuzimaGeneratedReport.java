@@ -15,11 +15,10 @@ package org.openmrs.module.muzima.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
-import org.openmrs.Cohort;
 import org.openmrs.User;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ReportConfiguration extends BaseOpenmrsMetadata {
+public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
@@ -27,10 +26,10 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
     private String cohortUuid;
     private User user;
 
-    public ReportConfiguration(){
+    public MuzimaGeneratedReport(){
     }    // used by hibernate
 
-    public ReportConfiguration(String reportUuid, String cohortUuid){
+    public MuzimaGeneratedReport(String reportUuid, String cohortUuid){
         setReportUuid(reportUuid);
         setCohortUuid(cohortUuid);
        
