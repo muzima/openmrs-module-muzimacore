@@ -82,34 +82,34 @@ public class ReportConfigurationController {
                 System.out.println("sssssssss666666666666666666666666666");
                 String reportConfigJson = (String)map.get("reportConfigJson");
                 System.out.println("sssssssss77777777777777777"+reportConfigJson.substring(12,reportConfigJson.length()-2));
-                String [] reports = reportConfigJson.substring(12,reportConfigJson.length()-2).split("},");
+                String [] reports = reportConfigJson.substring(12,reportConfigJson.length()-2).split("}");
                 
                 for(String report:reports){
-                    System.out.println("fffff1111111"+report);
+                    System.out.println("fffffaaaaaaaaa  "+report);
                     Integer index1 = report.indexOf("uuid");
-                    System.out.println("fffff22222222"+index1);
-                    String s1 = report.substring(index1+7,report.length()-2);
-                    System.out.println("fffff333333333333"+s1);
+                    System.out.println("fffffbbbbbbbbbbbbbb  "+index1);
+                    String s1 = report.substring(index1+7,report.length()-1);
+                    System.out.println("fffffcccccccccccc  "+s1);
                     Integer index2 = s1.indexOf("}");
-                    System.out.println("fffff44444444444"+index2);
-                    String reportUuid="";
+                    System.out.println("fffffdddddddddd   "+index2);
+                    /*String reportUuid="";
                     if(index2 ==-1){
                         reportUuid = s1;
                     }
                     else{
                         reportUuid= s1.substring(1,index2-2);
-                    }
+                    }*/
                     //String 
                     System.out.println("fffff555555555"+s1);
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
-                    reportConfiguration.setReportUuid(reportUuid);
+                    reportConfiguration.setReportUuid(s1);
                     reportConfiguration.setCohortUuid(cohortUuid);
-                    //reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             }
             System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqConfigs are saved");
             MuzimaReportProcessor muzimaReportProcessor = new MuzimaReportProcessor();
-            muzimaReportProcessor.processAllReports();
+            //muzimaReportProcessor.processAllReports();
         }
     }
     
