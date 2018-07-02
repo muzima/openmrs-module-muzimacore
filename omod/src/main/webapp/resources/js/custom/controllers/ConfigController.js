@@ -118,7 +118,7 @@ function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
 
                 var formResult = response.data;
                 var metaJson = JSON.parse(formResult.metaJson);
-                if (metaJson.concepts != undefined) {
+                if (metaJson != null && metaJson.concepts != undefined) {
                     angular.forEach(metaJson.concepts, function (mConcept) {
                         var conceptExists = _.find($scope.extractedConcepts, function (eConcept) {
                             return mConcept.uuid == eConcept.uuid
