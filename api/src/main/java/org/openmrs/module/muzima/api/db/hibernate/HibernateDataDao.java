@@ -173,9 +173,10 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
      */
     @Override
     public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize, final List<Integer> errorIds) {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass, "ErrorData");
         criteria.createAlias("location", "location", CriteriaSpecification.LEFT_JOIN);
         criteria.createAlias("provider", "provider", CriteriaSpecification.LEFT_JOIN);
+        criteria.createAlias("ErrorData.errorMessages", "ErrorMessage");
 
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -186,22 +187,23 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
             disjunction.add(Restrictions.ilike("formName", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("provider.identifier", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("provider.name", search, MatchMode.ANYWHERE));
-	        if(StringUtils.isNumeric(search)) {
-		        disjunction.add(Restrictions.eq("location.locationId", Integer.parseInt(search)));
-	        }
-	        if(errorIds.size() > 0) {
-		        disjunction.add(Restrictions.in("id", errorIds));
-	        }
-	        criteria.add(disjunction);
+            if(StringUtils.isNumeric(search)) {
+                disjunction.add(Restrictions.eq("location.locationId", Integer.parseInt(search)));
+            }
+            if(errorIds.size() > 0) {
+                disjunction.add(Restrictions.in("id", errorIds));
+            }
+            disjunction.add(Restrictions.ilike("ErrorMessage.message", search, MatchMode.ANYWHERE));
+            criteria.add(disjunction);
         }
-	    if (pageNumber != null) {
-		    criteria.setFirstResult((pageNumber - 1) * pageSize);
-	    }
-	    if (pageSize != null) {
-		    criteria.setMaxResults(pageSize);
-	    }
-	    criteria.addOrder(Order.desc("dateCreated"));
-	    return criteria.list();
+        if (pageNumber != null) {
+            criteria.setFirstResult((pageNumber - 1) * pageSize);
+        }
+        if (pageSize != null) {
+            criteria.setMaxResults(pageSize);
+        }
+        criteria.addOrder(Order.desc("dateCreated"));
+        return criteria.list();
     }
 
 	public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize) {
