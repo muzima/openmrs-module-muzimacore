@@ -23,7 +23,26 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     }
 
     $scope.edit = function () {
-        $scope.mode = "edit";
+         $muzimaReportConfigurations.getReportsForReportConfiguration($scope.reportConfiguration.uuid).
+            then(function (response) {
+                $scope.reports = response.data.objects;
+           
+                angular.forEach($scope.reports, function (report, index) {
+                                 $scope.configReports.push(report);
+                                    });
+                
+            });
+            
+             $muzimaReportConfigurations.getCohortForReportConfiguration($scope.reportConfiguration.uuid).
+                        then(function (response) {
+                           //console.log("22222222222222222222222")
+                            $scope.cohorts = response.data
+                            
+                            
+                        });
+                        
+             $scope.mode = "edit";
+        
     };
 
     $scope.cancel = function () {
@@ -39,7 +58,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     };
 
     $scope.save = function (reportConfiguration) {
-        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson()).
+        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.cohorts.uuid, createJson()).
         then(function () {
             $location.path("/reportConfigs");
         })
@@ -60,6 +79,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
                 $muzimaReportConfigurations.searchReportConfigCohorts($scope.search.cohorts).
                 then(function (response) {
                     $scope.cohorts = response.data.objects;
+                    $scope.search.cohorts = response.data.objects;
                 });
             }
         }, true);
