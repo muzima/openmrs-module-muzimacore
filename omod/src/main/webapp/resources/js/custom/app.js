@@ -300,7 +300,7 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
         return $http.post("reportConfig.json", {"uuid": uuid,"cohortUuid": cohortUuid, "reportConfigJson": configJson});
     };
     var deleteReportConfiguration = function (uuid) {
-        return $http.post("reportConfig.json", {"uuid": uuid});
+        return $http.post("delete/reportConfig.json", {"uuid": uuid});
     };
     
     var searchReportConfigCohorts = function(search) {

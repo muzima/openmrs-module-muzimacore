@@ -58,7 +58,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     };
 
     $scope.save = function (reportConfiguration) {
-        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.cohorts.uuid, createJson()).
+        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson()).
         then(function () {
             $location.path("/reportConfigs");
         })
@@ -79,7 +79,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
                 $muzimaReportConfigurations.searchReportConfigCohorts($scope.search.cohorts).
                 then(function (response) {
                     $scope.cohorts = response.data.objects;
-                    $scope.search.cohorts = response.data.objects;
+                   // $scope.search.cohorts = response.data.objects;
                 });
             }
         }, true);
