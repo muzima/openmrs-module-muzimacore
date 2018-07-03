@@ -114,7 +114,6 @@ public class ReportConfigurationController {
     
                 
                 ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
-                if ( !cohortUuid.equals("")){
                     System.out.println("ccccccccccccccccccccccccccccc");
                     reportConfiguration.setCohortUuid(cohortUuid);
     
@@ -130,10 +129,8 @@ public class ReportConfigurationController {
                         System.out.println("fffff555555555"+s1);
                         reportConfiguration.setReportUuid(s1);
                         reportConfiguration.setCohortUuid(cohortUuid);
-                       reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                        reportConfigurationService.saveReportConfiguration(reportConfiguration);
                     }
-                    
-                }
             } else {
               
                 String cohortUuid = (String) map.get("cohortUuid");
@@ -150,14 +147,7 @@ public class ReportConfigurationController {
                     System.out.println("fffffcccccccccccc  "+s1);
                     Integer index2 = s1.indexOf("}");
                     System.out.println("fffffdddddddddd   "+index2);
-                    /*String reportUuid="";
-                    if(index2 ==-1){
-                        reportUuid = s1;
-                    }
-                    else{
-                        reportUuid= s1.substring(1,index2-2);
-                    }*/
-                    //String 
+                   
                     System.out.println("fffff555555555"+s1);
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
                     reportConfiguration.setReportUuid(s1);
@@ -191,21 +181,10 @@ public class ReportConfigurationController {
     @RequestMapping(value = "/module/muzimacore/reportConfigReports.json", method = RequestMethod.GET)
     public Map<String, Object> getReports(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
-    
-        ReportDefinitionService rds = Context.getService(ReportDefinitionService.class);
-        List<DefinitionSummary> definitionSummaries = rds.getAllDefinitionSummaries(true);
+        
         List<ReportDesign> reportDesigns = Context.getService(ReportService.class).getAllReportDesigns(true);
     
-    
         if (Context.isAuthenticated()) {
-            /*List<Object> objects = new ArrayList<Object>();
-            System.out.println("rrrrrrrrrrrrrrrrr11111111111111111Inside reports Design");
-            ReportService rs = Context.getService(ReportService.class);
-            System.out.println("rrrrrrrrrrrrrrrrr22222222222222222Inside reports Design");
-            ReportDesign reportDesign = rs.getReportDesignByUuid("155562ad-0988-4ae8-a6ae-cee2039a807b");
-            System.out.println("rrrrrrrrrrrrrrrrr3333333333333333333Inside reports Design");
-            objects.add(WebConverter.convertMuzimaReport(reportDesign));
-            response.put("objects", objects);*/
             List<Object> objects = new ArrayList<Object>();
             for (ReportDesign reportDesign : reportDesigns) {
                 objects.add(WebConverter.convertMuzimaReport(reportDesign));
