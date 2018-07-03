@@ -28,6 +28,7 @@ import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
+import org.openmrs.module.muzima.model.GeneratedReport;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaSetting;
@@ -292,6 +293,17 @@ public class WebConverter {
             map.put("report", Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportUuid()).getName());
             map.put("cohort", Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid()).getName());
             map.put("user",reportConfiguration.getCreator().toString());
+        }
+        return map;
+    }
+    
+    public static Map<String, Object> convertMuzimaGeneratedReport(final GeneratedReport generatedReport) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (generatedReport!= null) {
+            map.put("uuid", generatedReport.getUuid());
+            //map.put("name", reportConfiguration.getName());
+            map.put("patientId", generatedReport.getPatientId());
+            map.put("reportJson", generatedReport.getPatientId());
         }
         return map;
     }

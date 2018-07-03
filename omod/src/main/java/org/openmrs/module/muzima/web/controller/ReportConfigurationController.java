@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -132,11 +133,6 @@ public class ReportConfigurationController {
                        reportConfigurationService.saveReportConfiguration(reportConfiguration);
                     }
                     
-                } else {
-                    System.out.println("sssssss5555555555555555555555555555");
-                    reportConfiguration.setRetired(true);
-                    reportConfiguration.setRetireReason("Deleting a data source object!");
-                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             } else {
               
@@ -173,6 +169,22 @@ public class ReportConfigurationController {
             MuzimaReportProcessor muzimaReportProcessor = new MuzimaReportProcessor();
             muzimaReportProcessor.processAllReports();
         }
+    }
+    
+    @RequestMapping(value = "/module/muzimacore/delete/reportConfig.json", method = RequestMethod.POST)
+    public void deleteReportConfiguration(final @RequestBody Map<String, Object> map) {
+        System.out.println("dddddddddddddddddddddddddd");
+        
+            System.out.println("sssssss5555555555555555555555555555");
+            String uuid = (String) map.get("uuid");
+            ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
+            ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
+    
+            reportConfiguration.setRetired(true);
+            reportConfiguration.setRetireReason("Deleting a data source object!");
+            reportConfiguration.setDateRetired(new Date());
+            reportConfigurationService.saveReportConfiguration(reportConfiguration);
+        
     }
     
     @ResponseBody
