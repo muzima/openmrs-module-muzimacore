@@ -86,26 +86,25 @@ public class GeneratedReportServiceImpl extends BaseOpenmrsService implements Ge
      * Get the total number of the settings in the database with partial matching search term.
      *
      *
-     * @param search the search term.
+     * @param patientId the search term.
      * @return the total number of the settings in the database.
      */
     @Override
-    public Number countDataSource(final String search) {
+    public Number countDataSource(final Integer patientId) {
         System.out.println("6666666666666666666666666\n");
-        return dao.countGeneratedReports(search);
+        return dao.countGeneratedReports(patientId);
     }
 
     /**
      * Get settings with matching search term for a particular page.
      *
-     * @param search     the search term.
+     * @param patientId    the search term.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
      * @return list of all settings with matching search term for a particular page.
      */
     @Override
-    public List<GeneratedReport> getPagedGeneratedReports(final String search, final Integer pageNumber, final Integer pageSize) {
-        System.out.println("dddddddddddddddddddddddddddddddd\n");
-        return dao.getPagedGeneratedReports(search, pageNumber, pageSize);
+    public List<GeneratedReport> getPagedGeneratedReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {
+        return dao.getPagedGeneratedReports(patientId, pageNumber, pageSize);
     }
 }
