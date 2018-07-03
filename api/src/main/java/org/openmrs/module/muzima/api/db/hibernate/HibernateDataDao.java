@@ -172,11 +172,12 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
      * @return list of data for the page.
      */
     @Override
-    public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize, final List<Integer> errorIds) {
+    @SuppressWarnings("unchecked")
+    public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass, "ErrorData");
         criteria.createAlias("location", "location", CriteriaSpecification.LEFT_JOIN);
         criteria.createAlias("provider", "provider", CriteriaSpecification.LEFT_JOIN);
-        criteria.createAlias("ErrorData.errorMessages", "ErrorMessage");
+        criteria.createAlias("ErrorData.errorMessage", "ErrorMessage");
 
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -190,9 +191,6 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
             if(StringUtils.isNumeric(search)) {
                 disjunction.add(Restrictions.eq("location.locationId", Integer.parseInt(search)));
             }
-            if(errorIds.size() > 0) {
-                disjunction.add(Restrictions.in("id", errorIds));
-            }
             disjunction.add(Restrictions.ilike("ErrorMessage.message", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
         }
@@ -205,11 +203,6 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
         criteria.addOrder(Order.desc("dateCreated"));
         return criteria.list();
     }
-
-	public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize) {
-        List<Integer> tmp = new ArrayList<Integer>();
-		return this.getPagedData(search, pageNumber,pageSize, tmp);
-	}
 
     /**
      * Get the total number of data with matching search term.
