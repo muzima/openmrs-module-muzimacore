@@ -177,7 +177,8 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass, "ErrorData");
         criteria.createAlias("location", "location", CriteriaSpecification.LEFT_JOIN);
         criteria.createAlias("provider", "provider", CriteriaSpecification.LEFT_JOIN);
-        criteria.createAlias("ErrorData.errorMessage", "ErrorMessage");
+        criteria.createAlias("ErrorData.errorMessages", "ErrorMessage");
+        // criteria.setProjection( Projections.projectionList().add( Projections.distinct(Projections.groupProperty("id"))));
 
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
