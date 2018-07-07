@@ -22,6 +22,7 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/app.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/EditController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/ErrorController.js"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/MergeController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/FormController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/ImportController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/QueueController.js"/>
