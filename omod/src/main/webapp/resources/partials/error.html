@@ -14,6 +14,13 @@
         <table class="table">
             <tbody>
             <tr>
+                <div ng-hide="error.Errors.indexOf('Found a patient with similar characteristic') < 0">
+                    <a href="#/error/{{error.uuid}}/merge"><button class="btn btn-success">
+                        Go to the Merge page
+                    </button></a>
+                </div>
+            </tr>
+            <tr>
                 <td>Sender</td>
                 <td>{{error.source}}</td>
                 <td>&nbsp;</td>
