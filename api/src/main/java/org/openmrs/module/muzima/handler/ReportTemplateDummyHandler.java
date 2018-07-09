@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Handler(supports = QueueData.class, order = 7)
 public class ReportTemplateDummyHandler implements QueueDataHandler {
     public static final String DISCRIMINATOR_VALUE = "provider-report";
-    private final Log log = LogFactory.getLog(ReportTemplateDummyHandler.class);
 
     /**
      *
@@ -21,9 +20,7 @@ public class ReportTemplateDummyHandler implements QueueDataHandler {
      * @throws QueueProcessorException
      */
     @Override
-    public void process(final QueueData queueData) throws QueueProcessorException {
-        log.info("Processing encounter form data: " + queueData.getUuid());
-    }
+    public void process(final QueueData queueData) throws QueueProcessorException {}
 
     /**
      *
