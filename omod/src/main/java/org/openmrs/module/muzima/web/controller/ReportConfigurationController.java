@@ -67,7 +67,7 @@ public class ReportConfigurationController {
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
     
-            reportDesign = Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportUuid());
+            reportDesign = Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportDesignUuid());
             List<Object> objects = new ArrayList<Object>();
             objects.add(WebConverter.convertMuzimaReport(reportDesign));
             response.put("objects", objects);
@@ -127,7 +127,7 @@ public class ReportConfigurationController {
                         System.out.println("fffffdddddddddd   "+index2);
                
                         System.out.println("fffff555555555"+s1);
-                        reportConfiguration.setReportUuid(s1);
+                        reportConfiguration.setReportDesignUuid(s1);
                         reportConfiguration.setCohortUuid(cohortUuid);
                         reportConfigurationService.saveReportConfiguration(reportConfiguration);
                     }
@@ -150,7 +150,7 @@ public class ReportConfigurationController {
                    
                     System.out.println("fffff555555555"+s1);
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
-                    reportConfiguration.setReportUuid(s1);
+                    reportConfiguration.setReportDesignUuid(s1);
                     reportConfiguration.setCohortUuid(cohortUuid);
                     //reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
