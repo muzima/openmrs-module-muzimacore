@@ -278,4 +278,19 @@ public class WebConverter {
         }
         return map;
     }
+    public static Map<String, Object> convertPatient(final Patient patient) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (patient != null) {
+            map.put("uuid", patient.getUuid());
+            map.put("first_name", patient.getGivenName());
+            map.put("middle_name", patient.getMiddleName());
+            map.put("family_name", patient.getFamilyName());
+            map.put("sex", patient.getGender());
+            map.put("age", patient.getAge());
+            map.put("country", patient.getPersonAddress().getCountry());
+            map.put("district", patient.getPersonAddress().getCountyDistrict());
+            map.put("birthday", patient.getBirthdate().toString());
+        }
+        return map;
+    }
 }
