@@ -14,13 +14,6 @@
         <table class="table">
             <tbody>
             <tr>
-                <div ng-hide="error.Errors.indexOf('Found a patient with similar characteristic') < 0">
-                    <a href="#/merge/{{error.uuid}}"><button class="btn btn-success">
-                        Go to the Merge page
-                    </button></a>
-                </div>
-            </tr>
-            <tr>
                 <td>Sender</td>
                 <td>{{error.source}}</td>
                 <td>&nbsp;</td>
@@ -89,8 +82,12 @@
             </tr>
             <tr>
                 <td colspan="4">
-                    <h6>Uploaded Form Data <i  class="icon-edit"></i></h6>
-
+                        <h6>Uploaded Form Data <i  class="icon-edit"></i></h6>
+                    <div ng-hide="error.Errors.indexOf('Found a patient with similar characteristic') < 0">
+                        <a href="#/merge/{{error.uuid}}"><button class="btn btn-success">
+                            Go to the Merge page
+                        </button></a>
+                    </div>
                     <div  class="tree well" >
                         <ul id = 'treeul'>
                         </ul>
