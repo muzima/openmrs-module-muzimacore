@@ -13,40 +13,25 @@
  */
 package org.openmrs.module.muzima.task;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
-import org.openmrs.Patient;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
-import org.openmrs.cohort.CohortDefinition;
 import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.ReportConfiguration;
-import org.openmrs.module.reporting.ReportingConstants;
-import org.openmrs.module.reporting.common.ObjectUtil;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportData;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.ReportDesignResource;
-import org.openmrs.module.reporting.report.ReportProcessorConfiguration;
 import org.openmrs.module.reporting.report.ReportRequest;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
+import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.renderer.RenderingMode;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.openmrs.module.reporting.report.util.ReportUtil;
-import org.openmrs.module.reporting.web.renderers.WebReportRenderer;
-import org.openmrs.report.EvaluationContext;
-import org.openmrs.module.reporting.definition.DefinitionSummary;
-import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
-import org.openmrs.util.OpenmrsUtil;
-import org.openmrs.web.WebConstants;
-import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.WebRequest;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,8 +64,7 @@ public class MuzimaReportProcessor {
             RenderingMode selectedRenderingMode = null;
             
             
-            ReportDesign design = rs.getReportDesignByUuid(reportConfiguration.getReportUuid());
-    
+            ReportDesign design = rs.getReportDesignByUuid(reportConfiguration.getReportDesignUuid());
             
             ReportDefinition reportDefinition = rds.getDefinitionByUuid(design.getReportDefinition().getUuid());
             
@@ -95,7 +79,6 @@ public class MuzimaReportProcessor {
                 if(renderingMode.getLabel().equals(design.getName())){
                     selectedRenderingMode = renderingMode;
                 }
-                
             }
             
             for (String patientId : patientList) {
@@ -108,6 +91,7 @@ public class MuzimaReportProcessor {
                 rr.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
                 rr.setRenderingMode(selectedRenderingMode);
                 rr.setPriority(ReportRequest.Priority.NORMAL);
+                
                 rr = rs.queueReport(rr);
                 rs.processNextQueuedReports();
                 ReportDesignResource r = design.getResourceByUuid(design.getUuid());
@@ -115,12 +99,22 @@ public class MuzimaReportProcessor {
                  
                 System.out.println("1818181818181818"+file1.toString());
                 
-                File file2 =rs.getReportOutputFile(rr);
-                
                 System.out.println("199999999999999"+file1.toString());
                 
                 System.out.println("2020202020202020202020"+file1.toString());
+                
                 ReportData reportData = rs.loadReportData(rr);
+               /* File file2 =rs.getReportLogFile(rr);
+                while (true){
+                    if(file2.toString().contains("complete"))
+                    {
+                        break;
+                    }
+                
+                        System.out.println("4444444444444444444"+file2.toString());
+                    
+                }
+                */
                 System.out.println("212121212121212121212121"+reportData);
                 byte[] data = rs.loadRenderedOutput(rr);
                 

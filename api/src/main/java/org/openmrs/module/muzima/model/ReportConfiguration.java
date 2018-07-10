@@ -30,8 +30,8 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
     public ReportConfiguration(){
     }    // used by hibernate
 
-    public ReportConfiguration(String reportUuid, String cohortUuid){
-        setReportUuid(reportUuid);
+    public ReportConfiguration(String reportDesignUuid, String cohortUuid){
+        setReportDesignUuid(reportDesignUuid);
         setCohortUuid(cohortUuid);
        
     }
@@ -46,11 +46,11 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
         this.id = id;
     }
     
-    public void setReportUuid(final String reportUuid) {
-        this.reportUuid = reportUuid;
+    public void setReportDesignUuid(final String reportDesignUuid) {
+        this.reportUuid = reportDesignUuid;
     }
     
-    public String getReportUuid(){
+    public String getReportDesignUuid(){
         return reportUuid;
     }
     
@@ -77,7 +77,7 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
                 "id=" + id +
                 ", uuid=" + getUuid() +
                 ", name='" + getName() +
-                ", reportId='" + getReportUuid() +
+                ", reportId='" + getReportDesignUuid() +
                 ", cohortId='" + getCohortUuid()+
                 ", description='" + getDescription() +
                 '}';

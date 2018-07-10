@@ -12,7 +12,7 @@
         <property name="cohortReportConfigId" type="java.lang.Integer" column="cohort_report_config_id"  not-null="true"/>
         <property name="patientId" type="java.lang.Integer" column="patient_id"  not-null="true"/>
 
-        <property name="reportJson" column="report_json"/>
+        <property name="reportJson" type="java.lang.String" column="report_json"/>
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">
             <column name="creator"/>
         </many-to-one>
