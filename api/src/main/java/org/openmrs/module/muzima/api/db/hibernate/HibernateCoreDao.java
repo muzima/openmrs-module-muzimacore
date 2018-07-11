@@ -286,4 +286,13 @@ public class HibernateCoreDao implements CoreDao {
         }
         return (Number) query.uniqueResult();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    @SuppressWarnings("unchecked")
+    public Patient getPatient(final Integer id) throws DAOException {
+                Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
+                criteria.add(Restrictions.eq("patientId", id));
+                return (Patient) criteria.uniqueResult();
+    }
 }

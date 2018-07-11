@@ -13,7 +13,9 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
+import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.CoreService;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
@@ -32,18 +34,18 @@ import java.util.Map;
 @RequestMapping(value = "/module/muzimacore/merge.json")
 public class MergeController {
 
-	/*@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> getError(final @RequestParam(value = "uuid") String uuid) {
-		ErrorData errorData = null;
+	public Map<String, Object> getError(final @RequestParam(value = "patient_id") Integer id) {
+		Patient patient = null;
 		if (Context.isAuthenticated()) {
-			DataService dataService = Context.getService(DataService.class);
-			errorData = dataService.getErrorDataByUuid(uuid);
+			CoreService coreService = Context.getService(CoreService.class);
+			patient = coreService.getPatient(id);
 		}
-		return WebConverter.convertErrorData(errorData);
+		return WebConverter.convertPatient(patient);
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
+	/*@RequestMapping(method = RequestMethod.POST)
 	public Map<String, Object> saveEditedFormData(final @RequestParam(value = "uuid") String uuid,
 			final @RequestBody String formData){
 		ErrorData errorData = null;
