@@ -58,7 +58,7 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.get("error.json?uuid=" + uuid);
     };
     var getErrorPatient = function (id) {
-        return $http.get("merge.json?patient_id=" + id);
+       return $http.get("merge.json?patient_id=" + id);
     };
 
     var getSources = function (search, pageNumber, pageSize) {
@@ -97,7 +97,7 @@ muzimaCoreModule.factory('$data', function ($http) {
 
         getErrors: getErrors,
         getError: getError,
-        getErrors: reQueueErrors,
+        getErrorPatient: getErrorPatient,
         reQueueErrors: reQueueErrors,
 
         getSources: getSources,

@@ -172,8 +172,7 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
      * @return list of data for the page.
      */
     @Override
-    @SuppressWarnings("unchecked")
-    public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize) {
+    public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize, final List<Integer> errorIds) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         criteria.createAlias("location", "location", CriteriaSpecification.LEFT_JOIN);
         criteria.createAlias("provider", "provider", CriteriaSpecification.LEFT_JOIN);
@@ -188,20 +187,27 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
             disjunction.add(Restrictions.ilike("provider.identifier", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("provider.name", search, MatchMode.ANYWHERE));
             if(StringUtils.isNumeric(search)) {
-                disjunction.add(Restrictions.eq("location.locationId", Integer.parseInt(search)));
-            }
-            criteria.add(disjunction);
-
+		        disjunction.add(Restrictions.eq("location.locationId", Integer.parseInt(search)));
+	        }
+	        if(errorIds.size() > 0) {
+		        disjunction.add(Restrictions.in("id", errorIds));
+	        }
+	        criteria.add(disjunction);
         }
-        if (pageNumber != null) {
-            criteria.setFirstResult((pageNumber - 1) * pageSize);
-        }
-        if (pageSize != null) {
-            criteria.setMaxResults(pageSize);
-        }
-        criteria.addOrder(Order.desc("dateCreated"));
-        return criteria.list();
+	    if (pageNumber != null) {
+		    criteria.setFirstResult((pageNumber - 1) * pageSize);
+	    }
+	    if (pageSize != null) {
+		    criteria.setMaxResults(pageSize);
+	    }
+	    criteria.addOrder(Order.desc("dateCreated"));
+	    return criteria.list();
     }
+
+    public List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize) {
+        List<Integer> tmp = new ArrayList<Integer>();
+		return this.getPagedData(search, pageNumber,pageSize, tmp);
+	}
 
     /**
      * Get the total number of data with matching search term.

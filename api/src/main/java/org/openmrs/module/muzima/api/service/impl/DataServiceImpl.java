@@ -291,9 +291,20 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
      */
     @Override
     public List<ErrorData> getPagedErrorData(final String search, final Integer pageNumber, final Integer pageSize) {
+        List<ErrorMessage> errorMessages = errorMessageDao.getAllData();
+        // Integer[] errorMessageIds = new Integer[]{};
+        List<Integer> errorMessageIds = new ArrayList<Integer>();
+        for(ErrorMessage errorMessage : errorMessages){
+
+            if (StringUtils.contains(errorMessage.getMessage(), search)){
+                    errorMessageIds.add(errorMessage.getId());
+                }
+        }
+        if (errorMessageIds.size() > 0){
+            return errorDataDao.getPagedData(search, pageNumber, pageSize, errorMessageIds);
+        }
         return errorDataDao.getPagedData(search, pageNumber, pageSize);
     }
-
     /**
      * Return the archive data with the given id.
      *

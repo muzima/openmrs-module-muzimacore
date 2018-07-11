@@ -11,11 +11,10 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         for(var key in errorMessages) {
             console.log(errorMessages[key]);
             if(errorMessages[key].indexOf('Found a patient with similar characteristic') > -1) {
-                // TODO: Get Patient_id
+                // TODO: Get patient_id
                 $scope.getPatientData(4);
             }
         }
-
     });
 
     $scope.getPatientData = function (id) {
@@ -25,4 +24,3 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         });
     }
 }
-

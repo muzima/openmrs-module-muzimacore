@@ -278,10 +278,9 @@ public class WebConverter {
         }
         return map;
     }
-
-    public static Map<String, Object> convertPatient(final Patient patient){
+    public static Map<String, Object> convertPatient(final Patient patient) {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (patient != null){
+        if (patient != null) {
             map.put("uuid", patient.getUuid());
             map.put("first_name", patient.getGivenName());
             map.put("middle_name", patient.getMiddleName());

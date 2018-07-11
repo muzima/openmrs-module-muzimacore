@@ -75,6 +75,7 @@ public interface DataDao<T extends Data> extends SingleClassDao<T> {
      */
     List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize);
 
+    List<T> getPagedData(final String search, final Integer pageNumber, final Integer pageSize, final List<Integer> errorIds);
     /**
      * Get the total number of data with matching search term.
      *

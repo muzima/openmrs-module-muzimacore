@@ -86,7 +86,7 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
     }
 
     @Override
-    public Patient getPatient(final Integer id) throws APIException{
+    public Patient getPatient(final Integer id) throws APIException {
         return getCoreDao().getPatient(id);
     }
 }
