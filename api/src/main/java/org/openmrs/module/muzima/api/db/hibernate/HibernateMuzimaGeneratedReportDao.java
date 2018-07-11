@@ -13,36 +13,34 @@
  */
 package org.openmrs.module.muzima.api.db.hibernate;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
-import org.openmrs.module.muzima.api.db.GeneratedReportDao;
-import org.openmrs.module.muzima.model.GeneratedReport;
+import org.openmrs.module.muzima.api.db.MuzimaGeneratedReportDao;
+import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class HibernateGeneratedReportDao implements GeneratedReportDao {
+public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportDao {
     private DbSessionFactory sessionFactory;
-    protected Class mappedClass = GeneratedReport.class;
+    protected Class mappedClass = MuzimaGeneratedReport.class;
     private final Log log = LogFactory.getLog(this.getClass());
 
-    public HibernateGeneratedReportDao(DbSessionFactory sessionFactory){
+    public HibernateMuzimaGeneratedReportDao(DbSessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     @Transactional
-    public List<GeneratedReport> getAll() {
-        Criteria criteria = session().createCriteria(GeneratedReport.class);
+    public List<MuzimaGeneratedReport> getAll() {
+        Criteria criteria = session().createCriteria(MuzimaGeneratedReport.class);
         criteria.add(Restrictions.eq("retired", false));
         return criteria.list();
     }
@@ -50,14 +48,14 @@ public class HibernateGeneratedReportDao implements GeneratedReportDao {
     /**
      * Get generatedReports with matching search term for particular page.
      *
-     * @param search     the search term.
+     * @param patientId     the search term.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
      * @return list of generatedReports for the page.
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<GeneratedReport> getPagedGeneratedReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {
+    public List<MuzimaGeneratedReport> getPagedMuzimaGeneratedReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {
         Criteria criteria = session().createCriteria(mappedClass);
             Disjunction disjunction = Restrictions.disjunction();
             //disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
@@ -84,7 +82,7 @@ public class HibernateGeneratedReportDao implements GeneratedReportDao {
      */
     @Override
     @Transactional
-    public Number countGeneratedReports(final Integer patientId) {
+    public Number countMuzimaGeneratedReports(final Integer patientId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         
             System.out.println("888888888888888888888888888888\n");
@@ -103,7 +101,7 @@ public class HibernateGeneratedReportDao implements GeneratedReportDao {
 
     @Override
     @Transactional
-    public Number countGeneratedReports(){
+    public Number countMuzimaGeneratedReports(){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.setProjection(Projections.rowCount());
@@ -111,16 +109,16 @@ public class HibernateGeneratedReportDao implements GeneratedReportDao {
     }
     
     @Override
-    public GeneratedReport getGeneratedReportById(Integer id) {
+    public MuzimaGeneratedReport getMuzimaGeneratedReportById(Integer id) {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("id", id));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        return (GeneratedReport) criteria.list();
+        return (MuzimaGeneratedReport) criteria.list();
     }
     
     @Override
     @Transactional
-    public List<GeneratedReport> getGeneratedReportByPatientId(Integer patientId){
+    public List<MuzimaGeneratedReport> getMuzimaGeneratedReportByPatientId(Integer patientId){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
@@ -129,27 +127,27 @@ public class HibernateGeneratedReportDao implements GeneratedReportDao {
 
     @Override
     @Transactional
-    public GeneratedReport getGeneratedReportByUuid(String uuid){
-        GeneratedReport setting = null;
+    public MuzimaGeneratedReport getMuzimaGeneratedReportByUuid(String uuid){
+        MuzimaGeneratedReport setting = null;
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        setting = (GeneratedReport)criteria.uniqueResult();
+        setting = (MuzimaGeneratedReport)criteria.uniqueResult();
         return setting;
     }
 
     @Override
     @Transactional
-    public GeneratedReport   getGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId) {
+    public MuzimaGeneratedReport  getMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId) {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("cohortReportConfigId", cohortReportConfigId));
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        return (GeneratedReport)criteria.uniqueResult();
+        return (MuzimaGeneratedReport)criteria.uniqueResult();
     }
     
     @Override
-    public List<GeneratedReport> getGeneratedReportByCohortReportConfigId(Integer cohortReportConfigId) {
+    public List<MuzimaGeneratedReport> getMuzimaGeneratedReportByCohortReportConfigId(Integer cohortReportConfigId) {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("cohortReportConfigId", cohortReportConfigId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
@@ -158,14 +156,14 @@ public class HibernateGeneratedReportDao implements GeneratedReportDao {
     
     @Override
     @Transactional
-    public GeneratedReport saveOrUpdateGeneratedReport(final GeneratedReport GeneratedReport){
-        session().saveOrUpdate(GeneratedReport);
-        return GeneratedReport;
+    public MuzimaGeneratedReport saveOrUpdateMuzimaGeneratedReport(final MuzimaGeneratedReport muzimaGeneratedReport){
+        session().saveOrUpdate(muzimaGeneratedReport);
+        return muzimaGeneratedReport;
     }
 
     @Override
-    public void deleteGeneratedReport(GeneratedReport generatedReport){
-        session().delete(generatedReport);
+    public void deleteMuzimaGeneratedReport(MuzimaGeneratedReport muzimaGeneratedReport){
+        session().delete(muzimaGeneratedReport);
     }
 
     private DbSession session() {

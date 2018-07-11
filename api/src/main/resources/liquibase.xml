@@ -1216,6 +1216,7 @@
                 <constraints nullable="false"/>
                 
             </column>
+            
             <column name="creator" type="int">
                 <constraints nullable="false"/>
             </column>
@@ -1263,6 +1264,13 @@
             </column>
             <column name="cohort_report_config_id" type="int">
             </column>
+
+            <column name="report_request_uuid" type="char(38)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="varchar(255)"/>
+            
             <column name="patient_id" type="int">
                 <constraints nullable="false"/>
             </column>

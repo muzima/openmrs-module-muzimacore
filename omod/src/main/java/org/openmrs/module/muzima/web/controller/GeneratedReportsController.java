@@ -14,10 +14,8 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.service.GeneratedReportService;
-import org.openmrs.module.muzima.api.service.ReportConfigurationService;
-import org.openmrs.module.muzima.model.GeneratedReport;
-import org.openmrs.module.muzima.model.ReportConfiguration;
+import org.openmrs.module.muzima.api.service.MuzimaGeneratedReportService;
+import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,10 +40,10 @@ public class GeneratedReportsController {
             final @RequestParam(value = "pageSize") Integer pageSize) {
         Map<String, Object> response = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
-            GeneratedReportService generatedReportService = Context.getService(GeneratedReportService.class);
+            MuzimaGeneratedReportService generatedReportService = Context.getService(MuzimaGeneratedReportService.class);
             int pages = (generatedReportService.countDataSource(patientId).intValue() + pageSize - 1) / pageSize;
             List<Object> objects = new ArrayList<Object>();
-            for (GeneratedReport generatedReport : generatedReportService.getPagedGeneratedReports(patientId, pageNumber, pageSize)) {
+            for (MuzimaGeneratedReport generatedReport : generatedReportService.getPagedMuzimaGeneratedReports(patientId, pageNumber, pageSize)) {
                 objects.add(WebConverter.convertMuzimaGeneratedReport(generatedReport));
             }
             response.put("pages", pages);
@@ -59,9 +57,9 @@ public class GeneratedReportsController {
             final @RequestParam(value = "cohortReportConfigId") Integer cohortReportConfigId) {
         Map<String, Object> response = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
-            GeneratedReportService generatedReportService = Context.getService(GeneratedReportService.class);
+            MuzimaGeneratedReportService generatedReportService = Context.getService(MuzimaGeneratedReportService.class);
             List<Object> objects = new ArrayList<Object>();
-            objects.add(WebConverter.convertMuzimaGeneratedReport(generatedReportService.getGeneratedReportByPatientIdANDCohortReportConfigId(patientId,cohortReportConfigId)));
+            objects.add(WebConverter.convertMuzimaGeneratedReport(generatedReportService.getMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(patientId,cohortReportConfigId)));
             
             response.put("objects", objects);
         }

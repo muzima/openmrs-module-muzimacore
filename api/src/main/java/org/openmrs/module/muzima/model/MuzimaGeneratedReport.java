@@ -22,16 +22,19 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    private String reportUuid;
-    private String cohortUuid;
+    private Integer patientId;
+    private String reportRequestUuid;
+    private String cohortReportConfigUuid;
     private User user;
+    private String status;
+    private String reportJson;
 
     public MuzimaGeneratedReport(){
     }    // used by hibernate
 
-    public MuzimaGeneratedReport(String reportUuid, String cohortUuid){
-        setReportUuid(reportUuid);
-        setCohortUuid(cohortUuid);
+    public MuzimaGeneratedReport(String reportRequestUuid, String cohortReportConfigUuid){
+        setCohortReportConfigUuid(cohortReportConfigUuid);
+        setReportRequestUuid(reportRequestUuid);
        
     }
 
@@ -45,22 +48,44 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
         this.id = id;
     }
     
-    public void setReportUuid(final String reportUuid) {
-        this.reportUuid = reportUuid;
+    public void setCohortReportConfigUuid(final String cohortReportConfigUuid) {
+        this.cohortReportConfigUuid = cohortReportConfigUuid;
     }
     
-    public String getReportUuid(){
-        return reportUuid;
+    public String getCohortReportConfigUuid(){
+        return cohortReportConfigUuid;
     }
     
-    
-
-    public String getCohortUuid(){
-        return cohortUuid;
+    public void setReportRequestUuid(final String reportRequestUuid) {
+        this.reportRequestUuid = reportRequestUuid;
     }
-
-    public void setCohortUuid(final String cohortUuid) {
-        this.cohortUuid = cohortUuid;
+    
+    public String getReportRequestUuid(){
+        return reportRequestUuid;
+    }
+    
+    public void setStatus(final String status) {
+        this.status = status;
+    }
+    
+    public String getStatus(){
+        return status;
+    }
+    
+    public void setPatientId(final Integer patientId) {
+        this.patientId = patientId;
+    }
+    
+    public Integer getPatientId(){
+        return patientId;
+    }
+    
+    public void setReportJson(final String reportJson) {
+        this.reportJson = reportJson;
+    }
+    
+    public String getReportJson(){
+        return reportJson;
     }
     
     public User getCreator(){
@@ -76,8 +101,6 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
                 "id=" + id +
                 ", uuid=" + getUuid() +
                 ", name='" + getName() +
-                ", reportId='" + getReportUuid() +
-                ", cohortId='" + getCohortUuid()+
                 ", description='" + getDescription() +
                 '}';
     }
