@@ -11,8 +11,80 @@
         </ul>
     </div>
     <div class="col-lg-8">
-        <p>FirstName: {{mergePatient.first_name}}</p>
-        <p>Middle Name: {{mergePatient.middle_name}}</p>
-        <p>Family Name: {{mergePatient.family_name}}</p>
+        <div class="row">
+            <div class="col-lg-1">
+                <button class="btn btn-default" type="submit">Back</button>
+            </div>
+            <div class="col-lg-10"></div>
+            <div class="col-lg-1">
+                <button class="btn btn-default" type="submit">Extend View</button>
+           </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="checkbox pull-right">
+                    <label>
+                        <input type="checkbox"> Select All
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Select All
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <strong>From EMR DB</strong>
+            </div>
+            <div class="col-lg-6">
+                <strong>From Queue DB</strong>
+            </div>
+        </div>
+
+        <div class="row" ng-repeat="rowData in tableData">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="col-md-4">{{rowData.label}}</label>
+                    <div class="col-md-7 {{rowData.isConflict ? 'has-error': ''}}">
+                       <input type="text" class="form-control" placeholder="{{rowData.emrPatient}}">
+                    </div>
+                    <div class="col-md-1">
+                        <div class="checkbox" ng-show="rowData.isConflict">
+                            <label>
+                                <input type="checkbox" value="option1" aria-label="...">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <div class="col-md-1">
+                        <div class="checkbox" ng-show="rowData.isConflict">
+                            <label>
+                               <input type="checkbox" value="option1" aria-label="...">
+                            </label>
+                        </div>
+                    </div>
+                    <label class="col-md-4">{{rowData.label}}</label>
+                    <div class="col-md-7 {{rowData.isConflict ? 'has-error': ''}}">
+                        <input type="text" class="form-control" placeholder="{{rowData.queuePatient}}">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <button class="btn btn-primary btn-block" type="submit">MERGE QUEUE</button>
+            </div>
+            <div class="col-lg-6">
+                <button class="btn btn-primary btn-block" type="submit">CREATE NEW PATIENT</button>
+            </div>
+        </div>
     </div>
 </div>
