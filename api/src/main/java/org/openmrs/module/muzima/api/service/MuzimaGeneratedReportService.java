@@ -14,33 +14,33 @@
 package org.openmrs.module.muzima.api.service;
 
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.muzima.model.GeneratedReport;
+import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
 
 import java.util.List;
 
-public interface GeneratedReportService extends OpenmrsService {
+public interface MuzimaGeneratedReportService extends OpenmrsService {
 
-    GeneratedReport getGeneratedReportById(final Integer id);
+    MuzimaGeneratedReport getMuzimaGeneratedReportById(final Integer id);
     
-    List<GeneratedReport> getGeneratedReportByPatientId(final Integer id);
+    List<MuzimaGeneratedReport> getMuzimaGeneratedReportByPatientId(final Integer id);
     
-    GeneratedReport getGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId);
+    MuzimaGeneratedReport getMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId);
     
-    GeneratedReport getGeneratedReportByUuid(final String uuid);
+    MuzimaGeneratedReport getMuzimaGeneratedReportByUuid(final String uuid);
     
-    GeneratedReport saveGeneratedReport(GeneratedReport generatedReport);
+    MuzimaGeneratedReport saveMuzimaGeneratedReport(MuzimaGeneratedReport muzimageneratedReport);
 
-    void deleteGeneratedReport(GeneratedReport generatedReport);
+    void deleteMuzimaGeneratedReport(MuzimaGeneratedReport muzimageneratedReport);
 
-    List<GeneratedReport> getAllGeneratedReports();
+    List<MuzimaGeneratedReport> getAllMuzimaGeneratedReports();
 
-    Number countGeneratedReports();
+    Number countMuzimaGeneratedReports();
 
     /**
      * Get the total number of the settings in the database with partial matching search term.
      *
      *
-     * @param search the search term.
+     * @param patientId the search term.
      * @return the total number of the settings in the database.
      */
     Number countDataSource(final Integer patientId);
@@ -53,7 +53,7 @@ public interface GeneratedReportService extends OpenmrsService {
      * @param pageSize   the size of the page.
      * @return list of all settings with matching search term for a particular page.
      */
-    List<GeneratedReport> getPagedGeneratedReports(final Integer patientId, final Integer pageNumber,
+    List<MuzimaGeneratedReport> getPagedMuzimaGeneratedReports(final Integer patientId, final Integer pageNumber,
             final Integer pageSize);
 
 }

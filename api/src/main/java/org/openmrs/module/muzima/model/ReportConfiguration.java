@@ -23,8 +23,10 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
-    private String reportUuid;
+    private String reportDesignUuid;
     private String cohortUuid;
+    private String reportRequestUuid;
+    private String status;
     private User user;
 
     public ReportConfiguration(){
@@ -47,14 +49,12 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
     }
     
     public void setReportDesignUuid(final String reportDesignUuid) {
-        this.reportUuid = reportDesignUuid;
+        this.reportDesignUuid = reportDesignUuid;
     }
     
     public String getReportDesignUuid(){
-        return reportUuid;
+        return reportDesignUuid;
     }
-    
-    
 
     public String getCohortUuid(){
         return cohortUuid;

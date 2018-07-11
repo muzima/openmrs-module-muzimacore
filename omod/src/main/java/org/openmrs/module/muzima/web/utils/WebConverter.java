@@ -28,14 +28,13 @@ import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
-import org.openmrs.module.muzima.model.GeneratedReport;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.ReportConfiguration;
-import org.openmrs.module.reporting.definition.DefinitionSummary;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.slf4j.Logger;
@@ -297,7 +296,7 @@ public class WebConverter {
         return map;
     }
     
-    public static Map<String, Object> convertMuzimaGeneratedReport(final GeneratedReport generatedReport) {
+    public static Map<String, Object> convertMuzimaGeneratedReport(final MuzimaGeneratedReport generatedReport) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (generatedReport!= null) {
             map.put("uuid", generatedReport.getUuid());
