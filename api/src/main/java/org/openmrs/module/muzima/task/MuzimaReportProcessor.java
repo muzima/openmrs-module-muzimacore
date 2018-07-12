@@ -55,11 +55,20 @@ public class MuzimaReportProcessor {
                 .getAllReportConfigurations();
         ReportService reportService = Context.getService(ReportService.class);
         ReportDefinitionService rds = Context.getService(ReportDefinitionService.class);
+        System.out.println("fffffffffffffffffffffI am befbore line");
+        try {
+            MuzimaGeneratedReportService muzimaGeneratedReportService = Context.getService(MuzimaGeneratedReportService.class);
+    
+        }
+        catch (Exception ex){
+            System.out.println(ex.toString());
+            MuzimaGeneratedReportService muzimaGeneratedReportService = null;
+        }
+        System.out.println("fffffffffffffffffffffI am after line");
         MuzimaGeneratedReportService muzimaGeneratedReportService = Context.getService(MuzimaGeneratedReportService.class);
-        
+    
         for (ReportConfiguration reportConfiguration : reportConfigurations) {
-            System.out
-                    .println("fffffffffffffffffbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" + reportConfiguration.getReportDesignUuid());
+            System.out.println("fffffffffffffffffbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" + reportConfiguration.getReportDesignUuid());
             
             Cohort cohort = Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid());
             System.out.println("fffffffffffffffff1111111111111111111");
