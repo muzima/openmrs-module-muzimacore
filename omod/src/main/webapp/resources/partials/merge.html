@@ -18,20 +18,20 @@
             <div class="col-lg-10"></div>
             <div class="col-lg-1">
                 <button class="btn btn-default" type="submit">Extend View</button>
-           </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
                 <div class="checkbox pull-right">
                     <label>
-                        <input type="checkbox"> Select All
+                        <input id="erm_select_all" type="checkbox"> Select All
                     </label>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox"> Select All
+                        <input type="checkbox" ng-model="queue_checkbox.select_all" ng-change="toggleCheckboxes(queue)"> Select All
                     </label>
                 </div>
             </div>
@@ -50,12 +50,12 @@
                 <div class="form-group">
                     <label class="col-md-4">{{rowData.label}}</label>
                     <div class="col-md-7 {{rowData.isConflict ? 'has-error': ''}}">
-                       <input type="text" class="form-control" placeholder="{{rowData.emrPatient}}">
+                        <input type="text" class="form-control" ng-model="rowData.emrPatient">
                     </div>
                     <div class="col-md-1">
                         <div class="checkbox" ng-show="rowData.isConflict">
                             <label>
-                                <input type="checkbox" value="option1" aria-label="...">
+                                <input id="erm_{{rowData}}_checkbox" type="checkbox" value="option1" aria-label="...">
                             </label>
                         </div>
                     </div>
@@ -66,13 +66,13 @@
                     <div class="col-md-1">
                         <div class="checkbox" ng-show="rowData.isConflict">
                             <label>
-                               <input type="checkbox" value="option1" aria-label="...">
+                                <input ng-model="queue_checkbox[rowData.key]" type="checkbox" value="option1" aria-label="...">
                             </label>
                         </div>
                     </div>
                     <label class="col-md-4">{{rowData.label}}</label>
                     <div class="col-md-7 {{rowData.isConflict ? 'has-error': ''}}">
-                        <input type="text" class="form-control" placeholder="{{rowData.queuePatient}}">
+                        <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient" ng-model-options="{updateOn: 'blur'}">
                     </div>
                 </div>
             </div>
