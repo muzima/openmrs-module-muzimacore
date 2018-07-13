@@ -33,7 +33,7 @@
         <class>org.openmrs.module.muzima.extension.html.AdminList</class>
     </extension>
 
-    <!-- Maps hibernate file's, if present  ReportConfiguration.hbm.xml -->
+    <!-- Maps hibernate file's, if present -->
     <mappingFiles>
         ArchiveData.hbm.xml
         DataSource.hbm.xml
@@ -48,6 +48,7 @@
         RegistrationData.hbm.xml
         MuzimaSetting.hbm.xml
         ReportConfiguration.hbm.xml
+        MuzimaGeneratedReport.hbm.xml
     </mappingFiles>
 
     <!-- Internationalization -->
