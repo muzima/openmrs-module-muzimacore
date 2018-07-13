@@ -9,7 +9,7 @@
         <id name="id" type="java.lang.Integer" column="id" unsaved-value="0">
             <generator class="native"/>
         </id>
-        <property name="cohortReportConfigUuid" type="java.lang.String" column="cohort_report_config_id"  not-null="true"/>
+        <property name="cohortReportConfigId" type="java.lang.Integer" column="cohort_report_config_id"  not-null="true"/>
         <property name="patientId" type="java.lang.Integer" column="patient_id"  not-null="true"/>
 
         <property name="reportRequestUuid" type="java.lang.String" column="report_request_uuid" length="38" not-null="true"/>

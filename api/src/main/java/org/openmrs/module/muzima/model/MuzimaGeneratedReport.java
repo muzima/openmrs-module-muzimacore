@@ -23,8 +23,8 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
 
     private Integer id;
     private Integer patientId;
+    private Integer cohortReportConfigId;
     private String reportRequestUuid;
-    private String cohortReportConfigUuid;
     private User user;
     private String status;
     private String reportJson;
@@ -32,8 +32,8 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     public MuzimaGeneratedReport(){
     }    // used by hibernate
 
-    public MuzimaGeneratedReport(String reportRequestUuid, String cohortReportConfigUuid){
-        setCohortReportConfigUuid(cohortReportConfigUuid);
+    public MuzimaGeneratedReport(String reportRequestUuid, Integer cohortReportConfigId){
+        setCohortReportConfigId(cohortReportConfigId);
         setReportRequestUuid(reportRequestUuid);
        
     }
@@ -48,12 +48,12 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
         this.id = id;
     }
     
-    public void setCohortReportConfigUuid(final String cohortReportConfigUuid) {
-        this.cohortReportConfigUuid = cohortReportConfigUuid;
+    public void setCohortReportConfigId(final Integer cohortReportConfigId) {
+        this.cohortReportConfigId = cohortReportConfigId;
     }
     
-    public String getCohortReportConfigUuid(){
-        return cohortReportConfigUuid;
+    public Integer getCohortReportConfigId(){
+        return cohortReportConfigId;
     }
     
     public void setReportRequestUuid(final String reportRequestUuid) {
