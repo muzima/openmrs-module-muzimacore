@@ -3,6 +3,9 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
      $scope.search = { cohorts: '', reports: ''};
      $scope.selected = {cohorts: '', reports: ''};
      $scope.configReports = [];
+     $scope.checkboxModel = {
+            priority : true
+          };
      
       var createJson = function () {
              var reportConfigurationJsonString = {"reports":$scope.configReports};
@@ -58,7 +61,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     };
 
     $scope.save = function (reportConfiguration) {
-        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson()).
+        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson(),$scope.checkboxModel.priority).
         then(function () {
             $location.path("/reportConfigs");
         })

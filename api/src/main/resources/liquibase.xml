@@ -1216,6 +1216,9 @@
                 <constraints nullable="false"/>
                 
             </column>
+            <column name="priority" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
             
             <column name="creator" type="int">
                 <constraints nullable="false"/>

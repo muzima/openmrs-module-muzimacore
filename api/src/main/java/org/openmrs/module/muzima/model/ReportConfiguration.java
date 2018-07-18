@@ -25,9 +25,8 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
     private Integer id;
     private String reportDesignUuid;
     private String cohortUuid;
-    private String reportRequestUuid;
-    private String status;
     private User user;
+    private Boolean priority;
 
     public ReportConfiguration(){
     }    // used by hibernate
@@ -64,6 +63,14 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
         this.cohortUuid = cohortUuid;
     }
     
+    public Boolean getPriority(){
+        return priority;
+    }
+    
+    public void setPriority(final Boolean priority) {
+        this.priority = priority;
+    }
+    
     public User getCreator(){
         return user;
     }
@@ -77,8 +84,8 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
                 "id=" + id +
                 ", uuid=" + getUuid() +
                 ", name='" + getName() +
-                ", reportId='" + getReportDesignUuid() +
-                ", cohortId='" + getCohortUuid()+
+                ", reportUuid='" + getReportDesignUuid() +
+                ", cohortUuid='" + getCohortUuid()+
                 ", description='" + getDescription() +
                 '}';
     }

@@ -24,7 +24,10 @@
                 <div class="row">
                     <input class="col-lg-10 form-control" placeholder="Report name ..." type="text" disabled="" ng-model="reportConfiguration.cohort">
                 </div>
-                
+
+                <div class="row">
+                    <input type="checkbox" name="priority" value="priority" ng-model="checkboxModel.priority"> High Priority<br>
+                </div>
                
                 <div class="row" style="margin-top: 14px; padding: 0">
                     <textarea class="col-lg-12 form-control" placeholder="." rows="10" disabled="" ng-model="reportConfiguration.report">
@@ -45,6 +48,10 @@
                         <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
                                uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
                                uib-typeahead-wait-ms="500"  uib-typeahead-editable="false"/>
+                    </div>
+
+                    <div class="row">
+                        <input type="checkbox" name="priority" value="priority" ng-model="checkboxModel.priority"> High Priority<br>
                     </div>
                     
                     <div class="panel panel-default panel-body col-lg-12">
