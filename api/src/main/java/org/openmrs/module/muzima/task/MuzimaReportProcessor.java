@@ -32,6 +32,8 @@ import org.openmrs.module.reporting.report.definition.service.ReportDefinitionSe
 import org.openmrs.module.reporting.report.renderer.RenderingMode;
 import org.openmrs.module.reporting.report.service.ReportService;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,9 +71,9 @@ public class MuzimaReportProcessor {
                     .println("fffffffffffffffff1111111111111111111111111111111" + reportConfiguration.getReportDesignUuid());
             
             Cohort cohort = Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid());
-            
+            System.out.println("fffffffffffffffff2222222222222222222" + cohort.getName());
             String patientIds = cohort.getCommaSeparatedPatientIds();
-            System.out.println("fffffffffffffffff22222222222222222222" + patientIds);
+            System.out.println("fffffffffffffffff3333333333333333333333" + patientIds);
             String[] patientList = patientIds.split(",");
             
             RenderingMode selectedRenderingMode = null;
@@ -82,105 +84,121 @@ public class MuzimaReportProcessor {
             for (RenderingMode renderingMode : reportService.getRenderingModes(reportDefinition)) {
                 if (renderingMode.getLabel().equals(design.getName())) {
                     selectedRenderingMode = renderingMode;
-                    System.out.println("vvvvvvvvvvvvvvvvvvvvvvfffffffffffffffff2222222222222222222222");
+                    System.out.println("fffffffffffffffffffff444444444444444444");
                 }
             }
             
-            for (String patientId : patientList) {
-                System.out.println("ffffffffffffffffff333333333333333333333" + patientId);
+            for (String patientIdString : patientList) {
+                Integer patientId = Integer.valueOf(patientIdString);
+                System.out.println("ffffffffffffffffff5555555555555555555" + patientId);
                 
                 MuzimaGeneratedReport generatedReport = muzimaGeneratedReportService
-                        .getLastMuzimaGeneratedReportByPatientId(Integer.valueOf(patientId));
-                System.out.println("tttttttttttffffffffccccccccccccccccccccccccccccccc" + generatedReport);
+                        .getLastMuzimaGeneratedReportByPatientId(patientId);
+                System.out.println("ffffffffffffffffff66666666666666666666" + generatedReport);
                 if (generatedReport != null) {
-                    System.out.println("fffffffffffffffff4444444444444444444444444444444444");
+                    System.out.println("fffffffffffffffff777777777777777777777");
                     if (!"completed".equals(generatedReport.getStatus())) {
-                        System.out.println("fffffffffffffffff5555555555555555555555555555");
+                        System.out.println("fffffffffffffffff888888888888888888888");
                         ReportRequest reportRequest = reportService
                                 .getReportRequestByUuid(generatedReport.getReportRequestUuid());
-                        
-                        byte[] data = reportService.loadRenderedOutput(reportRequest);
-                        
-                        if (data != null) {
-                            System.out.println("fffffffffffffffff6666666666666666666666666666" + data);
-                            System.out.println("Text [Byte Format] : " + data);
-                            System.out.println("Text [Byte Format] : " + design.toString());
+                        if ("completed".equals(reportRequest.getStatus().toString())) {
+                            System.out.println("ffffffffffffffffffff999999999999999" + reportRequest.getStatus().toString());
+                            byte[] data = reportService.loadRenderedOutput(reportRequest);
                             
-                            String s = new String(data);
-                            System.out.println("Text Decryted : " + s);
+                            if (data != null) {
+                                System.out.println("fffffffffffffffffaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + data);
+                                System.out.println("Text [Byte Format] : " + data);
+                                System.out.println("Text [Byte Format] : " + design.toString());
+                                
+                                String s = new String(data);
+                                System.out.println("Text Decryted : " + s);
+                                
+                                generatedReport.setReportJson(s);
+                                generatedReport.setStatus("completed");
+                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(generatedReport);
+                                System.out.println("fffffffffffffffffffbbbbbbbbbbbbbbbbbbbbbbbb");
+                            } else {
+                                System.out.println("ffffffffffffffffffcccccccccccccccccc");
+                                generatedReport.setStatus("completed");
+                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(generatedReport);
+                                System.out.println("fffffffffffffffffffdddddddddddddddddddddd");
+                            }
                             
-                            generatedReport.setReportJson(s);
+                        } else {
+                            System.out.println("ffffffffffffffffffeeeeeeeeeeeeeeeeeee");
                             generatedReport.setStatus("completed");
                             muzimaGeneratedReportService.saveMuzimaGeneratedReport(generatedReport);
-                            System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                        } else {
-                            System.out.println("ffffffffffffffffffffffffffffffffffffffffffffailed");
+                            System.out.println("fffffffffffffffffffdgggggggggggggggggggg");
+                            
                         }
                     }
                     
-                    System.out.println("ffffffffffffffffffff77777777777777777777777" + 1);
+                    System.out.println("ffffffffffffffffffffhhhhhhhhhhhhhhhhh" + 1);
                     
-                    Patient patient = patientService.getPatient(Integer.valueOf(patientId));
+                    Patient patient = patientService.getPatient(patientId);
                     List<Obs> obsList = obsService.getObservationsByPerson(patient);
-                    
-                    Obs obs = obsList.get(obsList.size() - 1);
-                    
-                    if (obs.getObsDatetime().after(generatedReport.getDateCreated())) {
-                        System.out.println("fffffffffffffffA new report has to be generated");
+                    if (0 != obsList.size()) {
+                        System.out.println("ffffffffffffffffffffiiiiiiiiiiiiiiiiiii"+obsList+" "+obsList.size()+" "+obsList.get(0));
+                        Obs obs = obsList.get(obsList.size() - 1);
+    
+                        final Calendar cal = Calendar.getInstance();
+                        cal.add(Calendar.DATE, -1);
+                        Date yesterday = cal.getTime();
                         
-                        ReportRequest reportRequest = new ReportRequest();
-                        Map<String, Object> params = new LinkedHashMap<String, Object>();
+                        if (obs.getObsDatetime().after(yesterday)) {
+                            System.out.println("fffffffffffffffjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+                            
+                            ReportRequest reportRequest = new ReportRequest();
+                            Map<String, Object> params = new LinkedHashMap<String, Object>();
+                            
+                            params.put("person", personService.getPerson(patientId));
+                            reportRequest.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
+                            reportRequest.setRenderingMode(selectedRenderingMode);
+                            reportRequest.setPriority(ReportRequest.Priority.NORMAL);
+                            
+                            reportRequest = reportService.queueReport(reportRequest);
+                            reportService.processNextQueuedReports();
+                            System.out.println("fffff11111111111111111111End of AsynchronousTask");
+                            
+                            MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
+                            muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
+                            muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
+                            muzimaGeneratedReport.setPatientId(patientId);
+                            muzimaGeneratedReport.setStatus("progress");
+                            
+                            muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
+                            System.out.println("fffffffffffffffkkkkkkkkkkkkkkkkkkkkkkkkkSave of generatedReport Success");
+                        }
                         
-                        params.put("person", personService.getPerson(1));
-                        reportRequest.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
-                        reportRequest.setRenderingMode(selectedRenderingMode);
-                        reportRequest.setPriority(ReportRequest.Priority.NORMAL);
-                        
-                        reportRequest = reportService.queueReport(reportRequest);
-                        reportService.processNextQueuedReports();
-                        System.out.println("fffff11111111111111111111End of AsynchronousTask");
-                        
-                        MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
-                        muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
-                        muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
-                        muzimaGeneratedReport.setPatientId(1);
-                        muzimaGeneratedReport.setStatus("progress");
-                        
-                        muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
-                        System.out.println("fffffff2222222222222222222222222Save of generatedReport Success");
                     }
                     
                 } else {
                     
-                    System.out.println("fffff00000000000000000000000000000" + 1);
-                    
-                    System.out.println("A new report has to be generated");
+                    System.out.println("fffffffffffffllllllllllllllllllllll" + 1);
                     
                     ReportRequest reportRequest = new ReportRequest();
                     Map<String, Object> params = new LinkedHashMap<String, Object>();
                     
-                    params.put("person", personService.getPerson(1));
+                    params.put("person", personService.getPerson(patientId));
                     reportRequest.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
                     reportRequest.setRenderingMode(selectedRenderingMode);
                     reportRequest.setPriority(ReportRequest.Priority.NORMAL);
                     
                     reportRequest = reportService.queueReport(reportRequest);
                     reportService.processNextQueuedReports();
-                    System.out.println("fffff11111111111111111111End of AsynchronousTask");
+                    System.out.println("fffffffffffffffffffmmmmmmmmmmmmmmmmmmmmmm");
                     
                     MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
                     muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
                     muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
-                    muzimaGeneratedReport.setPatientId(1);
+                    muzimaGeneratedReport.setPatientId(patientId);
                     muzimaGeneratedReport.setStatus("progress");
                     
                     muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
-                    System.out.println("fffffff2222222222222222222222222Save of generatedReport Success");
+                    System.out.println("ffffffffffffffooooooooooooooooooooooSave of generatedReport Success");
                     
                 }
-                break;
             }
-            break;
         }
     }
 }

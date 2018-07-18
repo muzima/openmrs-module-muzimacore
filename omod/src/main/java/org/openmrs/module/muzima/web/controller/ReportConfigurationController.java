@@ -97,38 +97,48 @@ public class ReportConfigurationController {
     
     @RequestMapping(value = "/module/muzimacore/reportConfig.json", method = RequestMethod.POST)
     public void saveReportConfiguration(final @RequestBody Map<String, Object> map) {
-        System.out.println("ssssss111111111111111111");
+        System.out.println("rrrrrrrrrrrr111111111111111111");
         if (Context.isAuthenticated()) {
-            System.out.println("sssssss22222222222222222222");
+            System.out.println("rrrrrrrrrrrrr22222222222222222222");
             String uuid = (String) map.get("uuid");
+            String priorityString = (String) map.get("priority");
+            Boolean priority = false;
+            if("1".equals(priorityString)){
+        
+                priority = true;
+            }
+            
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             if (StringUtils.isNotBlank(uuid)) {
                
-                System.out.println("specoaooooooooooooooooooooo");
+                System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrr");
                 String cohortUuid =  (String) map.get("cohortUuid");
                 
-                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
                 String reportConfigJson = (String)map.get("reportConfigJson");
-                System.out.println("bbbbbbbbbbbbbbbbbbbbbb"+reportConfigJson.substring(12,reportConfigJson.length()-2));
+                
+                System.out.println("rrrrrrrrrrrrrrrrrrrr"+reportConfigJson.substring(12,reportConfigJson.length()-2));
                 String [] reports = reportConfigJson.substring(12,reportConfigJson.length()-2).split("}");
     
                 
                 ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
-                    System.out.println("ccccccccccccccccccccccccccccc");
+                    System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrr");
                     reportConfiguration.setCohortUuid(cohortUuid);
     
                     for(String report:reports){
-                        System.out.println("fffffaaaaaaaaa  "+report);
+                        System.out.println("rrrrrrrrrrrrrrrrrr "+report);
                         Integer index1 = report.indexOf("uuid");
-                        System.out.println("fffffbbbbbbbbbbbbbb  "+index1);
+                        System.out.println("rrrrrrrrrrrrrrrrrrrrrr  "+index1);
                         String s1 = report.substring(index1+7,report.length()-1);
-                        System.out.println("fffffcccccccccccc  "+s1);
+                        System.out.println("rrrrrrrrrrrrrrrrrrrrrr  "+s1);
                         Integer index2 = s1.indexOf("}");
-                        System.out.println("fffffdddddddddd   "+index2);
+                        System.out.println("rrrrrrrrrrrrrrrrrrrrr  "+index2);
                
-                        System.out.println("fffff555555555"+s1);
+                        System.out.println("rrrrrrrrrrrrrrrrrrrrrr"+s1);
                         reportConfiguration.setReportDesignUuid(s1);
                         reportConfiguration.setCohortUuid(cohortUuid);
+                        reportConfiguration.setPriority(priority);
+                        System.out.println("rrrrrrrrrrrrrrrrrrrrrr"+s1);
                         reportConfigurationService.saveReportConfiguration(reportConfiguration);
                     }
             } else {
@@ -152,7 +162,8 @@ public class ReportConfigurationController {
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
                     reportConfiguration.setReportDesignUuid(s1);
                     reportConfiguration.setCohortUuid(cohortUuid);
-                    //reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                    reportConfiguration.setPriority(priority);
+                   // reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             }
             System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqConfigs are saved");

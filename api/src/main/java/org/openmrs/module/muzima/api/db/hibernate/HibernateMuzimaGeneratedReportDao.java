@@ -23,6 +23,7 @@ import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.MuzimaGeneratedReportDao;
+import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,7 +114,7 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("id", id));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        return (MuzimaGeneratedReport) criteria.list();
+        return (MuzimaGeneratedReport) criteria.uniqueResult();
     }
     
     @Override
@@ -121,7 +122,10 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        return (MuzimaGeneratedReport) criteria.list();
+        criteria.setProjection(Projections.max("dateCreated"));
+    
+        return (MuzimaGeneratedReport) criteria.uniqueResult(); 
+        
     }
     
     @Override
@@ -136,12 +140,12 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
     @Override
     @Transactional
     public MuzimaGeneratedReport getMuzimaGeneratedReportByUuid(String uuid){
-        MuzimaGeneratedReport setting = null;
+        MuzimaGeneratedReport muzimaGeneratedReport = null;
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        setting = (MuzimaGeneratedReport)criteria.uniqueResult();
-        return setting;
+        muzimaGeneratedReport = (MuzimaGeneratedReport)criteria.uniqueResult();
+        return muzimaGeneratedReport;
     }
 
     @Override
