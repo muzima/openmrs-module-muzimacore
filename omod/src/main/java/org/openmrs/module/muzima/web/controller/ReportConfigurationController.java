@@ -101,11 +101,9 @@ public class ReportConfigurationController {
         if (Context.isAuthenticated()) {
             System.out.println("rrrrrrrrrrrrr22222222222222222222");
             String uuid = (String) map.get("uuid");
-            String priorityString = (String) map.get("priority");
-            Boolean priority = false;
-            if("1".equals(priorityString)){
-        
-                priority = true;
+            Boolean priority = (Boolean) map.get("priority");
+            if(priority ==null){
+                priority = false;
             }
             
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
@@ -163,7 +161,7 @@ public class ReportConfigurationController {
                     reportConfiguration.setReportDesignUuid(s1);
                     reportConfiguration.setCohortUuid(cohortUuid);
                     reportConfiguration.setPriority(priority);
-                   // reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                    //reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             }
             System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqConfigs are saved");

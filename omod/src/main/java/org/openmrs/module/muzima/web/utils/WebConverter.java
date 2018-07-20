@@ -292,6 +292,8 @@ public class WebConverter {
             map.put("report", Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportDesignUuid()).getName());
             map.put("cohort", Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid()).getName());
             map.put("user",reportConfiguration.getCreator().toString());
+            map.put("priority",reportConfiguration.getPriority());
+            
         }
         return map;
     }

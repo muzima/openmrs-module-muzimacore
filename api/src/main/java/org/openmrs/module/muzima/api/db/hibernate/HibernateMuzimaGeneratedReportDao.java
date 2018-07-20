@@ -119,11 +119,12 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
     
     @Override
     public MuzimaGeneratedReport getLastMuzimaGeneratedReportByPatientId(Integer patientId) {
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbb");
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        criteria.setProjection(Projections.max("dateCreated"));
-    
+        //criteria.setProjection(Projections.max("dateCreated"));
+        System.out.println("dddddddddddddddddddddddddddbbbbbbbbbbbbbbbbbbbbbbbbbbb"+criteria.uniqueResult());
         return (MuzimaGeneratedReport) criteria.uniqueResult(); 
         
     }

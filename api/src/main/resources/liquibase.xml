@@ -1247,12 +1247,12 @@
         <addForeignKeyConstraint constraintName="muzima_cohort_report_config_retired_by"
                                  baseTableName="muzima_cohort_report_config" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
-         <addForeignKeyConstraint constraintName="muzima_cohort_report_config_cohort_uuid"
+        <!-- <addForeignKeyConstraint constraintName="muzima_cohort_report_config_cohort_uuid"
                                      baseTableName="muzima_cohort_report_config" baseColumnNames="cohort_uuid"
                                      referencedTableName="cohort" referencedColumnNames="uuid"/>
         <addForeignKeyConstraint constraintName="muzima_cohort_report_config_report_design_uuid"
                                  baseTableName="muzima_cohort_report_config" baseColumnNames="report_design_uuid"
-                                 referencedTableName="reporting_report_design" referencedColumnNames="uuid"/>
+                                 referencedTableName="reporting_report_design" referencedColumnNames="uuid"/>-->
     </changeSet>
 
     <changeSet id="muzima-20180630154129" author="dileka">
