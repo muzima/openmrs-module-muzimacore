@@ -91,6 +91,9 @@ public class MuzimaReportProcessor {
             for (String patientIdString : patientList) {
                 Integer patientId = Integer.valueOf(patientIdString);
                 System.out.println("ffffffffffffffffff5555555555555555555" + patientId);
+    
+                System.out.println("ffffffffffffffffff555555555555555555cccccccccccc5" + patientId+" kkkk"+ muzimaGeneratedReportService
+                        .getLastMuzimaGeneratedReportByPatientId(patientId));
                 
                 MuzimaGeneratedReport generatedReport = muzimaGeneratedReportService
                         .getLastMuzimaGeneratedReportByPatientId(patientId);
