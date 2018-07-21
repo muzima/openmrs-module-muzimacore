@@ -26,6 +26,8 @@ public interface MuzimaGeneratedReportService extends OpenmrsService {
     
     MuzimaGeneratedReport getLastMuzimaGeneratedReportByPatientId(final Integer id);
     
+    MuzimaGeneratedReport getLastPriorityMuzimaGeneratedReportByPatientId(final Integer id);
+    
     MuzimaGeneratedReport getMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId);
     
     MuzimaGeneratedReport getMuzimaGeneratedReportByUuid(final String uuid);
