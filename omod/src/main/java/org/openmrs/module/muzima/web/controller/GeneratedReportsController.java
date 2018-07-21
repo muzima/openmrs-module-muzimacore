@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
+import org.openmrs.Patient;
+import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaGeneratedReportService;
 import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
@@ -51,7 +53,7 @@ public class GeneratedReportsController {
         }
       return response;
     }
-    @RequestMapping(value = "/module/muzimacore/generatedReport.json", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/module/muzimacore/generatedReport.json", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getGeneratedReport(final @RequestParam(value = "patientId") Integer patientId,
             final @RequestParam(value = "cohortReportConfigId") Integer cohortReportConfigId) {
@@ -60,6 +62,21 @@ public class GeneratedReportsController {
             MuzimaGeneratedReportService generatedReportService = Context.getService(MuzimaGeneratedReportService.class);
             List<Object> objects = new ArrayList<Object>();
             objects.add(WebConverter.convertMuzimaGeneratedReport(generatedReportService.getMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(patientId,cohortReportConfigId)));
+            
+            response.put("objects", objects);
+        }
+        return response;
+    }*/
+    @RequestMapping(value = "/module/muzimacore/generatedReport.json", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getGeneratedReport(final @RequestParam(value = "patientUuid") String patientUuid) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        if (Context.isAuthenticated()) {
+            PatientService patientService = Context.getService(PatientService.class);
+            Patient patient = patientService.getPatientByUuid(patientUuid);
+            MuzimaGeneratedReportService generatedReportService = Context.getService(MuzimaGeneratedReportService.class);
+            List<Object> objects = new ArrayList<Object>();
+            objects.add(WebConverter.convertMuzimaGeneratedReport(generatedReportService.getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId())));
             
             response.put("objects", objects);
         }

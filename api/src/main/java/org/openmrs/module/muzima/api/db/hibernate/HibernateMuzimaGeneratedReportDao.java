@@ -123,9 +123,24 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        criteria.setProjection(Projections.max("dateCreated"));
+        criteria.addOrder(Order.desc("dateCreated"));
+        criteria.setMaxResults(1);
         System.out.println("dddddddddddddddddddddddddddbbbbbbbbbbbbbbbbbbbbbbbbbbb"+criteria.uniqueResult());
         return (MuzimaGeneratedReport) criteria.uniqueResult(); 
+        
+    }
+    
+    @Override
+    public MuzimaGeneratedReport getLastPriorityMuzimaGeneratedReportByPatientId(Integer patientId) {
+        System.out.println("aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        Criteria criteria = session().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("patientId", patientId));
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.add(Restrictions.eq("priority", Boolean.TRUE));
+        criteria.addOrder(Order.desc("dateCreated"));
+        criteria.setMaxResults(1);
+        System.out.println("dddddddddddddddddddddddddddbbbbbbbbbbbbbbbbbbbbbbbbbbb"+criteria.uniqueResult());
+        return (MuzimaGeneratedReport) criteria.uniqueResult();
         
     }
     
