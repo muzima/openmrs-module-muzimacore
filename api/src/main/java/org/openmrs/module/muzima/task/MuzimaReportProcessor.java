@@ -95,15 +95,15 @@ public class MuzimaReportProcessor {
                 System.out.println("ffffffffffffffffff555555555555555555cccccccccccc5" + patientId+" kkkk"+ muzimaGeneratedReportService
                         .getLastMuzimaGeneratedReportByPatientId(patientId));
                 
-                MuzimaGeneratedReport generatedReport = muzimaGeneratedReportService
+                MuzimaGeneratedReport lastGeneratedReport = muzimaGeneratedReportService
                         .getLastMuzimaGeneratedReportByPatientId(patientId);
-                System.out.println("ffffffffffffffffff66666666666666666666" + generatedReport);
-                if (generatedReport != null) {
+                System.out.println("ffffffffffffffffff66666666666666666666" + lastGeneratedReport);
+                if (lastGeneratedReport != null) {
                     System.out.println("fffffffffffffffff777777777777777777777");
-                    if (!"completed".equals(generatedReport.getStatus())) {
+                    if (!"completed".equals(lastGeneratedReport.getStatus())) {
                         System.out.println("fffffffffffffffff888888888888888888888");
                         ReportRequest reportRequest = reportService
-                                .getReportRequestByUuid(generatedReport.getReportRequestUuid());
+                                .getReportRequestByUuid(lastGeneratedReport.getReportRequestUuid());
                         if ("completed".equals(reportRequest.getStatus().toString())) {
                             System.out.println("ffffffffffffffffffff999999999999999" + reportRequest.getStatus().toString());
                             byte[] data = reportService.loadRenderedOutput(reportRequest);
@@ -115,22 +115,22 @@ public class MuzimaReportProcessor {
                                 
                                 String s = new String(data);
                                 System.out.println("Text Decryted : " + s);
-                                
-                                generatedReport.setReportJson(s);
-                                generatedReport.setStatus("completed");
-                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(generatedReport);
+    
+                                lastGeneratedReport.setReportJson(s);
+                                lastGeneratedReport.setStatus("completed");
+                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
                                 System.out.println("fffffffffffffffffffbbbbbbbbbbbbbbbbbbbbbbbb");
                             } else {
                                 System.out.println("ffffffffffffffffffcccccccccccccccccc");
-                                generatedReport.setStatus("completed");
-                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(generatedReport);
+                                lastGeneratedReport.setStatus("completed");
+                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
                                 System.out.println("fffffffffffffffffffdddddddddddddddddddddd");
                             }
                             
                         } else {
                             System.out.println("ffffffffffffffffffeeeeeeeeeeeeeeeeeee");
-                            generatedReport.setStatus("completed");
-                            muzimaGeneratedReportService.saveMuzimaGeneratedReport(generatedReport);
+                            lastGeneratedReport.setStatus("completed");
+                            muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
                             System.out.println("fffffffffffffffffffdgggggggggggggggggggg");
                             
                         }
@@ -167,6 +167,7 @@ public class MuzimaReportProcessor {
                             muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
                             muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
                             muzimaGeneratedReport.setPatientId(patientId);
+                            muzimaGeneratedReport.setPriority(reportConfiguration.getPriority());
                             muzimaGeneratedReport.setStatus("progress");
                             
                             muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
@@ -195,6 +196,7 @@ public class MuzimaReportProcessor {
                     muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
                     muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
                     muzimaGeneratedReport.setPatientId(patientId);
+                    muzimaGeneratedReport.setPriority(reportConfiguration.getPriority());
                     muzimaGeneratedReport.setStatus("progress");
                     
                     muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
