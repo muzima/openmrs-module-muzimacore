@@ -74,6 +74,7 @@ public class GeneratedReportsController {
         if (Context.isAuthenticated()) {
             PatientService patientService = Context.getService(PatientService.class);
             Patient patient = patientService.getPatientByUuid(patientUuid);
+            
             MuzimaGeneratedReportService generatedReportService = Context.getService(MuzimaGeneratedReportService.class);
             List<Object> objects = new ArrayList<Object>();
             objects.add(WebConverter.convertMuzimaGeneratedReport(generatedReportService.getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId())));

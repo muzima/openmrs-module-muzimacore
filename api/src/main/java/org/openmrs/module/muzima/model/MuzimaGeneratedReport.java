@@ -28,6 +28,7 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     private User user;
     private String status;
     private String reportJson;
+    private  Boolean priority;
 
     public MuzimaGeneratedReport(){
     }    // used by hibernate
@@ -86,6 +87,14 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     
     public String getReportJson(){
         return reportJson;
+    }
+    
+    public void setPriority(final Boolean priority) {
+        this.priority = priority;
+    }
+    
+    public Boolean getPriority(){
+        return priority;
     }
     
     public User getCreator(){
