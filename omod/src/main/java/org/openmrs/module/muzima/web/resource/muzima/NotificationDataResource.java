@@ -25,6 +25,7 @@ import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.muzima.web.resource.utils.JsonUtils;
+import org.openmrs.module.muzima.web.resource.utils.ResourceUtils;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -245,16 +246,16 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         personUuid = context.getRequest().getParameter("receiver");
         String syncDateString = context.getRequest().getParameter("syncDate");
         if(syncDateString!=null){
-             syncDate = parseDate(syncDateString);
+             syncDate = ResourceUtils.parseDate(syncDateString);
         }
 
         if (personUuid != null) {
             Person person = Context.getPersonService().getPersonByUuid(personUuid);
             if (person == null)
                 return new EmptySearchResult();
-            int encounterCount = dataService.countNotificationDataByReceiver(person, searchString, "unread").intValue();
+            int encounterCount = dataService.countNotificationDataByReceiver(person, searchString, "").intValue();
             List<NotificationData> encounters =
-                    dataService.getNotificationDataByReceiver(person, searchString, context.getStartIndex(), context.getLimit(), "unread", syncDate);
+                    dataService.getNotificationDataByReceiver(person, searchString, context.getStartIndex(), context.getLimit(), "", syncDate);
             boolean hasMore = encounterCount > context.getStartIndex() + encounters.size();
             return new AlreadyPaged<NotificationData>(context, encounters, hasMore);
         }
@@ -264,9 +265,9 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
             Person person = Context.getPersonService().getPersonByUuid(personUuid);
             if (person == null)
                 return new EmptySearchResult();
-            int encounterCount = dataService.countNotificationDataBySender(person, searchString, "unread").intValue();
+            int encounterCount = dataService.countNotificationDataBySender(person, searchString, "").intValue();
             List<NotificationData> encounters =
-                    dataService.getNotificationDataBySender(person, searchString, context.getStartIndex(), context.getLimit(), "unread", syncDate);
+                    dataService.getNotificationDataBySender(person, searchString, context.getStartIndex(), context.getLimit(), "", syncDate);
             boolean hasMore = encounterCount > context.getStartIndex() + encounters.size();
             return new AlreadyPaged<NotificationData>(context, encounters, hasMore);
         }
