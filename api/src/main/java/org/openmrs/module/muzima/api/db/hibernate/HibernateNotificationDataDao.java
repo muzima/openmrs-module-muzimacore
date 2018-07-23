@@ -26,6 +26,7 @@ import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.module.muzima.api.db.NotificationDataDao;
 import org.openmrs.module.muzima.model.NotificationData;
+import org.openmrs.module.muzima.utils.JsonUtils;
 
 import java.util.Date;
 import java.util.List;

@@ -62,7 +62,7 @@ import static org.openmrs.module.muzima.web.resource.utils.ResourceUtils.parseDa
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/notificationdata",
         supportedClass = NotificationData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
 public class NotificationDataResource extends DataDelegatingCrudResource<NotificationData> {
-    private static final DateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     /**
      * Gets the delegate object with the given unique id. Implementations may decide whether
      * "unique id" means a uuid, or if they also want to retrieve delegates based on a unique
