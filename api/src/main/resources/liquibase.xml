@@ -1184,4 +1184,8 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20180720102200" author="bmokaya">
+        <dropNotNullConstraint columnDataType="int" columnName="patient" tableName="muzima_notification_data"/>
+    </changeSet>
+
 </databaseChangeLog>

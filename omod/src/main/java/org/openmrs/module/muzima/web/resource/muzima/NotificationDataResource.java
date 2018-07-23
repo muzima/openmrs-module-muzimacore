@@ -20,6 +20,7 @@ import org.openmrs.Person;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
+import org.openmrs.module.muzima.model.Data;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
@@ -46,8 +47,13 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static org.openmrs.module.muzima.web.resource.utils.ResourceUtils.parseDate;
 
 /**
  * TODO: Write brief description about the class here.
@@ -55,7 +61,7 @@ import java.util.Map;
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/notificationdata",
         supportedClass = NotificationData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
 public class NotificationDataResource extends DataDelegatingCrudResource<NotificationData> {
-
+    private static final DateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     /**
      * Gets the delegate object with the given unique id. Implementations may decide whether
      * "unique id" means a uuid, or if they also want to retrieve delegates based on a unique
@@ -148,6 +154,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
             description.addProperty("payload");
             description.addProperty("receiver", Representation.DEFAULT);
             description.addProperty("sender", Representation.DEFAULT);
+            description.addProperty("dateCreated");
             description.addSelfLink();
             return description;
         } else {
@@ -195,6 +202,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         String message = extractMessageFromPayload(payload);
         String subject = extractSubjectFromPayload(payload);
         String source = extractSourceFromPayload(payload);
+        Date dateCreated = extractDateCreatedFromPayload(payload);
 
         notificationData.setReceiver(receiver);
         notificationData.setSender(sender);
@@ -202,6 +210,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         notificationData.setPayload(message);
         notificationData.setSubject(subject);
         notificationData.setSource(source);
+        notificationData.setDateCreated(dateCreated);
         notificationData.setStatus("unread");
 
         propertiesToCreate.put("sender",sender);
@@ -210,6 +219,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         propertiesToCreate.put("payload", message);
         propertiesToCreate.put("subject",subject);
         propertiesToCreate.put("source", source);
+        propertiesToCreate.put("dateCreated", dateCreated);
         propertiesToCreate.put("status", "unread");
         setConvertedProperties(notificationData, propertiesToCreate, getCreatableProperties(), true);
         notificationData = save(notificationData);
@@ -228,17 +238,23 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
     @Override
     protected PageableResult doSearch(final RequestContext context) {
         String personUuid;
+        Date syncDate = null;
 
         DataService dataService = Context.getService(DataService.class);
         String searchString = context.getRequest().getParameter("q");
         personUuid = context.getRequest().getParameter("receiver");
+        String syncDateString = context.getRequest().getParameter("syncDate");
+        if(syncDateString!=null){
+             syncDate = parseDate(syncDateString);
+        }
+
         if (personUuid != null) {
             Person person = Context.getPersonService().getPersonByUuid(personUuid);
             if (person == null)
                 return new EmptySearchResult();
             int encounterCount = dataService.countNotificationDataByReceiver(person, searchString, "unread").intValue();
             List<NotificationData> encounters =
-                    dataService.getNotificationDataByReceiver(person, searchString, context.getStartIndex(), context.getLimit(), "unread");
+                    dataService.getNotificationDataByReceiver(person, searchString, context.getStartIndex(), context.getLimit(), "unread", syncDate);
             boolean hasMore = encounterCount > context.getStartIndex() + encounters.size();
             return new AlreadyPaged<NotificationData>(context, encounters, hasMore);
         }
@@ -250,7 +266,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
                 return new EmptySearchResult();
             int encounterCount = dataService.countNotificationDataBySender(person, searchString, "unread").intValue();
             List<NotificationData> encounters =
-                    dataService.getNotificationDataBySender(person, searchString, context.getStartIndex(), context.getLimit(), "unread");
+                    dataService.getNotificationDataBySender(person, searchString, context.getStartIndex(), context.getLimit(), "unread", syncDate);
             boolean hasMore = encounterCount > context.getStartIndex() + encounters.size();
             return new AlreadyPaged<NotificationData>(context, encounters, hasMore);
         }
@@ -294,6 +310,11 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         return source;
     }
 
+    private Date extractDateCreatedFromPayload(String payload){
+        Date dateCreated = org.openmrs.module.muzima.utils.JsonUtils.readAsDateTime(payload, "$['dateCreated']",dateTimeFormat);
+        return dateCreated;
+    }
+
     /**
      * Gets a description of resource's properties which can be set on creation.
      *
@@ -311,6 +332,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         delegatingResourceDescription.addRequiredProperty("payload");
         delegatingResourceDescription.addRequiredProperty("source");
         delegatingResourceDescription.addRequiredProperty("status");
+        delegatingResourceDescription.addRequiredProperty("dateCreated");
         return delegatingResourceDescription;
     }
 
