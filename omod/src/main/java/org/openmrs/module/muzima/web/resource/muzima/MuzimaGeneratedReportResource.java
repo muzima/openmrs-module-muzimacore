@@ -7,7 +7,6 @@ import org.openmrs.annotation.Handler;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaGeneratedReportService;
-import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -27,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/generatedReport",
-        supportedClass = MuzimaConfig.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
-@Handler(supports = MuzimaConfig.class)
+        supportedClass = MuzimaGeneratedReport.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+@Handler(supports = MuzimaGeneratedReport.class)
 public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResource<MuzimaGeneratedReport> {
     private static final Log log = LogFactory.getLog(MuzimaGeneratedReportResource.class);
 

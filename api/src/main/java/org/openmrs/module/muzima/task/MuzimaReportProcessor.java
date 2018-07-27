@@ -104,7 +104,10 @@ public class MuzimaReportProcessor {
                         System.out.println("fffffffffffffffff888888888888888888888");
                         ReportRequest reportRequest = reportService
                                 .getReportRequestByUuid(lastGeneratedReport.getReportRequestUuid());
-                        if ("completed".equals(reportRequest.getStatus().toString())) {
+    
+    
+                        System.out.println("fffffffffffffffffaaaaaaaaaaaaaaaaaaaa"+reportRequest.toString()+" "+reportRequest.getUuid()+" "+reportRequest.getStatus());
+                        if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
                             System.out.println("ffffffffffffffffffff999999999999999" + reportRequest.getStatus().toString());
                             byte[] data = reportService.loadRenderedOutput(reportRequest);
                             
@@ -115,9 +118,11 @@ public class MuzimaReportProcessor {
                                 
                                 String s = new String(data);
                                 System.out.println("Text Decryted : " + s);
-    
+                                System.out.println("fffffffffffffffffffrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
                                 lastGeneratedReport.setReportJson(s);
+                                System.out.println("fffffffffffffffffffkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
                                 lastGeneratedReport.setStatus("completed");
+                                System.out.println("ffffffffffffffffffflllllllllllllllllllllllllllllllll");
                                 muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
                                 System.out.println("fffffffffffffffffffbbbbbbbbbbbbbbbbbbbbbbbb");
                             } else {
@@ -129,7 +134,7 @@ public class MuzimaReportProcessor {
                             
                         } else {
                             System.out.println("ffffffffffffffffffeeeeeeeeeeeeeeeeeee");
-                            lastGeneratedReport.setStatus("completed");
+                            lastGeneratedReport.setStatus("progress");
                             muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
                             System.out.println("fffffffffffffffffffdgggggggggggggggggggg");
                             
