@@ -67,11 +67,12 @@ public class GeneratedReportsController {
         }
         return response;
     }*/
-    @RequestMapping(value = "/module/muzimacore/generatedReport.json", method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/generatedreport.json", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getGeneratedReport(final @RequestParam(value = "patientUuid") String patientUuid) {
         Map<String, Object> response = new HashMap<String, Object>();
-        if (Context.isAuthenticated()) {
+        System.out.println("sssssssssssssssssssssssssssssssssssssssssssssssssssss");
+        //if (Context.isAuthenticated()) {
             PatientService patientService = Context.getService(PatientService.class);
             Patient patient = patientService.getPatientByUuid(patientUuid);
             
@@ -80,7 +81,8 @@ public class GeneratedReportsController {
             objects.add(WebConverter.convertMuzimaGeneratedReport(generatedReportService.getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId())));
             
             response.put("objects", objects);
-        }
+       // }
+        System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
         return response;
     }
 }
