@@ -1277,7 +1277,7 @@
             <column name="patient_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="report_json" type="${clob.type}">
+            <column name="report_json" type="longBlob">
                 
             </column>
             <column name="priority" type="tinyint" defaultValueNumeric="0">
