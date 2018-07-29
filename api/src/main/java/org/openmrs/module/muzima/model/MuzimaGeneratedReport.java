@@ -27,7 +27,7 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     private String reportRequestUuid;
     private User user;
     private String status;
-    private String reportJson;
+    private byte[] reportJson;
     private  Boolean priority;
 
     public MuzimaGeneratedReport(){
@@ -81,11 +81,11 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
         return patientId;
     }
     
-    public void setReportJson(final String reportJson) {
+    public void setReportJson(final byte[] reportJson) {
         this.reportJson = reportJson;
     }
     
-    public String getReportJson(){
+    public byte[] getReportJson(){
         return reportJson;
     }
     
@@ -106,11 +106,15 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
 
     @Override
     public String toString() {
-        return "MuzimaSetting{" +
+        return "MuzimaGeneratedReport{" +
                 "id=" + id +
                 ", uuid=" + getUuid() +
                 ", name='" + getName() +
                 ", description='" + getDescription() +
+                ", patientId='" + getPatientId() +
+                ", cohortReportConfigId='" + getCohortReportConfigId() +
+                ", reportJson='" + getReportJson() +
+                ", priority='" + getPriority() +
                 '}';
     }
 

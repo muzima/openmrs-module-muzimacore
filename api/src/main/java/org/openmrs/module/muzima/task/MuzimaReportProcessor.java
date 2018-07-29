@@ -119,7 +119,7 @@ public class MuzimaReportProcessor {
                                 String s = new String(data);
                                 System.out.println("Text Decryted : " + s);
                                 System.out.println("fffffffffffffffffffrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-                                lastGeneratedReport.setReportJson(s);
+                                lastGeneratedReport.setReportJson(data);
                                 System.out.println("fffffffffffffffffffkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
                                 lastGeneratedReport.setStatus("completed");
                                 System.out.println("ffffffffffffffffffflllllllllllllllllllllllllllllllll");
