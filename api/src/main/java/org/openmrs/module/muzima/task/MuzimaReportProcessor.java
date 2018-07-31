@@ -93,10 +93,11 @@ public class MuzimaReportProcessor {
                 System.out.println("ffffffffffffffffff5555555555555555555" + patientId);
     
                 System.out.println("ffffffffffffffffff555555555555555555cccccccccccc5" + patientId+" kkkk"+ muzimaGeneratedReportService
-                        .getLastMuzimaGeneratedReportByPatientId(patientId));
+                        .getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(patientId,reportConfiguration.getId()));
                 
                 MuzimaGeneratedReport lastGeneratedReport = muzimaGeneratedReportService
-                        .getLastMuzimaGeneratedReportByPatientId(patientId);
+                        .getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(patientId,reportConfiguration.getId());
+             
                 System.out.println("ffffffffffffffffff66666666666666666666" + lastGeneratedReport);
                 if (lastGeneratedReport != null) {
                     System.out.println("fffffffffffffffff777777777777777777777");
@@ -141,21 +142,24 @@ public class MuzimaReportProcessor {
                         }
                     }
                     
-                    System.out.println("ffffffffffffffffffffhhhhhhhhhhhhhhhhh" + 1);
+                    System.out.println("ffffffffffffffffffffhhhhhhhhhhhhhhhhh so we are checking for any obs" + 1);
                     
                     Patient patient = patientService.getPatient(patientId);
                     List<Obs> obsList = obsService.getObservationsByPerson(patient);
                     if (0 != obsList.size()) {
                         System.out.println("ffffffffffffffffffffiiiiiiiiiiiiiiiiiii"+obsList+" "+obsList.size()+" "+obsList.get(0));
                         Obs obs = obsList.get(obsList.size() - 1);
+                        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx last obs " +obs.toString());
+    
     
                         final Calendar cal = Calendar.getInstance();
                         cal.add(Calendar.DATE, -1);
                         Date yesterday = cal.getTime();
-                        
+                        System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkk last obs  we new one" +obs.getObsDatetime()+ " "+yesterday);
+    
                         if (obs.getObsDatetime().after(yesterday)) {
                             System.out.println("fffffffffffffffjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
-                            
+                            System.out.println("lllllllllllllllllllllllllllll last obs  we new one" +obs.getObsDatetime()+ " "+yesterday);
                             ReportRequest reportRequest = new ReportRequest();
                             Map<String, Object> params = new LinkedHashMap<String, Object>();
                             

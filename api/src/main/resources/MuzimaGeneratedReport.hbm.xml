@@ -15,7 +15,7 @@
         <property name="reportRequestUuid" type="java.lang.String" column="report_request_uuid" length="38" not-null="true"/>
         <property name="status" type="java.lang.String" column="status" length="255"/>
 
-        <property name="reportJson" type="java.lang.Binary" column="report_json"/>
+        <property name="reportJson" type="binary" column="report_json"/>
         <property name="priority" type="java.lang.Boolean" column="priority" length="1"/>
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">
             <column name="creator"/>
