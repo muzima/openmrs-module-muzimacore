@@ -37,15 +37,13 @@ public interface MuzimaGeneratedReportDao {
     
     MuzimaGeneratedReport getMuzimaGeneratedReportById(Integer id);
     
-    MuzimaGeneratedReport getLastMuzimaGeneratedReportByPatientId(Integer id);
-    
     MuzimaGeneratedReport getLastPriorityMuzimaGeneratedReportByPatientId(Integer id);
     
     List<MuzimaGeneratedReport> getMuzimaGeneratedReportByPatientId(Integer id);
     
     MuzimaGeneratedReport getMuzimaGeneratedReportByUuid(String Uuid);
     
-    MuzimaGeneratedReport getMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId);
+    MuzimaGeneratedReport getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId);
     
     List<MuzimaGeneratedReport> getMuzimaGeneratedReportByCohortReportConfigId(Integer cohortReportConfigId);
     

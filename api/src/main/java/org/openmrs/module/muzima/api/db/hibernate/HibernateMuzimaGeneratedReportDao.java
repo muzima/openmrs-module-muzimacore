@@ -116,19 +116,7 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         return (MuzimaGeneratedReport) criteria.uniqueResult();
     }
-    
-    @Override
-    public MuzimaGeneratedReport getLastMuzimaGeneratedReportByPatientId(Integer patientId) {
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbb");
-        Criteria criteria = session().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("patientId", patientId));
-        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        criteria.addOrder(Order.desc("dateCreated"));
-        criteria.setMaxResults(1);
-        System.out.println("dddddddddddddddddddddddddddbbbbbbbbbbbbbbbbbbbbbbbbbbb"+criteria.uniqueResult());
-        return (MuzimaGeneratedReport) criteria.uniqueResult(); 
-        
-    }
+
     
     @Override
     public MuzimaGeneratedReport getLastPriorityMuzimaGeneratedReportByPatientId(Integer patientId) {
@@ -166,12 +154,14 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
 
     @Override
     @Transactional
-    public MuzimaGeneratedReport  getMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId) {
+    public MuzimaGeneratedReport  getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId) {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("cohortReportConfigId", cohortReportConfigId));
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        return (MuzimaGeneratedReport)criteria.uniqueResult();
+        criteria.addOrder(Order.desc("dateCreated"));
+        criteria.setMaxResults(1);
+       return (MuzimaGeneratedReport)criteria.uniqueResult();
     }
     
     @Override
