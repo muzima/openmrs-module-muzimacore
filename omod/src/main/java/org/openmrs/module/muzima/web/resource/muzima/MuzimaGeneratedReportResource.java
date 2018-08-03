@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-@Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/generatedReport",
+@Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/muzimageneratedreport",
         supportedClass = MuzimaGeneratedReport.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
 @Handler(supports = MuzimaGeneratedReport.class)
 public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResource<MuzimaGeneratedReport> {
@@ -46,15 +46,16 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
         Integer startIndex = context.getStartIndex();;
         Integer limit =  context.getLimit();;
 
-        String nameParameter = request.getParameter("uuid");
+        String nameParameter = request.getParameter("patient");
         List<MuzimaGeneratedReport> muzimaGeneratedReports = new ArrayList<MuzimaGeneratedReport>();
 
         if (nameParameter != null) {
             PatientService patientService = Context.getService(PatientService.class);
             Patient patient = patientService.getPatientByUuid(nameParameter);
             MuzimaGeneratedReportService service = Context.getService(MuzimaGeneratedReportService.class);
-            System.out.println("pppppppppppppppppppppppppppppppp"+patient.getId());
+            System.out.println("pppppppppppppppppppppppppppppppp"+patient.getId()+nameParameter);
             muzimaGeneratedReports.add(Context.getService(MuzimaGeneratedReportService.class).getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId()));
+            System.out.println("ccccccccccccccccccccc"+muzimaGeneratedReports.size());
         }
         return new NeedsPaging<MuzimaGeneratedReport>(muzimaGeneratedReports, context);
     }
