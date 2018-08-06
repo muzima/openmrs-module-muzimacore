@@ -63,6 +63,7 @@ public class CohortMemberResource extends DelegatingCrudResource<FakeCohortMembe
             final int patientCount = coreService.countPatients(uuidParameter, syncDate).intValue();
             final List<Patient> patients = coreService.getPatients(uuidParameter, syncDate,
                     context.getStartIndex(), context.getLimit());
+
             final Cohort cohort = Context.getCohortService().getCohortByUuid(uuidParameter);
             for (Patient cohortMember : patients) {
                 members.add(new FakeCohortMember(cohortMember, cohort));
