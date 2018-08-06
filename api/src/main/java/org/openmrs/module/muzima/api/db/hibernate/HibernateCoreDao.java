@@ -13,9 +13,12 @@
  */
 package org.openmrs.module.muzima.api.db.hibernate;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -31,6 +34,8 @@ import org.openmrs.module.muzima.api.db.CoreDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -183,17 +188,36 @@ public class HibernateCoreDao implements CoreDao {
         criteria.add(Expression.ilike("name", name, MatchMode.ANYWHERE));
         criteria.addOrder(Order.asc("name"));
         if (syncDate != null) {
-            criteria.add(Restrictions.or(
+
+
+            String sql = "select cohort_id from expanded_cohort_update_history where date_updated >= :syncDate";
+            SQLQuery myquery = getSessionFactory().getCurrentSession().createSQLQuery(sql);
+            myquery.setParameter("syncDate", syncDate);
+
+            Disjunction disjunction = Restrictions.disjunction();
+            if(myquery.list().size() > 0) {
+                disjunction.add(Restrictions.in("id", myquery.list()));
+                criteria.add(disjunction);
+            }
+
+
+            criteria.add(
                     Restrictions.or(
+                        Restrictions.in("id", myquery.list()),
+                        Restrictions.or(
+                            Restrictions.or(
+                                Restrictions.and(
+                                        Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                        Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
+                                Restrictions.and(
+                                        Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
+                                        Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
                             Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
-                                    Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
-                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
+                                Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
+                                Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))
+                        )
+                    )
+            );
         }
         criteria.add(Restrictions.eq("voided", false));
 
@@ -232,6 +256,26 @@ public class HibernateCoreDao implements CoreDao {
     @SuppressWarnings("unchecked")
     public List<Patient> getPatients(final String cohortUuid, final Date syncDate,
                                      final int startIndex, final int size) throws DAOException {
+
+        String sql = "select GROUP_CONCAT(members_added,',') from expanded_cohort_update_history where date_updated >= :syncDate";
+        SQLQuery myquery = getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List newIdentifiers = new ArrayList();
+        if (syncDate != null) {
+            myquery.setParameter("syncDate", syncDate);
+            List members = myquery.list();
+            if(members.size() > 0){
+                String mm = (String)members.get(0);
+                if(StringUtils.isNotBlank(mm)) {
+                    String[] ids = mm.split(",");
+                    for (String id : ids) {
+                        if(StringUtils.isNotBlank(id)) {
+                            newIdentifiers.add(Integer.parseInt(id));
+                        }
+                    }
+                }
+            }
+        }
+
         String hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
@@ -253,6 +297,7 @@ public class HibernateCoreDao implements CoreDao {
         query.setMaxResults(size);
         query.setFirstResult(startIndex);
         List patientIds = query.list();
+        patientIds.addAll(newIdentifiers);
 
         if (!patientIds.isEmpty()) {
             Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);

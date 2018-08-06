@@ -49,6 +49,7 @@ public class FakeCohort extends BaseOpenmrsData {
             }
         }
         fakeCohort.setVoided(cohort.getVoided());
+
         return fakeCohort;
     }
 
@@ -76,6 +77,10 @@ public class FakeCohort extends BaseOpenmrsData {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getSize() {
+        return memberIds.size();
     }
 
     public Set<Integer> getMemberIds() {
