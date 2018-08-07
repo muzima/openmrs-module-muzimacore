@@ -23,7 +23,6 @@ import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.MuzimaGeneratedReportDao;
-import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +58,6 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
     public List<MuzimaGeneratedReport> getPagedMuzimaGeneratedReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {
         Criteria criteria = session().createCriteria(mappedClass);
             Disjunction disjunction = Restrictions.disjunction();
-            //disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.eq("patientId", patientId));
             criteria.add(disjunction);
       
@@ -85,17 +83,13 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
     @Transactional
     public Number countMuzimaGeneratedReports(final Integer patientId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
-        
-            System.out.println("888888888888888888888888888888\n");
+   
             Disjunction disjunction = Restrictions.disjunction();
-            //disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.eq("patientId", patientId));
             criteria.add(disjunction);
         
-        System.out.println("99999999999999999999999999999999\n");
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.setProjection(Projections.rowCount());
-        System.out.println("1010101010101010101010101010\n");
         return (Number) criteria.uniqueResult();
         
     }
@@ -120,14 +114,12 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
     
     @Override
     public MuzimaGeneratedReport getLastPriorityMuzimaGeneratedReportByPatientId(Integer patientId) {
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbb");
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.add(Restrictions.eq("priority", Boolean.TRUE));
         criteria.addOrder(Order.desc("dateCreated"));
         criteria.setMaxResults(1);
-        System.out.println("dddddddddddddddddddddddddddbbbbbbbbbbbbbbbbbbbbbbbbbbb"+criteria.uniqueResult());
         return (MuzimaGeneratedReport) criteria.uniqueResult();
         
     }

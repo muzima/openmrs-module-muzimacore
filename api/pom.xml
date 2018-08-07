@@ -135,7 +135,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-   
+
     <!-- end spring boot test dependencies -->
 
     <build>

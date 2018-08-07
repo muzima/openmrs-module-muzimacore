@@ -58,7 +58,6 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
     @Override
     @SuppressWarnings("unchecked")
     public List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize) {
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaa\n");
         Criteria criteria = session().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -67,7 +66,6 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
             disjunction.add(Restrictions.ilike("cohortId", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
         }
-        System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\n");
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
@@ -76,7 +74,6 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
             criteria.setMaxResults(pageSize);
         }
         criteria.addOrder(Order.desc("dateCreated"));
-        System.out.println("cccccccccccccccccccccccccccccccccc\n");
         return criteria.list();
     }
 
@@ -90,20 +87,15 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
     @Override
     @Transactional
     public Number countReportConfigurations(final String search) {
-        System.out.println("7777777777777777777777777777\n");
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
-            System.out.println("888888888888888888888888888888\n");
             Disjunction disjunction = Restrictions.disjunction();
-            //disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("reportId", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("cohortId", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
         }
-        System.out.println("99999999999999999999999999999999\n");
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.setProjection(Projections.rowCount());
-        System.out.println("1010101010101010101010101010\n");
         return (Number) criteria.uniqueResult();
         
     }
@@ -126,12 +118,11 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
     @Override
     @Transactional
     public ReportConfiguration getReportConfigurationByUuid(String uuid){
-        ReportConfiguration setting = null;
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        setting = (ReportConfiguration)criteria.uniqueResult();
-        return setting;
+        ReportConfiguration reportConfiguration = (ReportConfiguration)criteria.uniqueResult();
+        return reportConfiguration;
     }
 
     @Override

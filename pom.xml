@@ -176,7 +176,7 @@
                 <classifier>tests</classifier>
                 <scope>test</scope>
             </dependency>
-            
+
             <!-- End OpenMRS core -->
 
             <dependency>
