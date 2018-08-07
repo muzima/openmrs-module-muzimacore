@@ -9,7 +9,6 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
      
       var createJson = function () {
              var reportConfigurationJsonString = {"reports":$scope.configReports};
-             //reportConfigurationJsonString.reports["reports"] = $scope.configReports;
              return angular.toJson(reportConfigurationJsonString);
          };
         
@@ -38,7 +37,6 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
             
              $muzimaReportConfigurations.getCohortForReportConfiguration($scope.reportConfiguration.uuid).
                         then(function (response) {
-                           //console.log("22222222222222222222222")
                             $scope.cohorts = response.data
                             
                             

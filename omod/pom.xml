@@ -127,22 +127,6 @@
             <version>1.16.0</version>
             <scope>provided</scope>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>serialization.xstream-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>htmlwidget</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>quartz</groupId>
-            <artifactId>quartz</artifactId>
-        </dependency>-->
-
     </dependencies>
 
     <build>
@@ -278,7 +262,5 @@
         <MODULE_VERSION>${project.parent.version}</MODULE_VERSION>
         <MODULE_PACKAGE>${project.parent.groupId}.${project.parent.artifactId}</MODULE_PACKAGE>
     </properties>
-    
-    
 
 </project>

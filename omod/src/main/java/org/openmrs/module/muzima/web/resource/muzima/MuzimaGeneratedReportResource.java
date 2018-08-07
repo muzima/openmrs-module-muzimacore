@@ -35,48 +35,39 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
     protected NeedsPaging<MuzimaGeneratedReport> doGetAll(RequestContext context) throws ResponseException {
         MuzimaGeneratedReportService service = Context.getService(MuzimaGeneratedReportService.class);
         List<MuzimaGeneratedReport> all = service.getAllMuzimaGeneratedReports();
-        System.out.println("1111111111111111111111111111");
         return new NeedsPaging<MuzimaGeneratedReport>(all, context);
     }
    //ToDo
     @Override
     protected PageableResult doSearch(final RequestContext context) {
-        System.out.println("22222222222222222222222222");
         HttpServletRequest request = context.getRequest();
         Integer startIndex = context.getStartIndex();
-        Integer limit =  context.getLimit();;
-        System.out.println("333333333333333333333");
-
+        Integer limit =  context.getLimit();
+        
         String nameParameter = request.getParameter("patientUuid");
         List<MuzimaGeneratedReport> muzimaGeneratedReports = new ArrayList<MuzimaGeneratedReport>();
 
         if (nameParameter != null) {
-            System.out.println("444444444444444444444444444");
             PatientService patientService = Context.getService(PatientService.class);
             Patient patient = patientService.getPatientByUuid(nameParameter);
             MuzimaGeneratedReportService service = Context.getService(MuzimaGeneratedReportService.class);
-            System.out.println("pppppppppppppppppppppppppppppppp"+patient.getId()+nameParameter);
             muzimaGeneratedReports.add(Context.getService(MuzimaGeneratedReportService.class).getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId()));
-            System.out.println("ccccccccccccccccccccc"+muzimaGeneratedReports.size());
+
         }
         return new NeedsPaging<MuzimaGeneratedReport>(muzimaGeneratedReports, context);
     }
 
     @Override
     public MuzimaGeneratedReport getByUniqueId(String uuid) {
-        System.out.println("333333333333333333");
-        System.out.println("llllllllllllllllllllllllllllllll"+uuid);
         PatientService patientService = Context.getService(PatientService.class);
         Patient patient = patientService.getPatientByUuid(uuid);
         MuzimaGeneratedReportService service = Context.getService(MuzimaGeneratedReportService.class);
-        System.out.println("pppppppppppppppppppppppppppppppp"+patient.getId());
         return service.getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId());
     }
 
     //ToDo    
     @Override
     public Object retrieve(String uuid, RequestContext context) throws ResponseException {
-        System.out.println("singlesinglesinglesinglesinglesinglesinglesinglesinglesingle");
         MuzimaGeneratedReportService service = Context.getService(MuzimaGeneratedReportService.class);
         PatientService patientService = Context.getService(PatientService.class);
         Patient patient = patientService.getPatientByUuid(uuid);
@@ -112,7 +103,6 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
     
     //ToDo 
     public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-        System.out.println("444444444444444444444444");
         DelegatingResourceDescription description = null;
 
         if (rep instanceof DefaultRepresentation || rep instanceof RefRepresentation) {

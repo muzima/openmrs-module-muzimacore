@@ -43,8 +43,6 @@
             <div ng-switch-when="edit">
                 <form id="consult">
                     <div class="row">
-                        <!--<input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="reportConfiguration.cohortId">
-                        -->
                         <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
                                uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
                                uib-typeahead-wait-ms="500"  uib-typeahead-editable="false"/>
@@ -76,17 +74,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--<div class="row">
-                        <div class="col-lg-4 col-lg-offset-4 margin-top-lg pad-5 p-2 padding-5">
-                            <button type="submit" ng-click="" class="btn btn-success btn-large btn-lg btn-block">Add to List</button>
-                        </div>
-                    </div>-->
-
-                  <!--  <div class="row" style="margin-top: 14px; padding: 0">
-                        <textarea class="col-lg-12 form-control" placeholder="Report ..." rows="10" ng-model="reportConfiguration.reportId">
-                        </textarea>
-                    </div>-->
                    
                     <div class="row">
                         <button type="submit" ng-click="save(reportConfiguration)" class="btn btn-success">Save</button>

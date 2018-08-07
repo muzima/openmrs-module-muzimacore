@@ -21,9 +21,7 @@ import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.muzima.task.MuzimaReportProcessor;
 import org.openmrs.module.muzima.web.utils.WebConverter;
-import org.openmrs.module.reporting.definition.DefinitionSummary;
 import org.openmrs.module.reporting.report.ReportDesign;
-import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.service.ReportService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,7 +60,6 @@ public class ReportConfigurationController {
         Map<String, Object> response = new HashMap<String, Object>();
         ReportConfiguration reportConfiguration = null;
         ReportDesign reportDesign = null;
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         if (Context.isAuthenticated()) {
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
@@ -72,7 +69,6 @@ public class ReportConfigurationController {
             objects.add(WebConverter.convertMuzimaReport(reportDesign));
             response.put("objects", objects);
         }
-        System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
         return response;
     }
     
@@ -81,7 +77,6 @@ public class ReportConfigurationController {
         Map<String, Object> response = new HashMap<String, Object>();
         ReportConfiguration reportConfiguration = null;
         Cohort cohort = null;
-        System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
         if (Context.isAuthenticated()) {
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
@@ -91,15 +86,12 @@ public class ReportConfigurationController {
             objects.add(WebConverter.convertMuzimaCohort(cohort));
             response.put("objects", objects);
         }
-        System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww11111111");
         return response;
     }
     
     @RequestMapping(value = "/module/muzimacore/reportConfig.json", method = RequestMethod.POST)
     public void saveReportConfiguration(final @RequestBody Map<String, Object> map) {
-        System.out.println("rrrrrrrrrrrr111111111111111111");
         if (Context.isAuthenticated()) {
-            System.out.println("rrrrrrrrrrrrr22222222222222222222");
             String uuid = (String) map.get("uuid");
             Boolean priority = (Boolean) map.get("priority");
             if(priority ==null){
@@ -108,63 +100,36 @@ public class ReportConfigurationController {
             
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             if (StringUtils.isNotBlank(uuid)) {
-               
-                System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrr");
                 String cohortUuid =  (String) map.get("cohortUuid");
-                
-                System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
                 String reportConfigJson = (String)map.get("reportConfigJson");
-                
-                System.out.println("rrrrrrrrrrrrrrrrrrrr"+reportConfigJson.substring(12,reportConfigJson.length()-2));
                 String [] reports = reportConfigJson.substring(12,reportConfigJson.length()-2).split("}");
     
                 
                 ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
-                    System.out.println("rrrrrrrrrrrrrrrrrrrrrrrrrrr");
                     reportConfiguration.setCohortUuid(cohortUuid);
     
                     for(String report:reports){
-                        System.out.println("rrrrrrrrrrrrrrrrrr "+report);
                         Integer index1 = report.indexOf("uuid");
-                        System.out.println("rrrrrrrrrrrrrrrrrrrrrr  "+index1);
                         String s1 = report.substring(index1+7,report.length()-1);
-                        System.out.println("rrrrrrrrrrrrrrrrrrrrrr  "+s1);
-                        Integer index2 = s1.indexOf("}");
-                        System.out.println("rrrrrrrrrrrrrrrrrrrrr  "+index2);
-               
-                        System.out.println("rrrrrrrrrrrrrrrrrrrrrr"+s1);
                         reportConfiguration.setReportDesignUuid(s1);
                         reportConfiguration.setCohortUuid(cohortUuid);
                         reportConfiguration.setPriority(priority);
-                        System.out.println("rrrrrrrrrrrrrrrrrrrrrr"+s1);
-                        //reportConfigurationService.saveReportConfiguration(reportConfiguration);
                     }
             } else {
               
                 String cohortUuid = (String) map.get("cohortUuid");
-                System.out.println("sssssssss666666666666666666666666666");
                 String reportConfigJson = (String)map.get("reportConfigJson");
-                System.out.println("sssssssss77777777777777777"+reportConfigJson.substring(12,reportConfigJson.length()-2));
                 String [] reports = reportConfigJson.substring(12,reportConfigJson.length()-2).split("}");
                 
                 for(String report:reports){
-                    System.out.println("fffffaaaaaaaaa  "+report);
                     Integer index1 = report.indexOf("uuid");
-                    System.out.println("fffffbbbbbbbbbbbbbb  "+index1);
                     String s1 = report.substring(index1+7,report.length()-1);
-                    System.out.println("fffffcccccccccccc  "+s1);
-                    Integer index2 = s1.indexOf("}");
-                    System.out.println("fffffdddddddddd   "+index2);
-                   
-                    System.out.println("fffff555555555"+s1);
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
                     reportConfiguration.setReportDesignUuid(s1);
                     reportConfiguration.setCohortUuid(cohortUuid);
                     reportConfiguration.setPriority(priority);
-                    //reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             }
-            System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqConfigs are saved");
             MuzimaReportProcessor muzimaReportProcessor = new MuzimaReportProcessor();
             muzimaReportProcessor.processAllReports();
         }
@@ -172,9 +137,6 @@ public class ReportConfigurationController {
     
     @RequestMapping(value = "/module/muzimacore/delete/reportConfig.json", method = RequestMethod.POST)
     public void deleteReportConfiguration(final @RequestBody Map<String, Object> map) {
-        System.out.println("dddddddddddddddddddddddddd");
-        
-            System.out.println("sssssss5555555555555555555555555555");
             String uuid = (String) map.get("uuid");
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
