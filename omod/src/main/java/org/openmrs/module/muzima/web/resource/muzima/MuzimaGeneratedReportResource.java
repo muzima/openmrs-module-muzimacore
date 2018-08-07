@@ -43,13 +43,15 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
     protected PageableResult doSearch(final RequestContext context) {
         System.out.println("22222222222222222222222222");
         HttpServletRequest request = context.getRequest();
-        Integer startIndex = context.getStartIndex();;
+        Integer startIndex = context.getStartIndex();
         Integer limit =  context.getLimit();;
+        System.out.println("333333333333333333333");
 
-        String nameParameter = request.getParameter("patient");
+        String nameParameter = request.getParameter("patientUuid");
         List<MuzimaGeneratedReport> muzimaGeneratedReports = new ArrayList<MuzimaGeneratedReport>();
 
         if (nameParameter != null) {
+            System.out.println("444444444444444444444444444");
             PatientService patientService = Context.getService(PatientService.class);
             Patient patient = patientService.getPatientByUuid(nameParameter);
             MuzimaGeneratedReportService service = Context.getService(MuzimaGeneratedReportService.class);
