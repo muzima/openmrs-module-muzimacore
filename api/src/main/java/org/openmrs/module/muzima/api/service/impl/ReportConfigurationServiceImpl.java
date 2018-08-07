@@ -79,7 +79,6 @@ public class ReportConfigurationServiceImpl extends BaseOpenmrsService implement
      */
     @Override
     public Number countDataSource(final String search) {
-        System.out.println("6666666666666666666666666\n");
         return dao.countReportConfigurations(search);
     }
 
@@ -93,7 +92,6 @@ public class ReportConfigurationServiceImpl extends BaseOpenmrsService implement
      */
     @Override
     public List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize) {
-        System.out.println("dddddddddddddddddddddddddddddddd\n");
         return dao.getPagedReportConfigurations(search, pageNumber, pageSize);
     }
 }

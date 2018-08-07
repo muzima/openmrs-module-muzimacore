@@ -15,7 +15,6 @@ package org.openmrs.module.muzima.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
-import org.openmrs.Cohort;
 import org.openmrs.User;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -80,7 +79,7 @@ public class ReportConfiguration extends BaseOpenmrsMetadata {
 
     @Override
     public String toString() {
-        return "MuzimaSetting{" +
+        return "ReportConfiguration{" +
                 "id=" + id +
                 ", uuid=" + getUuid() +
                 ", name='" + getName() +
