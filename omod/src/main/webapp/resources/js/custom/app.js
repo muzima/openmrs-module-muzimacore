@@ -316,7 +316,7 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
                return $http.get("reportConfigReports.json?search=" + (search === undefined ? '' : search));
      };
       var getReportsForReportConfiguration = function(uuid) {
-                return $http.get("reportConfig/reports.json?uuid="  + uuid);
+                return $http.get("reportConfig/report.json?uuid="  + uuid);
           };
        var getCohortForReportConfiguration = function(uuid) {
                       return $http.get("reportConfig/singleCohort.json?uuid="  + uuid);

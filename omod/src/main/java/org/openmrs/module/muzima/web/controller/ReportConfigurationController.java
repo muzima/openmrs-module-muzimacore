@@ -43,7 +43,7 @@ import java.util.Map;
 public class ReportConfigurationController {
     
     /**
-     * This method fetches reportConfiguration
+     * This method fetches single reportConfiguration
      * @return reportConfiguration relevant to a uuid
      * @param uuid reportConfiguration uuid
      */
@@ -59,13 +59,13 @@ public class ReportConfigurationController {
     }
     
     /**
-     * This method fetches report designs
+     * This method fetches report design
      * @return report design json relevant to a reportConfiguration is sent to the view
      * @param uuid reportConfiguration uuid
      */
     @ResponseBody
-    @RequestMapping(value = "/module/muzimacore/reportConfig/reports.json", method = RequestMethod.GET)
-    public Map<String, Object> getReportsForReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
+    @RequestMapping(value = "/module/muzimacore/reportConfig/report.json", method = RequestMethod.GET)
+    public Map<String, Object> getReportDesignForReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
         Map<String, Object> response = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
@@ -167,7 +167,7 @@ public class ReportConfigurationController {
      */
     @ResponseBody
     @RequestMapping(value = "/module/muzimacore/reportConfigReports.json", method = RequestMethod.GET)
-    public Map<String, Object> getReports(final @RequestParam(value = "search") String search) {
+    public Map<String, Object> searchReportDesignsForReportConfiguration(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
         
         List<ReportDesign> reportDesigns = Context.getService(ReportService.class).getAllReportDesigns(true);
