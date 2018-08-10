@@ -29,12 +29,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO: Write brief description about the class here.
+ * This class holds the endpoint to fetch the MuzimaCohortReportConfigs to the view
  */
 @Controller
 @RequestMapping(value = "/module/muzimacore/reportConfigs.json")
 public class ReportConfigurationsController {
-
+    /**
+     * @return return all the reportConfigurations for given parameters
+     * 
+     */
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getReportConfigurations(final @RequestParam(value = "search") String search,

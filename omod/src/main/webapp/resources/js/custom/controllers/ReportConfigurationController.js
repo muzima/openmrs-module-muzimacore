@@ -23,7 +23,11 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
             $scope.reportConfiguration = response.data;
         });
     }
-
+    
+     /****************************************************************************************
+                 ***** Group of methods to manipulate ReportConfigurations
+                 *****************************************************************************************/
+             
     $scope.edit = function () {
          $muzimaReportConfigurations.getReportsForReportConfiguration($scope.reportConfiguration.uuid).
             then(function (response) {
@@ -57,7 +61,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
             $location.path("/reportConfigs");
         }
     };
-
+  
     $scope.save = function (reportConfiguration) {
         $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson(),reportConfiguration.priority).//$scope.checkboxModel.priority).
         then(function () {
@@ -86,7 +90,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
         }, true);
         
          /****************************************************************************************
-          ***** Group of methods to manipulate Reports
+          ***** Group of methods to manipulate Report Designs
           *****************************************************************************************/
                 
          $scope.$watch('search.reports', function (newValue, oldValue) {

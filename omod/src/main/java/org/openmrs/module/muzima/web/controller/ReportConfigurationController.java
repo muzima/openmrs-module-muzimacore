@@ -37,12 +37,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO: Write brief description about the class here.
+ * This class manages single cohortReportConfiguration
  */
 @Controller
 public class ReportConfigurationController {
-
- 
+    
+    /**
+     * This method fetches reportConfiguration
+     * @return reportConfiguration relevant to a uuid
+     * @param uuid reportConfiguration uuid
+     */
     @ResponseBody
     @RequestMapping(value = "/module/muzimacore/reportConfig.json", method = RequestMethod.GET)
     public Map<String, Object> getReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
@@ -54,41 +58,49 @@ public class ReportConfigurationController {
         return WebConverter.convertMuzimaReportConfiguration(reportConfiguration);
     }
     
+    /**
+     * This method fetches report designs
+     * @return report design json relevant to a reportConfiguration is sent to the view
+     * @param uuid reportConfiguration uuid
+     */
     @ResponseBody
     @RequestMapping(value = "/module/muzimacore/reportConfig/reports.json", method = RequestMethod.GET)
     public Map<String, Object> getReportsForReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
         Map<String, Object> response = new HashMap<String, Object>();
-        ReportConfiguration reportConfiguration = null;
-        ReportDesign reportDesign = null;
         if (Context.isAuthenticated()) {
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
-            reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
+            ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
     
-            reportDesign = Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportDesignUuid());
+            ReportDesign reportDesign = Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportDesignUuid());
             List<Object> objects = new ArrayList<Object>();
             objects.add(WebConverter.convertMuzimaReport(reportDesign));
             response.put("objects", objects);
         }
         return response;
     }
-    
+    /**
+     * This method saves or updates report configuration
+     * @return cohort relevant to a reportConfiguration is sent to the view
+     * @param uuid reportConfiguration uuid
+     */
     @RequestMapping(value = "/module/muzimacore/reportConfig/singleCohort.json", method = RequestMethod.GET)
     public Map<String, Object> getCohortForReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
         Map<String, Object> response = new HashMap<String, Object>();
-        ReportConfiguration reportConfiguration = null;
-        Cohort cohort = null;
         if (Context.isAuthenticated()) {
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
-            reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
-            
-            cohort = Context.getService(CohortService.class).getCohortByUuid(reportConfiguration.getCohortUuid());
+            ReportConfiguration reportConfiguration= reportConfigurationService.getReportConfigurationByUuid(uuid);
+    
+            Cohort cohort= Context.getService(CohortService.class).getCohortByUuid(reportConfiguration.getCohortUuid());
             List<Object> objects = new ArrayList<Object>();
             objects.add(WebConverter.convertMuzimaCohort(cohort));
             response.put("objects", objects);
         }
         return response;
     }
-    
+    /**
+     * This method saves or updates report configuration
+     * @param map reportConfiguration json
+     */
     @RequestMapping(value = "/module/muzimacore/reportConfig.json", method = RequestMethod.POST)
     public void saveReportConfiguration(final @RequestBody Map<String, Object> map) {
         if (Context.isAuthenticated()) {
@@ -130,11 +142,12 @@ public class ReportConfigurationController {
                     reportConfiguration.setPriority(priority);
                 }
             }
-            MuzimaReportProcessor muzimaReportProcessor = new MuzimaReportProcessor();
-            muzimaReportProcessor.processAllReports();
         }
     }
-    
+    /**
+     * This method deletes report configuration
+     * @param map reportConfiguration uuid
+     */
     @RequestMapping(value = "/module/muzimacore/delete/reportConfig.json", method = RequestMethod.POST)
     public void deleteReportConfiguration(final @RequestBody Map<String, Object> map) {
             String uuid = (String) map.get("uuid");
@@ -148,6 +161,10 @@ public class ReportConfigurationController {
         
     }
     
+    /**
+     * @return This method returns report designs when creating new report configuration
+     * @param search the query sent by the user to find reportDesigns
+     */
     @ResponseBody
     @RequestMapping(value = "/module/muzimacore/reportConfigReports.json", method = RequestMethod.GET)
     public Map<String, Object> getReports(final @RequestParam(value = "search") String search) {

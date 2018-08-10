@@ -284,6 +284,11 @@ muzimaCoreModule.factory('$muzimaSettings', function($http) {
     }
 });
 
+
+/****************************************************************************************
+             ***** Group of methods to manipulate ReportConfigurations
+             *****************************************************************************************/
+         
 muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
 
     var getReportConfigurations = function (search, pageNumber, pageSize) {
@@ -306,11 +311,10 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
     var searchReportConfigCohorts = function(search) {
            return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
      };
-       
+      //search ReportDesigns For ReportConfiguration 
      var searchReportConfigReports = function(search) {
                return $http.get("reportConfigReports.json?search=" + (search === undefined ? '' : search));
      };
-     //searchReportsForReportConfiguration
       var getReportsForReportConfiguration = function(uuid) {
                 return $http.get("reportConfig/reports.json?uuid="  + uuid);
           };
