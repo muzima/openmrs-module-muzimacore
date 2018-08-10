@@ -11,7 +11,7 @@
         </id>
         <property name="discriminator" type="java.lang.String" column="discriminator" length="255" not-null="true"/>
 
-        <property name="payload" type="java.lang.String" column="payload" length="65535" not-null="true"/>
+        <property name="payload" type="java.lang.String" column="payload" length="16777215" not-null="true"/>
         <many-to-one name="dataSource" class="DataSource" column="data_source" not-null="true"/>
 
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">
