@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * This class generates muzimaGeneratedReports for each cohort according to scheduled parameters
  */
 public class MuzimaReportProcessor {
     
@@ -64,7 +65,8 @@ public class MuzimaReportProcessor {
         PersonService personService = Context.getService(PersonService.class);
         PatientService patientService = Context.getService(PatientService.class);
         MuzimaGeneratedReportService muzimaGeneratedReportService = Context.getService(MuzimaGeneratedReportService.class);
-        
+    
+        //This loop iterates through every report configuration created
         for (ReportConfiguration reportConfiguration : reportConfigurations) {
        
             Cohort cohort = Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid());
@@ -76,24 +78,29 @@ public class MuzimaReportProcessor {
             ReportDesign design = reportService.getReportDesignByUuid(reportConfiguration.getReportDesignUuid());
             ReportDefinition reportDefinition = reportDefinitionService
                     .getDefinitionByUuid(design.getReportDefinition().getUuid());
+            
+            //sets the selected rendering mode
             for (RenderingMode renderingMode : reportService.getRenderingModes(reportDefinition)) {
                 if (renderingMode.getLabel().equals(design.getName())) {
                     selectedRenderingMode = renderingMode;
                 }
             }
-            
+            //iterates through the list of patients in the cohort of the reportConfiguration
             for (String patientIdString : patientList) {
                 Integer patientId = Integer.valueOf(patientIdString);
                
                 MuzimaGeneratedReport lastGeneratedReport = muzimaGeneratedReportService
                         .getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(patientId,reportConfiguration.getId());
-             
+    
+                //gets the last generated report to check whether the it is complete
                 if (lastGeneratedReport != null) {
                     if (!"completed".equals(lastGeneratedReport.getStatus())) {
                         ReportRequest reportRequest = reportService
                                 .getReportRequestByUuid(lastGeneratedReport.getReportRequestUuid());
     
+                        //checks whether the request to generate reports is completed
                         if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
+                            //if complete, report is generated
                             byte[] data = reportService.loadRenderedOutput(reportRequest);
                             
                             if (data != null) {
@@ -115,10 +122,12 @@ public class MuzimaReportProcessor {
                     Patient patient = patientService.getPatient(patientId);
                     List<Obs> obsList = obsService.getObservationsByPerson(patient);
                     if (0 != obsList.size()) {
-                        Obs obs = obsList.get(obsList.size() - 1);
+                        Obs obs = obsList.get(obsList.size() - 1); //gets the last observation of the patient
                         final Calendar cal = Calendar.getInstance();
                         cal.add(Calendar.DATE, -1);
                         Date yesterday = cal.getTime();
+    
+                        //checks whether the last obs datetime against the last time the report was generated
                         if (obs.getObsDatetime().after(yesterday)) {
                             ReportRequest reportRequest = new ReportRequest();
                             Map<String, Object> params = new LinkedHashMap<String, Object>();
@@ -128,6 +137,7 @@ public class MuzimaReportProcessor {
                             reportRequest.setRenderingMode(selectedRenderingMode);
                             reportRequest.setPriority(ReportRequest.Priority.NORMAL);
                             
+                            //Request for report generation is made(handled asynchronously)
                             reportRequest = reportService.queueReport(reportRequest);
                             reportService.processNextQueuedReports();
                            
@@ -144,7 +154,8 @@ public class MuzimaReportProcessor {
                     }
                     
                 } else {
-                   
+                    
+                   //this snippet is run for the very first time of the task
                     ReportRequest reportRequest = new ReportRequest();
                     Map<String, Object> params = new LinkedHashMap<String, Object>();
                     
@@ -152,7 +163,8 @@ public class MuzimaReportProcessor {
                     reportRequest.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
                     reportRequest.setRenderingMode(selectedRenderingMode);
                     reportRequest.setPriority(ReportRequest.Priority.NORMAL);
-                    
+    
+                    //Request for report generation is made(handled asynchronously)
                     reportRequest = reportService.queueReport(reportRequest);
                     reportService.processNextQueuedReports();
                    
