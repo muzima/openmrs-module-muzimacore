@@ -111,21 +111,21 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
     }
     
     //ToDo 
-    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-        System.out.println("444444444444444444444444");
+    public DelegatingResourceDescription getRepresentationDescription(final Representation rep) {
         DelegatingResourceDescription description = null;
 
-        if (rep instanceof DefaultRepresentation || rep instanceof RefRepresentation) {
+        //if (rep instanceof DefaultRepresentation || rep instanceof RefRepresentation) {
             description = new DelegatingResourceDescription();
             description.addProperty("uuid");
             description.addProperty("id");
             description.addProperty("patientId");
+            description.addProperty("patientUuid");
             description.addProperty("name");
             description.addProperty("description");
             description.addProperty("reportJson");
             description.addSelfLink();
-        }
-
+        //}
+        System.out.println("vvvvvvvvvvvvvvvvvvvvvv"+description);
         return description;
     }
 }
