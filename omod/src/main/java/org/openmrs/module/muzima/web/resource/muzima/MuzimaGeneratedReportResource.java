@@ -57,7 +57,7 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
             MuzimaGeneratedReportService service = Context.getService(MuzimaGeneratedReportService.class);
             System.out.println("pppppppppppppppppppppppppppppppp"+patient.getId()+nameParameter);
             muzimaGeneratedReports.add(Context.getService(MuzimaGeneratedReportService.class).getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId()));
-            System.out.println("ccccccccccccccccccccc"+muzimaGeneratedReports.size());
+            System.out.println("ccccccccccccccccccccc"+muzimaGeneratedReports.get(0).getReportJson().toString());
         }
         return new NeedsPaging<MuzimaGeneratedReport>(muzimaGeneratedReports, context);
     }
@@ -111,21 +111,21 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
     }
     
     //ToDo 
-    public DelegatingResourceDescription getRepresentationDescription(Representation rep) {
-        System.out.println("444444444444444444444444");
+    public DelegatingResourceDescription getRepresentationDescription(final Representation rep) {
         DelegatingResourceDescription description = null;
 
-        if (rep instanceof DefaultRepresentation || rep instanceof RefRepresentation) {
+        //if (rep instanceof DefaultRepresentation || rep instanceof RefRepresentation) {
             description = new DelegatingResourceDescription();
             description.addProperty("uuid");
             description.addProperty("id");
             description.addProperty("patientId");
+            description.addProperty("patientUuid");
             description.addProperty("name");
             description.addProperty("description");
             description.addProperty("reportJson");
             description.addSelfLink();
-        }
-
+        //}
+        System.out.println("vvvvvvvvvvvvvvvvvvvvvv"+description);
         return description;
     }
 }

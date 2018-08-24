@@ -23,6 +23,7 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
 
     private Integer id;
     private Integer patientId;
+    private String patientUuid;
     private Integer cohortReportConfigId;
     private String reportRequestUuid;
     private User user;
@@ -71,6 +72,15 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     
     public String getStatus(){
         return status;
+    }
+    
+    public void setPatientUuid(final String patientUuid) {
+        this.patientUuid = patientUuid;
+    }
+    
+    public String getPatientUuid(){
+       // return patientUuid;
+        return "86dedb46-49a9-4c55-82b7-4e17bef34ee6";
     }
     
     public void setPatientId(final Integer patientId) {
