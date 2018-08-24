@@ -137,7 +137,7 @@ public class ReportConfigurationController {
                         reportConfiguration.setCohortUuid(cohortUuid);
                         reportConfiguration.setPriority(priority);
                         System.out.println("rrrrrrrrrrrrrrrrrrrrrr"+s1);
-                        //reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                       // reportConfigurationService.saveReportConfiguration(reportConfiguration);
                     }
             } else {
               
@@ -161,7 +161,7 @@ public class ReportConfigurationController {
                     reportConfiguration.setReportDesignUuid(s1);
                     reportConfiguration.setCohortUuid(cohortUuid);
                     reportConfiguration.setPriority(priority);
-                    //reportConfigurationService.saveReportConfiguration(reportConfiguration);
+                   // reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             }
             System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqConfigs are saved");
