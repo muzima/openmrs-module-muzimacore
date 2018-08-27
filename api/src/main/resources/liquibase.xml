@@ -1188,4 +1188,56 @@
         <dropNotNullConstraint columnDataType="int" columnName="patient" tableName="muzima_notification_data"/>
     </changeSet>
 
+    <changeSet id="muzima-20180717115600" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="AudioContentComplexObs.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Complex Obs Audio Content" />
+            <column name="description" value="Specifies Concept Uuid for Complex Obs Audio Content" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-07-17T11:56:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="24caa622-691a-493b-b9ac-8ee70424ad47" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20180717120000" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="VideoContentComplexObs.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Complex Obs Video Content" />
+            <column name="description" value="Specifies Concept Uuid for Complex Obs Video Content" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-07-17T12:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="eaf882a3-3360-45b3-b480-ee9e634bc74f" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20180717120200" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="ImageContentComplexObs.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Complex Obs Image Content" />
+            <column name="description" value="Specifies Concept Uuid for Complex Obs Image Content" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-07-17T12:02:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="fd759595-6338-491b-ac37-62e699c1823c" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20180717120700" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="FileContentComplexObs.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Complex Obs File Content" />
+            <column name="description" value="Specifies Concept Uuid for Complex Obs File Content" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-07-17T12:07:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="651fc189-127f-4b4c-98f3-121ed5ad182e" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
