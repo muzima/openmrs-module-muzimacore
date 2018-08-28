@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import java.text.DateFormat;
+
 /**
  * TODO: Write brief description about the class here.
  */
@@ -314,5 +316,27 @@ public class JsonUtils {
             logger.error("Unable to convert string value from path: " + path + " from: " + String.valueOf(serialized));
         }
         return null;
+    }
+
+    /**
+     * Read date value from the json object.
+     *
+     * @param jsonObject the json object.
+     * @param path       the path inside the json object.
+     * @return the date Time value in the json object. When the path is invalid, by default will return null.
+     */
+    public static Date readAsDateTime(final String jsonObject, final String path,final DateFormat dateFormat) {
+        Date returnedDate = null;
+        try {
+            String dateAsString = readAsString(jsonObject, path);
+            if(dateAsString.length()==10){
+                dateAsString = dateAsString+" 00:00";
+            }
+
+            returnedDate = dateFormat.parse(dateAsString);
+        } catch (Exception e) {
+                       logger.error("Unable to create date value from path: " + path + " from: " + String.valueOf(jsonObject));
+        }
+        return returnedDate;
     }
 }

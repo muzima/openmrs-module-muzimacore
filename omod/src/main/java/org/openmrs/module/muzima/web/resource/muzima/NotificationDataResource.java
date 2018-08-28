@@ -13,12 +13,19 @@
  */
 package org.openmrs.module.muzima.web.resource.muzima;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
+import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
+import org.openmrs.module.muzima.web.resource.utils.JsonUtils;
 import org.openmrs.module.webservices.rest.SimpleObject;
+import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.RepHandler;
@@ -33,16 +40,20 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.resource.impl.EmptySearchResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ConversionException;
+import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
+import java.util.Map;
 
 /**
  * TODO: Write brief description about the class here.
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/notificationdata",
-        supportedClass = NotificationData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*"})
+        supportedClass = NotificationData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
 public class NotificationDataResource extends DataDelegatingCrudResource<NotificationData> {
 
     /**
@@ -157,7 +168,52 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
      */
     @Override
     public Object create(final SimpleObject propertiesToCreate, final RequestContext context) throws ResponseException {
-        throw new ResourceDoesNotSupportOperationException();
+        Object payloadObject = propertiesToCreate.get("payload");
+        if (payloadObject == null) {
+            throw new ConversionException("The payload property is missing!");
+        }
+
+        String payload;
+        if (payloadObject instanceof Map) {
+            StringWriter stringWriter = new StringWriter();
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                objectMapper.writeValue(stringWriter, payloadObject);
+            } catch (IOException e) {
+                throw new ConversionException("Unable to convert payload property!", e);
+            }
+            payload = stringWriter.toString();
+        } else {
+            payload = payloadObject.toString();
+        }
+
+        NotificationData notificationData = new NotificationData();
+        //set NotificationData values from payload
+        Person receiver = extractReceiverFromPayload(payload);
+        Person sender = extractSenderFromPayload(payload);
+        Patient patient = extractPatientFromPayload(payload);
+        String message = extractMessageFromPayload(payload);
+        String subject = extractSubjectFromPayload(payload);
+        String source = extractSourceFromPayload(payload);
+
+        notificationData.setReceiver(receiver);
+        notificationData.setSender(sender);
+        notificationData.setPatient(patient);
+        notificationData.setPayload(message);
+        notificationData.setSubject(subject);
+        notificationData.setSource(source);
+        notificationData.setStatus("unread");
+
+        propertiesToCreate.put("sender",sender);
+        propertiesToCreate.put("receiver",receiver);
+        propertiesToCreate.put("patient",patient);
+        propertiesToCreate.put("payload", message);
+        propertiesToCreate.put("subject",subject);
+        propertiesToCreate.put("source", source);
+        propertiesToCreate.put("status", "unread");
+        setConvertedProperties(notificationData, propertiesToCreate, getCreatableProperties(), true);
+        notificationData = save(notificationData);
+        return ConversionUtil.convertToRepresentation(notificationData, Representation.DEFAULT);
     }
 
     @RepHandler(FullRepresentation.class)
@@ -201,4 +257,62 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         // TODO: in the future, this could be searching by category of the notification.
         return new NeedsPaging<NotificationData>(dataService.getAllNotificationData(), context);
     }
+
+    private Patient extractPatientFromPayload(String payload){
+        String patientUuid = JsonUtils.readAsString(payload, "$['patient']");
+        Patient patient = Context.getPatientService().getPatientByUuid(patientUuid);
+        return patient;
+    }
+
+    private Person extractReceiverFromPayload(String payload){
+        String receiverUuid = JsonUtils.readAsString(payload,"$['receiver']");
+        Person receiver = Context.getPersonService().getPersonByUuid(receiverUuid);
+        if(receiver == null){
+            receiver = Context.getProviderService().getProviderByUuid(receiverUuid).getPerson();
+        }
+        return  receiver;
+    }
+
+    private Person extractSenderFromPayload(String payload){
+        String senderUuid = JsonUtils.readAsString(payload, "$['sender']");
+        Person sender = Context.getPersonService().getPersonByUuid(senderUuid);
+        return sender;
+    }
+
+    private String extractMessageFromPayload(String payload){
+        String message = JsonUtils.readAsString(payload, "$['payload']");
+        return message;
+    }
+
+    private String extractSubjectFromPayload(String payload){
+        String subject = JsonUtils.readAsString(payload, "$['subject']");
+        return subject;
+    }
+
+    private String extractSourceFromPayload(String payload){
+        String source = JsonUtils.readAsString(payload, "$['source']");
+        return source;
+    }
+
+    /**
+     * Gets a description of resource's properties which can be set on creation.
+     *
+     * @return the description
+     * @throws org.openmrs.module.webservices.rest.web.response.ResponseException
+     *
+     */
+    @Override
+    public DelegatingResourceDescription getCreatableProperties() throws ResourceDoesNotSupportOperationException {
+        DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
+        delegatingResourceDescription.addRequiredProperty("sender");
+        delegatingResourceDescription.addRequiredProperty("receiver");
+        delegatingResourceDescription.addRequiredProperty("patient");
+        delegatingResourceDescription.addRequiredProperty("subject");
+        delegatingResourceDescription.addRequiredProperty("payload");
+        delegatingResourceDescription.addRequiredProperty("source");
+        delegatingResourceDescription.addRequiredProperty("status");
+        return delegatingResourceDescription;
+    }
+
+
 }

@@ -80,10 +80,10 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.post("edit.json",{"formData": formData});
     };
     var validateData = function (uuid, formData) {
-        return $http.post("validate.json?uuid="+uuid+"&formData="+formData);
+        return $http.post("validate.json?uuid="+uuid,formData);
     };
     var saveEditedFormData = function (uuid, formData) {
-        return $http.post("error.json?uuid="+uuid+"&formData="+formData);
+        return $http.post("error.json?uuid="+uuid,formData);
     };
 
     return {
@@ -128,7 +128,7 @@ muzimaCoreModule.factory('FormService', function ($http) {
         return $http.get('../../module/muzimacore/discriminator.json', {cache: false});
     };
     var searchForms = function(search) {
-        return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description)&q=' + (search === undefined ? '' : search));
+        return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description,retired)');
     };
 
     return {

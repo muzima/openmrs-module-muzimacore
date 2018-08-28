@@ -9,9 +9,9 @@
         <id name="id" type="java.lang.Integer" column="id" unsaved-value="0">
             <generator class="native"/>
         </id>
-        <property name="discriminator" type="java.lang.String" column="discriminator" not-null="true"/>
+        <property name="discriminator" type="java.lang.String" column="discriminator" length="255" not-null="true"/>
 
-        <property name="payload" type="java.lang.String" column="payload" not-null="true"/>
+        <property name="payload" type="java.lang.String" column="payload" length="16777215" not-null="true"/>
         <many-to-one name="dataSource" class="DataSource" column="data_source" not-null="true"/>
 
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">

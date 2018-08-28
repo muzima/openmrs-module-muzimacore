@@ -158,21 +158,8 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
 
     });
 
-    $('#btnQueue').click(function(){
-        var uuidList = [$scope.uuid];
-        $data.reQueueErrors(uuidList).
-        then(function () {
-            $location.path("/queues");
-        })
-    });
-
-    $( "#btnCancelQueue" ).click(function(){
-        $location.path("/errors");
-    });
-
     $scope.queue = function () {
         var uuidList = [$scope.uuid];
-        alert("uuidList: " + uuidList);
         $data.reQueueErrors(uuidList).
         then(function () {
             $location.path("/errors");

@@ -14,6 +14,7 @@
 package org.openmrs.module.muzima.web.resource.muzima;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openmrs.Location;
@@ -21,6 +22,7 @@ import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.handler.ObsQueueDataHandler;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.QueueData;
@@ -51,7 +53,7 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/queuedata",
-        supportedClass = QueueData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*"})
+        supportedClass = QueueData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
 public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
 
     /**
@@ -244,11 +246,24 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
             payload = payloadObject.toString();
         }
 
+        String discriminator = null;
+        if(propertiesToCreate.get("discriminator") != null){
+            discriminator = propertiesToCreate.get("discriminator").toString();
+        }
+
+        String formName;
+        Location location = null;
+
         QueueData queueData = new QueueData();
-        Location location = extractLocationFromPayload(payload);
-        Provider provider = extractProviderFromPayload(payload);
-        String formName = extractFormNameFromPayload(payload);
         String patientUuid = extractPatientUuidFromPayload(payload);
+        Provider provider = extractProviderFromPayload(payload);
+
+        if(StringUtils.equals(discriminator, ObsQueueDataHandler.DISCRIMINATOR_VALUE)){
+            formName = "Individual Obs";
+        } else {
+            location = extractLocationFromPayload(payload);
+            formName = extractFormNameFromPayload(payload);
+        }
 
         queueData.setDataSource(dataSource);
         queueData.setPayload(payload);
