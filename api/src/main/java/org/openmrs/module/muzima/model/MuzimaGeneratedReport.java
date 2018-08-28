@@ -16,6 +16,8 @@ package org.openmrs.module.muzima.model;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.User;
+import org.openmrs.api.PatientService;
+import org.openmrs.api.context.Context;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
@@ -79,8 +81,9 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     }
     
     public String getPatientUuid(){
-       // return patientUuid;
-        return "86dedb46-49a9-4c55-82b7-4e17bef34ee6";
+        PatientService patientService = Context.getService(PatientService.class);
+        this.patientUuid = patientService.getPatient(patientId).getUuid();
+        return this.patientUuid;
     }
     
     public void setPatientId(final Integer patientId) {
@@ -97,6 +100,10 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     
     public byte[] getReportJson(){
         return reportJson;
+    }
+    
+    public String getReportJsonForMuzima(){
+        return new String(reportJson);
     }
     
     public void setPriority(final Boolean priority) {
@@ -123,7 +130,7 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
                 ", description='" + getDescription() +
                 ", patientId='" + getPatientId() +
                 ", cohortReportConfigId='" + getCohortReportConfigId() +
-                ", reportJson='" + getReportJson() +
+                ", reportJson='" + getReportJsonForMuzima() +
                 ", priority='" + getPriority() +
                 '}';
     }
