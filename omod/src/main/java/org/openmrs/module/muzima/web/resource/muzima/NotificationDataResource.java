@@ -45,6 +45,8 @@ import org.openmrs.module.webservices.rest.web.response.ConversionException;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -64,6 +66,7 @@ import static org.openmrs.module.muzima.web.resource.utils.ResourceUtils.parseDa
         supportedClass = NotificationData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
 public class NotificationDataResource extends DataDelegatingCrudResource<NotificationData> {
     private static final DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static final Logger logger = LoggerFactory.getLogger(org.openmrs.module.muzima.utils.JsonUtils.class.getSimpleName());
     /**
      * Gets the delegate object with the given unique id. Implementations may decide whether
      * "unique id" means a uuid, or if they also want to retrieve delegates based on a unique
@@ -317,7 +320,7 @@ public class NotificationDataResource extends DataDelegatingCrudResource<Notific
         try {
             dateCreated = org.openmrs.module.muzima.utils.ISO8601Util.toCalendar(JsonUtils.readAsString(payload, "$['dateCreated']")).getTime();
         } catch (ParseException e) {
-            System.out.println("Unable to extract date from payload:  "+e.getMessage());
+            logger.error("Unable to extract date from payload:  "+e.getMessage());
         }
 
         return dateCreated;
