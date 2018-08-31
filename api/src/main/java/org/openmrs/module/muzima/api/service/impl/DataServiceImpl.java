@@ -517,8 +517,8 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
     @Override
     public List<NotificationData> getNotificationDataByReceiver(final Person person, final String search,
                                                                 final Integer pageNumber, final Integer pageSize,
-                                                                final String status) {
-        return getNotificationDataDao().getNotificationsByReceiver(person, search, pageNumber, pageSize, status);
+                                                                final String status,final Date syncDate) {
+        return getNotificationDataDao().getNotificationsByReceiver(person, search, pageNumber, pageSize, status ,syncDate);
     }
 
     /**
@@ -534,8 +534,8 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
     @Override
     public List<NotificationData> getNotificationDataBySender(final Person person, final String search,
                                                               final Integer pageNumber, final Integer pageSize,
-                                                              final String status) {
-        return getNotificationDataDao().getNotificationsBySender(person, search, pageNumber, pageSize, status);
+                                                              final String status, final Date syncDate) {
+        return getNotificationDataDao().getNotificationsBySender(person, search, pageNumber, pageSize, status, syncDate);
     }
 
     /**
