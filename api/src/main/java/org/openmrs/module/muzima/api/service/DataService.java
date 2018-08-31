@@ -10,6 +10,7 @@ import org.openmrs.module.muzima.model.ErrorMessage;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.model.QueueData;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -327,7 +328,7 @@ public interface DataService extends OpenmrsService {
      */
     List<NotificationData> getNotificationDataByReceiver(final Person person, final String search,
                                                          final Integer pageNumber, final Integer pageSize,
-                                                         final String status);
+                                                         final String status, final Date syncDate);
 
     /**
      * Return paged notification data from a particular person with matching search term for a particular page.
@@ -341,7 +342,7 @@ public interface DataService extends OpenmrsService {
      */
     List<NotificationData> getNotificationDataBySender(final Person person, final String search,
                                                        final Integer pageNumber, final Integer pageSize,
-                                                       final String status);
+                                                       final String status, final Date syncDate);
 
     /**
      * Return count for the paged notification data for a particular person with matching search term for a particular page.
