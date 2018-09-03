@@ -17,6 +17,7 @@ import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.module.muzima.model.NotificationData;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public interface NotificationDataDao extends DataDao<NotificationData> {
      */
     List<NotificationData> getNotificationsByReceiver(final Person person, final String search,
                                                       final Integer pageNumber, final Integer pageSize,
-                                                      final String status);
+                                                      final String status, final Date syncDate);
 
     /**
      * Get all notification from this particular person.
@@ -42,7 +43,7 @@ public interface NotificationDataDao extends DataDao<NotificationData> {
      */
     List<NotificationData> getNotificationsBySender(final Person person, final String search,
                                                     final Integer pageNumber, final Integer pageSize,
-                                                    final String status);
+                                                    final String status, final Date syncDate);
 
     Number countNotificationsByReceiver(final Person person, final String search, final String status);
 

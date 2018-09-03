@@ -26,7 +26,9 @@ import org.openmrs.Person;
 import org.openmrs.Role;
 import org.openmrs.module.muzima.api.db.NotificationDataDao;
 import org.openmrs.module.muzima.model.NotificationData;
+import org.openmrs.module.muzima.utils.JsonUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +54,7 @@ public class HibernateNotificationDataDao extends HibernateDataDao<NotificationD
     @SuppressWarnings("unchecked")
     public List<NotificationData> getNotificationsByReceiver(final Person person, final String search,
                                                              final Integer pageNumber, final Integer pageSize,
-                                                             final String status) {
+                                                             final String status, final Date syncDate) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -61,6 +63,9 @@ public class HibernateNotificationDataDao extends HibernateDataDao<NotificationD
             criteria.add(disjunction);
         }
         criteria.add(Restrictions.eq("receiver", person));
+        if(syncDate != null){
+            criteria.add(Restrictions.gt("dateCreated", syncDate));
+        }
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
         if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
@@ -108,7 +113,7 @@ public class HibernateNotificationDataDao extends HibernateDataDao<NotificationD
     @SuppressWarnings("unchecked")
     public List<NotificationData> getNotificationsBySender(final Person person, final String search,
                                                            final Integer pageNumber, final Integer pageSize,
-                                                           final String status) {
+                                                           final String status, final Date syncDate) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -117,6 +122,9 @@ public class HibernateNotificationDataDao extends HibernateDataDao<NotificationD
             criteria.add(disjunction);
         }
         criteria.add(Restrictions.eq("sender", person));
+        if(syncDate != null){
+            criteria.add(Restrictions.gt("dateCreated", syncDate));
+        }
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
         if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
