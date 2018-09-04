@@ -55,6 +55,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * TODO brief class desceription.
@@ -121,7 +122,18 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
 
         try {
             if (validate(queueData)) {
-                Context.getEncounterService().saveEncounter(encounter);
+                Set<Obs> obss =  encounter.getAllObs();
+                boolean allObsValid = true;
+                for(Obs obs:obss){
+                    if(!(obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText())){
+                        allObsValid = false;
+                        queueProcessorException.addException(new Exception("Unable to process obs for concept with id: " + obs.getConcept().getConceptId()));
+                    }
+
+                }
+                if(allObsValid) {
+                    Context.getEncounterService().saveEncounter(encounter);
+                }
             }
         } catch (Exception e) {
             if (!e.getClass().equals(QueueProcessorException.class))
@@ -300,6 +312,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         } else if (concept.getDatatype().isText()) {
             obs.setValueText(value);
         }
+
         // only add if the value is not empty :)
         encounter.addObs(obs);
         if (parentObs != null) {
