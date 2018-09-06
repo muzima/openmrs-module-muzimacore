@@ -1239,5 +1239,116 @@
             <column name="uuid" value="651fc189-127f-4b4c-98f3-121ed5ad182e" />
         </insert>
     </changeSet>
+    <changeSet id="expandedcohort-2015-03-19-15:50" author="msavai">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="expanded_cohort_definition"/></not>
+        </preConditions>
+        <comment>
+            Creating the expanded cohort table
+        </comment>
+        <createTable tableName="expanded_cohort_definition">
+            <column name="id" type="int"  autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_id" type="int"/>
+            <column name="sql_definition" type="text"/>
+            <column name="is_scheduled" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="voided" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-07-20-13:14" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="expanded_cohort_update_history"/></not>
+        </preConditions>
+        <comment>
+            Creating the expanded cohort update history table
+        </comment>
+        <createTable tableName="expanded_cohort_update_history">
+            <column name="id" type="int"  autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="members_added" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_updated" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-08-25-15:52" author="mssavai" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_update_history" columnName="members_removed"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the members_removed column
+        </comment>
+        <addColumn tableName="expanded_cohort_update_history">
+            <column name="members_removed" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-08-25-16:35" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="expanded_cohort_update_history" columnName="members_added"/>
+        </preConditions>
+        <comment>
+            Dropping null constraint on members_added column
+        </comment>
+        <dropNotNullConstraint tableName="expanded_cohort_update_history"
+                               columnName="members_added"
+                               columnDataType="text"/>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-08-27-13:12" author="mssavai" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="enable_member_addition"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the enable_member_addition column
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="enable_member_addition" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-08-27-13:16" author="mssavai" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="enable_member_removal"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the enable_member_removal column
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="enable_member_removal" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
