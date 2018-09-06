@@ -24,6 +24,10 @@ muzimaCoreModule.
             when('/setting/:uuid', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
             when('/settings', {controller: SettingsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/settings.html'}).
             when('/createSetting/', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
+		    when('/cohortdefinitions', {controller: CohortDefinitionsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinitions.html'}).
+            when('/cohortdefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
+            when('/cohortdefinition/:uuid', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
+            when('/createcohortdefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
             otherwise({redirectTo: '/sources'});
     }]
 );
@@ -278,5 +282,36 @@ muzimaCoreModule.factory('$muzimaSettings', function($http) {
         getSetting: getSetting,
         saveSetting: saveSetting,
         deleteSetting: deleteSetting
+    }
+});
+
+muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
+    
+
+    var getCohortDefinitions = function () {
+        return $http.get("cohortdefinitions.json");
+    };
+    var getCohortDefinition = function (uuid) {
+            return $http.get("cohortdefinition.json?uuid=" + uuid);
+        };
+    var getAllCohorts = function () {
+            return $http.get("cohorts.json");
+        };
+    var getAllCohortsWithoutDefinition=function(){
+            return $http.get("cohortswithoutdefinition.json");
+         };
+    var saveCohortDefinition = function (uuid, cohortid, definition, isscheduled, enableMemberAddition, enableMemberRemoval) {
+            return $http.post("cohortdefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition,
+                "isscheduled": isscheduled, "enableMemberAddition":enableMemberAddition, "enableMemberRemoval": enableMemberRemoval});
+        };
+
+    return {
+
+        getCohortDefinitions: getCohortDefinitions,
+        getCohortDefinition:getCohortDefinition,
+        saveCohortDefinition:saveCohortDefinition,
+        getAllCohorts:getAllCohorts,
+        getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition
+        
     }
 });

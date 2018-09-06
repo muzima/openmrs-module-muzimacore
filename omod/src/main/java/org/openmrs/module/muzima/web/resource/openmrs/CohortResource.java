@@ -51,15 +51,23 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
         HttpServletRequest request = context.getRequest();
         String nameParameter = request.getParameter("q");
         String syncDateParameter = request.getParameter("syncDate");
+        System.out.println("In Cohort Resource");
+        System.out.println("Sync Date parameter: "+syncDateParameter);
+        CoreService coreService = Context.getService(CoreService.class);
+        Date syncDate = ResourceUtils.parseDate(syncDateParameter);
         if (nameParameter != null) {
-            Date syncDate = ResourceUtils.parseDate(syncDateParameter);
-            CoreService coreService = Context.getService(CoreService.class);
+
+
             final int cohortCount = coreService.countCohorts(nameParameter, syncDate).intValue();
             final List<Cohort> cohorts = coreService.getCohorts(nameParameter, syncDate, context.getStartIndex(), context.getLimit());
 
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
-                fakeCohorts.add(FakeCohort.copyCohort(cohort));
+                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate,context.getStartIndex(),context.getLimit());
+                FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
+                fakeCohort.setUpdated(hasCohortChanged);
+                fakeCohorts.add(fakeCohort);
+                System.out.println("hasCohortChanged: "+hasCohortChanged);
             }
 
             return new NeedsPaging<FakeCohort>(fakeCohorts, context) {
@@ -73,7 +81,11 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
 
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
-                fakeCohorts.add(FakeCohort.copyCohort(cohort));
+                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate,context.getStartIndex(),context.getLimit());
+                FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
+                fakeCohort.setUpdated(hasCohortChanged);
+                fakeCohorts.add(fakeCohort);
+                System.out.println("hasCohortChanged: "+hasCohortChanged);
             }
 
             return new NeedsPaging<FakeCohort>(fakeCohorts, context);

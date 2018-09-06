@@ -14,6 +14,7 @@
 package org.openmrs.module.muzima.web.resource.openmrs;
 
 import org.apache.commons.beanutils.ConversionException;
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -55,17 +56,30 @@ public class CohortMemberResource extends DelegatingCrudResource<FakeCohortMembe
     public PageableResult doSearch(final RequestContext context) throws ResponseException {
         HttpServletRequest request = context.getRequest();
         String uuidParameter = request.getParameter("uuid");
+        String membersRemovedOption = request.getParameter("members_removed");
         String syncDateParameter = request.getParameter("syncDate");
         List<FakeCohortMember> members = new ArrayList<FakeCohortMember>();
         if (uuidParameter != null) {
             Date syncDate = ResourceUtils.parseDate(syncDateParameter);
             CoreService coreService = Context.getService(CoreService.class);
             final int patientCount = coreService.countPatients(uuidParameter, syncDate).intValue();
-            final List<Patient> patients = coreService.getPatients(uuidParameter, syncDate,
-                    context.getStartIndex(), context.getLimit());
+            final List<Patient> patients = new ArrayList<Patient>();
+
+            if(StringUtils.isNotEmpty(membersRemovedOption)){
+                List<Patient> removedMembers = coreService.getPatientsRemovedFromCohort(uuidParameter, syncDate,
+                        context.getStartIndex(), context.getLimit());
+                System.out.println("REMOVED MEMBERS COUNT:"+removedMembers.size());
+                patients.addAll(removedMembers);
+            } else {
+                List<Patient> addedMembers = coreService.getPatients(uuidParameter, syncDate,
+                        context.getStartIndex(), context.getLimit());
+                System.out.println("ADDED MEMBERS COUNT:"+addedMembers.size());
+                patients.addAll(addedMembers);
+            }
 
             final Cohort cohort = Context.getCohortService().getCohortByUuid(uuidParameter);
             for (Patient cohortMember : patients) {
+                System.out.println("Adding patient : "+cohortMember.getFamilyName());
                 members.add(new FakeCohortMember(cohortMember, cohort));
             }
             boolean hasMore = patientCount > context.getStartIndex() + patients.size();

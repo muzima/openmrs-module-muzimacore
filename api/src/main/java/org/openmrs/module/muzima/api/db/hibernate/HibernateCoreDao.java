@@ -28,6 +28,7 @@ import org.openmrs.Cohort;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.api.APIException;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.CoreDao;
@@ -251,30 +252,66 @@ public class HibernateCoreDao implements CoreDao {
         return (Number) criteria.uniqueResult();
     }
 
+    private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate,
+                                final int startIndex, final int size) throws DAOException{
+        String addedMembersSql = "select GROUP_CONCAT(e.members_added,',') from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
+        SQLQuery addedMembersQuery = getSessionFactory().getCurrentSession().createSQLQuery(addedMembersSql);
+        List addedMembersList = new ArrayList();
+        if (syncDate != null) {
+            addedMembersQuery.setParameter("syncDate", syncDate);
+            addedMembersQuery.setParameter("cohortUuid", cohortUuid);
+            List addedMembersQueryResult = addedMembersQuery.list();
+            if(addedMembersQueryResult.size() > 0){
+                String mm = (String)addedMembersQueryResult.get(0);
+                System.out.println("ADDED: "+mm);
+
+                if(StringUtils.isNotBlank(mm)) {
+                    String[] ids = mm.split(",");
+                    for (String id : ids) {
+                        if(StringUtils.isNotBlank(id)) {
+                            addedMembersList.add(Integer.parseInt(id));
+                        }
+                    }
+                }
+            }
+        }
+        return addedMembersList;
+    }
+
+    private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate,
+                                             final int startIndex, final int size) throws DAOException{
+        String removedMembersSql = "select GROUP_CONCAT(e.members_removed,',') from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
+        SQLQuery removedMembersSqlQuery = getSessionFactory().getCurrentSession().createSQLQuery(removedMembersSql);
+        List removedMembersIds = new ArrayList();
+        if (syncDate != null) {
+            removedMembersSqlQuery.setParameter("syncDate", syncDate);
+            removedMembersSqlQuery.setParameter("cohortUuid", cohortUuid);
+            List members = removedMembersSqlQuery.list();
+            if(members.size() > 0){
+                String mm = (String)members.get(0);
+                System.out.println("REMOVED: "+mm);
+                if(StringUtils.isNotBlank(mm)) {
+                    String[] ids = mm.split(",");
+                    for (String id : ids) {
+                        if(StringUtils.isNotBlank(id)) {
+                            removedMembersIds.add(Integer.parseInt(id));
+                        }
+                    }
+                }
+            }
+        }
+        return removedMembersIds;
+    }
+
     @Override
     @Transactional(readOnly = true)
     @SuppressWarnings("unchecked")
     public List<Patient> getPatients(final String cohortUuid, final Date syncDate,
                                      final int startIndex, final int size) throws DAOException {
 
-        String sql = "select GROUP_CONCAT(members_added,',') from expanded_cohort_update_history where date_updated >= :syncDate";
-        SQLQuery myquery = getSessionFactory().getCurrentSession().createSQLQuery(sql);
-        List newIdentifiers = new ArrayList();
-        if (syncDate != null) {
-            myquery.setParameter("syncDate", syncDate);
-            List members = myquery.list();
-            if(members.size() > 0){
-                String mm = (String)members.get(0);
-                if(StringUtils.isNotBlank(mm)) {
-                    String[] ids = mm.split(",");
-                    for (String id : ids) {
-                        if(StringUtils.isNotBlank(id)) {
-                            newIdentifiers.add(Integer.parseInt(id));
-                        }
-                    }
-                }
-            }
-        }
+        //This will take care of cohort members who were added to cohort since sync date but have not been changed themselves
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, startIndex, size);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
 
         String hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
@@ -297,7 +334,22 @@ public class HibernateCoreDao implements CoreDao {
         query.setMaxResults(size);
         query.setFirstResult(startIndex);
         List patientIds = query.list();
-        patientIds.addAll(newIdentifiers);
+        System.out.println("KKKKK: Before:  "+patientIds);
+        System.out.println("ADDEDMEMBERS: Before:  "+addedMembersIds);
+        for(int id:removedMembersIds) {
+            int i = addedMembersIds.indexOf(id);
+            if(i >= 0) {
+                System.out.println("Removing index: "+i + " for value "+id + " in "+addedMembersIds);
+                addedMembersIds.remove(i);
+            } else {
+                System.out.println("No value "+id + " in "+addedMembersIds);
+
+            }
+        }
+        System.out.println("ADDEDMEMBERS: after:  "+addedMembersIds);
+        patientIds.addAll(addedMembersIds);
+
+        System.out.println("KKKKK: after:  "+patientIds);
 
         if (!patientIds.isEmpty()) {
             Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
@@ -330,5 +382,62 @@ public class HibernateCoreDao implements CoreDao {
             query.setParameter("syncDate", syncDate);
         }
         return (Number) query.uniqueResult();
+    }
+
+
+
+    @Transactional(readOnly = true)
+    public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate,
+                                               final int startIndex, final int size) throws DAOException{
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, startIndex, size);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
+
+        if(!removedMembersIds.isEmpty()){
+            System.out.println("XXXXXXXXXXXXXXX: "+removedMembersIds);
+            for(int id:addedMembersIds) {
+                int i = removedMembersIds.indexOf(id);
+                if(i >= 0) {
+                    System.out.println("Removing index: "+i + " for value "+id + " in "+removedMembersIds);
+                    removedMembersIds.remove(i);
+                } else {
+                    System.out.println("No value "+id + " in "+removedMembersIds);
+
+                }
+            }
+
+            System.out.println("RRRRRRRRR: "+removedMembersIds);
+            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
+            criteria.add(Restrictions.in("patientId", removedMembersIds));
+            return criteria.list();
+        }
+        return Collections.emptyList();
+    }
+
+    public boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate,
+                                             final int startIndex, final int size) throws DAOException{
+        List<Patient> removedPatients = getPatientsRemovedFromCohort(cohortUuid,syncDate,startIndex,size);
+        if(removedPatients.size() > 0){
+            return true;
+        }
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, startIndex, size);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
+
+        for(int id:removedMembersIds) {
+            int i = addedMembersIds.indexOf(id);
+            if(i >= 0) {
+                System.out.println("Removing index: "+i + " for value "+id + " in "+addedMembersIds);
+                addedMembersIds.remove(i);
+            } else {
+                System.out.println("No value "+id + " in "+addedMembersIds);
+
+            }
+        }
+
+        if(addedMembersIds.size() > 0){
+            return true;
+        }
+
+        return false;
+
     }
 }

@@ -1,0 +1,55 @@
+<div id="wide-sidebar" class="row">
+    <div class="col-lg-2">
+        <ul class="nav nav-tabs nav-stacked">
+            <li><a href="#/sources">Data Source</a></li>
+            <li><a href="#/configs">Setup Configurations</a></li>
+            <li><a href="#/queues">Queue Data</a></li>
+            <li><a href="#/registrations">Registrations</a></li>
+            <li><a href="#/forms">Muzima Forms</a></li>
+            <li><a href="#/errors">Error Data</a></li>
+            <li><a href="#/settings">Settings</a></li>
+            <li class="navigation-active"><a href="#/cohortdefinitions">Cohort Definitions</a></li>
+        </ul>
+    </div>
+    <div class="col-lg-8">
+        <div class="clearfix">
+            <div class="row">
+            </div>
+            <div class="row">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>                  
+                        <th>Open</th>
+                        <th>Cohort Name</th>
+                        <th>Description</th>
+                        <th>Criteria</th>
+                        <th>Scheduled</th>
+                        <th>Addition enabled</th>
+                        <th>Removal enabled</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-hide="cohortdefinitions.length">
+                        <td colspan="5">No Expanded Cohorts defined.</td>
+                    </tr>
+                    <tr ng-repeat="cohortdefinition in cohortdefinitions | orderBy:'submitted':true">
+                        <td><a href="#/cohortdefinition/{{cohortdefinition.uuid}}"><i class=icon-edit></i></a></td>
+                        <td>{{cohortdefinition.name}}</td>
+                        <td>{{cohortdefinition.description}}</td>
+                        <td><pre>{{cohortdefinition.definition}}</pre></td>
+                        <td align="center"><input disabled="" type="checkbox"  checked="{{cohortdefinition.isscheduled}}"></td>
+                        <td align="center"><input disabled="" type="checkbox"  checked="{{cohortdefinition.enableMemberAddition}}"></td>
+                        <td align="center"><input disabled="" type="checkbox"  checked="{{cohortdefinition.enableMemberRemoval}}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="noOfPages > 1" class="row">
+                <div class="span12 pull-left">
+                    <pagination num-pages="noOfPages" current-page="currentPage" max-size="maxSize" boundary-links="true"></pagination>
+                </div>
+            </div>
+  
+        </div>
+    </div>
+</div>

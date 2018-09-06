@@ -56,4 +56,14 @@ public interface CoreDao {
 
     @Transactional(readOnly = true)
     Number countPatients(final String cohortUuid, final Date syncDate) throws DAOException;
+
+    @Transactional(readOnly = true)
+    List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate,
+                              final int startIndex, final int size) throws DAOException;
+    @Transactional(readOnly = true)
+    boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate,
+                              final int startIndex, final int size) throws DAOException;
+
+  //  @Transactional(readOnly = true)
+  //  Number countPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate) throws DAOException;
 }
