@@ -234,17 +234,33 @@ public class HibernateCoreDao implements CoreDao {
         criteria.add(Expression.ilike("name", name, MatchMode.ANYWHERE));
         criteria.addOrder(Order.asc("name"));
         if (syncDate != null) {
-            criteria.add(Restrictions.or(
+
+
+            String sql = "select cohort_id from expanded_cohort_update_history where date_updated >= :syncDate";
+            SQLQuery myquery = getSessionFactory().getCurrentSession().createSQLQuery(sql);
+            myquery.setParameter("syncDate", syncDate);
+
+            Disjunction disjunction = Restrictions.disjunction();
+            if(myquery.list().size() > 0) {
+                disjunction.add(Restrictions.in("id", myquery.list()));
+                criteria.add(disjunction);
+            }
+
+
+            criteria.add(
                     Restrictions.or(
+                            Restrictions.or(
+                                    Restrictions.and(
+                                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                            Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
+                                    Restrictions.and(
+                                            Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
+                                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
                             Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
-                                    Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
-                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
+                                    Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
+                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))
+                    )
+            );
         }
         criteria.add(Restrictions.eq("voided", false));
 
@@ -263,7 +279,6 @@ public class HibernateCoreDao implements CoreDao {
             List addedMembersQueryResult = addedMembersQuery.list();
             if(addedMembersQueryResult.size() > 0){
                 String mm = (String)addedMembersQueryResult.get(0);
-                System.out.println("ADDED: "+mm);
 
                 if(StringUtils.isNotBlank(mm)) {
                     String[] ids = mm.split(",");
@@ -289,7 +304,6 @@ public class HibernateCoreDao implements CoreDao {
             List members = removedMembersSqlQuery.list();
             if(members.size() > 0){
                 String mm = (String)members.get(0);
-                System.out.println("REMOVED: "+mm);
                 if(StringUtils.isNotBlank(mm)) {
                     String[] ids = mm.split(",");
                     for (String id : ids) {
@@ -334,22 +348,14 @@ public class HibernateCoreDao implements CoreDao {
         query.setMaxResults(size);
         query.setFirstResult(startIndex);
         List patientIds = query.list();
-        System.out.println("KKKKK: Before:  "+patientIds);
-        System.out.println("ADDEDMEMBERS: Before:  "+addedMembersIds);
         for(int id:removedMembersIds) {
             int i = addedMembersIds.indexOf(id);
             if(i >= 0) {
-                System.out.println("Removing index: "+i + " for value "+id + " in "+addedMembersIds);
                 addedMembersIds.remove(i);
-            } else {
-                System.out.println("No value "+id + " in "+addedMembersIds);
-
             }
         }
-        System.out.println("ADDEDMEMBERS: after:  "+addedMembersIds);
         patientIds.addAll(addedMembersIds);
 
-        System.out.println("KKKKK: after:  "+patientIds);
 
         if (!patientIds.isEmpty()) {
             Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
@@ -393,22 +399,18 @@ public class HibernateCoreDao implements CoreDao {
         List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
 
         if(!removedMembersIds.isEmpty()){
-            System.out.println("XXXXXXXXXXXXXXX: "+removedMembersIds);
             for(int id:addedMembersIds) {
                 int i = removedMembersIds.indexOf(id);
                 if(i >= 0) {
-                    System.out.println("Removing index: "+i + " for value "+id + " in "+removedMembersIds);
                     removedMembersIds.remove(i);
-                } else {
-                    System.out.println("No value "+id + " in "+removedMembersIds);
-
                 }
             }
 
-            System.out.println("RRRRRRRRR: "+removedMembersIds);
-            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
-            criteria.add(Restrictions.in("patientId", removedMembersIds));
-            return criteria.list();
+            if(removedMembersIds.size() > 0) {
+                Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
+                criteria.add(Restrictions.in("patientId", removedMembersIds));
+                return criteria.list();
+            }
         }
         return Collections.emptyList();
     }
@@ -425,11 +427,7 @@ public class HibernateCoreDao implements CoreDao {
         for(int id:removedMembersIds) {
             int i = addedMembersIds.indexOf(id);
             if(i >= 0) {
-                System.out.println("Removing index: "+i + " for value "+id + " in "+addedMembersIds);
                 addedMembersIds.remove(i);
-            } else {
-                System.out.println("No value "+id + " in "+addedMembersIds);
-
             }
         }
 

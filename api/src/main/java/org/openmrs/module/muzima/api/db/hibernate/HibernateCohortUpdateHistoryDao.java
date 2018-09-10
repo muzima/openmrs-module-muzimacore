@@ -14,7 +14,6 @@ public class HibernateCohortUpdateHistoryDao implements CohortUpdateHistoryDao{
     }
 
     public CohortUpdateHistory saveOrUpdate(CohortUpdateHistory cohortUpdateHistory){
-        System.out.println("Saving cohort update history : "+cohortUpdateHistory.getMembersAdded());
         sessionFactory.getCurrentSession().saveOrUpdate(cohortUpdateHistory);
         return cohortUpdateHistory;
     }

@@ -56,7 +56,6 @@ public class ExpandedCohortProcessorServiceImpl implements ExpandedCohortProcess
                 addedMemberIdsString = StringUtils.strip(addedMemberIdsString, ",");
                 cohortUpdateHistory.setMembersAdded(addedMemberIdsString);
                 savedCohort.getMemberIds().addAll(addedMembers);
-                System.out.println("Added Members: "+addedMemberIdsString);
             }
         }
 
@@ -72,7 +71,6 @@ public class ExpandedCohortProcessorServiceImpl implements ExpandedCohortProcess
                 removedMemberIdsString = StringUtils.strip(removedMemberIdsString, ",");
                 cohortUpdateHistory.setMembersRemoved(removedMemberIdsString);
                 savedCohort.getMemberIds().removeAll(removedMembers);
-                System.out.println("Removed Members: "+removedMemberIdsString);
             }
         }
 

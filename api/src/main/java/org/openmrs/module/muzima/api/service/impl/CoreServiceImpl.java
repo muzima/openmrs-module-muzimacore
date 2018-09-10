@@ -76,7 +76,6 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 
     @Override
     public List<Patient> getPatients(final String cohortUuid, final Date syncDate, final int startIndex, final int size) throws APIException {
-        System.out.println("GET NEW MEMBERS");
         return getCoreDao().getPatients(cohortUuid, syncDate, startIndex, size);
     }
 
@@ -88,7 +87,6 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
     @Override
     public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate,
                                                final int startIndex, final int size) throws APIException {
-        System.out.println("GET REMOVED MEMBERS");
         return getCoreDao().getPatientsRemovedFromCohort(cohortUuid, syncDate, startIndex, size);
     }
 

@@ -48,7 +48,6 @@ public class ExpandedCohortProcessor {
             Iterator<CohortDefinitionData> cohortCriteriaDataIterator = cohortDefinitionDataList.iterator();
             while(cohortCriteriaDataIterator.hasNext()){
                 CohortDefinitionData cohortCriteriaData=cohortCriteriaDataIterator.next();
-                System.out.println("Processing cohort:"+cohortCriteriaData.getCohortId());
                 expandedCohortProcessorService.process(cohortCriteriaData);
             }
         } finally {

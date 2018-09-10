@@ -68,18 +68,15 @@ public class CohortMemberResource extends DelegatingCrudResource<FakeCohortMembe
             if(StringUtils.isNotEmpty(membersRemovedOption)){
                 List<Patient> removedMembers = coreService.getPatientsRemovedFromCohort(uuidParameter, syncDate,
                         context.getStartIndex(), context.getLimit());
-                System.out.println("REMOVED MEMBERS COUNT:"+removedMembers.size());
                 patients.addAll(removedMembers);
             } else {
                 List<Patient> addedMembers = coreService.getPatients(uuidParameter, syncDate,
                         context.getStartIndex(), context.getLimit());
-                System.out.println("ADDED MEMBERS COUNT:"+addedMembers.size());
                 patients.addAll(addedMembers);
             }
 
             final Cohort cohort = Context.getCohortService().getCohortByUuid(uuidParameter);
             for (Patient cohortMember : patients) {
-                System.out.println("Adding patient : "+cohortMember.getFamilyName());
                 members.add(new FakeCohortMember(cohortMember, cohort));
             }
             boolean hasMore = patientCount > context.getStartIndex() + patients.size();
