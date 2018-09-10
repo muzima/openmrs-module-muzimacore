@@ -378,7 +378,6 @@ public class JsonUtilsTest {
         logger.debug("Executing Read as Data ");
         String datePayload = "{\"key\":\"04-06-1994\"}";
         Date value = JsonUtils.readAsDate(datePayload, "key");
-        System.out.println(value);
         assert value != null;
         assertThat(JsonUtils.readAsDate(datePayload,"key")).hasDayOfMonth(4);
         assertThat(JsonUtils.readAsDate(datePayload,"key")).hasMonth(6);

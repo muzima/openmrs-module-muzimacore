@@ -27,14 +27,14 @@ public class FakeCohort extends BaseOpenmrsData {
 
     private static final String[] properties = new String[]{
             "uuid", "name", "description", "memberIds",
-            "creator", "dateCreated", "changedBy", "dateChanged", "voidedBy", "dateVoided", "voidReason"
+            "creator", "dateCreated", "changedBy", "dateChanged", "voidedBy", "dateVoided", "voidReason",
     };
 
     private Integer id;
     private String name;
     private String description;
     private Set<Integer> memberIds;
-    private boolean updated;
+    private boolean isUpdated;
 
     private FakeCohort() {
     }
@@ -92,11 +92,11 @@ public class FakeCohort extends BaseOpenmrsData {
         this.memberIds = memberIds;
     }
 
-    public void setUpdated(boolean updated){
-        this.updated = updated;
+    public void setIsUpdated(boolean updated){
+        this.isUpdated = updated;
     }
 
-    public boolean getUpdated(){
-        return updated;
+    public boolean getIsUpdated(){
+        return isUpdated;
     }
 }

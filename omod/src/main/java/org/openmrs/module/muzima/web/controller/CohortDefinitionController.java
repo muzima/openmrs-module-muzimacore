@@ -48,8 +48,6 @@ public class CohortDefinitionController {
             boolean isScheduled = (Boolean) map.get("isscheduled");
             boolean enableMemberAddition = (Boolean) map.get("enableMemberAddition");
             boolean enableMemberRemoval = (Boolean) map.get("enableMemberRemoval");
-            System.out.println("Map: ");
-            System.out.println(map);
 
             CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
 
