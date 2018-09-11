@@ -23,7 +23,6 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         $cohortDefinitionService.getCohortDefinition($scope.uuid).
             then(function (response) {
                 $scope.cohortdefinition = response.data;
-                console.log("response.dada: "+JSON.stringify(response.data));
             });
         $cohortDefinitionService.getAllCohorts().
             then(function (response) {
@@ -70,8 +69,6 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
                     if(cohortdefinition.cohortid==cohort.id){
                         cohortdefinition.description = cohort.description;
                         $scope.definitioninputdisabled=function(e){
-
-                            console.log("cohort description : "+cohort.description);
                             return false;
                          };
                     }
@@ -79,7 +76,18 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
 
     }
     $scope.definitioninputdisabled=function(uuid){
-        if(uuid){return false; }else{return true; }
+        if(uuid){
+            return false;
+        }else{
+            return true;
+        }
+    };
+    $scope.definitionsavingdisabled=function(definition){
+        if(definition){
+            return false;
+        }else{
+            return true;
+        }
     };
 }
 
