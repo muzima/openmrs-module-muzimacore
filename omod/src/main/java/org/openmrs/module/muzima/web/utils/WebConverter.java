@@ -253,6 +253,7 @@ public class WebConverter {
     public static Map<String, Object> convertMuzimaCohort(final Cohort cohort) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (cohort != null) {
+            map.put("id",cohort.getId());
             map.put("uuid", cohort.getUuid());
             map.put("name", cohort.getName());
             map.put("description",cohort.getDescription());

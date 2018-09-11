@@ -14,38 +14,35 @@
     <div class="col-lg-8">
         <div ng-switch="mode">
             <div ng-switch-when="view">
-                <div class="row">
-                    <select class="span10" disabled="" ng-model="cohortdefinition.cohortid"
-                            ng-options="cohort.id as cohort.name for cohort in cohorts">
-                    </select>
-                    <input type="text" disabled=""  ng-model="cohortdefinition.name">
+                <div class="row col-lg-8">
+                    <input class="form-control" type="text" disabled=""  ng-model="cohortdefinition.name">
                 </div>
-                <div class="row">
-                    <textarea class="span10" placeholder="Cohort description ..." rows="3"
+                <div class="row col-lg-8">
+                    <textarea class="form-control" placeholder="Cohort description ..." rows="3"
                               disabled="" ng-model="cohortdefinition.description">
                     </textarea>
                 </div>
-                <div class="row">
-                    <textarea class="span10" placeholder="SQL Definition ..." rows="10"
+                <div class="row col-lg-8">
+                    <textarea class="form-control" placeholder="SQL Definition ..." rows="10"
                            disabled="" ng-model="cohortdefinition.definition">
                         </textarea>
                 </div>
-                <div class="row">
-                    <div class="span10">
+                <div class="row col-lg-8">
+                    <div class="">
                         <input disabled="" type="checkbox"  ng-model="cohortdefinition.isscheduled"> Enable scheduled task for this cohort definition
                     </div>
                 </div>
-                <div class="row">
-                    <div class="span10">
+                <div class="row col-lg-8">
+                    <div class="">
                         <input disabled="" type="checkbox"  ng-model="cohortdefinition.enableMemberAddition"> Enable Addition of members
                     </div>
                 </div>
-                <div class="row">
-                    <div class="span10">
+                <div class="row col-lg-8">
+                    <div class="">
                         <input disabled="" type="checkbox"  ng-model="cohortdefinition.enableMemberRemoval"> Enable Removal of members
                     </div>
                 </div>
-                <div class="row">
+                <div class="row col-lg-8">
                     <button type="submit" ng-click="edit()" class="btn">Edit</button>
                     <button type="submit" ng-click="cancel()" class="btn">Close</button>
                 </div>
@@ -53,39 +50,39 @@
             </div>
             <div ng-switch-when="edit">
                 <form id="definition">
-                    <div class="row">
-                        <select class="span10" ng-model="cohortdefinition.cohortid" ng-change="cohortselected(cohortdefinition,cohorts)"
+                    <div class="row col-lg-8">
+                        <select class="form-control" ng-model="cohortdefinition.cohortid" ng-change="cohortselected(cohortdefinition,cohorts)"
                                  ng-disabled="cohortdefinition.uuid" ng-options="cohort.id as cohort.name for cohort in cohorts">
                         </select>
                     </div>
-                    <div class="row">
-                    <textarea class="span10" placeholder="Cohort description ..." rows="3"
+                    <div class="row col-lg-8">
+                    <textarea class="form-control" placeholder="Cohort description ..." rows="3"
                               disabled="" ng-model="cohortdefinition.description">
                     </textarea>
                     </div>
-                    <div class="row">
-                    <textarea class="span10" placeholder="SQL Definition..." rows="10"
+                    <div class="row col-lg-8">
+                    <textarea class="form-control" placeholder="SQL Definition..." rows="10" required="required"
                               ng-disabled="definitioninputdisabled(cohortdefinition.uuid)" ng-model="cohortdefinition.definition">
                         </textarea>
                     </div>
-                    <div class="row">
-                        <div class="span10">
+                    <div class="row col-lg-8">
+                        <div class="">
                             <input ng-disabled="definitioninputdisabled(cohortdefinition.uuid)" type="checkbox"  ng-model="cohortdefinition.isscheduled"> Enable scheduled task for this cohort definition
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="span10">
+                    <div class="row col-lg-8">
+                        <div class="">
                             <input ng-disabled="definitioninputdisabled(cohortdefinition.uuid)" type="checkbox"  ng-model="cohortdefinition.enableMemberAddition"> Enable Addition of members
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="span10">
-                            <input ng-disabled="definitioninputdisabled(cohortdefinition.uuid)" type="checkbox"  ng-model="cohortdefinition.enableMemberRemoval"> Enable Removal of members
+                    <div class="row col-lg-8">
+                        <div class="">
+                            <input  ng-disabled="definitioninputdisabled(cohortdefinition.uuid)" type="checkbox"  ng-model="cohortdefinition.enableMemberRemoval"> Enable Removal of members
                         </div>
                     </div>
-                    <div class="row">
-                        <button type="submit" ng-click="save(cohortdefinition)" class="btn">Save</button>
-                        <button type="submit" ng-click="cancel()" class="btn">Cancel</button>
+                    <div class="row col-lg-8">
+                        <button type="submit" ng-disabled="definitionsavingdisabled(cohortdefinition.definition)" ng-click="save(cohortdefinition)" class="btn btn-primary">Save</button>
+                        <button type="submit" ng-click="cancel()" class="btn btn-warning">Cancel</button>
                     </div>
                     <span></span>
                 </form>
