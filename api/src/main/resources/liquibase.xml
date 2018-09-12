@@ -1240,4 +1240,17 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20180831113800" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="SHRStatus.isEnabled" />
+            <column name="name" value="SHR status" />
+            <column name="description" value="Specifies if smart card feature will be enabled on Android App" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-08-31T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="25e52b76-dbef-4629-aed2-5497a1f8303c" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
