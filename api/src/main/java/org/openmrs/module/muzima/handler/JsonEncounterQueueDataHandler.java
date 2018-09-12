@@ -125,7 +125,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                 Set<Obs> obss =  encounter.getAllObs();
                 boolean allObsValid = true;
                 for(Obs obs:obss){
-                    if(!(obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText())){
+                    if(areAllObsValid(obs)){
                         allObsValid = false;
                         queueProcessorException.addException(new Exception("Unable to process obs for concept with id: " + obs.getConcept().getConceptId()));
                     }
@@ -146,7 +146,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
     }
 
     /**
-     * 
+     *
      * @param encounter
      * @param patientObject
      */
@@ -445,5 +445,14 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
     @Override
     public boolean accept(final QueueData queueData) {
         return StringUtils.equals(DISCRIMINATOR_VALUE, queueData.getDiscriminator());
+    }
+
+    /**
+     * Checks if all obs have concepts with valid datatype.
+     * @param obs
+     * @return boolean
+     */
+    public boolean areAllObsValid(Obs obs){
+        return !(obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText());
     }
 }
