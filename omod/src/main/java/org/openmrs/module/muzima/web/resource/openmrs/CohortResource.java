@@ -61,7 +61,7 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
             for (Cohort cohort : cohorts) {
                 boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate,context.getStartIndex(),context.getLimit());
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
-                fakeCohort.setIsUpdated(hasCohortChanged);
+                fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);
             }
 
@@ -78,7 +78,7 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
             for (Cohort cohort : cohorts) {
                 boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate,context.getStartIndex(),context.getLimit());
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
-                fakeCohort.setIsUpdated(hasCohortChanged);
+                fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);
             }
 
