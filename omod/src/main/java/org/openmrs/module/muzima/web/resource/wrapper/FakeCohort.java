@@ -34,7 +34,7 @@ public class FakeCohort extends BaseOpenmrsData {
     private String name;
     private String description;
     private Set<Integer> memberIds;
-    private boolean isUpdated;
+    private boolean isUpdateAvailable;
 
     private FakeCohort() {
     }
@@ -92,11 +92,11 @@ public class FakeCohort extends BaseOpenmrsData {
         this.memberIds = memberIds;
     }
 
-    public void setIsUpdated(boolean updated){
-        this.isUpdated = updated;
+    public void setIsUpdateAvailable(boolean isUpdateAvailable){
+        this.isUpdateAvailable = isUpdateAvailable;
     }
 
-    public boolean getIsUpdated(){
-        return isUpdated;
+    public boolean getIsUpdateAvailable(){
+        return isUpdateAvailable;
     }
 }
