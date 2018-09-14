@@ -11,21 +11,20 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.muzima.api.impl;
+package org.openmrs.module.muzima.api.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.CohortUpdateHistoryService;
 import org.openmrs.module.muzima.api.ExpandedCohortProcessorService;
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.Cohort;
-import org.openmrs.module.muzima.api.model.CohortUpdateHistory;
+import org.openmrs.module.muzima.model.CohortUpdateHistory;
 import org.openmrs.module.reportingcompatibility.service.ReportingCompatibilityService;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class ExpandedCohortProcessorServiceImpl implements ExpandedCohortProcessorService {
     public void process(CohortDefinitionData cohortDefinitionData){
@@ -45,7 +44,7 @@ public class ExpandedCohortProcessorServiceImpl implements ExpandedCohortProcess
         Set<Integer> removedMembers = new HashSet<Integer>();
 
         //add members
-        if(cohortDefinitionData.getEnableMemberAddition() == true) {
+        if(cohortDefinitionData.getIsMemberAdditionEnabled() == true) {
             addedMembers = new HashSet<Integer>(newMembers);
             addedMembers.removeAll(currentMembers);
             if (!addedMembers.isEmpty()) {
@@ -60,7 +59,7 @@ public class ExpandedCohortProcessorServiceImpl implements ExpandedCohortProcess
         }
 
         //Remove members
-        if(cohortDefinitionData.getEnableMemberRemoval() == true) {
+        if(cohortDefinitionData.getIsMemberRemovalEnabled() == true) {
             removedMembers = new HashSet<Integer>(currentMembers);
             removedMembers.removeAll(newMembers);
             if (!removedMembers.isEmpty()) {

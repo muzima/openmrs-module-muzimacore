@@ -14,14 +14,13 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.openmrs.module.muzima.api.db.CohortDefinitionDataDao;
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -50,14 +49,14 @@ public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao
         return (CohortDefinitionData)criteria.uniqueResult();
     }
 
-    public List<CohortDefinitionData> getAll(){;
+    public List<CohortDefinitionData> getAll(){
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         return (List<CohortDefinitionData>) criteria.list();
     }
 
-    public List<CohortDefinitionData> getByScheduled(Boolean scheduled){;
+    public List<CohortDefinitionData> getByScheduled(Boolean scheduled){
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("scheduled", scheduled));
+        criteria.add(Restrictions.eq("isScheduledForExecution", scheduled));
         return (List<CohortDefinitionData>) criteria.list();
     }
 

@@ -5,16 +5,16 @@
 
 <hibernate-mapping package="org.openmrs.module.muzima.api.model">
 
-    <class name="CohortDefinitionData" table="expanded_cohort_definition">
+    <class name="org.openmrs.module.muzima.model.CohortDefinitionData" table="expanded_cohort_definition">
         <id name="id" type="java.lang.Integer" column="id" unsaved-value="0">
             <generator class="native"/>
         </id>
 
         <property name="cohortId" type="java.lang.Integer" column="cohort_id" unique="true"/>
         <property name="definition" type="java.lang.String" column="sql_definition"/>
-	    <property name="scheduled" type="boolean" column="is_scheduled" length="1" not-null="true"/>
-	    <property name="enableMemberAddition" type="boolean" column="enable_member_addition" length="1" not-null="true"/>
-	    <property name="enableMemberRemoval" type="boolean" column="enable_member_removal" length="1" not-null="true"/>
+	    <property name="isScheduledForExecution" type="boolean" column="is_scheduled" length="1" not-null="true"/>
+	    <property name="isMemberAdditionEnabled" type="boolean" column="enable_member_addition" length="1" not-null="true"/>
+	    <property name="isMemberRemovalEnabled" type="boolean" column="enable_member_removal" length="1" not-null="true"/>
 
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">
             <column name="creator"/>

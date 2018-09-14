@@ -11,17 +11,16 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.muzima.api.impl;
+package org.openmrs.module.muzima.api.service.impl;
 
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.muzima.api.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.db.CohortDefinitionDataDao;
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 
 import java.util.List;
 

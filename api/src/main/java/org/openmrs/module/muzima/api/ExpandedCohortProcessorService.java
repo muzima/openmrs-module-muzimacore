@@ -13,7 +13,7 @@
  */
 package org.openmrs.module.muzima.api;
 
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 
 public interface ExpandedCohortProcessorService{
     void process(CohortDefinitionData cohortDefinitionData);

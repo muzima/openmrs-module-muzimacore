@@ -2,12 +2,12 @@ function CohortDefinitionsCtrl($scope, $location, $cohortDefinitionService){
 $cohortDefinitionService.getCohortDefinitions().
         then(function (response) {
             var serverData = response.data;
-            $scope.cohortdefinitions = serverData.objects;
+            $scope.cohortDefinitions = serverData.objects;
             $scope.noOfPages =1;
         });
 }
 function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinitionService){
-    $scope.cohortdefinition = {};
+    $scope.cohortDefinition = {};
     // initialize the view to be read only
     $scope.mode = "view";
     $scope.uuid = $routeParams.uuid;
@@ -22,7 +22,7 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
     } else {
         $cohortDefinitionService.getCohortDefinition($scope.uuid).
             then(function (response) {
-                $scope.cohortdefinition = response.data;
+                $scope.cohortDefinition = response.data;
             });
         $cohortDefinitionService.getAllCohorts().
             then(function (response) {
@@ -38,36 +38,36 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
     $scope.cancel = function () {
         if ($scope.mode == "edit") {
             if ($scope.uuid === undefined) {
-                $location.path("/cohortdefinitions");
+                $location.path("/cohortDefinitions");
             } else {
                 $scope.mode = "view"
             }
         } else {
-            $location.path("/cohortdefinitions");
+            $location.path("/cohortDefinitions");
         }
     };
 
-    $scope.save = function (cohortdefinition) {
-        if(cohortdefinition.isscheduled===undefined){
-            cohortdefinition.isscheduled=false;
+    $scope.save = function (cohortDefinition) {
+        if(cohortDefinition.isScheduledForExecution===undefined){
+            cohortDefinition.isScheduledForExecution=false;
         }
-        $cohortDefinitionService.saveCohortDefinition(cohortdefinition.uuid,cohortdefinition.cohortid, cohortdefinition.definition,
-            cohortdefinition.isscheduled, cohortdefinition.enableMemberAddition, cohortdefinition.enableMemberRemoval).
+        $cohortDefinitionService.saveCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
+            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled).
             then(function () {
-                $location.path("/cohortdefinitions");
+                $location.path("/cohortDefinitions");
             })
     };
 
     $scope.delete = function () {
         $cohortDefinitionService.deleteSource($scope.uuid).
             then(function () {
-                $location.path("/cohortdefinitions");
+                $location.path("/cohortDefinitions");
             })
     };
-    $scope.cohortselected = function(cohortdefinition,cohorts){
+    $scope.cohortselected = function(cohortDefinition,cohorts){
                 angular.forEach(cohorts,function(cohort,key){
-                    if(cohortdefinition.cohortid==cohort.id){
-                        cohortdefinition.description = cohort.description;
+                    if(cohortDefinition.cohortid==cohort.id){
+                        cohortDefinition.description = cohort.description;
                         $scope.definitioninputdisabled=function(e){
                             return false;
                          };

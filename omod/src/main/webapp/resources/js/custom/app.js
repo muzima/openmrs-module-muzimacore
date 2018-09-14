@@ -24,10 +24,10 @@ muzimaCoreModule.
             when('/setting/:uuid', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
             when('/settings', {controller: SettingsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/settings.html'}).
             when('/createSetting/', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
-		    when('/cohortdefinitions', {controller: CohortDefinitionsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinitions.html'}).
-            when('/cohortdefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
-            when('/cohortdefinition/:uuid', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
-            when('/createcohortdefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
+		    when('/cohortDefinitions', {controller: CohortDefinitionsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinitions.html'}).
+            when('/cohortDefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
+            when('/cohortDefinition/:uuid', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
+            when('/createCohortDefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
             otherwise({redirectTo: '/sources'});
     }]
 );
@@ -289,10 +289,10 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
     
 
     var getCohortDefinitions = function () {
-        return $http.get("cohortdefinitions.json");
+        return $http.get("cohortDefinitions.json");
     };
     var getCohortDefinition = function (uuid) {
-            return $http.get("cohortdefinition.json?uuid=" + uuid);
+            return $http.get("cohortDefinition.json?uuid=" + uuid);
         };
     var getAllCohorts = function () {
             return $http.get("cohorts.json");
@@ -300,9 +300,9 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
     var getAllCohortsWithoutDefinition=function(){
             return $http.get("cohortswithoutdefinition.json");
          };
-    var saveCohortDefinition = function (uuid, cohortid, definition, isscheduled, enableMemberAddition, enableMemberRemoval) {
-            return $http.post("cohortdefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition,
-                "isscheduled": isscheduled, "enableMemberAddition":enableMemberAddition, "enableMemberRemoval": enableMemberRemoval});
+    var saveCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled) {
+            return $http.post("cohortDefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition,
+                "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled});
         };
 
     return {

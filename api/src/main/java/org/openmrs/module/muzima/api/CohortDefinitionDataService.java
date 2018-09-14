@@ -14,7 +14,7 @@
 package org.openmrs.module.muzima.api;
 
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 
 import java.util.List;
 

@@ -13,7 +13,7 @@
  */
 package org.openmrs.module.muzima.api.db;
 
-import org.openmrs.module.muzima.api.model.CohortUpdateHistory;
+import org.openmrs.module.muzima.model.CohortUpdateHistory;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface CohortUpdateHistoryDao {

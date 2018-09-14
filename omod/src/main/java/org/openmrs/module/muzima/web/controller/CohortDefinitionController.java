@@ -15,7 +15,7 @@ package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.CohortDefinitionDataService;
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/module/muzimacore/cohortdefinition.json")
+@RequestMapping(value = "/module/muzimacore/cohortDefinition.json")
 public class CohortDefinitionController {
 
     @RequestMapping(method = RequestMethod.GET)
@@ -45,9 +45,9 @@ public class CohortDefinitionController {
             String uuid = (String) map.get("uuid");
             String definition = (String) map.get("definition");
             Integer cohortId = (Integer) map.get("cohortid");
-            boolean isScheduled = (Boolean) map.get("isscheduled");
-            boolean enableMemberAddition = (Boolean) map.get("enableMemberAddition");
-            boolean enableMemberRemoval = (Boolean) map.get("enableMemberRemoval");
+            boolean isScheduled = (Boolean) map.get("isScheduledForExecution");
+            boolean isMemberAdditionEnabled = (Boolean) map.get("isMemberAdditionEnabled");
+            boolean isMemberRemovalEnabled = (Boolean) map.get("isMemberRemovalEnabled");
 
             CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
 
@@ -60,9 +60,9 @@ public class CohortDefinitionController {
 
             cohortDefinitionData.setCohortId(cohortId);
             cohortDefinitionData.setDefinition(definition);
-            cohortDefinitionData.setScheduled(isScheduled);
-            cohortDefinitionData.setEnableMemberAddition(enableMemberAddition);
-            cohortDefinitionData.setEnableMemberRemoval(enableMemberRemoval);
+            cohortDefinitionData.setIsScheduledForExecution(isScheduled);
+            cohortDefinitionData.setIsMemberAdditionEnabled(isMemberAdditionEnabled);
+            cohortDefinitionData.setIsMemberRemovalEnabled(isMemberRemovalEnabled);
             expandedCohortDataService.saveCohortDefinitionData(cohortDefinitionData);
 
         }
