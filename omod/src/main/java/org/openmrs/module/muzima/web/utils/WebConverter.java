@@ -25,7 +25,7 @@ import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
@@ -289,9 +289,9 @@ public class WebConverter {
             map.put("name",cohort.getName());
             map.put("description",cohort.getDescription());
             map.put("definition",cohortDefinitionData.getDefinition());
-            map.put("isscheduled",cohortDefinitionData.getScheduled());
-            map.put("enableMemberAddition",cohortDefinitionData.getEnableMemberAddition());
-            map.put("enableMemberRemoval",cohortDefinitionData.getEnableMemberRemoval());
+            map.put("isScheduledForExecution",cohortDefinitionData.getIsScheduledForExecution());
+            map.put("isMemberAdditionEnabled",cohortDefinitionData.getIsMemberAdditionEnabled());
+            map.put("isMemberRemovalEnabled",cohortDefinitionData.getIsMemberRemovalEnabled());
             map.put("uuid",cohortDefinitionData.getUuid());
         }
         return map;

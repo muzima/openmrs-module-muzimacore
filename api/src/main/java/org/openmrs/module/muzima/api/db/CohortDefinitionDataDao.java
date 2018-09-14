@@ -13,7 +13,7 @@
  */
 package org.openmrs.module.muzima.api.db;
 
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 
 import org.springframework.transaction.annotation.Transactional;
 

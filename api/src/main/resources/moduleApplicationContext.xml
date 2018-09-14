@@ -297,7 +297,7 @@
 						<ref bean="transactionManager" />
 					</property>
 					<property name="target">
-						<bean class="org.openmrs.module.muzima.api.impl.CohortDefinitionDataServiceImpl">
+						<bean class="org.openmrs.module.muzima.api.service.impl.CohortDefinitionDataServiceImpl">
 							<property name="dao">
 								<bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateCohortDefinitionDataDao">
 									<property name="sessionFactory">
@@ -324,7 +324,7 @@
 				<bean
 						class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="target">
-						<bean class="org.openmrs.module.muzima.api.impl.ExpandedCohortProcessorServiceImpl">
+						<bean class="org.openmrs.module.muzima.api.service.impl.ExpandedCohortProcessorServiceImpl">
 						</bean>
 					</property>
 					<property name="preInterceptors">
@@ -344,7 +344,7 @@
 				<bean
 						class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="target">
-						<bean class="org.openmrs.module.muzima.api.impl.CohortUpdateHistoryServiceImpl">
+						<bean class="org.openmrs.module.muzima.api.service.impl.CohortUpdateHistoryServiceImpl">
 							<property name="dao">
 								<bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateCohortUpdateHistoryDao">
 									<property name="sessionFactory">

@@ -11,23 +11,25 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.muzima.api.db.hibernate;
+package org.openmrs.module.muzima.api.service.impl;
 
-import org.hibernate.SessionFactory;
+import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.muzima.api.CohortUpdateHistoryService;
 import org.openmrs.module.muzima.api.db.CohortUpdateHistoryDao;
 import org.openmrs.module.muzima.model.CohortUpdateHistory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public class HibernateCohortUpdateHistoryDao implements CohortUpdateHistoryDao{
-    @Autowired
-    protected SessionFactory sessionFactory;
+public class CohortUpdateHistoryServiceImpl extends BaseOpenmrsService implements CohortUpdateHistoryService {
+    private CohortUpdateHistoryDao dao;
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public void setDao(CohortUpdateHistoryDao dao) {
+        this.dao = dao;
     }
 
-    public CohortUpdateHistory saveOrUpdate(CohortUpdateHistory cohortUpdateHistory){
-        sessionFactory.getCurrentSession().saveOrUpdate(cohortUpdateHistory);
-        return cohortUpdateHistory;
+    public CohortUpdateHistoryDao getDao() {
+        return dao;
+    }
+
+    public CohortUpdateHistory saveCohortUpdateHistory(CohortUpdateHistory cohortUpdateHistory){
+        return dao.saveOrUpdate(cohortUpdateHistory);
     }
 }

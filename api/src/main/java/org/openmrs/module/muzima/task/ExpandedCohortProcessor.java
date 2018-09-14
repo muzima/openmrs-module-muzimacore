@@ -18,12 +18,11 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.ExpandedCohortProcessorService;
-import org.openmrs.module.muzima.api.impl.ExpandedCohortProcessorServiceImpl;
-import org.openmrs.module.muzima.api.model.CohortDefinitionData;
+import org.openmrs.module.muzima.api.service.impl.ExpandedCohortProcessorServiceImpl;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class ExpandedCohortProcessor {
     private final Log log = LogFactory.getLog(ExpandedCohortProcessor.class);

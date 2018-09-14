@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.muzima.api.model;
+package org.openmrs.module.muzima.model;
 
 import org.openmrs.BaseOpenmrsData;
 import java.io.Serializable;
@@ -22,9 +22,10 @@ public class CohortDefinitionData  extends BaseOpenmrsData implements Serializab
     private Integer id;
     private Integer cohortId;
     private String definition;
-    private boolean scheduled;
-    private boolean enableMemberAddition;
-    private boolean enableMemberRemoval;
+    //Defines whether this cohort definition is scheduled for execution by scheduler task
+    private boolean isScheduledForExecution;
+    private boolean isMemberAdditionEnabled;
+    private boolean isMemberRemovalEnabled;
 
     public Integer getId() {
         return id;
@@ -50,27 +51,27 @@ public class CohortDefinitionData  extends BaseOpenmrsData implements Serializab
         this.definition=definition;
     }
 
-    public void setScheduled(boolean scheduled){
-        this.scheduled=scheduled;
+    public void setIsScheduledForExecution(boolean isScheduled){
+        this.isScheduledForExecution =isScheduled;
     }
 
-    public boolean getScheduled(){
-        return scheduled;
+    public boolean getIsScheduledForExecution(){
+        return isScheduledForExecution;
     }
 
-    public void setEnableMemberAddition(boolean enableMemberAddition) {
-        this.enableMemberAddition = enableMemberAddition;
+    public void setIsMemberAdditionEnabled(boolean isMemberAdditionEnabled) {
+        this.isMemberAdditionEnabled = isMemberAdditionEnabled;
     }
 
-    public boolean getEnableMemberAddition(){
-        return enableMemberAddition;
+    public boolean getIsMemberAdditionEnabled(){
+        return isMemberAdditionEnabled;
     }
 
-    public void setEnableMemberRemoval(boolean enableMemberRemoval) {
-        this.enableMemberRemoval = enableMemberRemoval;
+    public void setIsMemberRemovalEnabled(boolean isMemberRemovalEnabled) {
+        this.isMemberRemovalEnabled = isMemberRemovalEnabled;
     }
 
-    public boolean getEnableMemberRemoval(){
-        return enableMemberRemoval;
+    public boolean getIsMemberRemovalEnabled(){
+        return isMemberRemovalEnabled;
     }
 }

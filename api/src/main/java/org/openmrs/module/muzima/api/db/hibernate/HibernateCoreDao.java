@@ -270,7 +270,7 @@ public class HibernateCoreDao implements CoreDao {
 
     private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate,
                                 final int startIndex, final int size) throws DAOException{
-        String addedMembersSql = "select GROUP_CONCAT(e.members_added,',') from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
+        String addedMembersSql = "select GROUP_CONCAT(e.members_added) from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
         SQLQuery addedMembersQuery = getSessionFactory().getCurrentSession().createSQLQuery(addedMembersSql);
         List addedMembersList = new ArrayList();
         if (syncDate != null) {
@@ -278,10 +278,10 @@ public class HibernateCoreDao implements CoreDao {
             addedMembersQuery.setParameter("cohortUuid", cohortUuid);
             List addedMembersQueryResult = addedMembersQuery.list();
             if(addedMembersQueryResult.size() > 0){
-                String mm = (String)addedMembersQueryResult.get(0);
+                String memberIdResult = (String)addedMembersQueryResult.get(0);
 
-                if(StringUtils.isNotBlank(mm)) {
-                    String[] ids = mm.split(",");
+                if(StringUtils.isNotBlank(memberIdResult)) {
+                    String[] ids = memberIdResult.split(",");
                     for (String id : ids) {
                         if(StringUtils.isNotBlank(id)) {
                             addedMembersList.add(Integer.parseInt(id));
@@ -295,7 +295,7 @@ public class HibernateCoreDao implements CoreDao {
 
     private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate,
                                              final int startIndex, final int size) throws DAOException{
-        String removedMembersSql = "select GROUP_CONCAT(e.members_removed,',') from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
+        String removedMembersSql = "select GROUP_CONCAT(e.members_removed) from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
         SQLQuery removedMembersSqlQuery = getSessionFactory().getCurrentSession().createSQLQuery(removedMembersSql);
         List removedMembersIds = new ArrayList();
         if (syncDate != null) {
@@ -303,9 +303,9 @@ public class HibernateCoreDao implements CoreDao {
             removedMembersSqlQuery.setParameter("cohortUuid", cohortUuid);
             List members = removedMembersSqlQuery.list();
             if(members.size() > 0){
-                String mm = (String)members.get(0);
-                if(StringUtils.isNotBlank(mm)) {
-                    String[] ids = mm.split(",");
+                String memberIdResult = (String)members.get(0);
+                if(StringUtils.isNotBlank(memberIdResult)) {
+                    String[] ids = memberIdResult.split(",");
                     for (String id : ids) {
                         if(StringUtils.isNotBlank(id)) {
                             removedMembersIds.add(Integer.parseInt(id));
@@ -348,10 +348,10 @@ public class HibernateCoreDao implements CoreDao {
         query.setMaxResults(size);
         query.setFirstResult(startIndex);
         List patientIds = query.list();
-        for(int id:removedMembersIds) {
-            int i = addedMembersIds.indexOf(id);
-            if(i >= 0) {
-                addedMembersIds.remove(i);
+        for(int memberId:removedMembersIds) {
+            int index = addedMembersIds.indexOf(memberId);
+            if(index >= 0) {
+                addedMembersIds.remove(index);
             }
         }
         patientIds.addAll(addedMembersIds);
@@ -399,10 +399,10 @@ public class HibernateCoreDao implements CoreDao {
         List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
 
         if(!removedMembersIds.isEmpty()){
-            for(int id:addedMembersIds) {
-                int i = removedMembersIds.indexOf(id);
-                if(i >= 0) {
-                    removedMembersIds.remove(i);
+            for(int memberId:addedMembersIds) {
+                int index = removedMembersIds.indexOf(memberId);
+                if(index >= 0) {
+                    removedMembersIds.remove(index);
                 }
             }
 
@@ -424,10 +424,10 @@ public class HibernateCoreDao implements CoreDao {
         List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, startIndex, size);
         List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
 
-        for(int id:removedMembersIds) {
-            int i = addedMembersIds.indexOf(id);
-            if(i >= 0) {
-                addedMembersIds.remove(i);
+        for(int memberId:removedMembersIds) {
+            int index = addedMembersIds.indexOf(memberId);
+            if(index >= 0) {
+                addedMembersIds.remove(index);
             }
         }
 

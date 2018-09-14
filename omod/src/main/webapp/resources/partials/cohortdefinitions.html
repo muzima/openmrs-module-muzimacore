@@ -8,14 +8,14 @@
             <li><a href="#/forms">Muzima Forms</a></li>
             <li><a href="#/errors">Error Data</a></li>
             <li><a href="#/settings">Settings</a></li>
-            <li class="navigation-active"><a href="#/cohortdefinitions">Cohort Definitions</a></li>
+            <li class="navigation-active"><a href="#/cohortDefinitions">Cohort Definitions</a></li>
         </ul>
     </div>
     <div class="col-lg-8">
         <div class="clearfix">
             <div class="row">
                 <div class="col-lg-4 pull-left">
-                    <a href="#/createcohortdefinition">Create cohort definition</a>
+                    <a href="#/createCohortDefinition">Create cohort definition</a>
                     <p></p>
                 </div>
             </div>
@@ -33,17 +33,17 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-hide="cohortdefinitions.length">
+                    <tr ng-hide="cohortDefinitions.length">
                         <td colspan="5">No cohort definitions created.</td>
                     </tr>
-                    <tr ng-repeat="cohortdefinition in cohortdefinitions | orderBy:'submitted':true">
-                        <td><a href="#/cohortdefinition/{{cohortdefinition.uuid}}"><i class=icon-edit></i></a></td>
-                        <td>{{cohortdefinition.name}}</td>
-                        <td>{{cohortdefinition.description}}</td>
-                        <td><pre>{{cohortdefinition.definition}}</pre></td>
-                        <td align="center"><input disabled="" type="checkbox"  checked="{{cohortdefinition.isscheduled}}"></td>
-                        <td align="center"><input disabled="" type="checkbox"  checked="{{cohortdefinition.enableMemberAddition}}"></td>
-                        <td align="center"><input disabled="" type="checkbox"  checked="{{cohortdefinition.enableMemberRemoval}}"></td>
+                    <tr ng-repeat="cohortDefinition in cohortDefinitions | orderBy:'submitted':true">
+                        <td><a href="#/cohortDefinition/{{cohortDefinition.uuid}}"><i class=icon-edit></i></a></td>
+                        <td>{{cohortDefinition.name}}</td>
+                        <td>{{cohortDefinition.description}}</td>
+                        <td><pre>{{cohortDefinition.definition}}</pre></td>
+                        <td align="center">{{cohortDefinition.isScheduledForExecution}}</td>
+                        <td align="center">{{cohortDefinition.isMemberAdditionEnabled}}</td>
+                        <td align="center">{{cohortDefinition.isMemberRemovalEnabled}}</td>
                     </tr>
                     </tbody>
                 </table>
