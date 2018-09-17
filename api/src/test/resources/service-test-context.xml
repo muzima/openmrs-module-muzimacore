@@ -30,9 +30,11 @@
     <bean class="org.openmrs.api.db.hibernate.DbSessionFactory" id="dbSessionFactory">
         <constructor-arg name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
     <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager" id="transactionManager">
         <constructor-arg name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
     <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
         <property name="configLocations">
             <list>
@@ -62,9 +64,7 @@
     </bean>
 
     <bean id="hibernateRegistrationDataDao" class="org.openmrs.module.muzima.api.db.hibernate.HibernateRegistrationDataDao">
-        <property name="sessionFactory">
-            <ref bean="dbSessionFactory" />
-        </property>
+        <property name="sessionFactory" ref="dbSessionFactory"/>
     </bean>
 
     <tx:annotation-driven/>

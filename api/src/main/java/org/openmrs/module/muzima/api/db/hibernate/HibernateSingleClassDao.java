@@ -71,7 +71,13 @@ public class HibernateSingleClassDao<T> implements SingleClassDao<T> {
     @Override
     @Transactional
     public T saveOrUpdate(T object) {
+
+        if (sessionFactory == null){
+            System.out.println("sessionFactory is Null");
+        }else {
             sessionFactory.getCurrentSession().saveOrUpdate(object);
+        }
+
         return object;
     }
 

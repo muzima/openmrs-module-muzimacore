@@ -84,9 +84,12 @@ public class HibernateRegistrationDataDao extends HibernateSingleClassDao<Regist
     public List<RegistrationData> getRegistrationData(final String temporaryUuid, final String assignedUuid) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         if (!StringUtils.isBlank(temporaryUuid)) {
+            System.out.println("temporatyUuid "+temporaryUuid);
             criteria.add(Restrictions.eq("temporaryUuid", temporaryUuid));
         }
         if (!StringUtils.isBlank(assignedUuid)) {
+            System.out.println("assignedUuid "+assignedUuid);
+
             criteria.add(Restrictions.eq("assignedUuid", assignedUuid));
         }
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));

@@ -46,4 +46,10 @@ public class ArchiveData extends AuditableData {
     public void setDateArchived(final Date dateArchived) {
         this.dateArchived = dateArchived;
     }
+
+    @Override
+    public String toString() {
+        return "ArchiveData.message = "+message +
+                "ArchiveData.dateArchived = " + dateArchived;
+    }
 }

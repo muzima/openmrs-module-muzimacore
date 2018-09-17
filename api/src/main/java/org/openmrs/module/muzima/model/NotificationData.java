@@ -189,4 +189,9 @@ public class NotificationData extends BaseOpenmrsData implements Data {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
+
+    @Override
+    public String toString() {
+        return "";
+    }
 }

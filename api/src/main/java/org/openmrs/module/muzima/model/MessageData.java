@@ -173,4 +173,16 @@ public class MessageData extends BaseOpenmrsData implements Data{
     public String getPayload() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "MessageData.source = " + source +
+                " MessageData.sender = " +sender +
+                " MessageData.receiver = " + receiver +
+                " MessageData.subject = " + subject +
+                " MessageData.body = " +body +
+                " MessageData.senderDate = " + senderDate +
+                " MessageData.senderTime = " + senderTime +
+                " MessageData.voided = " + voided;
+    }
 }

@@ -7,16 +7,16 @@
     <session-factory>
 
       <!-- Database connection settings datasource -->
-      <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+      <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
       <property name="connection.url">jdbc:mysql://localhost:3306/muzima_test_db?autoReconnect=true</property>
-      <property name="connection.username">root</property>
-      <property name="connection.password"></property>
+      <property name="connection.username">samuel</property>
+      <property name="connection.password">owino</property>
 
       <!-- JDBC Connection pool to use -->
       <property name="connection.pool_size">1</property>
 
       <!-- SQL Dialoect -->
-      <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+      <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 
       <!-- Enable automatice session context management -->
       <property name="current_session_context_class">thread</property>
@@ -26,10 +26,11 @@
 
       <!-- Echo all executed SQL to stdout TODO detect problem with test context logging .hibernate logs are a no show.-->
       <property name="show_sql">true</property>
+      <property name="format_sql">true</property>
+      <property name="use_sql_comments">true</property>
 
       <!-- Drop and recreate the database column on startup -->
       <property name="hbm2ddl.auto">create</property>
-
 
         <mapping resource="ArchiveData.hbm.xml"/>
         <mapping resource="ErrorData.hbm.xml"/>

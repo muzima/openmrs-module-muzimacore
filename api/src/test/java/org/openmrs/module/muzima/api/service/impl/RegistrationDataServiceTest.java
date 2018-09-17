@@ -69,7 +69,8 @@ public class RegistrationDataServiceTest extends BaseContextMockTest{
                 new ClassPathXmlApplicationContext("service-test-context.xml");
         this.service = testApplicationContext.getBean(RegistrationDataServiceImpl.class);
         this.dbSessionFactory = testApplicationContext.getBean(DbSessionFactory.class);
-        this.hibernateRegistrationDataDao = new HibernateRegistrationDataDao();
+        this.registrationDataDao = testApplicationContext.getBean(RegistrationDataDao.class);
+        this.hibernateRegistrationDataDao = (HibernateRegistrationDataDao) this.registrationDataDao;
     }
 
     @Test

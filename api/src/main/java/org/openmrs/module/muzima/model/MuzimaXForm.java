@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.openmrs.Form;
 
 public class MuzimaXForm {
+
     private Integer id;
     private Form form;
 
@@ -59,4 +60,9 @@ public class MuzimaXForm {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "MuzimaXForm.id = " +id+
+                "MuzimaXForm.form = " + form.toString();
+    }
 }

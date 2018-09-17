@@ -3,6 +3,7 @@ package org.openmrs.module.muzima.api.db.hibernate;
 import org.hibernate.FlushMode;
 import org.hibernate.Transaction;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.db.hibernate.DbSession;
@@ -17,8 +18,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.annotation.Timed;
 
+import javax.naming.Context;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,21 +47,21 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
         System.out.print("Loading app ctx");
         ApplicationContext testApplicationContext =
                 new ClassPathXmlApplicationContext("dao-test-context.xml");
-        this.hibernateSessionFactoryBean = testApplicationContext.getBean(HibernateSessionFactoryBean.class);
-        this.dbSessionFactory = testApplicationContext.getBean(DbSessionFactory.class);
+        hibernateSessionFactoryBean = testApplicationContext.getBean(HibernateSessionFactoryBean.class);
+        dbSessionFactory = testApplicationContext.getBean(DbSessionFactory.class);
         hibernateRegistrationDataDao = new HibernateRegistrationDataDao();
         hibernateRegistrationDataDao.setSessionFactory(dbSessionFactory);
-        this.registrationData = new RegistrationData();
+        registrationData = new RegistrationData();
     }
 
     @Test
     @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
     public void creationTest() throws Exception {
-        assertThat(this.hibernateSessionFactoryBean).isNotNull();
-        assertThat(this.dbSessionFactory).isNotNull();
-        assertThat(this.hibernateRegistrationDataDao).isNotNull();
-        assertThat(this.hibernateRegistrationDataDao.getSessionFactory()).isNotNull();
-        assertThat(this.registrationData).isNotNull();
+        assertThat(hibernateSessionFactoryBean).isNotNull();
+        assertThat(dbSessionFactory).isNotNull();
+        assertThat(hibernateRegistrationDataDao).isNotNull();
+        assertThat(hibernateRegistrationDataDao.getSessionFactory()).isNotNull();
+        assertThat(registrationData).isNotNull();
     }
 
     @Test
@@ -96,7 +99,7 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
         dbSessionFactory.getCurrentSession().close();
     }
 
-    @Rollback
+    @Rollback(false)
     @Test
     public void getRegistrationDataByUuidTest() throws Exception {
 
@@ -115,10 +118,10 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
 
         transaction = dbSessionFactory.getCurrentSession().beginTransaction();
 
-        this.hibernateRegistrationDataDao.saveRegistrationData(this.registrationData);
+        hibernateRegistrationDataDao.saveRegistrationData(registrationData);
 
-        RegistrationData flushedRegistrationData = this.hibernateRegistrationDataDao
-                .getRegistrationDataByUuid("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
+        RegistrationData flushedRegistrationData = hibernateRegistrationDataDao
+                .getRegistrationDataById(1);
 
         System.out.println("flushedRegistrationDate ["+flushedRegistrationData.toString());
 
@@ -133,7 +136,6 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
         dbSessionFactory.getCurrentSession().close();
     }
 
-    @Rollback
     @Test
     public void getRegistrationDataTest() throws Exception {
         Transaction transaction = null;
@@ -141,20 +143,21 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
         /**
          * Class throws an org.hibernate.StaleStateException : yet to be fixed.
          */
+        RegistrationData registrationData = new RegistrationData();
 
-        registrationData.setUuid("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
+        registrationData.setUuid("uuid");
         registrationData.setId(1);
         registrationData.setDateCreated(new Date());
-        registrationData.setTemporaryUuid("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
-        registrationData.setAssignedUuid("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
+        registrationData.setTemporaryUuid("uuid");
+        registrationData.setAssignedUuid("uuid");
         registrationData.setVoided(Boolean.FALSE);
 
         transaction = dbSessionFactory.getCurrentSession().beginTransaction();
-        dbSessionFactory.getCurrentSession().setFlushMode(FlushMode.COMMIT);
-        this.hibernateRegistrationDataDao.saveRegistrationData(registrationData);
+       // dbSessionFactory.getCurrentSession().setFlushMode(FlushMode.COMMIT);
+        hibernateRegistrationDataDao.saveRegistrationData(registrationData);
 
         List<RegistrationData> flushedRegistrationData = hibernateRegistrationDataDao
-                .getRegistrationData("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b","074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
+                .getRegistrationData("uuid","uuid");
 
         System.out.println("flushedRegistrationDate ["+flushedRegistrationData.toString());
 
@@ -232,7 +235,6 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
         dbSessionFactory.getCurrentSession().close();
     }
 
-    @Rollback
     @Test
     public void countRegistrationDataTest() throws Exception {
         Transaction transaction = null;
@@ -257,16 +259,16 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
         Long rowCount = (Long)hibernateRegistrationDataDao.countRegistrationData();
         assertThat(rowCount).isEqualTo(1);
         assertThat(rowCount).isGreaterThan(0);
-        assertThat(this.hibernateRegistrationDataDao.countRegistrationData().intValue()).isLessThan(2);
+        assertThat(hibernateRegistrationDataDao.countRegistrationData().intValue()).isLessThan(2);
 
         session.flush();
         dbSessionFactory.getCurrentSession().close();
     }
 
-    @After
+    @DirtiesContext
     public void tearDown() throws Exception {
         if(dbSessionFactory.getCurrentSession().isOpen()){
-            System.out.println("Clsssing hibernate session.");
+            System.out.println("Closing hibernate session.");
             dbSessionFactory.getCurrentSession().close();
         }
     }

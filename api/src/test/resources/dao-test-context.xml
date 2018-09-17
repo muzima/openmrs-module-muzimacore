@@ -27,12 +27,19 @@
       database specific dependencies or configurations such as DbSessionFactory and
       org.openmrs.api.db/hibernate.HibernateSessionFactory are abstracted.[ignored].
     -->
-    <bean class="org.openmrs.api.db.hibernate.DbSessionFactory" id="dbSessionFactory">
-        <constructor-arg name="sessionFactory" ref="sessionFactory"/>
+    <!--<bean class="org.openmrs.api.db.hibernate.DbSessionFactory" id="dbSessionFactory">-->
+        <!--<constructor-arg name="sessionFactory" ref="sessionFactory"/>-->
+    <!--</bean>-->
+    <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager" id="transactionManager">
+        <constructor-arg>
+            <ref bean = "sessionFactory"/>
+        </constructor-arg>
     </bean>
-    <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager" id="txManager">
-        <constructor-arg name="sessionFactory" ref="sessionFactory"/>
+
+    <bean id="dbSessionFactory" class="org.openmrs.api.db.hibernate.DbSessionFactory">
+        <constructor-arg name="sessionFactory" ref="sessionFactory" />
     </bean>
+
     <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
         <property name="configLocations">
             <list>
@@ -44,6 +51,20 @@
             <ref bean="mappingJarResources"/>
         </property>
     </bean>
+
+    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">-->
+        <!--<property name="configLocation">-->
+            <!--<value>classpath:muzima-hibernate.cfg.xml</value>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="DbSessionFactory" class="org.openmrs.api.db.hibernate.DbSessionFactory">-->
+        <!--<constructor-arg>-->
+            <!--<ref bean="sessionFactory"/>-->
+        <!--</constructor-arg>-->
+    <!--</bean>-->
+
+
 
     <util:list id="moduleTestingMappingJarLocations">
 

@@ -56,4 +56,11 @@ public class ErrorData extends AuditableData {
     public void setErrorMessages(Set<ErrorMessage> errorMessages) {
         this.errorMessages = errorMessages;
     }
+
+    @Override
+    public String toString() {
+        return "ErrorData.message = " + message +
+                " ErrorData.dateProcessed = " + dateProcessed +
+                " ErrorData.errorMessages = " +errorMessages;
+    }
 }
