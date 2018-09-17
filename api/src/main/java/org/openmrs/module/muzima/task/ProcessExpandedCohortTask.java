@@ -11,20 +11,19 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.muzima.model;
+package org.openmrs.module.muzima.task;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-public class CompositeEnketoResult extends EnketoResult {
-
-    private final String modelJson;
-
-    public CompositeEnketoResult(String transform, String modelJson) throws ParserConfigurationException {
-        super(transform);
-        this.modelJson = modelJson;
+import org.openmrs.scheduler.tasks.AbstractTask;
+import org.openmrs.api.context.Context;
+public class ProcessExpandedCohortTask extends AbstractTask{
+    private ExpandedCohortProcessor processor;
+    public ProcessExpandedCohortTask(){
+        this.processor=new ExpandedCohortProcessor();
     }
-
-    public String getModelAsJson() {
-        return this.modelJson;
+    @Override
+    public void execute() {
+        Context.openSession();
+        processor.processExpandedCohorts();
+        Context.closeSession();
     }
 }

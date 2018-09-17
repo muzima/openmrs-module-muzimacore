@@ -1,0 +1,59 @@
+<div id="wide-sidebar" class="row">
+    <div class="col-lg-2">
+        <ul class="nav nav-tabs nav-stacked">
+            <li><a href="#/sources">Data Source</a></li>
+            <li><a href="#/configs">Setup Configurations</a></li>
+            <li><a href="#/queues">Queue Data</a></li>
+            <li><a href="#/registrations">Registrations</a></li>
+            <li><a href="#/forms">Muzima Forms</a></li>
+            <li><a href="#/errors">Error Data</a></li>
+            <li><a href="#/settings">Settings</a></li>
+            <li class="navigation-active"><a href="#/cohortDefinitions">Cohort Definitions</a></li>
+        </ul>
+    </div>
+    <div class="col-lg-8">
+        <div class="clearfix">
+            <div class="row">
+                <div class="col-lg-4 pull-left">
+                    <a href="#/createCohortDefinition">Create cohort definition</a>
+                    <p></p>
+                </div>
+            </div>
+            <div class="row">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>                  
+                        <th>Open</th>
+                        <th>Cohort Name</th>
+                        <th>Description</th>
+                        <th>Criteria</th>
+                        <th title="Whether this cohort definition shall be executed when scheduler task runs next.">Scheduled</th>
+                        <th title="Whether new members who meet criteria can be added to the cohort.">Add members</th>
+                        <th title="Whether members who no longer meet criteria should be removed from the cohort.">Remove members</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-hide="cohortDefinitions.length">
+                        <td colspan="5">No cohort definitions created.</td>
+                    </tr>
+                    <tr ng-repeat="cohortDefinition in cohortDefinitions | orderBy:'submitted':true">
+                        <td><a href="#/cohortDefinition/{{cohortDefinition.uuid}}"><i class=icon-edit></i></a></td>
+                        <td>{{cohortDefinition.name}}</td>
+                        <td>{{cohortDefinition.description}}</td>
+                        <td><pre>{{cohortDefinition.definition}}</pre></td>
+                        <td align="center">{{cohortDefinition.isScheduledForExecution}}</td>
+                        <td align="center">{{cohortDefinition.isMemberAdditionEnabled}}</td>
+                        <td align="center">{{cohortDefinition.isMemberRemovalEnabled}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="noOfPages > 1" class="row">
+                <div class="span12 pull-left">
+                    <pagination num-pages="noOfPages" current-page="currentPage" max-size="maxSize" boundary-links="true"></pagination>
+                </div>
+            </div>
+  
+        </div>
+    </div>
+</div>
