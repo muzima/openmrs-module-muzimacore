@@ -83,6 +83,7 @@ public class HibernateRegistrationDataDao extends HibernateSingleClassDao<Regist
     @SuppressWarnings("unchecked")
     public List<RegistrationData> getRegistrationData(final String temporaryUuid, final String assignedUuid) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
+        System.out.println("mappedClass == "+mappedClass);
         if (!StringUtils.isBlank(temporaryUuid)) {
             System.out.println("temporatyUuid "+temporaryUuid);
             criteria.add(Restrictions.eq("temporaryUuid", temporaryUuid));

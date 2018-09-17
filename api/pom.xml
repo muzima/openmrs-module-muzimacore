@@ -40,6 +40,13 @@
             <artifactId>${project.parent.artifactId}-javarosa-validator</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reportingcompatibility-api</artifactId>
+            <version>1.5.14-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
 
         <!-- Begin OpenMRS core -->
         <dependency>

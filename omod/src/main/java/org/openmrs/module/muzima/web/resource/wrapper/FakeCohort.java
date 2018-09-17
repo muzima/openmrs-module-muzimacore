@@ -27,13 +27,14 @@ public class FakeCohort extends BaseOpenmrsData {
 
     private static final String[] properties = new String[]{
             "uuid", "name", "description", "memberIds",
-            "creator", "dateCreated", "changedBy", "dateChanged", "voidedBy", "dateVoided", "voidReason"
+            "creator", "dateCreated", "changedBy", "dateChanged", "voidedBy", "dateVoided", "voidReason",
     };
 
     private Integer id;
     private String name;
     private String description;
     private Set<Integer> memberIds;
+    private boolean isUpdateAvailable;
 
     private FakeCohort() {
     }
@@ -49,6 +50,7 @@ public class FakeCohort extends BaseOpenmrsData {
             }
         }
         fakeCohort.setVoided(cohort.getVoided());
+
         return fakeCohort;
     }
 
@@ -78,11 +80,23 @@ public class FakeCohort extends BaseOpenmrsData {
         this.description = description;
     }
 
+    public int getSize() {
+        return memberIds.size();
+    }
+
     public Set<Integer> getMemberIds() {
         return memberIds;
     }
 
     public void setMemberIds(Set<Integer> memberIds) {
         this.memberIds = memberIds;
+    }
+
+    public void setIsUpdateAvailable(boolean isUpdateAvailable){
+        this.isUpdateAvailable = isUpdateAvailable;
+    }
+
+    public boolean getIsUpdateAvailable(){
+        return isUpdateAvailable;
     }
 }

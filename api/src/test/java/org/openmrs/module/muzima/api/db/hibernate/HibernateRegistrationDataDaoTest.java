@@ -152,9 +152,11 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
         registrationData.setAssignedUuid("uuid");
         registrationData.setVoided(Boolean.FALSE);
 
-        transaction = dbSessionFactory.getCurrentSession().beginTransaction();
+        transaction = this.dbSessionFactory.getCurrentSession().beginTransaction();
        // dbSessionFactory.getCurrentSession().setFlushMode(FlushMode.COMMIT);
-        hibernateRegistrationDataDao.saveRegistrationData(registrationData);
+        this.hibernateRegistrationDataDao.saveRegistrationData(registrationData);
+
+        transaction.commit();
 
         List<RegistrationData> flushedRegistrationData = hibernateRegistrationDataDao
                 .getRegistrationData("uuid","uuid");

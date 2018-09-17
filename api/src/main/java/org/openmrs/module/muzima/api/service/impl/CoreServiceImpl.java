@@ -83,4 +83,19 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
     public Number countPatients(final String cohortUuid, final Date syncDate) throws APIException {
         return getCoreDao().countPatients(cohortUuid, syncDate);
     }
+
+    @Override
+    public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate,
+                                               final int startIndex, final int size) throws APIException {
+        return getCoreDao().getPatientsRemovedFromCohort(cohortUuid, syncDate, startIndex, size);
+    }
+
+    public  Number countPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate) throws APIException{
+        return getCoreDao().countPatients(cohortUuid, syncDate);
+    }
+
+    public  boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate,
+                                              final int startIndex, final int size) throws APIException{
+        return getCoreDao().hasCohortChangedSinceDate(cohortUuid, syncDate, startIndex, size);
+    }
 }

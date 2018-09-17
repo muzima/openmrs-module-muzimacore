@@ -18,6 +18,8 @@ import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.Role;
 
+import java.util.Date;
+
 /**
  * TODO: Write brief description about the class here.
  */
@@ -40,6 +42,8 @@ public class NotificationData extends BaseOpenmrsData implements Data {
     private Role role;
 
     private Patient patient;
+
+    private Date dateCreated;
 
     /**
      * @return id - The unique Identifier for the object
@@ -191,7 +195,12 @@ public class NotificationData extends BaseOpenmrsData implements Data {
     }
 
     @Override
-    public String toString() {
-        return "";
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    @Override
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }

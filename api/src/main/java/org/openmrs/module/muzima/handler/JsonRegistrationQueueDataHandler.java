@@ -77,7 +77,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             /*Custom exception thrown by the validate function should not be added again into @queueProcessorException.
              It should add the runtime dao Exception while saving the data into @queueProcessorException collection */
             if (!e.getClass().equals(QueueProcessorException.class)) {
-                queueProcessorException.addException(e);
+                queueProcessorException.addException(new Exception("Exception while process payload ",e));
             }
         } finally {
             if (queueProcessorException.anyExceptions()) {
@@ -97,7 +97,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             validateUnsavedPatient();
             return true;
         } catch (Exception e) {
-            queueProcessorException.addException(e);
+            queueProcessorException.addException(new Exception("Exception while validating payload ",e));
             return false;
         } finally {
             if (queueProcessorException.anyExceptions()) {
@@ -135,7 +135,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     }
 
     private void setPatientIdentifiersFromPayload() {
-        Set<PatientIdentifier> patientIdentifiers = new HashSet<PatientIdentifier>();
+        Set<PatientIdentifier> patientIdentifiers = new TreeSet<PatientIdentifier>();
         PatientIdentifier preferredIdentifier = getPreferredPatientIdentifierFromPayload();
         if (preferredIdentifier != null) {
             patientIdentifiers.add(preferredIdentifier);
