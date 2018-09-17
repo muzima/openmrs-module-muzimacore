@@ -11,20 +11,11 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.muzima.model;
+package org.openmrs.module.muzima.api;
 
-import javax.xml.parsers.ParserConfigurationException;
+import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.muzima.model.CohortUpdateHistory;
 
-public class CompositeEnketoResult extends EnketoResult {
-
-    private final String modelJson;
-
-    public CompositeEnketoResult(String transform, String modelJson) throws ParserConfigurationException {
-        super(transform);
-        this.modelJson = modelJson;
-    }
-
-    public String getModelAsJson() {
-        return this.modelJson;
-    }
+public interface CohortUpdateHistoryService extends OpenmrsService {
+    CohortUpdateHistory saveCohortUpdateHistory(CohortUpdateHistory cohortUpdateHistory);
 }

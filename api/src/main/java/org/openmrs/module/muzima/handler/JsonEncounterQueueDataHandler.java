@@ -58,7 +58,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * TODO brief class desceription.
+ * TODO brief class description.
  */
 @Component
 @Handler(supports = QueueData.class, order = 5)

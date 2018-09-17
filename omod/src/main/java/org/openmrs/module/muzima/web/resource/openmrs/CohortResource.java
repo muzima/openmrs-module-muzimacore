@@ -51,15 +51,18 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
         HttpServletRequest request = context.getRequest();
         String nameParameter = request.getParameter("q");
         String syncDateParameter = request.getParameter("syncDate");
+        CoreService coreService = Context.getService(CoreService.class);
+        Date syncDate = ResourceUtils.parseDate(syncDateParameter);
         if (nameParameter != null) {
-            Date syncDate = ResourceUtils.parseDate(syncDateParameter);
-            CoreService coreService = Context.getService(CoreService.class);
             final int cohortCount = coreService.countCohorts(nameParameter, syncDate).intValue();
             final List<Cohort> cohorts = coreService.getCohorts(nameParameter, syncDate, context.getStartIndex(), context.getLimit());
 
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
-                fakeCohorts.add(FakeCohort.copyCohort(cohort));
+                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate,context.getStartIndex(),context.getLimit());
+                FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
+                fakeCohort.setIsUpdateAvailable(hasCohortChanged);
+                fakeCohorts.add(fakeCohort);
             }
 
             return new NeedsPaging<FakeCohort>(fakeCohorts, context) {
@@ -73,7 +76,10 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
 
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
-                fakeCohorts.add(FakeCohort.copyCohort(cohort));
+                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate,context.getStartIndex(),context.getLimit());
+                FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
+                fakeCohort.setIsUpdateAvailable(hasCohortChanged);
+                fakeCohorts.add(fakeCohort);
             }
 
             return new NeedsPaging<FakeCohort>(fakeCohorts, context);
@@ -158,6 +164,7 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
             description.addProperty("name");
             description.addProperty("description");
             description.addProperty("voided");
+            description.addProperty("isUpdated");
             description.addProperty("memberIds", Representation.REF);
             description.addSelfLink();
             description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
@@ -169,6 +176,7 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
             description.addProperty("description");
             description.addProperty("memberIds");
             description.addProperty("voided");
+            description.addProperty("isUpdated");
             description.addProperty("auditInfo", findMethod("getAuditInfo"));
             description.addSelfLink();
             return description;
