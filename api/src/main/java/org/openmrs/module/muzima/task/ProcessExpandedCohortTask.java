@@ -22,8 +22,7 @@ public class ProcessExpandedCohortTask extends AbstractTask{
     }
     @Override
     public void execute() {
-        System.out.println("generating cohort");
-                Context.openSession();
+        Context.openSession();
         processor.processExpandedCohorts();
         Context.closeSession();
     }
