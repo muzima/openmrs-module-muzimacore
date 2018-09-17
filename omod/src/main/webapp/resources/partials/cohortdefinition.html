@@ -28,18 +28,18 @@
                         </textarea>
                 </div>
                 <div class="row col-lg-8">
-                    <div class="">
-                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isScheduledForExecution"> Enable scheduled task for this cohort definition
+                    <div class="" title="Check this to enable execution of this cohort definition when the scheduler task is run next.">
+                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isScheduledForExecution"> Enable scheduled task for this cohort definition &#9432;
                     </div>
                 </div>
                 <div class="row col-lg-8">
-                    <div class="" title="Automatically add members who meet criteria">
-                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled" > Automatically add new members
+                    <div class="" title="Check this to automatically add members who meet criteria">
+                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled" > Automatically add new members &#9432;
                     </div>
                 </div>
                 <div class="row col-lg-8">
-                    <div class="" title="Automatically remove members who no longer meet criteria">
-                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> Automatically remove members
+                    <div class="" title="Check this to automatically remove members who no longer meet criteria">
+                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> Automatically remove members &#9432;
                     </div>
                 </div>
                 <div class="row col-lg-8">
@@ -65,19 +65,19 @@
                               ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" ng-model="cohortDefinition.definition">
                         </textarea>
                     </div>
-                    <div class="row col-lg-8">
+                    <div class="row col-lg-8" title="Check this to enable execution of this cohort definition when the scheduler task is run next.">
                         <div class="">
-                            <input ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isScheduledForExecution"> Enable scheduled task for this cohort definition
+                            <input ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isScheduledForExecution"> Enable scheduled task for this cohort definition &#9432;
                         </div>
                     </div>
                     <div class="row col-lg-8">
-                        <div class="" title="Automatically add members who meet criteria">
-                            <input ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled"> Enable Addition of members
+                        <div class="" title="Check this to automatically add members who meet criteria">
+                            <input ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled"> Enable Addition of members &#9432;
                         </div>
                     </div>
                     <div class="row col-lg-8">
-                        <div class="" title="Automatically remove members who no longer meet criteria">
-                            <input  ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> Enable Removal of members
+                        <div class="" title="Check this to automatically remove members who no longer meet criteria">
+                            <input  ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> Enable Removal of members &#9432;
                         </div>
                     </div>
                     <div class="row col-lg-8">
