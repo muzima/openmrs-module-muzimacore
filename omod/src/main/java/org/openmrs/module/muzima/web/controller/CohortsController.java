@@ -15,7 +15,7 @@ package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.Cohort;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.CohortDefinitionDataService;
+import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
@@ -35,7 +35,9 @@ public class CohortsController {
     public Map<String, Object> getAllCohorts(){
         Map<String, Object> response = new HashMap<String, Object>();
         List<Object> objects = new ArrayList<Object>();
+        System.out.println("Fetching Cohorts]]]]]]]]]]] ");
         for(Cohort cohort : Context.getCohortService().getAllCohorts()) {
+            System.out.println("Cohort " +cohort.getName());
             objects.add(WebConverter.convertMuzimaCohort(cohort));
         }
         response.put("objects", objects);
@@ -53,7 +55,9 @@ public class CohortsController {
         for(CohortDefinitionData cohortDefinitionData : expandedCohortDataService.getAllCohortDefinitionData()) {
             cohortsWithDefinition.add(Context.getCohortService().getCohort(cohortDefinitionData.getCohortId()));
         }
+        System.out.println("Fetching Cohorts>>>>>>>>>> ");
         for(Cohort cohort : Context.getCohortService().getAllCohorts()) {
+            System.out.println("Cohort " +cohort.getName());
             if(!cohortsWithDefinition.contains(cohort)) {
                 objects.add(WebConverter.convertMuzimaCohort(cohort));
             }

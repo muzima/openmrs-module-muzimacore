@@ -36,8 +36,8 @@
     <!-- Maps hibernate file's, if present -->
     <mappingFiles>
         ArchiveData.hbm.xml
-	CohortDefinitionData.hbm.xml
-	CohortUpdateHistory.hbm.xml
+	    CohortDefinitionData.hbm.xml
+	    CohortUpdateHistory.hbm.xml
         DataSource.hbm.xml
         ErrorData.hbm.xml
         MuzimaConfig.hbm.xml

@@ -13,10 +13,10 @@
  */
 package org.openmrs.module.muzima.api.db.hibernate;
 
+import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.CohortDefinitionDataDao;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 
-import org.hibernate.SessionFactory;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -27,14 +27,14 @@ import java.util.List;
 
 public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao{
     @Autowired
-    protected SessionFactory sessionFactory;
+    protected DbSessionFactory sessionFactory;
     protected Class mappedClass =CohortDefinitionData.class;
 
     public HibernateCohortDefinitionDataDao(){
         super();
     }
 
-    public void setSessionFactory(SessionFactory sessionFactory) {
+    public void setSessionFactory(DbSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
