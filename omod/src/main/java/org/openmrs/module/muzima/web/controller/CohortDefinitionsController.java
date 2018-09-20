@@ -15,7 +15,7 @@ package org.openmrs.module.muzima.web.controller;
 
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.CohortDefinitionDataService;
+import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
@@ -34,6 +34,7 @@ public class CohortDefinitionsController{
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getAllExpandedCohortDefinitions(){
+        System.out.println("getAllExpandedCohortDefinitions ");
         Map<String, Object> response = new HashMap<String, Object>();
         CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
         List<Object> objects = new ArrayList<Object>();

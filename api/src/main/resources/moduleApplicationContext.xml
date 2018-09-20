@@ -290,7 +290,7 @@
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
-				<value>org.openmrs.module.muzima.api.CohortDefinitionDataService</value>
+				<value>org.openmrs.module.muzima.api.service.CohortDefinitionDataService</value>
 				<bean
 					class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager">
@@ -301,7 +301,7 @@
 							<property name="dao">
 								<bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateCohortDefinitionDataDao">
 									<property name="sessionFactory">
-										<ref bean="sessionFactory" />
+										<ref bean="dbSessionFactory" />
 									</property>
 								</bean>
 							</property>
@@ -320,27 +320,7 @@
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
-				<value>org.openmrs.module.muzima.api.ExpandedCohortProcessorService</value>
-				<bean
-						class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-					<property name="target">
-						<bean class="org.openmrs.module.muzima.api.service.impl.ExpandedCohortProcessorServiceImpl">
-						</bean>
-					</property>
-					<property name="preInterceptors">
-						<ref bean="serviceInterceptors" />
-					</property>
-					<property name="transactionAttributeSource">
-						<ref bean="transactionAttributeSource" />
-					</property>
-				</bean>
-			</list>
-		</property>
-	</bean>
-	<bean parent="serviceContext">
-		<property name="moduleService">
-			<list>
-				<value>org.openmrs.module.muzima.api.CohortUpdateHistoryService</value>
+				<value>org.openmrs.module.muzima.api.service.CohortUpdateHistoryService</value>
 				<bean
 						class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="target">
@@ -348,7 +328,7 @@
 							<property name="dao">
 								<bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateCohortUpdateHistoryDao">
 									<property name="sessionFactory">
-										<ref bean="sessionFactory" />
+										<ref bean="dbSessionFactory" />
 									</property>
 								</bean>
 							</property>
@@ -364,4 +344,5 @@
 			</list>
 		</property>
 	</bean>
+
 </beans>

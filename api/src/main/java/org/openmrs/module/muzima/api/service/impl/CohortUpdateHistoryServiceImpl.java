@@ -14,7 +14,7 @@
 package org.openmrs.module.muzima.api.service.impl;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.muzima.api.CohortUpdateHistoryService;
+import org.openmrs.module.muzima.api.service.CohortUpdateHistoryService;
 import org.openmrs.module.muzima.api.db.CohortUpdateHistoryDao;
 import org.openmrs.module.muzima.model.CohortUpdateHistory;
 
