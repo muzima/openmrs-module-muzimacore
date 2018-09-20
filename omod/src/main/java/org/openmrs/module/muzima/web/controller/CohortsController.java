@@ -35,9 +35,7 @@ public class CohortsController {
     public Map<String, Object> getAllCohorts(){
         Map<String, Object> response = new HashMap<String, Object>();
         List<Object> objects = new ArrayList<Object>();
-        System.out.println("Fetching Cohorts]]]]]]]]]]] ");
         for(Cohort cohort : Context.getCohortService().getAllCohorts()) {
-            System.out.println("Cohort " +cohort.getName());
             objects.add(WebConverter.convertMuzimaCohort(cohort));
         }
         response.put("objects", objects);
@@ -55,9 +53,7 @@ public class CohortsController {
         for(CohortDefinitionData cohortDefinitionData : expandedCohortDataService.getAllCohortDefinitionData()) {
             cohortsWithDefinition.add(Context.getCohortService().getCohort(cohortDefinitionData.getCohortId()));
         }
-        System.out.println("Fetching Cohorts>>>>>>>>>> ");
         for(Cohort cohort : Context.getCohortService().getAllCohorts()) {
-            System.out.println("Cohort " +cohort.getName());
             if(!cohortsWithDefinition.contains(cohort)) {
                 objects.add(WebConverter.convertMuzimaCohort(cohort));
             }
