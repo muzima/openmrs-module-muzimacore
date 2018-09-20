@@ -22,7 +22,6 @@ import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.Cohort;
 import org.openmrs.module.muzima.model.CohortUpdateHistory;
 import org.openmrs.module.reportingcompatibility.service.ReportingCompatibilityService;
-import org.openmrs.util.ReportingcompatibilityUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -36,7 +35,7 @@ public class ExpandedCohortProcessorServiceImplCompatibility1_9 implements Expan
         Cohort savedCohort = Context.getCohortService().getCohort(cohortDefinitionData.getCohortId());
 
         ReportingCompatibilityService reportingCompatibilityService = Context.getService(ReportingCompatibilityService.class);
-        Cohort newCohort = ReportingcompatibilityUtil.convert(reportingCompatibilityService.getPatientsBySqlQuery(cohortDefinitionData.getDefinition()));
+        Cohort newCohort = reportingCompatibilityService.getPatientsBySqlQuery(cohortDefinitionData.getDefinition());
 
         Set<Integer> currentMembers = new HashSet<Integer>(savedCohort.getMemberIds());
         Set<Integer> newMembers = newCohort.getMemberIds();
