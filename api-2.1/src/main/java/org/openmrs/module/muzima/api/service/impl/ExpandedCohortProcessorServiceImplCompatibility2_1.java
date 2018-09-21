@@ -79,13 +79,26 @@ public class ExpandedCohortProcessorServiceImplCompatibility2_1 implements Expan
                 }
 
                 if(!isInNewMemberList){
-                    activeMember.setEndDate(new Date());
                     removedMemberIdsString += activeMember.getPatientId() + ",";
+                    savedCohort.getActiveMemberships().remove(activeMember);
                 }
             }
             removedMemberIdsString = StringUtils.strip(removedMemberIdsString, ",");
             if(StringUtils.isNotEmpty(removedMemberIdsString)) {
                 cohortUpdateHistory.setMembersRemoved(removedMemberIdsString);
+            }
+        } else {
+            for(CohortMembership activeMember: savedCohort.getActiveMemberships()){
+                boolean isInNewMemberList = false;
+                for(CohortMembership newMember:newMembers){
+                    if(activeMember.getPatientId() == newMember.getPatientId()){
+                        isInNewMemberList = true;
+                    }
+                }
+
+                if(!isInNewMemberList){
+                    activeMember.setEndDate(new Date());
+                }
             }
         }
 
