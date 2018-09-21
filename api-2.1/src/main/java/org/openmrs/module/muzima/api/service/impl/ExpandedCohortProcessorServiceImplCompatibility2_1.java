@@ -80,31 +80,17 @@ public class ExpandedCohortProcessorServiceImplCompatibility2_1 implements Expan
 
                 if(!isInNewMemberList){
                     removedMemberIdsString += activeMember.getPatientId() + ",";
-                    savedCohort.getActiveMemberships().remove(activeMember);
+                    activeMember.setEndDate(new Date());
                 }
             }
             removedMemberIdsString = StringUtils.strip(removedMemberIdsString, ",");
             if(StringUtils.isNotEmpty(removedMemberIdsString)) {
                 cohortUpdateHistory.setMembersRemoved(removedMemberIdsString);
             }
-        } else {
-            for(CohortMembership activeMember: savedCohort.getActiveMemberships()){
-                boolean isInNewMemberList = false;
-                for(CohortMembership newMember:newMembers){
-                    if(activeMember.getPatientId() == newMember.getPatientId()){
-                        isInNewMemberList = true;
-                    }
-                }
-
-                if(!isInNewMemberList){
-                    activeMember.setEndDate(new Date());
-                }
-            }
         }
 
+        Context.getCohortService().saveCohort(savedCohort);
         if(StringUtils.isNotEmpty(addedMemberIdsString) || StringUtils.isNotEmpty(removedMemberIdsString)) {
-            Context.getCohortService().saveCohort(savedCohort);
-
             cohortUpdateHistory.setDateUpdated(new Date());
             CohortUpdateHistoryService cohortUpdateHistoryService = Context.getService(CohortUpdateHistoryService.class);
             cohortUpdateHistoryService.saveCohortUpdateHistory(cohortUpdateHistory);

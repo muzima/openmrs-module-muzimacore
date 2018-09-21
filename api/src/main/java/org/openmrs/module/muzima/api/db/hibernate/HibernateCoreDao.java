@@ -330,7 +330,8 @@ public class HibernateCoreDao implements CoreDao {
         String hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
-                " and c.voided = false and p.voided = false ";
+                " and c.voided = false and p.voided = false " +
+                " and case when exists(select 1 from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='cohort_member' AND COLUMN_NAME ='end_date') then m.end_date is null end";
         if (syncDate != null) {
             hqlQuery = hqlQuery +
                     " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
@@ -371,7 +372,8 @@ public class HibernateCoreDao implements CoreDao {
         String hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
-                " and c.voided = false and p.voided = false ";
+                " and c.voided = false and p.voided = false "+
+                " and case when exists(select 1 from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='cohort_member' AND COLUMN_NAME ='end_date') then m.end_date is null end";
         if (syncDate != null) {
             hqlQuery = hqlQuery +
                     " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
