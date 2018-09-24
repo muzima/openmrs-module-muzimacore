@@ -14,19 +14,23 @@
 package org.openmrs.module.muzima.api.service.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.CohortUpdateHistoryService;
-import org.openmrs.module.muzima.api.ExpandedCohortProcessorService;
+import org.openmrs.module.muzima.api.service.CohortUpdateHistoryService;
+import org.openmrs.module.muzima.api.service.ExpandedCohortProcessorService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.Cohort;
 import org.openmrs.module.muzima.model.CohortUpdateHistory;
 import org.openmrs.module.reportingcompatibility.service.ReportingCompatibilityService;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ExpandedCohortProcessorServiceImpl implements ExpandedCohortProcessorService {
+@Component("muzima.ExpandedCohortProcessorService")
+@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 2.0.*")
+public class ExpandedCohortProcessorServiceImplCompatibility1_9 implements ExpandedCohortProcessorService {
     public void process(CohortDefinitionData cohortDefinitionData){
         Cohort savedCohort = Context.getCohortService().getCohort(cohortDefinitionData.getCohortId());
 

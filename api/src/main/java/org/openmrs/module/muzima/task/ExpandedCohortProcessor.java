@@ -16,9 +16,8 @@ package org.openmrs.module.muzima.task;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.CohortDefinitionDataService;
-import org.openmrs.module.muzima.api.ExpandedCohortProcessorService;
-import org.openmrs.module.muzima.api.service.impl.ExpandedCohortProcessorServiceImpl;
+import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
+import org.openmrs.module.muzima.api.service.ExpandedCohortProcessorService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 
 import java.util.Iterator;
@@ -26,7 +25,6 @@ import java.util.List;
 
 public class ExpandedCohortProcessor {
     private final Log log = LogFactory.getLog(ExpandedCohortProcessor.class);
-
     private static Boolean isRunning = false;
     public void processExpandedCohorts() {
         if (!isRunning) {
@@ -41,9 +39,10 @@ public class ExpandedCohortProcessor {
         try {
             isRunning = true;
             CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
-            ExpandedCohortProcessorService expandedCohortProcessorService = new ExpandedCohortProcessorServiceImpl();
+
             List<CohortDefinitionData> cohortDefinitionDataList = cohortDefinitionDataService.getAllScheduledCohortDefinitionData();
 
+            ExpandedCohortProcessorService expandedCohortProcessorService = Context.getRegisteredComponent("muzima.ExpandedCohortProcessorService",ExpandedCohortProcessorService.class);
             Iterator<CohortDefinitionData> cohortCriteriaDataIterator = cohortDefinitionDataList.iterator();
             while(cohortCriteriaDataIterator.hasNext()){
                 CohortDefinitionData cohortCriteriaData=cohortCriteriaDataIterator.next();
