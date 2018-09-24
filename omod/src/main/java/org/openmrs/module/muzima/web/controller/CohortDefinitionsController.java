@@ -34,7 +34,6 @@ public class CohortDefinitionsController{
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getAllExpandedCohortDefinitions(){
-        System.out.println("getAllExpandedCohortDefinitions ");
         Map<String, Object> response = new HashMap<String, Object>();
         CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
         List<Object> objects = new ArrayList<Object>();

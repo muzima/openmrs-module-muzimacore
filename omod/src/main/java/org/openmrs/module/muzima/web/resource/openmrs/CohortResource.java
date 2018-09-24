@@ -63,7 +63,6 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
                 fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);
-                System.out.println("fakeCohort.getSize() : "+fakeCohort.getSize());
             }
 
             return new NeedsPaging<FakeCohort>(fakeCohorts, context) {

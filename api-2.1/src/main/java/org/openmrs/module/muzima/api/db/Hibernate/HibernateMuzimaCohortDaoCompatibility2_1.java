@@ -62,7 +62,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                                    final int startIndex, final int size) throws DAOException {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Cohort.class);
         criteria.add(Expression.ilike("name", name, MatchMode.ANYWHERE));
-        criteria.addOrder(Order.asc("name"));
+        criteria.addOrder(Order.asc("name"));git
         if (syncDate != null) {
 
 
@@ -216,8 +216,6 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
         }
-        System.out.println("HQL QUERY");
-        System.out.println(hqlQuery);
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
         query.setParameter("uuid", cohortUuid);
         if (syncDate != null) {
@@ -260,9 +258,6 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
         }
-
-        System.out.println("HQL QUERY");
-        System.out.println(hqlQuery);
 
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
         query.addScalar("total");
