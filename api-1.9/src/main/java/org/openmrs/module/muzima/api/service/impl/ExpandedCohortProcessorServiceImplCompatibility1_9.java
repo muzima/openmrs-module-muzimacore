@@ -29,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component("muzima.ExpandedCohortProcessorService")
-@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 2.0.1")
+@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 2.0.*")
 public class ExpandedCohortProcessorServiceImplCompatibility1_9 implements ExpandedCohortProcessorService {
     public void process(CohortDefinitionData cohortDefinitionData){
         Cohort savedCohort = Context.getCohortService().getCohort(cohortDefinitionData.getCohortId());

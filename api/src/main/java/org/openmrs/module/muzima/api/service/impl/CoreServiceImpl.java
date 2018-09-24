@@ -18,8 +18,10 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.muzima.api.db.CoreDao;
+import org.openmrs.module.muzima.api.db.MuzimaCohortDao;
 import org.openmrs.module.muzima.api.service.CoreService;
 
 import java.util.Date;
@@ -31,9 +33,17 @@ import java.util.List;
 public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 
     private CoreDao coreDao;
+    private MuzimaCohortDao muzimaCohortDao;
 
     public CoreDao getCoreDao() {
         return coreDao;
+    }
+
+    public MuzimaCohortDao getMuzimaCohortDao() {
+        if(muzimaCohortDao == null){
+            muzimaCohortDao = Context.getRegisteredComponent("muzima.MuzimaCohortDao",MuzimaCohortDao.class);
+        }
+        return muzimaCohortDao;
     }
 
     public void setCoreDao(final CoreDao coreDao) {
@@ -66,36 +76,36 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
     @Override
     public List<Cohort> getCohorts(final String name, final Date syncDate,
                                    final int startIndex, final int size) throws APIException {
-        return getCoreDao().getCohorts(name, syncDate, startIndex, size);
+        return getMuzimaCohortDao().getCohorts(name, syncDate, startIndex, size);
     }
 
     @Override
     public Number countCohorts(final String name, final Date syncDate) throws APIException {
-        return getCoreDao().countCohorts(name, syncDate);
+        return getMuzimaCohortDao().countCohorts(name, syncDate);
     }
 
     @Override
     public List<Patient> getPatients(final String cohortUuid, final Date syncDate, final int startIndex, final int size) throws APIException {
-        return getCoreDao().getPatients(cohortUuid, syncDate, startIndex, size);
+        return getMuzimaCohortDao().getPatients(cohortUuid, syncDate, startIndex, size);
     }
 
     @Override
     public Number countPatients(final String cohortUuid, final Date syncDate) throws APIException {
-        return getCoreDao().countPatients(cohortUuid, syncDate);
+        return getMuzimaCohortDao().countPatients(cohortUuid, syncDate);
     }
 
     @Override
     public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate,
                                                final int startIndex, final int size) throws APIException {
-        return getCoreDao().getPatientsRemovedFromCohort(cohortUuid, syncDate, startIndex, size);
+        return getMuzimaCohortDao().getPatientsRemovedFromCohort(cohortUuid, syncDate, startIndex, size);
     }
 
     public  Number countPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate) throws APIException{
-        return getCoreDao().countPatients(cohortUuid, syncDate);
+        return getMuzimaCohortDao().countPatients(cohortUuid, syncDate);
     }
 
     public  boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate,
                                               final int startIndex, final int size) throws APIException{
-        return getCoreDao().hasCohortChangedSinceDate(cohortUuid, syncDate, startIndex, size);
+        return getMuzimaCohortDao().hasCohortChangedSinceDate(cohortUuid, syncDate, startIndex, size);
     }
 }
