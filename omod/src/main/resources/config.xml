@@ -21,7 +21,7 @@
         </aware_of_modules>
         <require_modules>
             <require_module version="2.1">org.openmrs.module.webservices.rest</require_module>
-		<require_module version="1.5.4.1">org.openmrs.module.reportingcompatibility</require_module>
+		<require_module version="1.5.13">org.openmrs.module.reportingcompatibility</require_module>
         </require_modules>
 
     <!-- Module Activator -->
