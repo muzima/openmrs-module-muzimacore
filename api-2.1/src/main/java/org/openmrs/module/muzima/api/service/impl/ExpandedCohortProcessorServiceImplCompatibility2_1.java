@@ -30,7 +30,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Component("muzima.ExpandedCohortProcessorService")
-@OpenmrsProfile(openmrsPlatformVersion = "2.0")
+@OpenmrsProfile(openmrsPlatformVersion = "2.1")
 public class ExpandedCohortProcessorServiceImplCompatibility2_1 implements ExpandedCohortProcessorService {
     public void process(CohortDefinitionData cohortDefinitionData){
         Cohort savedCohort = Context.getCohortService().getCohort(cohortDefinitionData.getCohortId());
