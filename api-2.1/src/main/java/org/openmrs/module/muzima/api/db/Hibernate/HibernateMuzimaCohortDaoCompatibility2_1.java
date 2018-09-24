@@ -62,7 +62,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                                    final int startIndex, final int size) throws DAOException {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Cohort.class);
         criteria.add(Expression.ilike("name", name, MatchMode.ANYWHERE));
-        criteria.addOrder(Order.asc("name"));git
+        criteria.addOrder(Order.asc("name"));
         if (syncDate != null) {
 
 
