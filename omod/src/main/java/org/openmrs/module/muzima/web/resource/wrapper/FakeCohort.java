@@ -34,6 +34,7 @@ public class FakeCohort extends BaseOpenmrsData {
     private String name;
     private String description;
     private Set<Integer> memberIds;
+    private int size;
     private boolean isUpdateAvailable;
 
     private FakeCohort() {
@@ -50,6 +51,8 @@ public class FakeCohort extends BaseOpenmrsData {
             }
         }
         fakeCohort.setVoided(cohort.getVoided());
+        fakeCohort.size = cohort.getSize();
+
 
         return fakeCohort;
     }
@@ -81,7 +84,7 @@ public class FakeCohort extends BaseOpenmrsData {
     }
 
     public int getSize() {
-        return memberIds.size();
+        return size;
     }
 
     public Set<Integer> getMemberIds() {

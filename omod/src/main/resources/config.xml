@@ -21,7 +21,7 @@
         </aware_of_modules>
         <require_modules>
             <require_module version="2.1">org.openmrs.module.webservices.rest</require_module>
-		<require_module version="1.5.4.1">org.openmrs.module.reportingcompatibility</require_module>
+		<require_module version="1.5.13">org.openmrs.module.reportingcompatibility</require_module>
         </require_modules>
 
     <!-- Module Activator -->
@@ -36,8 +36,8 @@
     <!-- Maps hibernate file's, if present -->
     <mappingFiles>
         ArchiveData.hbm.xml
-	CohortDefinitionData.hbm.xml
-	CohortUpdateHistory.hbm.xml
+	    CohortDefinitionData.hbm.xml
+	    CohortUpdateHistory.hbm.xml
         DataSource.hbm.xml
         ErrorData.hbm.xml
         MuzimaConfig.hbm.xml
