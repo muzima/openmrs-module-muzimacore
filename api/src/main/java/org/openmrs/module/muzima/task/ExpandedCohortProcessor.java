@@ -19,15 +19,12 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.service.ExpandedCohortProcessorService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Iterator;
 import java.util.List;
 
 public class ExpandedCohortProcessor {
     private final Log log = LogFactory.getLog(ExpandedCohortProcessor.class);
-
-
     private static Boolean isRunning = false;
     public void processExpandedCohorts() {
         if (!isRunning) {
