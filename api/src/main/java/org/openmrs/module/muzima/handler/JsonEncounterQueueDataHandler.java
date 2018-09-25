@@ -125,12 +125,13 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                 Set<Obs> obss =  encounter.getAllObs();
                 boolean allObsValid = true;
                 for(Obs obs:obss){
-                    if(areAllObsValid(obs)){
+                    if(!isValidObs(obs)){
                         allObsValid = false;
                         queueProcessorException.addException(new Exception("Unable to process obs for concept with id: " + obs.getConcept().getConceptId()));
                     }
 
                 }
+
                 if(allObsValid) {
                     Context.getEncounterService().saveEncounter(encounter);
                 }
@@ -290,7 +291,18 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                 Date obsDateTime = parseDate(dateString);
                 obs.setObsDatetime(obsDateTime);
             }
-        }else{
+        }else if(o instanceof JSONObject){
+            JSONObject obj = (JSONObject) o;
+            if(obj.containsKey("obs_value")){
+                value = (String)obj.get("obs_value");
+            }
+            if(obj.containsKey("obs_datetime")){
+                String dateString = (String)obj.get("obs_datetime");
+                Date obsDateTime = parseDate(dateString);
+                obs.setObsDatetime(obsDateTime);
+            }
+        }
+        else{
             value = o.toString();
         }
         // find the obs value :)
@@ -452,7 +464,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      * @param obs
      * @return boolean
      */
-    public boolean areAllObsValid(Obs obs){
-        return !(obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText());
+    public boolean isValidObs(Obs obs){
+        return (obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText() || (obs.getConcept().isSet() && obs.isObsGrouping()));
     }
 }
