@@ -1365,4 +1365,18 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20180831113900" author="samuelowino">
+        <insert tableName="muzima_setting">
+            <column name="property" value="GPSStatus.isEnabled" />
+            <column name="name" value="GPS status" />
+            <column name="description" value="Specifies if GPS tracking feature will be activated on mUzima mobile application" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-09-27T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="7c5f3458-c240-11e8-a355-529269fb145i" />
+        </insert>
+
+    </changeSet>
+
 </databaseChangeLog>
