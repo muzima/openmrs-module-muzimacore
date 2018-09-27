@@ -18,7 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.muzima.api.CohortDefinitionDataService;
+import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.db.CohortDefinitionDataDao;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 

@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.module.muzima.api;
+package org.openmrs.module.muzima.api.service;
 
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 

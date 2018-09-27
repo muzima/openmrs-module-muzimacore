@@ -48,6 +48,7 @@
             <scope>provided</scope>
         </dependency>
 
+
         <!-- Begin OpenMRS core -->
         <dependency>
             <groupId>org.openmrs.api</groupId>

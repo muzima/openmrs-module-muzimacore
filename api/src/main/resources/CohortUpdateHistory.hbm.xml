@@ -8,8 +8,8 @@
             <generator class="native"/>
         </id>
         <property name="cohortId" type="java.lang.Integer" column="cohort_id" not-null="true"/>
-        <property name="membersAdded" type="java.lang.String" column="members_added" not-null="true"/>
-        <property name="membersRemoved" type="java.lang.String" column="members_removed" not-null="true"/>
+        <property name="membersAdded" type="java.lang.String" column="members_added" not-null="false"/>
+        <property name="membersRemoved" type="java.lang.String" column="members_removed" not-null="false"/>
         <property name="dateUpdated" type="java.util.Date" column="date_updated" not-null="true" length="19"/>
     </class>
 </hibernate-mapping>
