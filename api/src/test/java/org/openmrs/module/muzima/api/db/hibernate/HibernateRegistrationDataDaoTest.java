@@ -145,21 +145,21 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
          */
         RegistrationData registrationData = new RegistrationData();
 
-        registrationData.setUuid("uuid");
+        registrationData.setUuid("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
         registrationData.setId(1);
         registrationData.setDateCreated(new Date());
-        registrationData.setTemporaryUuid("uuid");
-        registrationData.setAssignedUuid("uuid");
+        registrationData.setTemporaryUuid("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
+        registrationData.setAssignedUuid("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
         registrationData.setVoided(Boolean.FALSE);
 
         transaction = this.dbSessionFactory.getCurrentSession().beginTransaction();
        // dbSessionFactory.getCurrentSession().setFlushMode(FlushMode.COMMIT);
-        this.hibernateRegistrationDataDao.saveRegistrationData(registrationData);
+        //this.hibernateRegistrationDataDao.saveRegistrationData(registrationData);
+        this.dbSessionFactory.getCurrentSession().save(registrationData);
 
-        transaction.commit();
 
         List<RegistrationData> flushedRegistrationData = hibernateRegistrationDataDao
-                .getRegistrationData("uuid","uuid");
+                .getRegistrationData("074108d9-3fbf-4b1c-8f58-8ea34c3bff8b","074108d9-3fbf-4b1c-8f58-8ea34c3bff8b");
 
         System.out.println("flushedRegistrationDate ["+flushedRegistrationData.toString());
 
@@ -223,7 +223,7 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
 
         transaction = dbSessionFactory.getCurrentSession().beginTransaction();
 
-        this.hibernateRegistrationDataDao.saveRegistrationData(this.registrationData);
+        this.dbSessionFactory.getCurrentSession().save(registrationData);
 
         this.hibernateRegistrationDataDao.deleteRegistrationData(this.registrationData);
 
@@ -256,7 +256,7 @@ public class HibernateRegistrationDataDaoTest extends BaseContextMockTest{
         DbSession session = dbSessionFactory.getCurrentSession();//.setFlushMode(FlushMode.COMMIT);
         session.setFlushMode(FlushMode.MANUAL);
 
-        hibernateRegistrationDataDao.saveRegistrationData(registrationData);
+        this.dbSessionFactory.getCurrentSession().save(registrationData);
 
         Long rowCount = (Long)hibernateRegistrationDataDao.countRegistrationData();
         assertThat(rowCount).isEqualTo(1);
