@@ -57,4 +57,11 @@ public class RegistrationData extends BaseOpenmrsData implements Serializable {
     public void setAssignedUuid(final String assignedUuid) {
         this.assignedUuid = assignedUuid;
     }
+
+    @Override
+    public String toString() {
+        return "Registration Data id = "+id +
+                "temporaryUuid = "+ temporaryUuid +
+                "assignedUuid = " + assignedUuid ;
+    }
 }

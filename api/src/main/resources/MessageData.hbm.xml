@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+		"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.openmrs.module.muzima.model">
+	
+	<class name="org.openmrs.module.muzima.model.MessageData" table="messageData">
+		<id name="id" type="int" column="id" unsaved-value="0">
+			<generator class="native" />
+		</id>
+		
+		<discriminator column="id" insert="false" />
+		
+		<property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true" />
+		<property name="source" type="java.lang.String" column="source" length="100"/>
+		<property name="sender" type="org.openmrs.Person" column="sender" length="100"/>
+		<property name="receiver" type="org.openmrs.Person" column="receiver" length="100"/>
+		<property name="subject" type="java.lang.String" column="subject" length="100"/>
+		<property name="body" type="java.lang.String" column="body" length="100"/>
+		<property name="senderDate" type="java.lang.String" column="senderDate" length="100"/>
+		<property name="senderTime" type="java.lang.String" column="sentTime" length="100"/>
+		<property name="voided" type="java.lang.Boolean" column="voided"/>
+	
+	</class>
+
+</hibernate-mapping>

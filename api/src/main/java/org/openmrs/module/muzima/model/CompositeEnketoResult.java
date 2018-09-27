@@ -27,4 +27,9 @@ public class CompositeEnketoResult extends EnketoResult {
     public String getModelAsJson() {
         return this.modelJson;
     }
+
+    @Override
+    public String toString() {
+        return "CompositeEnketoResult.modelJson = "+modelJson;
+    }
 }

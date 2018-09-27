@@ -20,33 +20,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ *  This is test case that test the functionalities and features provided by the {org.openmrs.module.muzimcore.utils.JsonUtils}
+ *  @see org.openmrs.module.muzima.utils.JsonUtils
+ */
 @RunWith(JUnit4.class)
 public class JsonUtilsTest {
 
-    private String mockPayload;
     private final Log logger = LogFactory.getLog(JsonUtilsTest.class);
 
     @Before
     public void setUp() throws Exception {
-        mockPayload = "{\n" +
-                "    \"dataSource\": \"Mobile Device\",\n" +
-                "    \"discriminator\": \"registration\",\n" +
-                "    \"payload\": {\n" +
-                "        \"patient.identifier\":\"\",\n" +
-                "        \"patient.medical_record_number\": \"9999-4\",\n" +
-                "        \"patient.identifier_type\": 3,\n" +
-                "        \"patient.identifier_location\": 1,\n" +
-                "        \"patient.uuid\":\"6e698d66-9f59-4a3b-b3d7-91efb7b297d3\",\n" +
-                "        \"patient.birthdate\": \"1984-04-16 06:15:00\",\n" +
-                "        \"patient.birthdate_estimated\": false,\n" +
-                "        \"patient.given_name\": \"Example\",\n" +
-                "        \"patient.middle_name\": \"of\",\n" +
-                "        \"patient.family_name\": \"Patient\",\n" +
-                "        \"patient.gender\": \"M\",\n" +
-                "        \"person_address.address1\": \"Adress 1\",\n" +
-                "        \"person_address.address2\": \"Adress 2\"\n" +
-                "    }\n" +
-                "}";
+
     }
 
     @Test
@@ -143,12 +128,10 @@ public class JsonUtilsTest {
 
     }
 
+    @Ignore
     @Test
-     //TODO - determine the workflow employeed for DateTime usage in muzima- to facilitate testing
-    /**
-     * TODO : View and Integrate the correct DateAndTime representation @ href="http://en.wikipedia.org/wiki/ISO_8601">ISO-8601 Wikipedia Page
-     */
     public void writeAsDateTimeTest() throws Exception {
+        //TODO refactor production code unless test is otherwise wrong
         logger.debug("Executing Write as DateTime Test");
         String dateTimeSamplePayload = "{\"key\":\"2008-03-01T13:00:00+01:00\"}";
         Date dateTimeValue = JsonUtils.readAsDateTime(dateTimeSamplePayload, "key");
@@ -157,13 +140,10 @@ public class JsonUtilsTest {
         logger.debug("Read value matches value in JsonPayliod as described,- " + JsonUtils.readAsDateTime(dateTimeSamplePayload, "$.key"));
     }
 
-    @Test
     @Ignore
-    //TODO - determine the workflow employeed for DateTime usage in muzima- to facilitate testing
-    /**
-     * TODO : View and Integrate the correct DateAndTime representation @ href="http://en.wikipedia.org/wiki/ISO_8601">ISO-8601 Wikipedia Page
-     */
+    @Test
     public void readAsDateTimeTest() throws Exception {
+        //
         logger.debug("Executing Read as DataTime ");
         String currentDate = new Date().toString();
         String datePayload = "{\"key\":\"2008-03-01T13:00:00+01:00\"}";

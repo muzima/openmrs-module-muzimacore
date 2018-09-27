@@ -59,10 +59,10 @@ import java.util.TreeSet;
 @Handler(supports = QueueData.class, order = 1)
 public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler {
 
-    private static final String TAG = "JsonGenericRegistrationQueueDataHandler";
+    public static final String TAG = "JsonGenericRegistrationQueueDataHandler";
     private static final String DISCRIMINATOR_VALUE = "json-generic-registration";
 
-    private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private final Log log = LogFactory.getLog(JsonGenericRegistrationQueueDataHandler.class);
 
@@ -317,9 +317,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
             queueProcessorException.addException(
                     new Exception("Unable to find encounter location using the id: " + locationIdString));
         } else {
-            Iterator<PatientIdentifier> iterator = patientIdentifiers.iterator();
-            while (iterator.hasNext()) {
-                PatientIdentifier identifier = iterator.next();
+            for (PatientIdentifier identifier : patientIdentifiers) {
                 identifier.setLocation(location);
             }
         }

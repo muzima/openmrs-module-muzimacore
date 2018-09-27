@@ -39,6 +39,7 @@ public class RegistrationsController {
     @ResponseBody
     public Map<String, Object> getRegistrations(final @RequestParam(value = "pageNumber") Integer pageNumber,
                                                    final @RequestParam(value = "pageSize") Integer pageSize) {
+
         Map<String, Object> response = new HashMap<String, Object>();
         RegistrationDataService service = Context.getService(RegistrationDataService.class);
 

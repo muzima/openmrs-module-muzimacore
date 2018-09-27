@@ -171,7 +171,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             JSONArray identifierValue = (JSONArray) identifierValueObject;
             for (int i = 0; i < identifierTypeName.size(); i++) {
                 PatientIdentifier identifier = createPatientIdentifier(identifierTypeName.get(i).toString(),
-                        identifierValue.get(i).toString());
+                                                                       identifierValue.get(i).toString());
                 if (identifier != null) {
                     otherIdentifiers.add(identifier);
                 }
