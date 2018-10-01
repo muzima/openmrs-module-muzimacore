@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -32,10 +31,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@ContextConfiguration(locations = "/service-test-context.xml")
-public class JsonRegistrationQueueDataHandlerTest {
+public class JsonGenericRegistrationQueueDataHandlerTest {
 
-    private JsonRegistrationQueueDataHandler JsonRegistrationQueueDataHandler;
+    private JsonGenericRegistrationQueueDataHandler jsonGenericRegistrationQueueDataHandler;
     private Patient unsavedPatient;
     private QueueProcessorException queueProcessorException = new QueueProcessorException();
     private Method setPatientIdentifiersFromPayloadMethod;
@@ -52,11 +50,6 @@ public class JsonRegistrationQueueDataHandlerTest {
     private Method getPatientAddressFromJsonObjectMethod;
     private Method setIdentifierTypeLocationMethod;
     private Method createPatientIdentifierMethod;
-
-    private Class<JsonRegistrationQueueDataHandler> registrationQueueDataHandlerClass;
-    private JsonRegistrationQueueDataHandler jsonRegistrationQueueDataHandlerInstance;
-
-
 
     private String testJsonPayload = "{\n" +
             "  \"patient\": {\n" +
@@ -131,36 +124,27 @@ public class JsonRegistrationQueueDataHandlerTest {
     }
 
     @Before
-    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-    public void setUp() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InstantiationException {
-        jsonRegistrationQueueDataHandlerInstance = registrationQueueDataHandlerClass.newInstance();
-
-        registrationQueueDataHandlerClass = JsonRegistrationQueueDataHandler.class;
+    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+    public void setUp() throws NoSuchMethodException, NoSuchFieldException, IllegalAccessException {
 
         /**
          * Access private methods using @see reflection
          */
-        setPatientIdentifiersFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientIdentifiersFromPayload");
-        getOtherPatientIdentifiersFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("getOtherPatientIdentifiersFromPayload",null);
-        setPatientBirthDateFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientBirthDateFromPayload",null);
-        setPatientGenderFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientGenderFromPayload",null);
-        setPatientNameFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientNameFromPayload",null);
-        getPatientUuidFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("getPatientUuidFromPayload",null);
-        setPatientAddressesFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientAddressesFromPayload",null);
-        setPersonAttributesFromPayloadMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("setPersonAttributesFromPayload",null);
-        findSimilarSavedPatientMethod = JsonRegistrationQueueDataHandler.class.getDeclaredMethod("findSimilarSavedPatient",null);
-
+        setPatientIdentifiersFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientIdentifiersFromPayload", JsonGenericRegistrationQueueDataHandler.class);
         setPatientIdentifiersFromPayloadMethod.setAccessible(true);
-        getOtherPatientIdentifiersFromPayloadMethod.setAccessible(true);
-        setPatientGenderFromPayloadMethod.setAccessible(true);
-        setPatientNameFromPayloadMethod.setAccessible(true);
-        getPatientUuidFromPayloadMethod.setAccessible(true);
-        setPatientAddressesFromPayloadMethod.setAccessible(true);
-        setPersonAttributesFromPayloadMethod.setAccessible(true);
-        findSimilarSavedPatientMethod.setAccessible(true);
-
-
-
+        getOtherPatientIdentifiersFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getOtherPatientIdentifiersFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        getMedicalRecordNumberFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getMedicalRecordNumberFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPatientBirthDateFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientBirthDateFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPatientGenderFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientGenderFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPatientNameFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientNameFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        getPatientUuidFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getPatientUuidFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPatientAddressesFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPatientAddressesFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        setPersonAttributesFromPayloadMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setPersonAttributesFromPayload",JsonGenericRegistrationQueueDataHandler.class);
+        findSimilarSavedPatientMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("findSimilarSavedPatient",JsonGenericRegistrationQueueDataHandler.class);
+        getElementFromJsonObjectMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getElementFromJsonObject",JsonGenericRegistrationQueueDataHandler.class);
+        getPatientAddressFromJsonObjectMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("getPatientAddressFromJsonObject",JsonGenericRegistrationQueueDataHandler.class);
+        setIdentifierTypeLocationMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("setIdentifierTypeLocation",JsonGenericRegistrationQueueDataHandler.class);
+        createPatientIdentifierMethod = JsonGenericRegistrationQueueDataHandler.class.getDeclaredMethod("createPatientIdentifier",JsonGenericRegistrationQueueDataHandler.class);
 
         unsavedPatient = new Patient();
 
@@ -181,54 +165,27 @@ public class JsonRegistrationQueueDataHandlerTest {
         unsavedPatient.setBirthdate(new Date());
 
         ApplicationContext testApplicationContext = new ClassPathXmlApplicationContext("service-test-context.xml");
-        JsonRegistrationQueueDataHandler = new JsonRegistrationQueueDataHandler();
+        jsonGenericRegistrationQueueDataHandler = new JsonGenericRegistrationQueueDataHandler();
 
         /**
          * Access private Fields using @see reflection
          */
-
-
-        Field unsavedPatientField = registrationQueueDataHandlerClass.getDeclaredField("unsavedPatient");
+        Field unsavedPatientField = JsonGenericRegistrationQueueDataHandler.class.getDeclaredField("unsavedPatient");
         unsavedPatientField.setAccessible(true);
-        unsavedPatientField.set(jsonRegistrationQueueDataHandlerInstance, unsavedPatient);
+        unsavedPatientField.set(unsavedPatientField, unsavedPatient);
 
-        Field payloadField = registrationQueueDataHandlerClass.getDeclaredField("payload");
+        Field payloadField = JsonGenericRegistrationQueueDataHandler.class.getDeclaredField("payload");
         payloadField.setAccessible(true);
-        payloadField.set(jsonRegistrationQueueDataHandlerInstance, testJsonPayload);
+        payloadField.set(payloadField, testJsonPayload);
 
-        Field queueProcessorExceptionField = registrationQueueDataHandlerClass.getDeclaredField("queueProcessorException");
+        Field queueProcessorExceptionField = JsonGenericRegistrationQueueDataHandler.class.getDeclaredField("queueProcessorException");
         queueProcessorExceptionField.setAccessible(true);
-        queueProcessorExceptionField.set(jsonRegistrationQueueDataHandlerInstance, queueProcessorException);
-
-        Method[] registrationQueueDataHandlerClassMethods = registrationQueueDataHandlerClass.getDeclaredMethods();
-        for (Method method : registrationQueueDataHandlerClassMethods) {
-            System.out.println("Methods:...");
-            System.out.println("-:" + method.getName());
-        }
-
-        setPatientIdentifiersFromPayloadMethod = registrationQueueDataHandlerClass.getDeclaredMethod("setPatientIdentifiersFromPayload",null);
-        getOtherPatientIdentifiersFromPayloadMethod = registrationQueueDataHandlerClass.getDeclaredMethod("getOtherPatientIdentifiersFromPayload",null);
-        setPatientBirthDateFromPayloadMethod = registrationQueueDataHandlerClass.getDeclaredMethod("setPatientBirthDateFromPayload",null);
-        setPatientGenderFromPayloadMethod = registrationQueueDataHandlerClass.getDeclaredMethod("setPatientGenderFromPayload",null);
-        setPatientNameFromPayloadMethod = registrationQueueDataHandlerClass.getDeclaredMethod("setPatientNameFromPayload",null);
-        getPatientUuidFromPayloadMethod = registrationQueueDataHandlerClass.getDeclaredMethod("getPatientUuidFromPayload",null);
-        setPatientAddressesFromPayloadMethod = registrationQueueDataHandlerClass.getDeclaredMethod("setPatientAddressesFromPayload",null);
-        setPersonAttributesFromPayloadMethod = registrationQueueDataHandlerClass.getDeclaredMethod("setPersonAttributesFromPayload",null);
-        findSimilarSavedPatientMethod = registrationQueueDataHandlerClass.getDeclaredMethod("findSimilarSavedPatient");
-        registrationQueueDataHandlerClass.getDeclaredMethod("getDiscriminator");
-        registrationQueueDataHandlerClass.getDeclaredMethod("setUnsavedPatientCreatorFromPayload");
-        registrationQueueDataHandlerClass.getDeclaredMethod("populateUnsavedPatientFromPayload");
-        registrationQueueDataHandlerClass.getDeclaredMethod("validateUnsavedPatient");
-        registrationQueueDataHandlerClass.getDeclaredMethod("registerUnsavedPatient");
-        registrationQueueDataHandlerClass.getDeclaredMethod("setPatientBirthDateEstimatedFromPayload");
-        registrationQueueDataHandlerClass.getDeclaredMethod("getPreferredPatientIdentifierFromPayload");
-
-
+        queueProcessorExceptionField.set(queueProcessorExceptionField, queueProcessorException);
     }
 
     @Test
     public void setPatientIdentifiersFromPayloadTest() throws Exception {
-        setPatientIdentifiersFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler.class,null);
+        setPatientIdentifiersFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         PatientIdentifier identifier = unsavedPatient.getPatientIdentifier();
         assertThat(identifier).isNotNull();
         assertThat(identifier.getIdentifier()).isEqualTo("12345");
@@ -241,13 +198,13 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void getMedicalRecordNumberFromPayloadTest() throws Exception {
-        PatientIdentifier patientIdentifier = (PatientIdentifier) getMedicalRecordNumberFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        PatientIdentifier patientIdentifier = (PatientIdentifier) getMedicalRecordNumberFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         assertThat(patientIdentifier).isNotNull();
     }
 
     @Test
     public void getOtherPatientIdentifiersFromPayloadTest() throws Exception {
-        List<PatientIdentifier> identifier = (List<PatientIdentifier>)getOtherPatientIdentifiersFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        List<PatientIdentifier> identifier = (List<PatientIdentifier>)getOtherPatientIdentifiersFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         assertThat(identifier.size()).isGreaterThan(0);
         assertThat(identifier.iterator().next()).isNotNull();
         assertThat(identifier.iterator().hasNext()).isTrue();
@@ -257,16 +214,16 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void createPatientIdentifier_shouldDetectBalnkIdentifireTypeValuesTest() throws Exception {
-        PatientIdentifier patientIdentifier = (PatientIdentifier) createPatientIdentifierMethod.invoke(JsonRegistrationQueueDataHandler,"", "", "");
+        PatientIdentifier patientIdentifier = (PatientIdentifier) createPatientIdentifierMethod.invoke(jsonGenericRegistrationQueueDataHandler,"", "", "");
         assertThat(patientIdentifier).isNull();
         ;
     }
 
     @Test
     public void createPatientIdentifier_shouldObtainIdentifierTypeByUuid() throws Exception {
-        PatientIdentifier patientIdentifier = (PatientIdentifier) createPatientIdentifierMethod.invoke(JsonRegistrationQueueDataHandler,"", "KENYA_NATIONAL_ID", "33333333");
+        PatientIdentifier patientIdentifier = (PatientIdentifier) createPatientIdentifierMethod.invoke(jsonGenericRegistrationQueueDataHandler,"", "KENYA_NATIONAL_ID", "33333333");
         assertThat(patientIdentifier).isNotNull();
-        assertThat(patientIdentifier.getIdentifierType()).isSameAs("KENYA_NATIONAL_ID");
+        assertThat(patientIdentifier.getIdentifierType()).isSameAs("KENAYA_NATIONAL_ID");
         assertThat(patientIdentifier.getIdentifier()).isSameAs("33333333");
         assertThat(patientIdentifier.getPatient()).isNotNull();
         assertThat(patientIdentifier.getPatient()).isInstanceOf(Patient.class);
@@ -275,14 +232,14 @@ public class JsonRegistrationQueueDataHandlerTest {
     @Test
     public void setIdentifierTypeLocationTest() throws Exception {
         Set<PatientIdentifier> identifiers = new HashSet<>();
-        setIdentifierTypeLocationMethod.invoke(JsonRegistrationQueueDataHandler,identifiers);
+        setIdentifierTypeLocationMethod.invoke(jsonGenericRegistrationQueueDataHandler,identifiers);
 
         assertTrue(unsavedPatient.getIdentifiers().contains(identifiers.iterator().next()));
     }
 
     @Test
     public void setPatientBirthDateFromPayloadTest() throws Exception {
-        setPatientBirthDateFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        setPatientBirthDateFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         Date birthDate = unsavedPatient.getBirthdate();
         assertThat(birthDate).isNotNull();
         assertThat(birthDate).isInstanceOf(Date.class);
@@ -290,7 +247,7 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void setPatientBirthDateEstimatedFromPayloadTest() throws Exception {
-        setPatientBirthDateFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        setPatientBirthDateFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         Boolean estimated = unsavedPatient.getBirthdateEstimated();
         assertThat(estimated).isNotNull();
         assertThat(estimated).isTrue();
@@ -298,7 +255,7 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void setPatientGenderFromPayloadTest() throws Exception {
-        setPatientGenderFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        setPatientGenderFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         String patientGender = this.unsavedPatient.getGender();
         assertThat(patientGender).isNotEmpty();
         assertThat(patientGender).isEqualTo("F");
@@ -307,7 +264,7 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void setPatientNameFromPayloadTest() throws Exception {
-        setPatientNameFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        setPatientNameFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         PersonName personName = unsavedPatient.getPersonName();
 
         assertThat(personName).isNotNull();
@@ -318,7 +275,7 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void getPatientUuidFromPayloadTest() throws Exception {
-        String extractedUuid = (String)getPatientUuidFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        String extractedUuid = (String)getPatientUuidFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         assertThat(extractedUuid).isNotEmpty();
         assertThat(extractedUuid).isNotNull();
         assertThat(extractedUuid).isEqualTo("1037ba06-fj79-4244-9d14-687baa44bd81");
@@ -326,7 +283,7 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void setPatientAddressesFromPayloadTest() throws Exception {
-        setPatientAddressesFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        setPatientAddressesFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         PersonAddress personAddress = unsavedPatient.getPersonAddress();
 
         assertThat(personAddress).isNotNull();
@@ -344,7 +301,7 @@ public class JsonRegistrationQueueDataHandlerTest {
         assertThat(personAddressObject).isNotNull();
         assertThat(personAddressObject).isInstanceOf(JSONObject.class);
 
-        PersonAddress personAddress = (PersonAddress) getPatientAddressFromJsonObjectMethod.invoke(JsonRegistrationQueueDataHandler,personAddressObject);
+        PersonAddress personAddress = (PersonAddress) getPatientAddressFromJsonObjectMethod.invoke(jsonGenericRegistrationQueueDataHandler,personAddressObject);
 
         assertNotNull(personAddressObject);
         assertThat(personAddress.getAddress6()).isEqualTo("location1");
@@ -356,7 +313,7 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void setPersonAttributesFromPayloadTet() throws Exception {
-        setPersonAttributesFromPayloadMethod.invoke(JsonRegistrationQueueDataHandler);
+        setPersonAttributesFromPayloadMethod.invoke(jsonGenericRegistrationQueueDataHandler);
         Set<PersonAttribute> personAttribute = unsavedPatient.getAttributes();
 
         assertThat(personAttribute).isNotNull();
@@ -396,12 +353,12 @@ public class JsonRegistrationQueueDataHandlerTest {
         testUnsavedPatient.setBirthdate(new Date());
 
         Mockito.when(Context.getPatientService().getPatients(unsavedPatient
-                .getPatientIdentifier()
-                .getIdentifier()))
+                                                                     .getPatientIdentifier()
+                                                                     .getIdentifier()))
 
                 .thenReturn(Collections.singletonList(testUnsavedPatient));
 
-        Patient patient = (Patient) findSimilarSavedPatientMethod.invoke(JsonRegistrationQueueDataHandler);
+        Patient patient = (Patient) findSimilarSavedPatientMethod.invoke(jsonGenericRegistrationQueueDataHandler);
 
         assertThat(patient).isNotNull();
         assertThat(patient).isEqualTo(unsavedPatient);
@@ -412,7 +369,7 @@ public class JsonRegistrationQueueDataHandlerTest {
     public void getElementFromJsonObjectTest() throws Exception {
         String elementPayload = "{\"key\":\"04-06-1994\"}";
         JSONObject jsonObject = (JSONObject) JsonUtils.readAsObject(elementPayload, "$");
-        Object element = getElementFromJsonObjectMethod.invoke(JsonRegistrationQueueDataHandler,jsonObject, "key");
+        Object element = getElementFromJsonObjectMethod.invoke(jsonGenericRegistrationQueueDataHandler,jsonObject, "key");
         assertThat(element).isNotNull();
         assertThat(element).isEqualTo(element);
     }
@@ -427,9 +384,9 @@ public class JsonRegistrationQueueDataHandlerTest {
 
     @Test
     public void getDiscriminatorValueTest() {
-        assertThat(JsonRegistrationQueueDataHandler.getDiscriminator()).isNotNull();
-        assertThat(JsonRegistrationQueueDataHandler.getDiscriminator()).isNotEmpty();
-        assertThat(JsonRegistrationQueueDataHandler.getDiscriminator()).isEqualTo("json-generic-registration");
+        assertThat(jsonGenericRegistrationQueueDataHandler.getDiscriminator()).isNotNull();
+        assertThat(jsonGenericRegistrationQueueDataHandler.getDiscriminator()).isNotEmpty();
+        assertThat(jsonGenericRegistrationQueueDataHandler.getDiscriminator()).isEqualTo("json-generic-registration");
     }
 }
 

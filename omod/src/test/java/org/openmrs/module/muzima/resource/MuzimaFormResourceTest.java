@@ -40,6 +40,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
 public class MuzimaFormResourceTest {
+
     private MuzimaFormService service;
     private MuzimaFormResource controller;
 

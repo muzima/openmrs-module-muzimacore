@@ -156,4 +156,16 @@ public abstract class AuditableData extends BaseOpenmrsData implements Data {
     public void setPatientUuid(String patientUuid) {
         this.patientUuid = patientUuid;
     }
+
+    @Override
+    public String toString() {
+        return "AuditableData.id = " +id+
+                " AuditableData.payload = "+ payload +
+                " AuditableData.discriminator = "+ discriminator +
+                " AuditableData.dataSource = "+dataSource +
+                " AuditableData.location = "+location+
+                " AuditableData.provider = "+provider+
+                " AuditableData.formName = "+formName+
+                " AuditableData.patientUuid = "+patientUuid;
+    }
 }

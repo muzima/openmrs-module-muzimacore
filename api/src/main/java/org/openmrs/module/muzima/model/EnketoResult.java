@@ -56,4 +56,11 @@ public class EnketoResult {
     public String getModelAsJson() throws DocumentException {
         return getModel();
     }
+
+    @Override
+    public String toString() {
+        return "EnketoResult.transform =" + transform +
+                " EnketoResult.documentBuilder = " +documentBuilder +
+                " EnketoResult.xPathFactory = " + xPathFactory;
+    }
 }

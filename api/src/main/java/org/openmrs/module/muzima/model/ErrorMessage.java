@@ -41,4 +41,9 @@ public class ErrorMessage  extends AuditableData {
         this.message = message;
     }
 
+    @Override
+    public String toString() {
+        return "ErrorMessage.id = "+ id +
+                " ErrorMessage.message = " +message;
+    }
 }

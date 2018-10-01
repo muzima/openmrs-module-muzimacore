@@ -63,6 +63,7 @@ public class HibernateRegistrationDataDao extends HibernateSingleClassDao<Regist
      */
     @Override
     public RegistrationData getRegistrationDataByUuid(final String uuid) {
+
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
@@ -82,10 +83,14 @@ public class HibernateRegistrationDataDao extends HibernateSingleClassDao<Regist
     @SuppressWarnings("unchecked")
     public List<RegistrationData> getRegistrationData(final String temporaryUuid, final String assignedUuid) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
+        System.out.println("mappedClass == "+mappedClass);
         if (!StringUtils.isBlank(temporaryUuid)) {
+            System.out.println("temporatyUuid "+temporaryUuid);
             criteria.add(Restrictions.eq("temporaryUuid", temporaryUuid));
         }
         if (!StringUtils.isBlank(assignedUuid)) {
+            System.out.println("assignedUuid "+assignedUuid);
+
             criteria.add(Restrictions.eq("assignedUuid", assignedUuid));
         }
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
@@ -143,6 +148,7 @@ public class HibernateRegistrationDataDao extends HibernateSingleClassDao<Regist
     public Number countRegistrationData() {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+        System.out.println(Projections.rowCount());
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
     }

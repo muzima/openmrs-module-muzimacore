@@ -54,6 +54,8 @@
         <constructor-arg ref="dbSessionFactory"/>
     </bean>
 
+    <bean id="serviceContext" class="org.openmrs.api.context.ServiceContext" factory-method="getInstance" destroy-method="destroyInstance"/>
+
     <!-- Services accessible via Context.getService() -->
     <bean parent="serviceContext">
         <property name="moduleService">
@@ -100,6 +102,13 @@
                                     </property>
                                 </bean>
                             </property>
+                            <property name="messageDataDao">
+                                <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateMessageDataDao">
+                                    <property name="sessionFactory">
+                                        <ref bean="dbSessionFactory"/>
+                                    </property>
+                                </bean>
+                            </property>
                             <property name="errorMessageDao">
                                 <bean class="org.openmrs.module.muzima.api.db.hibernate.HibernateErrorMessageDao">
                                     <property name="sessionFactory">
@@ -119,6 +128,7 @@
             </list>
         </property>
     </bean>
+
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
