@@ -13,23 +13,23 @@ import org.springframework.test.context.ContextConfiguration;
 public class JsonRegistrationQueueDataHandlerTest {
 
 
-    private JsonGenericRegistrationQueueDataHandler jsonRegistrationQueueDataHandler;
-    @Autowired
-    private QueueData queueData;
-
-    @Before
-    public void setUp() {
-        ApplicationContext testApplicationContext = new ClassPathXmlApplicationContext("handlerTestingApplicationContext.xml");
-        jsonRegistrationQueueDataHandler = new JsonGenericRegistrationQueueDataHandler();
-
-    }
-
-    @Test
-    public void getDiscriminatorValueTest() {
-        Assertions.assertThat(jsonRegistrationQueueDataHandler.getDiscriminator()).isNotNull();
-        Assertions.assertThat(jsonRegistrationQueueDataHandler.getDiscriminator()).isNotEmpty();
-        Assertions.assertThat(jsonRegistrationQueueDataHandler.getDiscriminator()).isEqualTo("json-registration");
-    }
+//    private JsonGenericRegistrationQueueDataHandler jsonRegistrationQueueDataHandler;
+//    @Autowired
+//    private QueueData queueData;
+//
+//    @Before
+//    public void setUp() {
+//        ApplicationContext testApplicationContext = new ClassPathXmlApplicationContext("handlerTestingApplicationContext.xml");
+//        jsonRegistrationQueueDataHandler = new JsonGenericRegistrationQueueDataHandler();
+//
+//    }
+//
+//    @Test
+//    public void getDiscriminatorValueTest() {
+//        Assertions.assertThat(jsonRegistrationQueueDataHandler.getDiscriminator()).isNotNull();
+//        Assertions.assertThat(jsonRegistrationQueueDataHandler.getDiscriminator()).isNotEmpty();
+//        Assertions.assertThat(jsonRegistrationQueueDataHandler.getDiscriminator()).isEqualTo("json-registration");
+//    }
 
 
 }
