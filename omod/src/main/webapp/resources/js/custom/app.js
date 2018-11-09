@@ -20,6 +20,8 @@ muzimaCoreModule.
             when('/update/forms/:muzimaform_uuid',{controller: UpdateCtrl, templateUrl: '../../moduleResources/muzimacore/partials/update/forms.html'}).
             when('/error/:uuid', {controller: ErrorCtrl, templateUrl: '../../moduleResources/muzimacore/partials/error.html'}).
             when('/errors', {controller: ErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/errors.html'}).
+            when('/duplicates', {controller: PotentialDuplicatesErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/potential_duplicates.html'}).
+            when('/merge/:uuid', {controller: MergeCtrl, templateUrl: '../../moduleResources/muzimacore/partials/merge.html'}).
             when('/edit/:uuid', {controller: EditCtrl, templateUrl: '../../moduleResources/muzimacore/partials/edit.html'}).
             when('/setting/:uuid', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
             when('/settings', {controller: SettingsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/settings.html'}).
@@ -90,6 +92,17 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.post("error.json?uuid="+uuid,formData);
     };
 
+    var mergePatient = function(info) {
+        return $http.post('mergePatient.json', info);
+    };
+
+    var requeueDuplicatePatient = function(info) {
+        return $http.post('requeueDuplicatePatient.json', info);
+    };
+
+    var getPatientByIdentifier = function (identifier) {
+        return $http.get('../../ws/rest/v1/patient?identifier=' + identifier + "&v=full");
+    };
     return {
         getQueues: getQueues,
         getQueue: getQueue,
@@ -107,8 +120,12 @@ muzimaCoreModule.factory('$data', function ($http) {
 
         getEdit: getEdit,
         editErrors: editErrors,
-        validateData: validateData
-    }
+        validateData: validateData,
+
+        getPatientByIdentifier: getPatientByIdentifier,
+        mergePatient: mergePatient,
+        requeueDuplicatePatient: requeueDuplicatePatient
+    };
 });
 
 muzimaCoreModule.factory('FormService', function ($http) {
