@@ -32,7 +32,9 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/ConfigController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/SettingController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/CohortDefinitionController.js"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/MergeController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/fileUpload.js"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/sideNav.js"/>
 
 <h3><spring:message code="muzimacore.title"/></h3>
 <div class="bootstrap-scope" ng-app="muzimaCoreModule">

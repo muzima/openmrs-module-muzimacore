@@ -1,5 +1,5 @@
 <div id="wide-sidebar" class="row">
-    <side-navigation menu-item="errors"></side-navigation>
+    <side-navigation menu-item="duplicates"></side-navigation>
     <div class="col-lg-8">
         <div class="clearfix">
             <div class="row">
@@ -11,8 +11,7 @@
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th>&nbsp;</th>
-                        <th>#</th>
+                        <th>Examine</th>
                         <th>Provider</th>
                         <th>Location</th>
                         <th>Form Name</th>
@@ -24,14 +23,10 @@
                     </thead>
                     <tbody>
                     <tr ng-hide="errors.length">
-                        <td colspan="9">Hooray! You have no errors here.</td>
+                        <td colspan="8">Hooray! You have no errors here.</td>
                     </tr>
                     <tr ng-repeat="error in errors | orderBy:'submitted':true">
-                        <td>
-                            <input type="checkbox" value="{{error.uuid}}"
-                                   ng-checked="selected[error.uuid]" ng-model="selected[error.uuid]">
-                        </td>
-                        <td><a href="#/error/{{error.uuid}}"  style="text-decoration: none"><i class=icon-edit icon-edit></i></a></td>
+                        <td><a href="#/merge/{{error.uuid}}"  style="text-decoration: none"><i class=icon-edit icon-edit></i></a></td>
                         <td>{{error.providerId}} - {{error.providerName}}</td>
                         <td>{{error.locationId}} - {{error.locationName}}</td>
                         <td>{{error.formName}}</td>
@@ -43,10 +38,10 @@
                     </tbody>
                 </table>
             </div>
-            <div ng-show="errors.length" class="row col-lg-12">
-                <button type="submit" ng-click="queue()" class="btn btn-primary" style="margin-top: 20px">Queue</button>
-                <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
-            </div>
         </div>
+    </div>
+
+    <div id='wait' class='loader'>
+        &nbsp;
     </div>
 </div>
