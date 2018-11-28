@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import java.text.DateFormat;
+import java.util.TimeZone;
 
 /**
  * TODO: Write brief description about the class here.
@@ -325,15 +326,19 @@ public class JsonUtils {
      * @param path       the path inside the json object.
      * @return the date Time value in the json object. When the path is invalid, by default will return null.
      */
-    public static Date readAsDateTime(final String jsonObject, final String path,final DateFormat dateFormat) {
+    public static Date readAsDateTime(final String jsonObject, final String path, final DateFormat dateFormat, final String jsonPayloadTimezone) {
         Date returnedDate = null;
         try {
             String dateAsString = readAsString(jsonObject, path);
             if(dateAsString.length()==10){
                 dateAsString = dateAsString+" 00:00";
             }
-
-            returnedDate = dateFormat.parse(dateAsString);
+            if(jsonPayloadTimezone != null) {
+                dateFormat.setTimeZone(TimeZone.getTimeZone(jsonPayloadTimezone));
+                returnedDate = dateFormat.parse(dateAsString);
+            }else{
+                returnedDate = dateFormat.parse(dateAsString);
+            }
         } catch (Exception e) {
                        logger.error("Unable to create date value from path: " + path + " from: " + String.valueOf(jsonObject));
         }

@@ -435,7 +435,8 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             encounter.setLocation(location);
         }
 
-        Date encounterDatetime = JsonUtils.readAsDateTime(encounterPayload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat);
+        String jsonPayloadTimezone = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.default_time_zone']");
+        Date encounterDatetime = JsonUtils.readAsDateTime(encounterPayload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat,jsonPayloadTimezone);
         encounter.setEncounterDatetime(encounterDatetime);
     }
 
@@ -446,10 +447,16 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      */
     private Date parseDate(final String dateValue) {
         Date date = null;
-        try {
-            date = dateFormat.parse(dateValue);
-        } catch (ParseException e) {
-            log.error("Unable to parse date data for encounter!", e);
+        if(StringUtils.isNumeric(dateValue))
+        {
+            long timestamp = Long.parseLong(dateValue);
+            date = new Date(timestamp);
+        }else {
+            try {
+                date = dateFormat.parse(dateValue);
+            } catch (ParseException e) {
+                log.error("Unable to parse date data for encounter!", e);
+            }
         }
         return date;
     }
