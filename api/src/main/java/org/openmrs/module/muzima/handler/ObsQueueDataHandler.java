@@ -121,7 +121,7 @@ public class ObsQueueDataHandler implements QueueDataHandler {
                 queueProcessorException.addException(new Exception("Unable to find user using the User Id: " + userString));
             }
 
-            Date encounterDatetime = JsonUtils.readAsDateTime(payload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat);
+            Date encounterDatetime = JsonUtils.readAsDateTime(payload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat,null);
             for(Obs obs:individualObsList){
                 if(obs.getObsDatetime() == null){
                     obs.setObsDatetime(encounterDatetime);
