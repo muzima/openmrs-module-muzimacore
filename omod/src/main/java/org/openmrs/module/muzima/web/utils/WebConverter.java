@@ -31,9 +31,13 @@ import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
+import org.openmrs.module.muzima.model.ReportConfiguration;
+import org.openmrs.module.reporting.report.ReportDesign;
+import org.openmrs.module.reporting.report.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -293,6 +297,40 @@ public class WebConverter {
             map.put("isMemberAdditionEnabled",cohortDefinitionData.getIsMemberAdditionEnabled());
             map.put("isMemberRemovalEnabled",cohortDefinitionData.getIsMemberRemovalEnabled());
             map.put("uuid",cohortDefinitionData.getUuid());
+        }
+        return map;
+    }
+
+    public static Map<String, Object> convertMuzimaReportConfiguration(final ReportConfiguration reportConfiguration) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (reportConfiguration!= null) {
+            map.put("uuid", reportConfiguration.getUuid());
+            //map.put("name", reportConfiguration.getName());
+            map.put("report", Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportDesignUuid()).getName());
+            map.put("cohort", Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid()).getName());
+            map.put("user",reportConfiguration.getCreator().toString());
+            map.put("priority",reportConfiguration.getPriority());
+
+        }
+        return map;
+    }
+
+    public static Map<String, Object> convertMuzimaGeneratedReport(final MuzimaGeneratedReport generatedReport) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (generatedReport!= null) {
+            map.put("uuid", generatedReport.getUuid());
+            //map.put("name", reportConfiguration.getName());
+            map.put("patientId", generatedReport.getPatientId());
+            map.put("reportJson", generatedReport.getPatientId());
+        }
+        return map;
+    }
+
+    public static Map<String, Object> convertMuzimaReport( ReportDesign reportDesign) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (reportDesign != null) {
+            map.put("uuid", reportDesign.getUuid());
+            map.put("name", reportDesign.getName());
         }
         return map;
     }

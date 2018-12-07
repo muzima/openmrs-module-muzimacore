@@ -44,6 +44,7 @@
         <jsonPathVersion>0.8.1</jsonPathVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <github.global.server>github</github.global.server>
+        <reportingModuleVersion>1.16.0</reportingModuleVersion>
     </properties>
 
     <dependencyManagement>
@@ -200,6 +201,37 @@
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>1.9.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>reporting-api</artifactId>
+                <version>${reportingModuleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>serialization.xstream-api</artifactId>
+                <version>0.2.6</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>htmlwidgets</artifactId>
+                <version>1.10.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>quartz</groupId>
+                <artifactId>quartz</artifactId>
+                <version>1.5.2</version>
+                <type>jar</type>
+                <scope>provided</scope>
             </dependency>
 
         </dependencies>

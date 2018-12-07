@@ -1172,7 +1172,18 @@
             <column name="uuid" value="aae1a60f-f6ac-4d00-8af7-80270d715114" />
         </insert>
     </changeSet>
-    
+   <changeSet id="muzima-20180620158900" author="dileka">
+        <insert tableName="muzima_setting">
+            <column name="property" value="PatientCohort.AutoDownload" />
+            <column name="name" value="Patient Cohort auto-download" />
+            <column name="description" value="Defines wether cohorts are downloaded automatically to muzima" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="true" />
+            <column name="date_created" valueDate="2018-06-20T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="aae1a60f-f6ac-4d00-ffff-80270d715114" />
+        </insert>
+    </changeSet>
     <changeSet id="muzima-20180214100000" author="bmokaya">
         <comment>Creating a default mUzima data source with the name Mobile Devices</comment>
         <insert tableName="muzima_data_source">
@@ -1377,5 +1388,127 @@
         </insert>
 
     </changeSet>
+
+    <changeSet id="muzima-20180621154129" author="dileka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_cohort_report_config"/>
+            </not>
+            <and>
+                <tableExists tableName="reporting_report_design"/>
+            </and>
+            
+        </preConditions>
+        <createTable tableName="muzima_cohort_report_config">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_uuid" type="char(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="report_design_uuid" type="char(38)">
+                <constraints nullable="false"/>
+                
+            </column>
+            <column name="priority" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int" />
+            <column name="date_changed" type="datetime"/>
+            <column name="retired" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="datetime"/>
+            <column name="retire_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_creator"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_changed_by"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_retired_by"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="retired_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
+
+    <changeSet id="muzima-20180630154129" author="dileka">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_generated_report"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_generated_report">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_report_config_id" type="int">
+            </column>
+
+            <column name="report_request_uuid" type="char(38)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="varchar(255)"/>
+            
+            <column name="patient_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="report_json" type="longblob">
+                
+            </column>
+            <column name="priority" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int" />
+            <column name="date_changed" type="datetime"/>
+            <column name="retired" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="datetime"/>
+            <column name="retire_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="muzima-20180626154129" author="dileka" context="rel3">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM scheduler_task_config where schedulable_class =
+                'org.openmrs.module.muzima.task.ReportDesignTask'
+            </sqlCheck>
+        </preConditions>
+        <comment>rel3</comment>
+        <sql>
+            INSERT INTO  scheduler_task_config  (name, description, schedulable_class,
+            start_time, start_time_pattern, repeat_interval, start_on_startup, started,
+            created_by, date_created, changed_by, date_changed, last_execution_time, uuid )
+            VALUES ('Auto Generate Patient Reports', NULL, 'org.openmrs.module.muzima.task.ReportDesignTask',
+            '2020-06-26 00:00:00','MM/dd/yyyy HH:mm:ss',86400, 1, 1,
+            1, now(), NULL, NULL, NULL, uuid());
+        </sql>
+    </changeSet>
+    
 
 </databaseChangeLog>

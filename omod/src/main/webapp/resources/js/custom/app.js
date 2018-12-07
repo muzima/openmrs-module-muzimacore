@@ -28,6 +28,9 @@ muzimaCoreModule.
             when('/cohortDefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
             when('/cohortDefinition/:uuid', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
             when('/createCohortDefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
+            when('/reportConfig/:uuid', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
+            when('/reportConfigs', {controller: ReportConfigurationsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfigurations.html'}).
+            when('/createReportConfig/', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
             otherwise({redirectTo: '/sources'});
     }]
 );
@@ -286,7 +289,7 @@ muzimaCoreModule.factory('$muzimaSettings', function($http) {
 });
 
 muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
-    
+
 
     var getCohortDefinitions = function () {
         return $http.get("cohortDefinitions.json");
@@ -312,6 +315,57 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
         saveCohortDefinition:saveCohortDefinition,
         getAllCohorts:getAllCohorts,
         getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition
-        
+
+    }
+});
+
+
+
+/****************************************************************************************
+             ***** Group of methods to manipulate ReportConfigurations
+             *****************************************************************************************/
+
+muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
+
+    var getReportConfigurations = function (search, pageNumber, pageSize) {
+        if (search === undefined) {
+            // replace undefined search term with empty string
+            search = '';
+        }
+        return $http.get("reportConfigs.json?search=" + search + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+    };
+    var getReportConfiguration = function (uuid) {
+        return $http.get("reportConfig.json?uuid=" + uuid);
+    };
+    var saveReportConfiguration = function (uuid, cohortUuid,configJson, priority) {
+        return $http.post("reportConfig.json", {"uuid": uuid,"cohortUuid": cohortUuid, "reportConfigJson": configJson, "priority": priority});
+    };
+    var deleteReportConfiguration = function (uuid) {
+        return $http.post("delete/reportConfig.json", {"uuid": uuid});
+    };
+
+    var searchReportConfigCohorts = function(search) {
+           return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
+     };
+      //search ReportDesigns For ReportConfiguration
+     var searchReportConfigReports = function(search) {
+               return $http.get("reportConfigReports.json?search=" + (search === undefined ? '' : search));
+     };
+      var getReportsForReportConfiguration = function(uuid) {
+                return $http.get("reportConfig/report.json?uuid="  + uuid);
+          };
+       var getCohortForReportConfiguration = function(uuid) {
+                      return $http.get("reportConfig/singleCohort.json?uuid="  + uuid);
+                };
+
+    return {
+        getReportConfigurations: getReportConfigurations,
+        getReportConfiguration: getReportConfiguration,
+        saveReportConfiguration: saveReportConfiguration,
+        deleteReportConfiguration: deleteReportConfiguration,
+        searchReportConfigCohorts: searchReportConfigCohorts,
+        searchReportConfigReports: searchReportConfigReports,
+        getReportsForReportConfiguration: getReportsForReportConfiguration,
+        getCohortForReportConfiguration:getCohortForReportConfiguration
     }
 });
