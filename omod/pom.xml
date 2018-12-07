@@ -120,6 +120,7 @@
             <version>2.0</version>
             <classifier>tests</classifier>
         </dependency>
+        <!-- ToDo: Check if necessary -->
         <dependency>
             <groupId>org.codehaus.jettison</groupId>
             <artifactId>jettison</artifactId>

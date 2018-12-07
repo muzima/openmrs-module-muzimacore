@@ -109,7 +109,7 @@ public class ReportConfigurationController {
             if(priority ==null){
                 priority = false;
             }
-            
+            //ToDo: Merge if else logic
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
             if (StringUtils.isNotBlank(uuid)) {
                 String cohortUuid =  (String) map.get("cohortUuid");
@@ -126,6 +126,7 @@ public class ReportConfigurationController {
                         reportConfiguration.setReportDesignUuid(s1);
                         reportConfiguration.setCohortUuid(cohortUuid);
                         reportConfiguration.setPriority(priority);
+                        reportConfigurationService.saveReportConfiguration(reportConfiguration);
                     }
             } else {
               
@@ -140,6 +141,7 @@ public class ReportConfigurationController {
                     reportConfiguration.setReportDesignUuid(s1);
                     reportConfiguration.setCohortUuid(cohortUuid);
                     reportConfiguration.setPriority(priority);
+                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
                 }
             }
         }

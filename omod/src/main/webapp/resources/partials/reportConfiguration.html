@@ -2,24 +2,20 @@
      xmlns:padding="http://www.w3.org/1999/xhtml">
     <div class="col-lg-2">
         <ul class="nav nav-tabs nav-stacked">
-            <li class="navigation-active"><a href="#/sources">Data Source</a></li>
+            <li><a href="#/sources">Data Source</a></li>
             <li><a href="#/configs">Setup Configurations</a></li>
             <li><a href="#/queues">Queue Data</a></li>
             <li><a href="#/registrations">Registrations</a></li>
             <li><a href="#/forms">Muzima Forms</a></li>
             <li><a href="#/errors">Error Data</a></li>
-            <li><a href="#/reportConfigs">Patient Reports</a></li>
+            <li class="navigation-active"><a href="#/reportConfigs">Patient Reports</a></li>
+            <li><a href="#/cohortDefinitions">Cohort Definitions</a></li>
             <li><a href="#/settings">Settings</a></li>
         </ul>
     </div>
     <div class="col-lg-8">
         <div ng-switch="mode">
             <div ng-switch-when="view">
-                
-
-                <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Cohort ..." type="text" disabled="" ng-model="reportConfiguration.uuid">
-                </div>
 
                 <div class="row">
                     <input class="col-lg-10 form-control" placeholder="Report name ..." type="text" disabled="" ng-model="reportConfiguration.cohort">
@@ -33,6 +29,10 @@
                     <textarea class="col-lg-12 form-control" placeholder="." rows="10" disabled="" ng-model="reportConfiguration.report">
                     </textarea>
                 </div>
+
+                <div class="row">
+                    <input class="col-lg-10 form-control" placeholder="Cohort ..." type="text" disabled="" ng-model="reportConfiguration.uuid">
+                </div>
                
                 <div class="row">
                     <button type="submit" ng-click="edit()" class="btn btn-primary">Edit</button>
@@ -43,7 +43,8 @@
             <div ng-switch-when="edit">
                 <form id="consult">
                     <div class="row">
-                        <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
+                        <input class="col-lg-10 form-control" type="text" ng-hide="!reportConfiguration.uuid" ng-model="reportConfiguration.cohort" disabled="disabled">
+                        <input ng-hide="reportConfiguration.uuid" type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
                                uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
                                uib-typeahead-wait-ms="500"  uib-typeahead-editable="false"/>
                     </div>

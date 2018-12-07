@@ -48,15 +48,18 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
         Integer startIndex = context.getStartIndex();
         Integer limit =  context.getLimit();
         
-        String nameParameter = request.getParameter("patientUuid");
+        String patientUuid = request.getParameter("patientUuid");
         List<MuzimaGeneratedReport> muzimaGeneratedReports = new ArrayList<MuzimaGeneratedReport>();
 
-        if (nameParameter != null) {
+        if (patientUuid != null) {
             PatientService patientService = Context.getService(PatientService.class);
-            Patient patient = patientService.getPatientByUuid(nameParameter);
+            Patient patient = patientService.getPatientByUuid(patientUuid);
             MuzimaGeneratedReportService service = Context.getService(MuzimaGeneratedReportService.class);
-            muzimaGeneratedReports.add(Context.getService(MuzimaGeneratedReportService.class).getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId()));
-
+            MuzimaGeneratedReport muzimaGeneratedReport = service.getLastPriorityMuzimaGeneratedReportByPatientId(patient.getId());
+            if(muzimaGeneratedReport != null){
+                muzimaGeneratedReport.setPatientUuid(patientUuid);
+                muzimaGeneratedReports.add(muzimaGeneratedReport);
+            }
         }
         return new NeedsPaging<MuzimaGeneratedReport>(muzimaGeneratedReports, context);
     }
@@ -113,7 +116,7 @@ public class MuzimaGeneratedReportResource extends MetadataDelegatingCrudResourc
             description = new DelegatingResourceDescription();
             description.addProperty("uuid");
             description.addProperty("id");
-            description.addProperty("patientId");
+            description.addProperty("patientUuid");
             description.addProperty("name");
             description.addProperty("description");
             description.addProperty("reportJson");

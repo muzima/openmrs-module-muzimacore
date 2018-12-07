@@ -32,7 +32,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
          $muzimaReportConfigurations.getReportsForReportConfiguration($scope.reportConfiguration.uuid).
             then(function (response) {
                 $scope.reports = response.data.objects;
-           
+
                 angular.forEach($scope.reports, function (report, index) {
                                  $scope.configReports.push(report);
                                     });
@@ -55,7 +55,8 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
             if ($scope.uuid === undefined) {
                 $location.path("/reportConfigs");
             } else {
-                $scope.mode = "view"
+                //ToDO: Redirect to view mode and clear the text area.
+                $location.path("/reportConfigs");
             }
         } else {
             $location.path("/reportConfigs");
@@ -70,7 +71,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     };
 
     $scope.delete = function () {
-        $reportConfigurations.deleteReportConfiguration($scope.uuid).
+        $muzimaReportConfigurations.deleteReportConfiguration($scope.uuid).
         then(function () {
             $location.path("/reportConfigs");
         })
