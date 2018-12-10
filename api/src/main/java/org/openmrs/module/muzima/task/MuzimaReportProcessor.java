@@ -51,133 +51,141 @@ public class MuzimaReportProcessor {
         if (!isRunning) {
             processAllReports();
         } else {
-            log.info("Queue data processor aborting (another processor already running)!");
+            log.info("mUzima report processor aborting (another processor already running)!");
         }
     }
     
-    public void processAllReports() {
-        
-        List<ReportConfiguration> reportConfigurations = Context.getService(ReportConfigurationService.class)
-                .getAllReportConfigurations();
-        ReportService reportService = Context.getService(ReportService.class);
-        ReportDefinitionService reportDefinitionService = Context.getService(ReportDefinitionService.class);
-        ObsService obsService = Context.getService(ObsService.class);
-        PersonService personService = Context.getService(PersonService.class);
-        PatientService patientService = Context.getService(PatientService.class);
-        MuzimaGeneratedReportService muzimaGeneratedReportService = Context.getService(MuzimaGeneratedReportService.class);
-    
-        //This loop iterates through every report configuration created
-        for (ReportConfiguration reportConfiguration : reportConfigurations) {
-       
-            Cohort cohort = Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid());
-            String patientIds = cohort.getCommaSeparatedPatientIds();
-            String[] patientList = patientIds.split(",");
-            
-            RenderingMode selectedRenderingMode = null;
-            
-            ReportDesign design = reportService.getReportDesignByUuid(reportConfiguration.getReportDesignUuid());
-            ReportDefinition reportDefinition = reportDefinitionService
-                    .getDefinitionByUuid(design.getReportDefinition().getUuid());
-            
-            //sets the selected rendering mode
-            for (RenderingMode renderingMode : reportService.getRenderingModes(reportDefinition)) {
-                if (renderingMode.getLabel().equals(design.getName())) {
-                    selectedRenderingMode = renderingMode;
+    private void processAllReports() {
+        try {
+            isRunning = true;
+            log.info("Starting mUzima report processor ...");
+            List<ReportConfiguration> reportConfigurations = Context.getService(ReportConfigurationService.class)
+                    .getAllReportConfigurations();
+            ReportService reportService = Context.getService(ReportService.class);
+            ReportDefinitionService reportDefinitionService = Context.getService(ReportDefinitionService.class);
+            ObsService obsService = Context.getService(ObsService.class);
+            PersonService personService = Context.getService(PersonService.class);
+            PatientService patientService = Context.getService(PatientService.class);
+            MuzimaGeneratedReportService muzimaGeneratedReportService = Context.getService(MuzimaGeneratedReportService.class);
+
+            //This loop iterates through every report configuration created
+            for (ReportConfiguration reportConfiguration : reportConfigurations) {
+
+                Cohort cohort = Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid());
+                String patientIds = cohort.getCommaSeparatedPatientIds();
+                String[] patientList = patientIds.split(",");
+
+                RenderingMode selectedRenderingMode = null;
+
+                ReportDesign design = reportService.getReportDesignByUuid(reportConfiguration.getReportDesignUuid());
+                ReportDefinition reportDefinition = reportDefinitionService
+                        .getDefinitionByUuid(design.getReportDefinition().getUuid());
+
+                //sets the selected rendering mode
+                for (RenderingMode renderingMode : reportService.getRenderingModes(reportDefinition)) {
+                    if (renderingMode.getLabel().equals(design.getName())) {
+                        selectedRenderingMode = renderingMode;
+                    }
                 }
-            }
-            //iterates through the list of patients in the cohort of the reportConfiguration
-            for (String patientIdString : patientList) {
-                Integer patientId = Integer.valueOf(patientIdString);
-               
-                MuzimaGeneratedReport lastGeneratedReport = muzimaGeneratedReportService
-                        .getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(patientId,reportConfiguration.getId());
-    
-                //gets the last generated report to check whether the it is complete
-                if (lastGeneratedReport != null) {
-                    if (!"completed".equals(lastGeneratedReport.getStatus())) {
-                        ReportRequest reportRequest = reportService
-                                .getReportRequestByUuid(lastGeneratedReport.getReportRequestUuid());
-    
-                        //checks whether the request to generate reports is completed
-                        if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
-                            //if complete, report is generated
-                            byte[] data = reportService.loadRenderedOutput(reportRequest);
-                            
-                            if (data != null) {
-                                String s = new String(data);
-                                lastGeneratedReport.setReportJson(data);
-                                lastGeneratedReport.setStatus("completed");
-                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
-                            } else {
-                                lastGeneratedReport.setStatus("completed");
-                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
+                //iterates through the list of patients in the cohort of the reportConfiguration
+                for (String patientIdString : patientList) {
+                    Integer patientId = Integer.valueOf(patientIdString);
+
+                    MuzimaGeneratedReport lastGeneratedReport = muzimaGeneratedReportService
+                            .getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(patientId, reportConfiguration.getId());
+
+                    //gets the last generated report to check whether the it is complete
+                    if (lastGeneratedReport != null) {
+                        if (!"completed".equals(lastGeneratedReport.getStatus())) {
+                            ReportRequest reportRequest = reportService
+                                    .getReportRequestByUuid(lastGeneratedReport.getReportRequestUuid());
+
+                            //checks whether the request to generate reports is completed
+                            if(reportRequest != null) {
+                                if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
+                                    //if complete, report is generated
+                                    byte[] data = reportService.loadRenderedOutput(reportRequest);
+
+                                    if (data != null) {
+                                        String s = new String(data);
+                                        lastGeneratedReport.setReportJson(data);
+                                        lastGeneratedReport.setStatus("completed");
+                                        muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
+                                    } else {
+                                        lastGeneratedReport.setStatus("completed");
+                                        muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
+                                    }
+
+                                } else {
+                                    lastGeneratedReport.setStatus("progress");
+                                    muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
+                                }
                             }
-                            
-                        } else {
-                            lastGeneratedReport.setStatus("progress");
-                            muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
                         }
-                    }
-                    
-                    Patient patient = patientService.getPatient(patientId);
-                    List<Obs> obsList = obsService.getObservationsByPerson(patient);
-                    if (0 != obsList.size()) {
-                        Obs obs = obsList.get(obsList.size() - 1); //gets the last observation of the patient
-                        final Calendar cal = Calendar.getInstance();
-                        cal.add(Calendar.DATE, -1);
-                        Date yesterday = cal.getTime();
-    
-                        //checks whether the last obs datetime against the last time the report was generated
-                        if (obs.getObsDatetime().after(yesterday)) {
-                            ReportRequest reportRequest = new ReportRequest();
-                            Map<String, Object> params = new LinkedHashMap<String, Object>();
-                            
-                            params.put("person", personService.getPerson(patientId));
-                            reportRequest.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
-                            reportRequest.setRenderingMode(selectedRenderingMode);
-                            reportRequest.setPriority(ReportRequest.Priority.NORMAL);
-                            
-                            //Request for report generation is made(handled asynchronously)
-                            reportRequest = reportService.queueReport(reportRequest);
-                            reportService.processNextQueuedReports();
-                           
-                            MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
-                            muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
-                            muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
-                            muzimaGeneratedReport.setPatientId(patientId);
-                            muzimaGeneratedReport.setPriority(reportConfiguration.getPriority());
-                            muzimaGeneratedReport.setStatus("progress");
-                            
-                            muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
+
+                        Patient patient = patientService.getPatient(patientId);
+                        List<Obs> obsList = obsService.getObservationsByPerson(patient);
+                        if (0 != obsList.size()) {
+                            Obs obs = obsList.get(obsList.size() - 1); //gets the last observation of the patient
+                            final Calendar cal = Calendar.getInstance();
+                            cal.add(Calendar.DATE, -1);
+                            Date yesterday = cal.getTime();
+
+                            //checks whether the last obs datetime against the last time the report was generated
+                            if (obs.getObsDatetime().after(yesterday)) {
+                                ReportRequest reportRequest = new ReportRequest();
+                                Map<String, Object> params = new LinkedHashMap<String, Object>();
+
+                                params.put("person", personService.getPerson(patientId));
+                                reportRequest.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
+                                reportRequest.setRenderingMode(selectedRenderingMode);
+                                reportRequest.setPriority(ReportRequest.Priority.NORMAL);
+
+                                //Request for report generation is made(handled asynchronously)
+                                reportRequest = reportService.queueReport(reportRequest);
+                                reportService.processNextQueuedReports();
+
+                                MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
+                                muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
+                                muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
+                                muzimaGeneratedReport.setPatientId(patientId);
+                                muzimaGeneratedReport.setPriority(reportConfiguration.getPriority());
+                                muzimaGeneratedReport.setStatus("progress");
+
+                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
+                            }
+
                         }
-                        
+
+                    } else {
+
+                        //this snippet is run for the very first time of the task
+                        ReportRequest reportRequest = new ReportRequest();
+                        Map<String, Object> params = new LinkedHashMap<String, Object>();
+
+                        params.put("person", personService.getPerson(patientId));
+                        reportRequest.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
+                        reportRequest.setRenderingMode(selectedRenderingMode);
+                        reportRequest.setPriority(ReportRequest.Priority.NORMAL);
+
+                        //Request for report generation is made(handled asynchronously)
+                        reportRequest = reportService.queueReport(reportRequest);
+                        reportService.processNextQueuedReports();
+
+                        MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
+                        muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
+                        muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
+                        muzimaGeneratedReport.setPatientId(patientId);
+                        muzimaGeneratedReport.setPriority(reportConfiguration.getPriority());
+                        muzimaGeneratedReport.setStatus("progress");
+
+                        muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
                     }
-                    
-                } else {
-                    
-                   //this snippet is run for the very first time of the task
-                    ReportRequest reportRequest = new ReportRequest();
-                    Map<String, Object> params = new LinkedHashMap<String, Object>();
-                    
-                    params.put("person", personService.getPerson(patientId));
-                    reportRequest.setReportDefinition(new Mapped<ReportDefinition>(reportDefinition, params));
-                    reportRequest.setRenderingMode(selectedRenderingMode);
-                    reportRequest.setPriority(ReportRequest.Priority.NORMAL);
-    
-                    //Request for report generation is made(handled asynchronously)
-                    reportRequest = reportService.queueReport(reportRequest);
-                    reportService.processNextQueuedReports();
-                   
-                    MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
-                    muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
-                    muzimaGeneratedReport.setCohortReportConfigId(reportConfiguration.getId());
-                    muzimaGeneratedReport.setPatientId(patientId);
-                    muzimaGeneratedReport.setPriority(reportConfiguration.getPriority());
-                    muzimaGeneratedReport.setStatus("progress");
-                    
-                    muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
                 }
             }
+        } finally {
+            log.info("Stopping mUzima report processor ...");
+            isRunning = false;
         }
     }
 }

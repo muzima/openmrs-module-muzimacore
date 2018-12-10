@@ -20,10 +20,10 @@ import org.openmrs.scheduler.tasks.AbstractTask;
  */
 public class ReportDesignTask extends AbstractTask {
 
-    private QueueDataProcessor processor;
+    private MuzimaReportProcessor processor;
 
     public ReportDesignTask() {
-        this.processor = new QueueDataProcessor();
+        this.processor = new MuzimaReportProcessor();
     }
 
     /**
@@ -32,7 +32,7 @@ public class ReportDesignTask extends AbstractTask {
     @Override
     public void execute() {
         Context.openSession();
-        processor.processQueueData();
+        processor.generateReports();
         Context.closeSession();
     }
 }
