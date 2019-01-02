@@ -435,7 +435,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             encounter.setLocation(location);
         }
 
-        String jsonPayloadTimezone = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.default_time_zone']");
+        String jsonPayloadTimezone = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.device_time_zone']");
         Date encounterDatetime = JsonUtils.readAsDateTime(encounterPayload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat,jsonPayloadTimezone);
         encounter.setEncounterDatetime(encounterDatetime);
     }
