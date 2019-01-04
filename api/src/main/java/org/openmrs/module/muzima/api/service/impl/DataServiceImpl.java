@@ -25,6 +25,7 @@ import org.openmrs.module.muzima.api.db.ErrorMessageDao;
 import org.openmrs.module.muzima.api.db.NotificationDataDao;
 import org.openmrs.module.muzima.api.db.QueueDataDao;
 import org.openmrs.module.muzima.api.service.DataService;
+import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
 import org.openmrs.module.muzima.model.ArchiveData;
 import org.openmrs.module.muzima.model.DataSource;
@@ -32,9 +33,11 @@ import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.model.QueueData;
+import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.util.HandlerUtil;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -697,5 +700,45 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
             errorMessages.add(error);
         }
         return errorMessages;
+    }
+
+    @Override
+    public List<QueueData> mergeDuplicatePatient(@NotNull final String errorDataUuid, @NotNull final String existingPatientUuid,
+                                                 @NotNull final String formData) {
+        List<QueueData> requeued = new ArrayList<QueueData>();
+        ErrorData errorData = this.getErrorDataByUuid(errorDataUuid);
+        String submittedPatientUuid = errorData.getPatientUuid();
+
+        errorData.setDiscriminator("json-demographics-update");
+
+        errorData = this.saveErrorData(errorData);
+
+        registerTemporaryUuid(submittedPatientUuid, existingPatientUuid);
+        QueueData queueData = new QueueData(errorData);
+        queueData = this.saveQueueData(queueData);
+        this.purgeErrorData(errorData);
+        requeued.add(queueData);
+
+        // Fetch all ErrorData associated with the patient UUID (the one determined to be of a duplicate patient).
+        int countOfErrors = this.countErrorData(submittedPatientUuid).intValue();
+        List<ErrorData> allToRequeue = this.getPagedErrorData(submittedPatientUuid, 1, countOfErrors);
+        for(ErrorData errorData1: allToRequeue) {
+            queueData = new QueueData(errorData1);
+            queueData = this.saveQueueData(queueData);
+            this.purgeErrorData(errorData1);
+            requeued.add(queueData);
+        }
+        return requeued;
+    }
+
+    private void registerTemporaryUuid(final String temporaryUuid, final String permanentUuid) {
+        RegistrationDataService registrationDataService = Context.getService(RegistrationDataService.class);
+        RegistrationData registrationData = registrationDataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
+        if (registrationData == null) {
+            registrationData = new RegistrationData();
+            registrationData.setTemporaryUuid(temporaryUuid);
+            registrationData.setAssignedUuid(permanentUuid);
+            registrationDataService.saveRegistrationData(registrationData);
+        }
     }
 }

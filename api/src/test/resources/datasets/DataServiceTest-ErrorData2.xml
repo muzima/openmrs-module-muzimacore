@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <muzima_error_data id="3" discriminator="json-registration" data_source="1" payload='{"patient":{"patient.uuid":"e3fe8d12-2c4e-4d0d-b405-1b0a7de2aa31","patient.family_name":"Test","patient.given_name":"Patient1","patient.middle_name":"Patient1","patient.mothers_name":"Non","patient.medical_record_number":"333333333-8","patient.other_identifier_type":"KENYAN NATIONAL ID NUMBER","patient.other_identifier_value":"12345678","patient.confirm_identifier_value":"12345678","patient.sex":"M","patient.birth_date":"01-01-1993","patient.birthdate_estimated":"true"},"tmp":{"tmp.birthdate_type":"age","tmp.age_in_years":"25"},"encounter":{"encounter.location_id":"3","encounter.provider_id_select":"admin","encounter.provider_id":"admin","encounter.encounter_datetime":"12-11-2018","encounter.form_uuid":"e72c4bd8-6329-4eb4-b0bd-1c4729ada98e","encounter.user_system_id":"admin"}}'
+                       message="Unable to process queue data" date_processed="2017-09-15 11:28:19"
+                       creator="1" date_created="2017-09-15 11:28:19" form_name="mUzima Registration Form" location="3" provider="1" patient_uuid="e3fe8d12-2c4e-4d0d-b405-1b0a7de2aa31"
+                       uuid="03bd16de-1d9a-44f4-b775-397aabae1dc0"/>
+    <muzima_error_message id="3" muzima_error_data_id="3" message="Found a patient with similar characteristic :  patientId = 1 Identifier Id = 1093-9" creator="1"
+                          date_created="2017-09-15 11:28:20" uuid="03bd16de-1d9a-44f4-b775-397aabae1dc0"/>
+
+    <muzima_error_data id="2" discriminator="json-registration" data_source="1" payload="some payload" message="Unable to process queue data" date_processed="2017-09-18 11:28:19"
+                       creator="1" date_created="2017-09-18 11:28:19" form_name="mUzima Registration Form" location="3" provider="1" patient_uuid="5b5e1658-ff6f-45f8-842a-ae92d91e58f8"
+                       uuid="03bd16y7-1d9a-44f4-b775-397aabae1dc0"/>
+    <muzima_error_message id="2" muzima_error_data_id="2" message="'Patient#null' failed to validate with reason: Identifier 111111111-6 already in use by another patient" creator="1"
+                          date_created="2017-09-18 11:28:20" uuid="08c56375-93b2-4853-a030-b2cb04f12a08"/>
+
+    <muzima_error_data id="4" discriminator="json-encounter" data_source="1" payload='{"patient":{"patient.uuid":"e3fe8d12-2c4e-4d0d-b405-1b0a7de2aa31","patient.family_name":"Cherwon","patient.given_name":"Mitchell","patient.middle_name":"Yebei","patient.sex":"F","patient.birth_date":"05-09-1978"},"encounter":{"encounter.location_id":"3","encounter.provider_id_select":"5-9","encounter.provider_id":"5-9","encounter.encounter_datetime":"06-11-2018","encounter.form_uuid":"5d7bf964-2300-4280-b007-a6a1c31c9e79","encounter.user_system_id":"admin"},"observation":{"1839^CURRENT VISIT TYPE^99DCT":"2345^FOLLOW-UP^99DCT","5624^GRAVIDA^99DCT":"2","1053^PARITY^99DCT":"3","2061^MENSTRUATION STATUS^99DCT":"5989^MENSTRUATING^99DCT","1836^LAST MENSTRUAL PERIOD DATE^99DCT":"06-11-2018","8351^PREGNANCY STATUS, CODED^99DCT":"1066^NO^99DCT","5596^ESTIMATED DATE OF CONFINEMENT^99DCT":"06-11-2018","9733^REASON NOT PREGNANT^99DCT":"9729^PREGNANCY NOT SUSPECTED^99DCT","6709^HIV STATUS^99DCT":"664^NEGATIVE^99DCT","856^HIV VIRAL LOAD, QUANTITATIVE^99DCT":"3","9589^PATIENT REPORTED PAST VISUAL INSPECTION WITH ACETIC ACID TEST^99DCT":"1065^YES^99DCT","7381^MOST RECENT VISUAL INSPECTION WITH ACETIC ACID RESULT^99DCT":"703^POSITIVE^99DCT","9590^VIA TEST RESULT THIS VISIT^99DCT":"7293^ULCER^99DCT","7484^VISUAL CERVICAL EXAM FINDINGS^99DCT":"1115^NORMAL^99DCT","7490^VISUAL VAGINAL EXAM FINDINGS^99DCT":"1447^WARTS, GENITAL^99DCT","7487^VISUAL VULVAL EXAM FINDINGS^99DCT":"1115^NORMAL^99DCT","7479^PROCEDURES DONE THIS VISIT^99DCT":"1107^NONE^99DCT","7500^GYNECOLOGIC ONCOLOGY PLAN^99DCT":"9725^RETURN FOR RESULT^99DCT","7222^THERAPEUTIC PLAN NOTES^99DCT":"Okay","5096^RETURN VISIT DATE^99DCT":"06-11-2018"}}'
+                       message="Unable to process queue data" date_processed="2017-09-18 11:28:19"
+                       creator="1" date_created="2017-09-20 12:30:19" form_name="Muzima Encounter Form" location="3" provider="1" patient_uuid="e3fe8d12-2c4e-4d0d-b405-1b0a7de2aa31"
+                       uuid="43794a2a-dc3c-451d-8e73-937fee85754e"/>
+    <muzima_error_message id="4" muzima_error_data_id="4" message="1458 : Unable to find Concept for Question with ID: 2061" creator="1"
+                          date_created="2017-09-18 11:28:20" uuid="9e92eb07-3d88-4531-a875-b68881f80a5d"/>
+    <muzima_error_message id="5" muzima_error_data_id="4" message="1460 : Unable to find Concept for Question with ID: 7484" creator="1"
+                          date_created="2017-09-18 11:28:20" uuid="98ae3171-c583-4f1d-95e1-55ec183213a8"/>
+</dataset>
+

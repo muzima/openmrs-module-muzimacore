@@ -35,6 +35,7 @@ public class DataServiceTest extends BaseModuleContextSensitiveTest {
     protected static final String QUEUE_DATA_XML = "datasets/DataServiceTest-QueueData.xml";
     protected static final String DATA_SOURCE_XML = "datasets/DataServiceTest-DataSource.xml";
     protected static final String ERROR_DATA_XML = "datasets/DataServiceTest-ErrorData.xml";
+    protected static final String ERROR_DATA_XML2 = "datasets/DataServiceTest-ErrorData2.xml";
     protected static final String ARCHIVE_DATA_XML = "datasets/DataServiceTest-ArchiveData.xml";
     // Services
     protected static DataService dataService = null;
@@ -369,5 +370,43 @@ public class DataServiceTest extends BaseModuleContextSensitiveTest {
         dataService.purgeDataSource(dataService.getDataSource(1));
 //        verify that data source is empty
         Assert.assertEquals("data source not purged", 0, dataService.getAllDataSource().size());
+    }
+
+    @Test
+    public void getPagedErrorData_shouldSearchTheErrorMessage() throws Exception {
+        executeDataSet(ERROR_DATA_XML2);
+        String needle = "Found a patient with similar characteristic";
+        List<ErrorData> records = dataService.getPagedErrorData(needle, 1, 10);
+        Assert.assertNotNull(records);
+
+        Assert.assertEquals(1, records.size());
+    }
+
+    @Test
+    public void getPagedErrorData_shouldSearchPatientUuidInPayload() throws Exception {
+        executeDataSet(ERROR_DATA_XML2);
+        String patientUuid = "e3fe8d12-2c4e-4d0d-b405-1b0a7de2aa31";
+
+        List<ErrorData> records = dataService.getPagedErrorData(patientUuid, 1, 10);
+        Assert.assertNotNull(records);
+
+        Assert.assertTrue(records.size()>1);
+    }
+
+    @Test
+    public void mergeDuplicatePatient_shouldUpdateThePayloadAndRequeueAsDemographicUpdate() throws Exception {
+        executeDataSet(ERROR_DATA_XML2);
+        int initialCountErrorData = dataService.getAllErrorData().size();
+        int initialCountQueue = dataService.getAllQueueData().size();
+        String errorDataUuid = "43794a2a-dc3c-451d-8e73-937fee85754e";
+        String existingPatientUuid = "existing-patient-uuid";
+        String formData = dataService.getErrorDataByUuid(errorDataUuid).getPayload();
+
+        dataService.mergeDuplicatePatient(errorDataUuid, existingPatientUuid, formData);
+
+        Assert.assertNull(dataService.getErrorDataByUuid(errorDataUuid));
+
+        Assert.assertEquals(initialCountErrorData - 2, dataService.getAllErrorData().size());
+        Assert.assertEquals(initialCountQueue + 2, dataService.getAllQueueData().size());
     }
 }
