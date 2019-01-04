@@ -10,6 +10,7 @@ import org.openmrs.module.muzima.model.ErrorMessage;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.model.QueueData;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -468,5 +469,15 @@ public interface DataService extends OpenmrsService {
     List<ErrorMessage> validateData(String uuid, String formData);
 
     List<String> getDiscriminatorTypes();
+
+    /**
+     * For a submitted payload the method fetches the associated ErrorData record, updates its payload with passed UUID whose patient UUID is changed
+     * to reflect the duplicate patient's uuid already in the system. The payload is re-queued with descriminator "json-update-demographics" instead
+     * of the "json-registration". All ErrorData records bearing the patient UUID in error are also fetched updated and re-queued.
+     * @param errorDataUuid String - UUID of ErrorData record with duplicate patient details submitted for registration.
+     * @param formData  String - payload with demographic information to be updated to the existing patient.
+     * @return List of QueueData - A list of newly submitted QueuedData.
+     */
+    List<QueueData> mergeDuplicatePatient(@NotNull final String errorDataUuid, @NotNull final String existingPatientUuid, @NotNull String formData);
 
 }

@@ -248,3 +248,46 @@ function ErrorsCtrl($scope, $location, $data) {
         }
     }, true);
 }
+
+function PotentialDuplicatesErrorsCtrl($scope, $data) {
+    // initialize selected error data for re-queueing
+    $scope.selected = {};
+    // initialize the paging structure
+    $scope.maxSize = 10;
+    $scope.pageSize = 10;
+    $scope.currentPage = 1;
+    $scope.totalItems = 0;
+    var searchTerm = 'Found a patient with similar characteristic';
+    $data.getErrors(searchTerm, $scope.currentPage, $scope.pageSize).then(function (response) {
+        var serverData = response.data;
+        $scope.errors = serverData.objects;
+        $scope.totalItems = serverData.totalItems;
+        $('#wait').hide();
+    }).catch(function(err) {
+        console.log(err);
+        $('#wait').hide();
+    });
+
+    $scope.$watch('currentPage', function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
+            then(function (response) {
+                var serverData = response.data;
+                $scope.errors = serverData.objects;
+                $scope.totalItems = serverData.totalItems;
+            });
+        }
+    }, true);
+
+    $scope.$watch('search', function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            $scope.currentPage = 1;
+            $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
+            then(function (response) {
+                var serverData = response.data;
+                $scope.errors = serverData.objects;
+                $scope.totalItems = serverData.totalItems;
+            });
+        }
+    }, true);
+}

@@ -1,0 +1,282 @@
+function MergeCtrl($scope, $routeParams, $location, $data) {
+    // page parameter
+    $scope.uuid = $routeParams.uuid;
+    $scope.queue_checkbox = { select_all: false };
+    $scope.emr_checkbox = { select_all: false};
+    $data.getError($scope.uuid).then(function (response) {
+        console.log('Response: ', response);
+        $scope.error = response.data;
+        $scope.payload = JSON.parse($scope.error['payload']);
+        $scope.queuePatient = _stripPatientPrefixFromPayloadPatient($scope.payload['patient']);
+        if($scope.payload['tmp'] && $scope.payload['tmp']['tmp.age_in_years']) {
+            $scope.queuePatient['age'] = $scope.payload['tmp']['tmp.age_in_years'];
+        }
+        const errorMessages = JSON.parse($scope.error['Errors']);
+        var duplicatePatientErrorMessage = Object.values(errorMessages).find(function(error) {
+            return error.startsWith('Found a patient with similar characteristic');
+        });
+
+        // Parse to find the patient identifier
+        if(duplicatePatientErrorMessage) {
+            let identifier = _findThePatientIdentifier(duplicatePatientErrorMessage);
+            if(identifier != null) {
+                $data.getPatientByIdentifier(identifier).then(function(response) {
+                    $scope.existingPatient = response.data.results[0];         // just pick the first record for now.
+                    $scope.emrPatient = _harmonizePatientFromServer($scope.existingPatient);
+                    $scope.allKeys = _.union(Object.keys($scope.emrPatient), Object.keys($scope.queuePatient));
+                    let tableData = [];
+                    for(let key of $scope.allKeys) {
+                        let rowData = {
+                            key,
+                            label: getLabel(key),
+                            isConflict: isConflict(key, $scope.emrPatient[key], $scope.queuePatient[key]),
+                        };
+                        rowData['emrPatient'] = $scope.emrPatient[key];
+                        rowData['queuePatient'] = $scope.queuePatient[key];
+                        tableData.push(rowData)
+                        $scope.queue_checkbox[key] = false;
+                        $scope.emr_checkbox[key] = false;
+                    }
+                    console.log(tableData);
+                    $scope.tableData = tableData
+                    $('#wait').hide();
+                }).catch(function(err) {
+                    console.log(err);
+                    $('#wait').hide();
+                });
+            }
+        } else {
+            $('#wait').hide();
+        }
+    });
+
+    function getLabel(filed) {
+        const lableMap = {
+            'given_name': 'Given name',
+            'first_name': 'First Name',
+            'middle_name': 'Middle Name',
+            'family_name': 'Family Name',
+            'sex': 'Sex',
+            'age': 'Age',
+            'country': 'Country',
+            'birth_date': 'Birthdate',
+        };
+        if(_.has(lableMap, filed)) {
+            return _.get(lableMap, filed);
+        }
+
+        // replace _ with space.
+        let toRet = filed.charAt(0).toUpperCase() + filed.substring(1);
+        toRet = toRet.replace(/_/g, ' ');
+
+        return toRet;
+    }
+
+    function isConflict(filed, val1, val2) {
+        switch(filed) {
+            case 'given_name':
+            case 'middle_name':
+            case 'family_name':
+            case 'sex':
+            case 'age':
+            case 'country':
+            case 'birthdate':
+            case 'medical_record_number':
+            case 'mothers_name':
+            case 'birthdate_estimated':
+                return val1 != val2;
+            default:
+                return false
+        }
+    }
+
+    function _findThePatientIdentifier(errorMessage) {
+        // Format is
+        // "Found a patient with similar characteristic :  patientId = 9409 Identifier Id = 333333333-8"
+        // regex
+        const regex = /(?:^|\s)Found a patient with similar characteristic :  patientId =\s\d+\sIdentifier Id =\s(.+)(?:\s|$)/g;
+        const matches = regex.exec(errorMessage);
+
+        if(Array.isArray(matches) && matches[1]) return matches[1];
+        return null;
+    }
+
+    function _harmonizePatientFromServer(patient) {
+        const AMRS_UNIVERSAL_ID_TYPE_UUID = 'a311eb47-794a-412b-a62f-d727adb8b47b';
+        let patientMedicalRecordNumber = null;
+        if(Array.isArray(patient.identifiers)) {
+            // find the universal type.
+            let universal = patient.identifiers.find(identifier => {
+                return identifier.identifierType.uuid === AMRS_UNIVERSAL_ID_TYPE_UUID;
+            });
+            if(universal) {
+                patientMedicalRecordNumber = universal['identifier'];
+            }
+        }
+        let patientName = patient['person']['preferredName'] || patient['person'].names[0];
+        let patientAddress = patient['person']['preferredAddress'] || patient['person'].addresses[0];
+        return {
+            uuid: patient['uuid'],
+            given_name: patientName['givenName'],
+            middle_name: patientName['middleName'],
+            family_name: patientName['familyName'],
+            age: patient['person'].age,
+            sex: patient['person'].gender,
+            country: patientAddress['country'],
+            district: patientAddress['district'],
+            birth_date: patient['person']['birthdate'],
+            medical_record_number: patientMedicalRecordNumber,
+        };
+    }
+
+    /**
+     * For example patient.birthdate is turned into birthdate.
+     * @param patient
+     * @returns {{}}
+     * @private
+     */
+    function _stripPatientPrefixFromPayloadPatient(patient) {
+        let stripped = {};
+        Object.keys(patient).forEach(key => {
+            stripped[key.substring(key.indexOf('.')+1)] = patient[key];
+        });
+        return stripped;
+    }
+
+    /**
+     * Updates the payload values with the one entered in the UI by the user when resolving the duplicate patients
+     * @private
+     */
+    function _updatePayloadData() {
+        console.log('Initial Payload', $scope.payload);
+        let patientKeys = Object.keys($scope.queuePatient);
+        $scope.tableData.forEach(rowData => {
+            if(patientKeys.find(patKey => patKey === rowData.key)) {
+                $scope.payload['patient']['patient.' + rowData.key] = rowData['queuePatient'];
+            }
+        });
+    }
+
+    $scope.updatePage = function(rowData) {
+        rowData.isConflict = isConflict(rowData.key, rowData['emrPatient'], rowData['queuePatient']);
+        // Check the queue data side.
+        $scope.queue_checkbox[rowData.key] = true;
+        $scope.emr_checkbox[rowData.key] = false;
+    };
+
+    $scope.toggleCheckboxes = function (side) {
+        if(side === 'emr') {
+            if($scope.emr_checkbox.select_all === true) {
+                $scope.queue_checkbox.select_all = false;
+                for(let key of $scope.allKeys) {
+                    $scope.emr_checkbox[key] = true;
+                    $scope.queue_checkbox[key] = false;
+                }
+            } else {
+                for(let key of $scope.allKeys) {
+                    $scope.emr_checkbox[key] = false;
+                }
+            }
+        } else if(side === 'queue') {
+            if($scope.queue_checkbox.select_all === true) {
+                $scope.emr_checkbox.select_all = false;
+                for(let key of $scope.allKeys) {
+                    $scope.queue_checkbox[key] = true;
+                    $scope.emr_checkbox[key] = false;
+                }
+            } else {
+                for(let key of $scope.allKeys) {
+                    $scope.queue_checkbox[key] = false
+                }
+            }
+        }
+    };
+
+    $scope.toggleIndividualCheckbox = function(side, key) {
+        if(side === 'emr') {
+            if($scope.emr_checkbox[key] === true) {
+                // Deselect the other side if selected.
+                $scope.queue_checkbox[key] = false;
+
+                // Also deselect all.
+                $scope.queue_checkbox.select_all = false;
+            }
+        } else if(side === 'queue') {
+            if($scope.queue_checkbox[key] === true) {
+                // Deselect the other side.
+                $scope.emr_checkbox[key] = false;
+
+                // Also deselect all
+                $scope.emr_checkbox.select_all = false;
+            }
+        }
+    };
+
+    $scope.mergeDemographics = function() {
+        $('#wait').show();
+        // Get demographic to remove
+        Object.keys($scope.queue_checkbox).forEach(key => {
+            if(key !== 'select_all') {
+                if($scope.queue_checkbox[key] === false) {
+                    // Remove
+                    let originalKey = 'patient.' + key;
+                    if($scope.payload['patient'][originalKey]) {
+                        delete $scope.payload['patient'][originalKey];
+                    } else if($scope.payload['tmp'][originalKey]){
+                        delete $scope.payload['tmp'][originalKey];
+                    }
+                }
+            }
+        });
+
+        // post to merge end point.
+        let info = {
+            existingPatientUuid: $scope.existingPatient['uuid'],
+            errorDataUuid: $scope.error['uuid'],
+            payload: JSON.stringify($scope.payload),
+        };
+
+        $data.mergePatient(info).then(function(response) {
+            // Redirect or something.
+            console.log('Response:', response);
+            $('#wait').hide();
+            $location.path('/duplicates');
+        }).catch(function(err) {
+            console.log(err);
+            $('#wait').hide();
+        });
+    };
+
+    $scope.createAndRequeue = function() {
+        // Warn if identifier is still the same.
+        // Find the rowData object associated with key medical_record_number
+        let medicalRecordNumberRowData = $scope.tableData.find(entry => {
+            return entry['key'] === 'medical_record_number';
+        });
+        if(medicalRecordNumberRowData && medicalRecordNumberRowData['emrPatient'] === medicalRecordNumberRowData['queuePatient']) {
+            $scope.popupMessage = 'Assigned medical record number already in use, please assign a different one on the new patient';
+            $('#merge-modal').modal('show');
+        } else {
+            $('#wait').show();
+            // Update & Modify the payload adding a flag that a duplicate patient should not be searched.
+            _updatePayloadData();
+            $scope.payload['skipPatientMatching'] = true;
+
+            // post to re-queue.
+            let info = {
+                errorDataUuid: $scope.error['uuid'],
+                payload: JSON.stringify($scope.payload),
+            };
+
+            $data.requeueDuplicatePatient(info).then(function (response) {
+                // Redirect or something.
+                console.log('Response:', response);
+                $('#wait').hide();
+                $location.path('/duplicates');
+            }).catch(function (err) {
+                console.log(err);
+                $('#wait').hide();
+            });
+        }
+    };
+}
