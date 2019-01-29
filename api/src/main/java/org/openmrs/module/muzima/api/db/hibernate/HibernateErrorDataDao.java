@@ -81,9 +81,9 @@ public class HibernateErrorDataDao extends HibernateDataDao<ErrorData> implement
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(ErrorData.class);
         criteria.createAlias("location", "location", CriteriaSpecification.LEFT_JOIN);
         criteria.createAlias("provider", "provider", CriteriaSpecification.LEFT_JOIN);
-        criteria.createAlias("errorMessages", "errorMessages", CriteriaSpecification.LEFT_JOIN);
 
         if (StringUtils.isNotEmpty(search)) {
+            criteria.createAlias("errorMessages", "errorMessages", CriteriaSpecification.LEFT_JOIN);
             Disjunction disjunction = Restrictions.disjunction();
             disjunction.add(Restrictions.ilike("payload", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("discriminator", search, MatchMode.ANYWHERE));
