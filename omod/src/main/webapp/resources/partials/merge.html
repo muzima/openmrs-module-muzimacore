@@ -57,13 +57,15 @@
                     <div class="col-md-1">
                         <div class="checkbox" ng-show="rowData.isConflict">
                             <label>
-                                <input ng-model="queue_checkbox[rowData.key]" type="checkbox" value="option1" aria-label="..." ng-change="toggleIndividualCheckbox('queue',rowData.key)">
+                                <input ng-model="queue_checkbox[rowData.key]" type="checkbox" value="option1"
+                                       aria-label="..." ng-change="toggleIndividualCheckbox('queue',rowData.key)">
                             </label>
                         </div>
                     </div>
                     <label class="col-md-4">{{rowData.label}}</label>
                     <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
-                        <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient" ng-change="updatePage(rowData)">
+                        <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient"
+                               ng-change="updatePage(rowData)" ng-disabled="isUuidField(rowData.key)">
                     </div>
                 </div>
             </div>
