@@ -31,15 +31,22 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
                                 key,
                                 label: getLabel(key),
                                 isConflict: isConflict(key, $scope.emrPatient[key], $scope.queuePatient[key]),
+                                category:getRegistrationDataCategory(key),
                             };
                             rowData['emrPatient'] = $scope.emrPatient[key];
                             rowData['queuePatient'] = $scope.queuePatient[key];
+
                             tableData.push(rowData);
                             $scope.queue_checkbox[key] = false;
                             $scope.emr_checkbox[key] = false;
                         }
+
                     }
                     $scope.tableData = tableData;
+
+
+
+
                     $('#wait').hide();
                 }).catch(function(err) {
                     console.log(err);
@@ -51,7 +58,37 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         }
     });
 
-    function getLabel(filed) {
+    $scope.categoryMap = ["basic_demographics","attributes","identifiers","addresses","others"];
+
+    function getRegistrationDataCategory(key){
+        switch(key) {
+            case 'uuid':
+            case 'given_name':
+            case 'middle_name':
+            case 'family_name':
+            case 'sex':
+            case 'age':
+            case 'birth_date':
+            case 'birthdate_estimated':
+                return 'basic_demographics';
+            case 'medical_record_number':
+            case 'other_identifier_type':
+            case 'other_identifier_value':
+                return 'identifiers';
+            case 'country':
+            case 'location':
+            case 'sub_location':
+            case 'village':
+                return 'addresses';
+            case 'mothers_name':
+            case 'phone_number':
+                return 'attributes';
+            default:
+                return 'others';
+        }
+    }
+
+    function getLabel(key) {
         const lableMap = {
             'given_name': 'Given name',
             'first_name': 'First Name',
@@ -62,24 +99,23 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
             'birth_date': 'Birthdate',
             'age': 'Age',
         };
-        if(_.has(lableMap, filed)) {
-            return _.get(lableMap, filed);
+        if(_.has(lableMap, key)) {
+            return _.get(lableMap, key);
         }
 
         // replace _ with space.
-        let toRet = filed.charAt(0).toUpperCase() + filed.substring(1);
+        let toRet = key.charAt(0).toUpperCase() + key.substring(1);
         toRet = toRet.replace(/_/g, ' ');
 
         return toRet;
     }
 
-    function isConflict(filed, val1, val2) {
-        switch(filed) {
+    function isConflict(key, val1, val2) {
+        switch(key) {
             case 'given_name':
             case 'middle_name':
             case 'family_name':
             case 'sex':
-            case 'age':
             case 'country':
             case 'birthdate':
             case 'medical_record_number':
