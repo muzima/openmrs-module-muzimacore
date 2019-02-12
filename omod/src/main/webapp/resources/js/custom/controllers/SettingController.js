@@ -9,6 +9,7 @@ function SettingCtrl($scope, $routeParams, $location, $muzimaSettings) {
         $muzimaSettings.getSetting($scope.uuid).
         then(function (response) {
             $scope.setting = response.data;
+            $('#wait').hide();
         });
     }
 
@@ -53,6 +54,7 @@ function SettingsCtrl($scope, $location, $muzimaSettings) {
         var serverData = response.data;
         $scope.settings = serverData.objects;
         $scope.noOfPages = serverData.pages;
+        $('#wait').hide();
     });
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
