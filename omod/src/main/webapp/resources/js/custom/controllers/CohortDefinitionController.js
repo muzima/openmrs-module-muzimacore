@@ -4,6 +4,7 @@ $cohortDefinitionService.getCohortDefinitions().
             var serverData = response.data;
             $scope.cohortDefinitions = serverData.objects;
             $scope.noOfPages =1;
+            $('#wait').hide();
         });
 }
 function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinitionService){
@@ -18,11 +19,13 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
             then(function (response) {
                 var serverData = response.data;
                 $scope.cohorts = serverData.objects;
+                $('#wait').hide();
             });
     } else {
         $cohortDefinitionService.getCohortDefinition($scope.uuid).
             then(function (response) {
                 $scope.cohortDefinition = response.data;
+            $('#wait').hide();
             });
         $cohortDefinitionService.getAllCohorts().
             then(function (response) {

@@ -193,6 +193,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
 }
 
 function ErrorsCtrl($scope, $location, $data) {
+    $scope.isErrorLoadingCompleted = false;
     // initialize selected error data for re-queueing
     $scope.selected = {};
     // initialize the paging structure
@@ -205,9 +206,13 @@ function ErrorsCtrl($scope, $location, $data) {
         var serverData = response.data;
         $scope.errors = serverData.objects;
         $scope.totalItems = serverData.totalItems;
+
+        $scope.isErrorLoadingCompleted = true;
+        $('#wait').hide();
     });
 
     $scope.queue = function () {
+        $('#wait').show();
         var uuidList = [];
         angular.forEach($scope.selected, function (value, key) {
             if (value) {
@@ -221,17 +226,20 @@ function ErrorsCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
                 $scope.totalItems = serverData.totalItems;
+                $('#wait').hide();
             });
         })
     };
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
         if (newValue != oldValue) {
+            $('#wait').show();
             $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
                 $scope.totalItems = serverData.totalItems;
+                $('#wait').hide();
             });
         }
     }, true);
@@ -269,12 +277,14 @@ function PotentialDuplicatesErrorsCtrl($scope, $data) {
     });
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
+        $('#wait').show();
         if (newValue != oldValue) {
             $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
                 $scope.totalItems = serverData.totalItems;
+                $('#wait').hide();
             });
         }
     }, true);
