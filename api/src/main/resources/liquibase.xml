@@ -1378,4 +1378,43 @@
 
     </changeSet>
 
+    <changeSet id="muzima-20190214135300" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaContentCategory.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Media Content Category" />
+            <column name="description" value="Specifies Concept-Uuid for wrapper concept for media category" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-02-14T13:53:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="b7c0c988-3047-11e9-873e-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20190214140100" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaCategoryOtherNonCoded.ConceptUuid" />
+            <column name="name" value="Concept Uuid for other non-coded category" />
+            <column name="description" value="Specifies Concept-Uuid for concept-set other non-coded option for media category" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-02-14T13:56:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="f81e3970-3047-11e9-873e-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20190214140300" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaContentComment.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Media Content Comment" />
+            <column name="description" value="Specifies Concept-Uuid for media comment concept" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-02-14T14:03:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="235e34e6-3048-11e9-873e-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
