@@ -140,7 +140,6 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
 
     function _harmonizePatientFromServer(patient) {
         let patientMedicalRecordNumber = null;
-        console.log(patient.identifiers[0].preferred);
         if(Array.isArray(patient.identifiers)) {
             // find the universal type.
             let universal = patient.identifiers.find(identifier => {
@@ -150,7 +149,7 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
                 patientMedicalRecordNumber = universal['identifier'];
             }
         }
-        console.log(patient);
+
         let patientName = patient['person']['preferredName'] || patient['person'].names[0];
         let patientAddress = patient['person']['preferredAddress'] || patient['person'].addresses[0];
         if(patientAddress == undefined){
