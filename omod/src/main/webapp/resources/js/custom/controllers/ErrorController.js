@@ -65,7 +65,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
             else{
                 $scope.ul_li_Data = $scope.ul_li_Data + "<li><span>"+ key ;
                 $scope.ul_li_Data = $scope.ul_li_Data + " : <b>"+ value+"</b></span></li>";
-                // console.log(key + ":"+ value);
             }
         });
         $('#'+htmlElement).empty();
@@ -135,7 +134,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
         $('#wait').show();
         $('.messages').hide();
         var jsonDataToValidate = $('#editJson').val();
-        console.log(jsonDataToValidate);
         $data.validateData($scope.uuid,jsonDataToValidate).
         then(function (result) {
             $scope.ul_li_Data = '';
@@ -174,7 +172,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
         //SAVE THE EDITED DATA
         $('#wait').show();
         var formDataToSave = $('#editJson').val();
-        console.log(formDataToSave);
         $data.saveEditedFormData($scope.uuid,formDataToSave).
         then(function (response) {
             $scope.error = response.data;
