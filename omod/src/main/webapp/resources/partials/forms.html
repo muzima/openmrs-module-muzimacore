@@ -23,13 +23,8 @@
                 </div>
             </div>
 
-            <div ng-show="fetchingForms">
-                <div style="text-align: center">
-                    <h3>Fetching forms...</h3>
-                </div>
-                <div class="progress progress-striped active">
-                    <div class="progress-bar" style="width: 100%"></div>
-                </div>
+            <div id='wait' class='loader' ng-show="fetchingForms">
+                &nbsp;
             </div>
 
             <div ng-show="tagFilterActive() && !fetchingForms" class="well well-large">

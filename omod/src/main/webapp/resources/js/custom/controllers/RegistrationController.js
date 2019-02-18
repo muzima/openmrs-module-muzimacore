@@ -5,6 +5,7 @@ function ViewRegistrationCtrl($scope, $location, $routeParams, $registrations) {
     $registrations.getRegistration($scope.uuid).
     then(function (response) {
         $scope.registration = response.data;
+        $('#wait').hide();
     });
 
     $scope.cancel = function () {
@@ -22,6 +23,7 @@ function ListRegistrationsCtrl($scope, $registrations) {
         var serverData = response.data;
         $scope.registrations = serverData.objects;
         $scope.noOfPages = serverData.pages;
+        $('#wait').hide();
     });
 
     $scope.$watch('currentPage', function (newValue, oldValue) {

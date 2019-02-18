@@ -35,40 +35,45 @@
             </div>
         </div>
 
-        <div class="row" ng-repeat="rowData in tableData">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <label class="col-md-4">{{rowData.label}}</label>
-                    <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
-                        <input type="text" class="form-control" ng-model="rowData.emrPatient" disabled>
+        <span ng-repeat="category in categoryMap">
+            <hr>
+            <div class="row" ng-repeat="rowData in tableData|filter:{category:category}">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="col-md-4">{{rowData.label}}</label>
+                        <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
+                            <input type="text" class="form-control" ng-model="rowData.emrPatient" disabled>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="checkbox" ng-show="rowData.isConflict">
+                                <label>
+                                    <input ng-model="emr_checkbox[rowData.key]" type="checkbox" value="option1" aria-label="..."
+                                           ng-change="toggleIndividualCheckbox('emr',rowData.key)">
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-1">
-                        <div class="checkbox" ng-show="rowData.isConflict">
-                            <label>
-                                <input ng-model="emr_checkbox[rowData.key]" type="checkbox" value="option1" aria-label="..."
-                                       ng-change="toggleIndividualCheckbox('emr',rowData.key)">
-                            </label>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <div class="checkbox" ng-show="rowData.isConflict">
+                                <label>
+                                    <input ng-model="queue_checkbox[rowData.key]" type="checkbox" value="option1"
+                                           aria-label="..." ng-change="toggleIndividualCheckbox('queue',rowData.key)">
+                                </label>
+                            </div>
+                        </div>
+                        <label class="col-md-4">{{rowData.label}}</label>
+                        <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
+                            <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient"
+                                   ng-change="updatePage(rowData)" ng-disabled="isUuidField(rowData.key)">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <div class="col-md-1">
-                        <div class="checkbox" ng-show="rowData.isConflict">
-                            <label>
-                                <input ng-model="queue_checkbox[rowData.key]" type="checkbox" value="option1" aria-label="..." ng-change="toggleIndividualCheckbox('queue',rowData.key)">
-                            </label>
-                        </div>
-                    </div>
-                    <label class="col-md-4">{{rowData.label}}</label>
-                    <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
-                        <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient" ng-change="updatePage(rowData)">
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        </span>
+        <hr>
         <div class="row">
             <div class="col-lg-6">
                 <button class="btn btn-primary btn-block" ng-click="mergeDemographics()">MERGE AND REQUEUE</button>
@@ -100,5 +105,4 @@
             </div>
         </div>
     </div>
-</div>
 </div>

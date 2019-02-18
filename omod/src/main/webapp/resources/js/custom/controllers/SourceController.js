@@ -6,10 +6,12 @@ function SourceCtrl($scope, $routeParams, $location, $data) {
     $scope.uuid = $routeParams.uuid;
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
+        $('#wait').hide();
     } else {
         $data.getSource($scope.uuid).
         then(function (response) {
             $scope.source = response.data;
+            $('#wait').hide();
         });
     }
 
@@ -54,6 +56,7 @@ function SourcesCtrl($scope, $data) {
         var serverData = response.data;
         $scope.sources = serverData.objects;
         $scope.noOfPages = serverData.pages;
+        $('#wait').hide();
     });
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
@@ -63,6 +66,7 @@ function SourcesCtrl($scope, $data) {
                 var serverData = response.data;
                 $scope.sources = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $('#wait').hide();
             });
         }
     }, true);

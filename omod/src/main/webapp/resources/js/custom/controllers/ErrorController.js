@@ -65,7 +65,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
             else{
                 $scope.ul_li_Data = $scope.ul_li_Data + "<li><span>"+ key ;
                 $scope.ul_li_Data = $scope.ul_li_Data + " : <b>"+ value+"</b></span></li>";
-                // console.log(key + ":"+ value);
             }
         });
         $('#'+htmlElement).empty();
@@ -135,7 +134,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
         $('#wait').show();
         $('.messages').hide();
         var jsonDataToValidate = $('#editJson').val();
-        console.log(jsonDataToValidate);
         $data.validateData($scope.uuid,jsonDataToValidate).
         then(function (result) {
             $scope.ul_li_Data = '';
@@ -174,7 +172,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
         //SAVE THE EDITED DATA
         $('#wait').show();
         var formDataToSave = $('#editJson').val();
-        console.log(formDataToSave);
         $data.saveEditedFormData($scope.uuid,formDataToSave).
         then(function (response) {
             $scope.error = response.data;
@@ -193,6 +190,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
 }
 
 function ErrorsCtrl($scope, $location, $data) {
+    $scope.isErrorLoadingCompleted = false;
     // initialize selected error data for re-queueing
     $scope.selected = {};
     // initialize the paging structure
@@ -205,9 +203,13 @@ function ErrorsCtrl($scope, $location, $data) {
         var serverData = response.data;
         $scope.errors = serverData.objects;
         $scope.totalItems = serverData.totalItems;
+
+        $scope.isErrorLoadingCompleted = true;
+        $('#wait').hide();
     });
 
     $scope.queue = function () {
+        $('#wait').show();
         var uuidList = [];
         angular.forEach($scope.selected, function (value, key) {
             if (value) {
@@ -221,17 +223,20 @@ function ErrorsCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
                 $scope.totalItems = serverData.totalItems;
+                $('#wait').hide();
             });
         })
     };
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
         if (newValue != oldValue) {
+            $('#wait').show();
             $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
                 $scope.totalItems = serverData.totalItems;
+                $('#wait').hide();
             });
         }
     }, true);
@@ -269,12 +274,14 @@ function PotentialDuplicatesErrorsCtrl($scope, $data) {
     });
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
+        $('#wait').show();
         if (newValue != oldValue) {
             $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
                 $scope.totalItems = serverData.totalItems;
+                $('#wait').hide();
             });
         }
     }, true);
