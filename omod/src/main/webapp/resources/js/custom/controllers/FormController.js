@@ -89,6 +89,7 @@ function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
         });
     };
 
+
     $scope.remove = function (muzimaform) {
         var form = muzimaform.form;
         FormService.retire(muzimaform.form, muzimaform.retireReason || '')
@@ -113,7 +114,7 @@ function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
         form.tags.push(tagToBeAdded);
         FormService.save(form)
             .then(function (result) {
-                return FormService.get(form.uuid);
+              return FormService.get(form.uuid);
             })
             .then(function (savedForm) {
                 angular.extend(form, savedForm.data);

@@ -1,6 +1,9 @@
 <div id="wide-sidebar" class="row">
     <side-navigation menu-item="errors"></side-navigation>
     <div class="col-lg-8">
+        <div id='wait' class='loader'>
+            &nbsp;
+        </div>
         <div class="clearfix">
             <div class="row">
                 <div class="col-lg-3 pull-right">
@@ -23,7 +26,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-hide="errors.length">
+                    <tr ng-hide="isErrorLoadingCompleted && errors.length">
                         <td colspan="9">Hooray! You have no errors here.</td>
                     </tr>
                     <tr ng-repeat="error in errors | orderBy:'submitted':true">
