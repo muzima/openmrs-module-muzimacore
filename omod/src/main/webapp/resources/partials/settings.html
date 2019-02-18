@@ -15,7 +15,7 @@
                     <tr>
                         <th>#</th>
                         <th>Name</th>
-                        <th>Property</th>
+                        <th>Description</th>
                         <th>Value</th>
                     </tr>
                     </thead>
@@ -26,7 +26,7 @@
                     <tr ng-repeat="setting in settings | filter:filterSource() | orderBy:'created':true">
                         <td><a href="#/setting/{{setting.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
                         <td>{{setting.name}}</td>
-                        <td>{{setting.property}}</td>
+                        <td>{{setting.description}}</td>
                         <td ng-bind-html="settingDisplayValue(setting)"></td>
                     </tr>
                     </tbody>
