@@ -1417,4 +1417,17 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20190220103000" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaCategoryFreeText.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Other category text" />
+            <column name="description" value="Specifies Concept-Uuid for free text for other-non coded category option" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-02-20T10:30:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="adbda0a4-34d5-11e9-8667-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
