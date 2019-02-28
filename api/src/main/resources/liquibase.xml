@@ -1380,9 +1380,9 @@
 
     <changeSet id="muzima-20190214135300" author="bmokaya">
         <insert tableName="muzima_setting">
-            <column name="property" value="MediaContentCategory.ConceptUuid" />
-            <column name="name" value="Concept Uuid for Media Content Category" />
-            <column name="description" value="Specifies Concept-Uuid for wrapper concept for media category" />
+            <column name="property" value="MediaWrapperConcept.ConceptUuid" />
+            <column name="name" value="Uuid for Media Wrapper Concept" />
+            <column name="description" value="Specifies Concept-Uuid for convenient set concept that wraps media complex obs with its metadata" />
             <column name="setting_data_type" value="STRING" />
             <column name="value_boolean" valueBoolean="false" />
             <column name="date_created" valueDate="2019-02-14T13:53:00" />
