@@ -38,7 +38,7 @@ public class RegistrationsController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getRegistrations(final @RequestParam(value = "pageNumber") Integer pageNumber,
-                                                   final @RequestParam(value = "pageSize") Integer pageSize) {
+                                                final @RequestParam(value = "pageSize") Integer pageSize) {
         Map<String, Object> response = new HashMap<String, Object>();
         RegistrationDataService service = Context.getService(RegistrationDataService.class);
 
@@ -49,6 +49,7 @@ public class RegistrationsController {
             objects.add(WebConverter.convertRegistrationData(registrationData));
         }
         response.put("pages", pages);
+        response.put("totalItems",service.countRegistrationData().intValue());
         response.put("objects", objects);
         return response;
     }
