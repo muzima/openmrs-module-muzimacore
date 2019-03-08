@@ -41,7 +41,7 @@ public interface MuzimaSettingService extends OpenmrsService {
      * @param search the search term.
      * @return the total number of the settings in the database.
      */
-    Number countDataSource(final String search);
+    Number countMuzimaSettings(final String search);
 
     /**
      * Get settings with matching search term for a particular page.

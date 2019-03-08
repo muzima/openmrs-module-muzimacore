@@ -390,13 +390,16 @@ function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
 
 function ConfigsCtrl($scope, $configs) {
     // initialize the paging structure
+    $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
+    $scope.totalItems = 0;
     $configs.getConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
         $scope.configs = serverData.objects;
         $scope.noOfPages = serverData.pages;
+        $scope.totalItems = serverData.totalItems;
         $('#wait').hide();
     });
 
@@ -407,6 +410,7 @@ function ConfigsCtrl($scope, $configs) {
                 var serverData = response.data;
                 $scope.configs = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);
@@ -419,6 +423,7 @@ function ConfigsCtrl($scope, $configs) {
                 var serverData = response.data;
                 $scope.configs = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);

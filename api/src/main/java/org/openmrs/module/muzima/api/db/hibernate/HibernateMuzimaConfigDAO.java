@@ -76,6 +76,7 @@ public class HibernateMuzimaConfigDAO implements MuzimaConfigDAO {
     @Transactional
     public Number countConfigs(String search) {
         Criteria criteria = session().createCriteria(MuzimaConfig.class);
+        criteria.add(Restrictions.eq("retired", false));
 
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
