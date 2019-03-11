@@ -34,6 +34,10 @@ public interface CohortDefinitionDataDao {
 
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
+    List<CohortDefinitionData> getPagedCohortDefinitionData(final Integer pageNumber, final Integer pageSize);
+
+    @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
     List<CohortDefinitionData> getByScheduled(Boolean scheduled);
 
     @Transactional
