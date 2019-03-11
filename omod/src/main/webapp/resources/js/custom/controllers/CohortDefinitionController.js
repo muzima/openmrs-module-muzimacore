@@ -1,12 +1,33 @@
 function CohortDefinitionsCtrl($scope, $location, $cohortDefinitionService){
-$cohortDefinitionService.getCohortDefinitions().
+// initialize the paging structure
+$scope.maxSize = 10;
+$scope.pageSize = 10;
+$scope.currentPage = 1;
+$scope.totalItems = 0;
+$cohortDefinitionService.getCohortDefinitions($scope.currentPage, $scope.pageSize).
         then(function (response) {
             var serverData = response.data;
-            $scope.cohortDefinitions = serverData.objects;
-            $scope.noOfPages =1;
-            $('#wait').hide();
+                $scope.cohortDefinitions = serverData.objects;
+                $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
+                $('#wait').hide();
         });
+
+$scope.$watch('currentPage', function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            $cohortDefinitionService.getCohortDefinitions($scope.currentPage, $scope.pageSize).
+            then(function (response) {
+                var serverData = response.data;
+                $scope.cohortDefinitions = serverData.objects;
+                $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
+                $('#wait').hide();
+            });
+        }
+    }, true);
 }
+
+
 function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinitionService){
     $scope.cohortDefinition = {};
     // initialize the view to be read only

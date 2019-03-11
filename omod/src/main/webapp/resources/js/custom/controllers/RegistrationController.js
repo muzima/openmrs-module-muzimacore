@@ -18,11 +18,13 @@ function ListRegistrationsCtrl($scope, $registrations) {
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
+    $scope.totalItems = 0;
     $registrations.getRegistrations($scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
         $scope.registrations = serverData.objects;
         $scope.noOfPages = serverData.pages;
+        $scope.totalItems = serverData.totalItems;
         $('#wait').hide();
     });
 
@@ -31,8 +33,9 @@ function ListRegistrationsCtrl($scope, $registrations) {
             $registrations.getRegistrations($scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
-                $scope.errors = serverData.objects;
+                $scope.registrations = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);
@@ -43,8 +46,9 @@ function ListRegistrationsCtrl($scope, $registrations) {
             $registrations.getRegistrations($scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
-                $scope.errors = serverData.objects;
+                $scope.registrations = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);
