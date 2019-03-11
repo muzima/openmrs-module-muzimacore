@@ -89,7 +89,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
         $('#editJsonSection').hide();
         $( "#btnUpdate" ).prop( "disabled", true );
         $('#wait').hide();
-        $('#search').hide();
         $('.messages').hide();
     }
 
@@ -149,7 +148,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
                 $('html,body').animate({scrollTop: $('#errorList').offset().top},1000);
             }
             $('.messages').show();
-            $('#search').hide();
             $('#wait').hide();
         });
     });
@@ -183,7 +181,6 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
             $( "#btnCancelQueue" ).prop( "disabled", false );
             $('.messages').hide();
             $('#wait').hide();
-            $('#search').hide();
             $('#myModal').modal('hide');
         });
     });
@@ -245,7 +242,6 @@ function ErrorsCtrl($scope, $location, $data) {
     }, true);
 
     $scope.$watch('search', function (newValue, oldValue) {
-        $('#search').show();
         if (newValue != oldValue) {
             $scope.currentPage = 1;
             $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
@@ -253,7 +249,6 @@ function ErrorsCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
                 $scope.totalItems = serverData.totalItems;
-                $('#search').hide();
             });
         }
     }, true);
