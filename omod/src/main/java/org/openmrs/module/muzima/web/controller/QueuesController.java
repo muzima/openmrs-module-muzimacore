@@ -56,6 +56,7 @@ public class QueuesController {
             }
 
             response.put("pages", pages);
+            response.put("totalItems", dataService.countQueueData(search).intValue());
             response.put("objects", objects);
         }
         return response;

@@ -21,6 +21,7 @@ import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -33,14 +34,18 @@ import java.util.Map;
 public class CohortDefinitionsController{
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getAllExpandedCohortDefinitions(){
+    public Map<String, Object> getAllExpandedCohortDefinitions(final @RequestParam(value = "pageNumber") Integer pageNumber,
+                                                               final @RequestParam(value = "pageSize") Integer pageSize){
         Map<String, Object> response = new HashMap<String, Object>();
         CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
         List<Object> objects = new ArrayList<Object>();
-        for(CohortDefinitionData cohortCriteriaData : expandedCohortDataService.getAllCohortDefinitionData()) {
+        int pages = (expandedCohortDataService.countCohortDefinitionData().intValue() + pageSize - 1) / pageSize;
+        for(CohortDefinitionData cohortCriteriaData : expandedCohortDataService.getAllCohortDefinitionData(pageNumber, pageSize)) {
             objects.add(WebConverter.convertCohortDefinitionData(cohortCriteriaData));
         }
         response.put("objects", objects);
+        response.put("pages", pages);
+        response.put("totalItems",expandedCohortDataService.countCohortDefinitionData().intValue());
         return response;
     }
 }

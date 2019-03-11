@@ -28,11 +28,13 @@ function QueuesCtrl($scope, $location, $data) {
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
+    $scope.totalItems = 0;
     $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
         $scope.queues = serverData.objects;
         $scope.noOfPages = serverData.pages;
+        $scope.totalItems = serverData.totalItems;
         $('#wait').hide();
     });
 
@@ -50,6 +52,7 @@ function QueuesCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.queues = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         })
     };
@@ -61,6 +64,7 @@ function QueuesCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.queues = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);
@@ -73,6 +77,7 @@ function QueuesCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.queues = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);

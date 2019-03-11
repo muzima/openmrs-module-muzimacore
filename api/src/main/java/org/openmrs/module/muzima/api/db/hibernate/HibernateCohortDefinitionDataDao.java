@@ -54,6 +54,17 @@ public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao
         return (List<CohortDefinitionData>) criteria.list();
     }
 
+    public List<CohortDefinitionData> getPagedCohortDefinitionData(Integer pageNumber, Integer pageSize) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
+        if (pageNumber != null) {
+            criteria.setFirstResult((pageNumber - 1) * pageSize);
+        }
+        if (pageSize != null) {
+            criteria.setMaxResults(pageSize);
+        }
+        return (List<CohortDefinitionData>) criteria.list();
+    }
+
     public List<CohortDefinitionData> getByScheduled(Boolean scheduled){
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("isScheduledForExecution", scheduled));

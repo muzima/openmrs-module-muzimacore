@@ -49,11 +49,13 @@ function SettingsCtrl($scope, $location, $muzimaSettings) {
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
+    $scope.totalItems = 0;
     $muzimaSettings.getSettings($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
         $scope.settings = serverData.objects;
         $scope.noOfPages = serverData.pages;
+        $scope.totalItems = serverData.totalItems;
         $('#wait').hide();
     });
 
@@ -64,6 +66,7 @@ function SettingsCtrl($scope, $location, $muzimaSettings) {
                 var serverData = response.data;
                 $scope.settings = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);
@@ -76,6 +79,7 @@ function SettingsCtrl($scope, $location, $muzimaSettings) {
                 var serverData = response.data;
                 $scope.settings = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);

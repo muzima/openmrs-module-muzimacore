@@ -55,6 +55,11 @@ public class CohortDefinitionDataServiceImpl extends BaseOpenmrsService implemen
     public List<CohortDefinitionData> getAllCohortDefinitionData(){
         return dao.getAll();
     }
+
+    public List<CohortDefinitionData> getAllCohortDefinitionData(Integer pageNumber, Integer pageSize) {
+        return dao.getPagedCohortDefinitionData(pageNumber, pageSize);
+    }
+
     public List<CohortDefinitionData> getAllScheduledCohortDefinitionData(){
         return dao.getByScheduled(true);
     }
