@@ -305,8 +305,8 @@ muzimaCoreModule.factory('$muzimaSettings', function($http) {
 muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
     
 
-    var getCohortDefinitions = function () {
-        return $http.get("cohortDefinitions.json");
+    var getCohortDefinitions = function (pageNumber, pageSize) {
+        return $http.get("cohortDefinitions.json?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
     };
     var getCohortDefinition = function (uuid) {
             return $http.get("cohortDefinition.json?uuid=" + uuid);
