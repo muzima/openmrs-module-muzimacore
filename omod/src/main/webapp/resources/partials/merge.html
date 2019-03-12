@@ -67,7 +67,7 @@
                         <label class="col-md-4">{{rowData.label}}</label>
                         <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
                             <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient"
-                                   ng-change="updatePage(rowData)" ng-disabled="isUuidField(rowData.key)">
+                                   ng-change="updatePage(rowData)" ng-disabled="!isEditableField(rowData.key)">
                         </div>
                     </div>
                 </div>

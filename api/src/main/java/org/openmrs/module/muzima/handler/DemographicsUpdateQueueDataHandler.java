@@ -31,8 +31,10 @@ import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
 import org.openmrs.module.muzima.model.QueueData;
+import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
 import org.openmrs.module.muzima.utils.PatientSearchUtils;
@@ -68,6 +70,10 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
             if (validate(queueData)) {
                 updateSavedPatientDemographics();
                 Context.getPatientService().savePatient(savedPatient);
+                String temporaryUuid = getTemporaryPatientUuidFromPayload();
+                if(!StringUtils.isNotEmpty(temporaryUuid)) {
+                    saveRegistrationData(temporaryUuid);
+                }
             }
         } catch (Exception e) {
             if (!e.getClass().equals(QueueProcessorException.class)) {
@@ -77,6 +83,22 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
             if (queueProcessorException.anyExceptions()) {
                 throw queueProcessorException;
             }
+        }
+    }
+
+    private String getTemporaryPatientUuidFromPayload(){
+        return JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.temporal_patient_uuid']");
+    }
+
+    private void saveRegistrationData(String temporaryUuid){
+        RegistrationDataService registrationDataService = Context.getService(RegistrationDataService.class);
+        RegistrationData registrationData = registrationDataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
+        if (registrationData == null) {
+            registrationData = new RegistrationData();
+            registrationData.setTemporaryUuid(temporaryUuid);
+            String assignedUuid = savedPatient.getUuid();
+            registrationData.setAssignedUuid(assignedUuid);
+            registrationDataService.saveRegistrationData(registrationData);
         }
     }
 
