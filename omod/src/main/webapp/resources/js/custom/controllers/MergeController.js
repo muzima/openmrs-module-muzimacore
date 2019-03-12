@@ -195,7 +195,26 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
             }
         });
     }
+    function _updatePayloadDataAsDemographicsUpdate() {
+        let patientKeys = Object.keys($scope.queuePatient);
+        $scope.payload['demographicsupdate'] = {};
+        $scope.tableData.forEach(rowData => {
+            if(patientKeys.find(patKey => patKey === rowData.key)) {
+                $scope.payload['demographicsupdate']['demographicsupdate.' + rowData.key] = rowData['queuePatient'];
+            }
+        });
 
+        //update uuids
+        $scope.payload['patient']['patient.uuid'] = $scope.existingPatient['uuid'];
+        $scope.payload['demographicsupdate']['demographicsupdate.temporal_patient_uuid'] =$scope.queuePatient.uuid;
+        if($scope.payload['demographicsupdate']['demographicsupdate.uuid']) {
+            delete $scope.payload['demographicsupdate']['demographicsupdate.uuid'];
+        }
+    }
+
+    $scope.createModelId = function(prefix,suffix){
+        return prefix+suffix;
+    }
     $scope.updatePage = function(rowData) {
         rowData.isConflict = isConflict(rowData.key, rowData['emrPatient'], rowData['queuePatient']);
         // Check the queue data side.
@@ -251,28 +270,28 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         }
     };
 
-    $scope.isUuidField = function(key){
+    $scope.isEditableField = function(key){
         return key == 'uuid' || key == 'age';
     }
 
     $scope.mergeDemographics = function() {
         $('#wait').show();
+
+        _updatePayloadDataAsDemographicsUpdate();
         // Get demographic to remove
         Object.keys($scope.queue_checkbox).forEach(key => {
             if(key !== 'select_all') {
-                if($scope.queue_checkbox[key] === false) {
-                    // Remove
-                    let originalKey = 'patient.' + key;
-                    if($scope.payload['patient'][originalKey]) {
-                        delete $scope.payload['patient'][originalKey];
-                    } else if($scope.payload['tmp'][originalKey]){
-                        delete $scope.payload['tmp'][originalKey];
+                let fullKey = 'demographicsupdate.' + key;
+                if($scope.emr_checkbox[key] === true) {
+                    if($scope.payload['demographicsupdate'][fullKey]) {
+                        delete $scope.payload['demographicsupdate'][fullKey];
                     }
                 }
             }
         });
 
         // post to merge end point.
+
         let info = {
             existingPatientUuid: $scope.existingPatient['uuid'],
             errorDataUuid: $scope.error['uuid'],
@@ -292,9 +311,7 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
     $scope.createAndRequeue = function() {
         // Warn if identifier is still the same.
         // Find the rowData object associated with key medical_record_number
-        let medicalRecordNumberRowData = $scope.tableData.find(entry => {
-            return entry['key'] === 'medical_record_number';
-        });
+        let medicalRecordNumberRowData = $scope.tableData.find(entry => entry['key'] === 'medical_record_number');
         if(medicalRecordNumberRowData && medicalRecordNumberRowData['emrPatient'] === medicalRecordNumberRowData['queuePatient']) {
             $scope.popupMessage = 'Assigned medical record number already in use, please assign a different one on the new patient';
             $('#merge-modal').modal('show');

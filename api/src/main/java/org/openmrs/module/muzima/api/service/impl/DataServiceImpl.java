@@ -704,9 +704,10 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
 
     @Override
     public List<QueueData> mergeDuplicatePatient(@NotNull final String errorDataUuid, @NotNull final String existingPatientUuid,
-                                                 @NotNull final String formData) {
+                                                 @NotNull final String payload) {
         List<QueueData> requeued = new ArrayList<QueueData>();
         ErrorData errorData = this.getErrorDataByUuid(errorDataUuid);
+        errorData.setPayload(payload);
         String submittedPatientUuid = errorData.getPatientUuid();
 
         errorData.setDiscriminator("json-demographics-update");
