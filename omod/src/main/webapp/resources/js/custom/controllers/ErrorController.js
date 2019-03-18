@@ -255,9 +255,10 @@ function ErrorsCtrl($scope, $location, $data) {
         }
     }, true);
 
-    $scope.selectError = function () {
+    $scope.toggleSelectAllCheckbox = function () {
         for (var i = 0; i < $scope.errors.length; i++) {
-            if (!$scope.errors[i].isChecked) {
+            var error = $scope.errors[i];
+            if (!$scope.selected[error.uuid]) {
                 $scope.allErrorsSelected = false;
                 return;
             }
