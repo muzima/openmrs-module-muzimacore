@@ -191,6 +191,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
 
 function ErrorsCtrl($scope, $location, $data) {
     $scope.isErrorLoadingCompleted = false;
+    $scope.allErrorsSelected = false;
     // initialize selected error data for re-queueing
     $scope.selected = {};
     // initialize the paging structure
@@ -223,6 +224,7 @@ function ErrorsCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.errors = serverData.objects;
                 $scope.totalItems = serverData.totalItems;
+                $scope.allErrorsSelected = false;
                 $('#wait').hide();
             });
         })
@@ -252,6 +254,24 @@ function ErrorsCtrl($scope, $location, $data) {
             });
         }
     }, true);
+
+    $scope.toggleSelectAllCheckbox = function () {
+        for (var i = 0; i < $scope.errors.length; i++) {
+            var error = $scope.errors[i];
+            if (!$scope.selected[error.uuid]) {
+                $scope.allErrorsSelected = false;
+                return;
+            }
+        }
+        $scope.allErrorsSelected = true;
+    };
+
+    $scope.selectAll = function () {
+        for (var i = 0; i < $scope.errors.length; i++) {
+            var error = $scope.errors[i];
+            $scope.selected[error.uuid] = $scope.allErrorsSelected;
+        }
+    };
 }
 
 function PotentialDuplicatesErrorsCtrl($scope, $data) {
