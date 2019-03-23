@@ -23,22 +23,83 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
                     $scope.existingPatient = response.data.results[0];         // just pick the first record for now.
                     $scope.emrPatient = _harmonizePatientFromServer($scope.existingPatient);
                     $scope.allKeys = _.union(Object.keys($scope.emrPatient), Object.keys($scope.queuePatient));
+                    console.log( "$scope.allKeys");
+                    console.log( $scope.allKeys);
 
                     let tableData = [];
                     for(let key of $scope.allKeys) {
                         if(key != 'confirm_identifier_value') {
-                            let rowData = {
-                                key,
-                                label: getLabel(key),
-                                isConflict: isConflict(key, $scope.emrPatient[key], $scope.queuePatient[key]),
-                                category:getRegistrationDataCategory(key),
-                            };
-                            rowData['emrPatient'] = $scope.emrPatient[key];
-                            rowData['queuePatient'] = $scope.queuePatient[key];
+                            if($scope.emrPatient[key] instanceof Object && $scope.queuePatient[key] instanceof Object){
 
-                            tableData.push(rowData);
-                            $scope.queue_checkbox[key] = false;
-                            $scope.emr_checkbox[key] = false;
+                                for (let key2 of Object.keys($scope.emrPatient[key])){
+                                    let rowData = {
+                                        key:key+"."+key2,
+                                        label: getLabel(key) + " " + key2,
+                                        isConflict: isConflict(key, $scope.emrPatient[key][key2], $scope.queuePatient[key][key2]),
+                                        category: getRegistrationDataCategory(key),
+                                    };
+                                    rowData['emrPatient'] = $scope.emrPatient[key][key2];
+                                    rowData['queuePatient'] = $scope.queuePatient[key][key2];
+
+                                    tableData.push(rowData);
+                                    $scope.queue_checkbox[key] = false;
+                                    $scope.emr_checkbox[key] = false;
+                                }
+                            } else if($scope.emrPatient[key] instanceof Object ){
+
+                                let count = 1;
+                                for (let key2 of Object.keys($scope.emrPatient[key])){
+                                    let rowData = {
+                                        key:key+"."+key2,
+                                        label: getLabel(key) + " " + key2,
+                                        isConflict: isConflict(key, $scope.emrPatient[key][key2], $scope.queuePatient[key]),
+                                        category: getRegistrationDataCategory(key),
+                                    };
+                                    rowData['emrPatient'] = $scope.emrPatient[key][key2];
+                                    if(key2.includes("value")) {
+                                        rowData['queuePatient'] = $scope.queuePatient[key];
+                                        count++;
+                                    }
+
+                                    tableData.push(rowData);
+                                    $scope.queue_checkbox[key] = false;
+                                    $scope.emr_checkbox[key] = false;
+                                }
+                            } else if( $scope.queuePatient[key] instanceof Object && !($scope.queuePatient[key] instanceof Array)){
+
+                                let count = 1;
+                                for (let key2 of Object.keys($scope.queuePatient[key])){
+                                    let rowData = {
+                                        key:key+"."+key2,
+                                        label: getLabel(key) + " " + key2,
+                                        isConflict: isConflict(key, $scope.emrPatient[key], $scope.queuePatient[key][key2]),
+                                        category: getRegistrationDataCategory(key),
+                                    };
+
+                                    rowData['queuePatient'] = $scope.queuePatient[key][key2];
+                                    if(key2.includes("value")) {
+                                        rowData['emrPatient'] = $scope.emrPatient[key];
+                                        count++;
+                                    }
+
+                                    tableData.push(rowData);
+                                    $scope.queue_checkbox[key] = false;
+                                    $scope.emr_checkbox[key] = false;
+                                }
+                            } else {
+                                let rowData = {
+                                    key,
+                                    label: getLabel(key),
+                                    isConflict: isConflict(key, $scope.emrPatient[key], $scope.queuePatient[key]),
+                                    category: getRegistrationDataCategory(key),
+                                };
+                                rowData['emrPatient'] = $scope.emrPatient[key];
+                                rowData['queuePatient'] = $scope.queuePatient[key];
+
+                                tableData.push(rowData);
+                                $scope.queue_checkbox[key] = false;
+                                $scope.emr_checkbox[key] = false;
+                            }
                         }
 
                     }
@@ -58,7 +119,7 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         }
     });
 
-    $scope.categoryMap = ["basic_demographics","attributes","identifiers","addresses","others"];
+    $scope.categoryMap = ["Basic Demographics","Attributes","Identifiers","Addresses","Others"];
 
     function getRegistrationDataCategory(key){
         switch(key) {
@@ -70,21 +131,21 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
             case 'age':
             case 'birth_date':
             case 'birthdate_estimated':
-                return 'basic_demographics';
+                return 'Basic Demographics';
             case 'medical_record_number':
             case 'other_identifier_type':
             case 'other_identifier_value':
-                return 'identifiers';
+                return 'Identifiers';
             case 'country':
             case 'location':
             case 'sub_location':
             case 'village':
-                return 'addresses';
+                return 'Addresses';
             case 'mothers_name':
             case 'phone_number':
-                return 'attributes';
+                return 'Attributes';
             default:
-                return 'others';
+                return 'Others';
         }
     }
 
@@ -139,15 +200,18 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
     }
 
     function _harmonizePatientFromServer(patient) {
-        let patientMedicalRecordNumber = null;
+        let patientMedicalRecordNumber = {};
         if(Array.isArray(patient.identifiers)) {
             // find the universal type.
             let universal = patient.identifiers.find(identifier => {
                 return identifier.preferred === true;
             });
             if(universal) {
-                patientMedicalRecordNumber = universal['identifier'];
+                patientMedicalRecordNumber['identifier_type_uuid'] = universal['identifierType']['uuid'];
+                patientMedicalRecordNumber['identifier_type_name'] = universal['identifierType']['display'];
+                patientMedicalRecordNumber['identifier_value'] = universal['identifier'];
             }
+
         }
 
         let patientName = patient['person']['preferredName'] || patient['person'].names[0];
@@ -179,8 +243,15 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         let stripped = {};
         Object.keys(patient).forEach(key => {
             stripped[key.substring(key.indexOf('.')+1)] = patient[key];
-        });
+    });
         return stripped;
+    }
+    function _addPatientPrefixToPayloadPatient(patient) {
+        let updated = {};
+        Object.keys(patient).forEach(key => {
+            updated["patient."+key] = patient[key];
+    });
+        return updated;
     }
 
     /**
@@ -196,20 +267,63 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         });
     }
     function _updatePayloadDataAsDemographicsUpdate() {
-        let patientKeys = Object.keys($scope.queuePatient);
-        $scope.payload['demographicsupdate'] = {};
-        $scope.tableData.forEach(rowData => {
-            if(patientKeys.find(patKey => patKey === rowData.key)) {
-                $scope.payload['demographicsupdate']['demographicsupdate.' + rowData.key] = rowData['queuePatient'];
-            }
-        });
+        let updateSuccessfulStatus = false;
+        let birthdateEstimated = $scope.tableData.find(entry => entry['key'] === 'birthdate_estimated');
+        if(birthdateEstimated && birthdateEstimated['emrPatient'] != birthdateEstimated['queuePatient']
+        && $scope.emr_checkbox['birthdate_estimated'] === $scope.queue_checkbox['birthdate_estimated']) {
+            $scope.popupMessage = 'Please make a choice whether birthdate_estimated for patient record should be changed or not during merge.';
+            $('#merge-modal').modal('show');
+            console.log("Showing error");
+            return updateSuccessfulStatus;
+        } else {
+            console.log("continue merging");
 
-        //update uuids
-        $scope.payload['patient']['patient.uuid'] = $scope.existingPatient['uuid'];
-        $scope.payload['demographicsupdate']['demographicsupdate.temporal_patient_uuid'] =$scope.queuePatient.uuid;
-        if($scope.payload['demographicsupdate']['demographicsupdate.uuid']) {
-            delete $scope.payload['demographicsupdate']['demographicsupdate.uuid'];
+
+            let patientKeys = Object.keys($scope.queuePatient);
+
+            $scope.payload['demographicsupdate'] = {};
+            $scope.tableData.forEach(rowData => {
+                if(patientKeys.find(patKey => patKey === rowData.key)){
+                $scope.payload['demographicsupdate']['demographicsupdate.' + rowData.key] = rowData['queuePatient'];
+            }});
+
+            //update uuids
+            $scope.payload['demographicsupdate']['demographicsupdate.temporal_patient_uuid'] = $scope.queuePatient.uuid;
+            if ($scope.payload['demographicsupdate']['demographicsupdate.uuid']) {
+                delete $scope.payload['demographicsupdate']['demographicsupdate.uuid'];
+            }
+
+            // Get demographic to remove
+            Object.keys($scope.queue_checkbox).forEach(key => {
+                if(key !== 'select_all'){
+                    let fullKey = 'demographicsupdate.' + key;
+                    if ($scope.emr_checkbox[key] === true) {
+                        if ($scope.payload['demographicsupdate'][fullKey]) {
+                            delete $scope.payload['demographicsupdate'][fullKey];
+                        }
+                    }
+                }
+            });
+
+            $scope.payload['patient'] = _addPatientPrefixToPayloadPatient($scope.emrPatient);
+
+            patientKeys.forEach(key => {
+                if(($scope.payload['patient']['patient.' + key]) && ($scope.payload['demographicsupdate']['demographicsupdate.' + key])
+                && $scope.payload['patient']['patient.' + key] == $scope.payload['demographicsupdate']['demographicsupdate.' + key]
+                ){
+                    delete $scope.payload['demographicsupdate']['demographicsupdate.' + key];
+                } else {
+                    console.log("Not equals: " + key + " :: " + $scope.payload['demographicsupdate']['demographicsupdate.' + key] + " : " + $scope.payload['patient']['patient.' + key]);
+                }
+            });
+
+            if ($scope.payload['demographicsupdate']['demographicsupdate.birth_date']) {
+                delete $scope.payload['demographicsupdate']['demographicsupdate.birth_date'];
+            }
+            updateSuccessfulStatus = true;
+            return updateSuccessfulStatus;
         }
+
     }
 
     $scope.createModelId = function(prefix,suffix){
@@ -271,41 +385,33 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
     };
 
     $scope.isEditableField = function(key){
-        return key == 'uuid' || key == 'age';
+        var isEditable = !key.includes('uuid') && key !== 'age' && key !== 'sex'&& key !== 'birth_date';
+        return isEditable;
     }
 
     $scope.mergeDemographics = function() {
         $('#wait').show();
 
-        _updatePayloadDataAsDemographicsUpdate();
-        // Get demographic to remove
-        Object.keys($scope.queue_checkbox).forEach(key => {
-            if(key !== 'select_all') {
-                let fullKey = 'demographicsupdate.' + key;
-                if($scope.emr_checkbox[key] === true) {
-                    if($scope.payload['demographicsupdate'][fullKey]) {
-                        delete $scope.payload['demographicsupdate'][fullKey];
-                    }
-                }
-            }
-        });
+        let updateSuccessfulStatus = _updatePayloadDataAsDemographicsUpdate();
 
-        // post to merge end point.
+        if(updateSuccessfulStatus){
+            let info = {
+                existingPatientUuid: $scope.existingPatient['uuid'],
+                errorDataUuid: $scope.error['uuid'],
+                payload: JSON.stringify($scope.payload),
+            };
 
-        let info = {
-            existingPatientUuid: $scope.existingPatient['uuid'],
-            errorDataUuid: $scope.error['uuid'],
-            payload: JSON.stringify($scope.payload),
-        };
-
-        $data.mergePatient(info).then(function(response) {
-            // Redirect or something.
+            $data.mergePatient(info).then(function (response) {
+                // Redirect or something.
+                $('#wait').hide();
+                $location.path('/duplicates');
+            }).catch(function (err) {
+                console.log(err);
+                $('#wait').hide();
+            });
+        } else {
             $('#wait').hide();
-            $location.path('/duplicates');
-        }).catch(function(err) {
-            console.log(err);
-            $('#wait').hide();
-        });
+        }
     };
 
     $scope.createAndRequeue = function() {
