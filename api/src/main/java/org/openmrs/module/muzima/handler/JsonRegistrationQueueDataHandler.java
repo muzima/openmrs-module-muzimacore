@@ -42,7 +42,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -324,7 +323,6 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             );
         }
     }
-
 
     private  void setUnsavedPatientCreatorFromPayload(){
         String userString = JsonUtils.readAsString(payload, "$['encounter']['encounter.user_system_id']");

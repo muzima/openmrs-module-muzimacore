@@ -278,7 +278,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
                     new Exception("Cannot create identifier. Identifier type name or uuid must be supplied"));
         }
 
-        if(StringUtils.isBlank(identifierTypeUuid)) {
+        if(StringUtils.isBlank(identifierValue)) {
             queueProcessorException.addException(
                     new Exception("Cannot create identifier. Supplied identifier value is blank for identifier type name:'"
                             + identifierTypeName + "', uuid:'" + identifierTypeUuid + "'"));
