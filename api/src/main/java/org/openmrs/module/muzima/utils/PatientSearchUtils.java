@@ -70,12 +70,14 @@ public class PatientSearchUtils {
                 }
             }
         }
-        if (savedPatient == null && !(candidatePatient.getPatientIdentifier() != null
+
+        if (savedPatient == null && (candidatePatient.getPatientIdentifier() != null
                 && StringUtils.isNotEmpty(candidatePatient.getPatientIdentifier().getIdentifier()) )) {
             List<Patient> patients = Context.getPatientService()
                     .getPatients(candidatePatient.getPatientIdentifier().getIdentifier());
             savedPatient = PatientSearchUtils.findPatient(patients, candidatePatient);
         }
+
         if(savedPatient == null && candidatePatient.getPersonName() != null
                 && StringUtils.isNotEmpty(candidatePatient.getPersonName().getFullName())){
             List<Patient> patients = Context.getPatientService()
