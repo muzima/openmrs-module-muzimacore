@@ -36,8 +36,10 @@
         </div>
 
         <span ng-repeat="category in categoryMap">
-            <hr>
-            <div class="row" ng-repeat="rowData in tableData|filter:{category:category}">
+            <div style="margin:0 auto; text-align:center"><strong>{{category}}</strong></div>
+            <div class="well">
+            <div ng-repeat="rowData in tableData|filter:{category:category}">
+                <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="col-md-4">{{rowData.label}}</label>
@@ -71,9 +73,11 @@
                         </div>
                     </div>
                 </div>
+                </div>
+                <hr>
+            </div>
             </div>
         </span>
-        <hr>
         <div class="row">
             <div class="col-lg-6">
                 <button class="btn btn-primary btn-block" ng-click="mergeDemographics()">MERGE AND REQUEUE</button>
