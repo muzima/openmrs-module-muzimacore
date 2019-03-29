@@ -660,6 +660,7 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
     public List<ErrorMessage> validateData(String uuid, String formData) {
         List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
         ErrorData errorData = getErrorDataByUuid(uuid);
+        errorDataDao.detachDataFromHibernateSession(errorData);
         errorData.setPayload(formData);
 
         QueueData queueData = new QueueData(errorData);
