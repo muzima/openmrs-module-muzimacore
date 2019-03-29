@@ -261,6 +261,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         if(medicalRecordNumberObject instanceof JSONObject) {
             medicalRecordNumber = createPatientIdentifier((JSONObject)medicalRecordNumberObject);
         } else if (medicalRecordNumberObject instanceof String){
+
             //process as legacy demographics update medical record number
             String medicalRecordNumberValueString = (String)medicalRecordNumberObject;
             if(StringUtils.isNotEmpty(medicalRecordNumberValueString)) {
@@ -530,30 +531,29 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     private PersonAddress getLegacyPatientAddressFromPayload(){
         PersonAddress personAddress = null;
 
-        String county = JsonUtils.readAsString(payload, "$['patient']['patient.county']");
+        String county = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.county']");
         if(StringUtils.isNotEmpty(county)) {
             if(personAddress == null) personAddress = new PersonAddress();
             personAddress.setStateProvince(county);
         }
 
-        String location = JsonUtils.readAsString(payload, "$['patient']['patient.location']");
+        String location = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.location']");
         if(StringUtils.isNotEmpty(location)) {
             if (personAddress == null) personAddress = new PersonAddress();
             personAddress.setAddress6(location);
         }
 
-        String subLocation = JsonUtils.readAsString(payload, "$['patient']['patient.sub_location']");
+        String subLocation = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.sub_location']");
         if(StringUtils.isNotEmpty(subLocation)) {
             if (personAddress == null) personAddress = new PersonAddress();
             personAddress.setAddress5(subLocation);
         }
 
-        String village = JsonUtils.readAsString(payload, "$['patient']['patient.village']");
+        String village = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.village']");
         if(StringUtils.isNotEmpty(village)) {
             if (personAddress == null) personAddress = new PersonAddress();
             personAddress.setCityVillage(village);
         }
-
         return personAddress;
     }
 
@@ -614,11 +614,11 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
 
     private Set<PersonAttribute> getLegacyPersonAttributes(){
         Set<PersonAttribute> attributes = new TreeSet<PersonAttribute>();
-        String mothersName = JsonUtils.readAsString(payload, "$['patient']['patient.mothers_name']");
+        String mothersName = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.mothers_name']");
         if(StringUtils.isNotEmpty(mothersName))
             attributes.add(createPersonAttribute("Mother's Name",null,mothersName));
 
-        String phoneNumber = JsonUtils.readAsString(payload, "$['patient']['patient.phone_number']");
+        String phoneNumber = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.phone_number']");
         if(StringUtils.isNotEmpty(phoneNumber))
             attributes.add(createPersonAttribute("Contact Phone Number",null, phoneNumber));
         return attributes;
