@@ -118,14 +118,16 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
     }
 
     private void validateUnsavedPatient() {
-        Patient savedPatient = findSimilarSavedPatient();
-        if (savedPatient != null) {
-            queueProcessorException.addException(
-                new Exception(
-                        "Found a patient with similar characteristic :  patientId = " + savedPatient.getPatientId()
-                                + " Identifier Id = " + savedPatient.getPatientIdentifier().getIdentifier()
-                )
-            );
+        if(!JsonUtils.readAsBoolean(payload, "$['skipPatientMatching']")) {
+            Patient savedPatient = findSimilarSavedPatient();
+            if (savedPatient != null) {
+                queueProcessorException.addException(
+                        new Exception(
+                                "Found a patient with similar characteristic :  patientId = " + savedPatient.getPatientId()
+                                        + " Identifier Id = " + savedPatient.getPatientIdentifier().getIdentifier()
+                        )
+                );
+            }
         }
     }
 
