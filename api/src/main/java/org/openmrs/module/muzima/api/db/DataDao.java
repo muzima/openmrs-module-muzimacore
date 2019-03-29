@@ -65,6 +65,8 @@ public interface DataDao<T extends Data> extends SingleClassDao<T> {
      */
     void purgeData(final T data);
 
+    void detachDataFromHibernateSession(final T data);
+
     /**
      * Get data with matching search term for particular page.
      *
