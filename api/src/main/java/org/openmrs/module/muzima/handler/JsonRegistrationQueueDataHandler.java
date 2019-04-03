@@ -15,7 +15,6 @@ package org.openmrs.module.muzima.handler;
 
 import net.minidev.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
@@ -346,12 +345,12 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             PatientIdentifier identifier = unsavedPatient.getPatientIdentifier();
             if (identifier != null) {
                 List<Patient> patients = Context.getPatientService().getPatients(identifier.getIdentifier());
-                savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+                savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
             }
         } else {
             PersonName personName = unsavedPatient.getPersonName();
             List<Patient> patients = Context.getPatientService().getPatients(personName.getFullName());
-            savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+            savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
         }
         return savedPatient;
     }

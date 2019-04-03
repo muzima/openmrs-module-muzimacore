@@ -19,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
-import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -321,10 +320,10 @@ public class ObsQueueDataHandler implements QueueDataHandler {
             }
         } else if (!StringUtils.isBlank(patientIdentifier.getIdentifier())) {
             List<Patient> patients = Context.getPatientService().getPatients(patientIdentifier.getIdentifier());
-            candidatePatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+            candidatePatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
         } else {
             List<Patient> patients = Context.getPatientService().getPatients(unsavedPatient.getPersonName().getFullName());
-            candidatePatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+            candidatePatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
         }
 
         if (candidatePatient == null) {
