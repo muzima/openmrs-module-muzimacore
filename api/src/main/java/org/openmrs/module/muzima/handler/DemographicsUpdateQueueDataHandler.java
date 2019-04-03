@@ -104,7 +104,19 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
 
     private void updateSavedPatientDemographics(){
         if(unsavedPatient.getIdentifiers() != null){
-            savedPatient.addIdentifiers(unsavedPatient.getIdentifiers());
+            for(final PatientIdentifier identifier : unsavedPatient.getIdentifiers() ) {
+                boolean identifierExists = false;
+                for(PatientIdentifier savedPatientIdentifier: savedPatient.getIdentifiers()) {
+                    if (savedPatientIdentifier.getIdentifierType().equals(identifier.getIdentifierType())
+                            && savedPatientIdentifier.getIdentifier().equalsIgnoreCase(identifier.getIdentifier())) {
+                        identifierExists = true;
+                        break;
+                    }
+                }
+                if(!identifierExists){
+                    savedPatient.addIdentifier(identifier);
+                }
+            }
         }
         if(unsavedPatient.getPersonName() != null) {
             savedPatient.addName(unsavedPatient.getPersonName());
