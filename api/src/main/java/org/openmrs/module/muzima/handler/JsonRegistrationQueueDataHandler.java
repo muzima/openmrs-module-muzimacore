@@ -15,7 +15,6 @@ package org.openmrs.module.muzima.handler;
 
 import net.minidev.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
@@ -42,7 +41,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -325,7 +323,6 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-
     private  void setUnsavedPatientCreatorFromPayload(){
         String userString = JsonUtils.readAsString(payload, "$['encounter']['encounter.user_system_id']");
         String providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
@@ -348,12 +345,12 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             PatientIdentifier identifier = unsavedPatient.getPatientIdentifier();
             if (identifier != null) {
                 List<Patient> patients = Context.getPatientService().getPatients(identifier.getIdentifier());
-                savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+                savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
             }
         } else {
             PersonName personName = unsavedPatient.getPersonName();
             List<Patient> patients = Context.getPatientService().getPatients(personName.getFullName());
-            savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+            savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
         }
         return savedPatient;
     }
