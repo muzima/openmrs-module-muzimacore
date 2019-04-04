@@ -25,6 +25,17 @@
             <column name="name" type="varchar(255)"/>
         </createTable>
     </changeSet>
+    <changeSet id="muzima-20170828-1811" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="html5forms_tag" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE html5forms_tag CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
 
     <changeSet id="html5form-2013-06-12-05:30" author="ThoughtWorks">
         <comment>
@@ -42,6 +53,18 @@
                        tableName="html5forms_form_tag_mapping"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1813" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="html5forms_form_tag_mapping" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE html5forms_form_tag_mapping CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
+
     <changeSet id="html5form-2013-06-13-07:15" author="ThoughtWorks">
         <comment>
             Table for forms
@@ -52,6 +75,18 @@
             </column>
         </createTable>
         <addPrimaryKey columnNames="form_id" constraintName="html5forms_form_id_pk" tableName="html5forms_form"/>
+    </changeSet>
+
+    <changeSet id="muzima-20170828-1814" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="html5forms_form" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE html5forms_form CONVERT TO CHARACTER SET utf8
+        </sql>
     </changeSet>
 
     <changeSet id="html5form-2013-06-25-18:15" author="ThoughtWorks">
@@ -298,6 +333,18 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="muzima-20180706-1247" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzimaforms_form" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzimaforms_form CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
+
     <changeSet id="muzimaform-2014-10-31" author="SahajSoft">
         <addForeignKeyConstraint baseColumnNames="form"
                                  baseTableName="muzimaforms_form"
@@ -365,6 +412,18 @@
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1942" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_data_source" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_data_source CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
+
     <changeSet id="muzima-2013-04-18-10-51" author="nribeka">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -407,6 +466,17 @@
                                  referencedTableName="muzima_data_source" referencedColumnNames="id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1943" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_queue_data" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_queue_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
     <changeSet id="muzima-2013-04-18-10-52" author="nribeka">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -453,6 +523,18 @@
         <addForeignKeyConstraint constraintName="muzima_archive_data_data_source"
                                  baseTableName="muzima_archive_data" baseColumnNames="data_source"
                                  referencedTableName="muzima_data_source" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="muzima-20170828-1944" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_archive_data" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_archive_data CONVERT TO CHARACTER SET utf8
+        </sql>
     </changeSet>
 
     <changeSet id="muzima-2013-04-18-10-53" author="nribeka">
@@ -503,6 +585,18 @@
                                  referencedTableName="muzima_data_source" referencedColumnNames="id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1945" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_error_data" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_error_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
+
     <changeSet id="muzima-2013-04-18-10-54" author="nribeka">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -523,6 +617,9 @@
                 <constraints nullable="false"/>
             </column>
             <column name="sender" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patient" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="creator" type="int">
@@ -560,6 +657,17 @@
                                  referencedTableName="person" referencedColumnNames="person_id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1947" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_notification_data" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_notification_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
     <changeSet id="nribeka" author="muzima-2014-02-04-07-10-54">
         <preConditions onFail="MARK_RAN">
             <and>
@@ -681,7 +789,17 @@
                                  baseTableName="muzima_error_message" baseColumnNames="muzima_error_data_id"
                                  referencedTableName="muzima_error_data" referencedColumnNames="id"/>
     </changeSet>
-
+    <changeSet id="muzima-20170828-1948" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_error_message" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_error_message CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
     <changeSet id="muzima-20150819-111000" author="shwetha">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -973,7 +1091,17 @@
                                  baseTableName="muzimaregistration_registration_data" baseColumnNames="voided_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
-
+    <changeSet id="muzima-20170828-1949" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzimaregistration_registration_data" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzimaregistration_registration_data CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
     <changeSet id="muzima-20160901-093538" author="smbugua">
         <comment>
             Renames tables - prefix muzimaform to muzima and rename columns and constraints appropriately
@@ -1083,6 +1211,18 @@
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
 
+    <changeSet id="muzima-20170828-1950" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_config" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_config CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
+
     <changeSet id="muzima-20160922-145252" author="smbugua">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -1146,6 +1286,17 @@
                                  baseTableName="muzima_setting" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
+    <changeSet id="muzima-20190404-1046" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_setting" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+            change charset to utf-8
+        </comment>
+        <sql>
+            ALTER TABLE muzima_setting CONVERT TO CHARACTER SET utf8
+        </sql>
+    </changeSet>
 
     <changeSet id="muzima-20170922145600" author="mssavai">
         <insert tableName="muzima_setting">
@@ -1172,7 +1323,7 @@
             <column name="uuid" value="aae1a60f-f6ac-4d00-8af7-80270d715114" />
         </insert>
     </changeSet>
-    
+
     <changeSet id="muzima-20180214100000" author="bmokaya">
         <comment>Creating a default mUzima data source with the name Mobile Devices</comment>
         <insert tableName="muzima_data_source">
@@ -1181,6 +1332,31 @@
             <column name="creator" value="1"/>
             <column name="date_created" valueDate="2018-02-14T10:00:00"/>
             <column name="uuid" value="0d62b128-010e-4c1b-ba86-ef963b7f8a72"/>
+        </insert>
+    </changeSet>
+
+    <!--Adding scheduled task to periodically refresh ETL tables-->
+    <changeSet id="${project.parent.artifactId}-20180802-1220" author="aojwang">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM scheduler_task_config
+                WHERE schedulable_class = 'org.openmrs.module.kenyaemrCharts.task.RefreshETLTablesTask'
+                And name = 'Refresh ETL Tables'
+            </sqlCheck>
+        </preConditions>
+        <comment>Inserting Muzima Queue Data Processor into 'schedule_task_config' table</comment>
+        <insert tableName="scheduler_task_config">
+            <column name="name" value="Muzima Queue Data Processor" />
+            <column name="description" value="Processes Muzima Queue Data Processor" />
+            <column name="schedulable_class" value="org.openmrs.module.muzima.task.ProcessQueueDataTask" />
+            <column name="start_time_pattern" value="MM/dd/yyyy HH:mm:ss" />
+            <column name="start_time" valueDate="2017-11-28T23:59:59" />
+            <column name="repeat_interval" value="180" />
+            <column name="date_created" valueDate="CURRENT_TIMESTAMP" />
+            <column name="created_by" value="1" />
+            <column name="start_on_startup" value="1" />
+            <column name="started" value="1" />
+            <column name="uuid" value="b82736c2-9651-11e8-9eb6-529269fb1459" />
         </insert>
     </changeSet>
 
