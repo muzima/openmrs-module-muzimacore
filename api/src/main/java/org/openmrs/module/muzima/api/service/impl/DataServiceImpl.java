@@ -660,6 +660,7 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
     public List<ErrorMessage> validateData(String uuid, String formData) {
         List<ErrorMessage> errorMessages = new ArrayList<ErrorMessage>();
         ErrorData errorData = getErrorDataByUuid(uuid);
+        errorDataDao.detachDataFromHibernateSession(errorData);
         errorData.setPayload(formData);
 
         QueueData queueData = new QueueData(errorData);
@@ -704,9 +705,10 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
 
     @Override
     public List<QueueData> mergeDuplicatePatient(@NotNull final String errorDataUuid, @NotNull final String existingPatientUuid,
-                                                 @NotNull final String formData) {
+                                                 @NotNull final String payload) {
         List<QueueData> requeued = new ArrayList<QueueData>();
         ErrorData errorData = this.getErrorDataByUuid(errorDataUuid);
+        errorData.setPayload(payload);
         String submittedPatientUuid = errorData.getPatientUuid();
 
         errorData.setDiscriminator("json-demographics-update");

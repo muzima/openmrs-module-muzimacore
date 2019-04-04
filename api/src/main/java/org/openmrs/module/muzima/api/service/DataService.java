@@ -478,6 +478,6 @@ public interface DataService extends OpenmrsService {
      * @param formData  String - payload with demographic information to be updated to the existing patient.
      * @return List of QueueData - A list of newly submitted QueuedData.
      */
-    List<QueueData> mergeDuplicatePatient(@NotNull final String errorDataUuid, @NotNull final String existingPatientUuid, @NotNull String formData);
+    List<QueueData> mergeDuplicatePatient(@NotNull final String errorDataUuid, @NotNull final String existingPatientUuid, @NotNull String payload);
 
 }
