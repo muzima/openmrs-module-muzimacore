@@ -68,9 +68,9 @@ public class ErrorController {
         if(Context.isAuthenticated()) {
             String errorDataUuid = data.get("errorDataUuid");
             String patientUuid = data.get("existingPatientUuid");
-            String formData = data.get("payload");
+            String payload = data.get("payload");
             DataService dataService = Context.getService(DataService.class);
-            List<QueueData> queuedData = dataService.mergeDuplicatePatient(errorDataUuid, patientUuid, formData);
+            List<QueueData> queuedData = dataService.mergeDuplicatePatient(errorDataUuid, patientUuid, payload);
             map.put("results", convertQueueDatas(queuedData));
         }
         return map;

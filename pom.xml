@@ -5,7 +5,7 @@
 
     <groupId>org.openmrs.module</groupId>
     <artifactId>muzimacore</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <packaging>pom</packaging>
     <name>Muzima Core Module</name>
     <description>Muzima module providing core services to the Muzima mobile application.</description>
