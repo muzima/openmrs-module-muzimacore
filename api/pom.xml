@@ -21,6 +21,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>idgen-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.10</version>
@@ -40,6 +45,7 @@
             <artifactId>${project.parent.artifactId}-javarosa-validator</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
 
         <!-- Begin OpenMRS core -->
         <dependency>
