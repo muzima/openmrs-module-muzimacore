@@ -312,7 +312,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                 || concept.getDatatype().isTime()
                 || concept.getDatatype().isDateTime()) {
             obs.setValueDatetime(parseDate(value));
-        } else if (concept.getDatatype().isCoded()) {
+        } else if (concept.getDatatype().isCoded() || concept.getDatatype().isBoolean() ) {
             String[] valueCodedElements = StringUtils.split(value, "\\^");
             int valueCodedId = Integer.parseInt(valueCodedElements[0]);
             Concept valueCoded = Context.getConceptService().getConcept(valueCodedId);
