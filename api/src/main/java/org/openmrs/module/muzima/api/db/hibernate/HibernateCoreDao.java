@@ -13,9 +13,10 @@
  */
 package org.openmrs.module.muzima.api.db.hibernate;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
-import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -31,6 +32,7 @@ import org.openmrs.module.muzima.api.db.CoreDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -172,118 +174,5 @@ public class HibernateCoreDao implements CoreDao {
 
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    @SuppressWarnings("unchecked")
-    public List<Cohort> getCohorts(final String name, final Date syncDate,
-                                   final int startIndex, final int size) throws DAOException {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Cohort.class);
-        criteria.add(Expression.ilike("name", name, MatchMode.ANYWHERE));
-        criteria.addOrder(Order.asc("name"));
-        if (syncDate != null) {
-            criteria.add(Restrictions.or(
-                    Restrictions.or(
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
-                                    Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
-                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
-        }
-        criteria.add(Restrictions.eq("voided", false));
-
-        criteria.setMaxResults(size);
-        criteria.setFirstResult(startIndex);
-        return criteria.list();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Number countCohorts(final String name, final Date syncDate) throws DAOException {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Cohort.class);
-        criteria.add(Expression.ilike("name", name, MatchMode.ANYWHERE));
-        criteria.addOrder(Order.asc("name"));
-        if (syncDate != null) {
-            criteria.add(Restrictions.or(
-                    Restrictions.or(
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
-                                    Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
-                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
-        }
-        criteria.add(Restrictions.eq("voided", false));
-
-        criteria.setProjection(Projections.rowCount());
-        return (Number) criteria.uniqueResult();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    @SuppressWarnings("unchecked")
-    public List<Patient> getPatients(final String cohortUuid, final Date syncDate,
-                                     final int startIndex, final int size) throws DAOException {
-        String hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
-                " where c.uuid = :uuid and p.patient_id = m.patient_id " +
-                " and c.cohort_id = m.cohort_id " +
-                " and c.voided = false and p.voided = false ";
-        if (syncDate != null) {
-            hqlQuery = hqlQuery +
-                    " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is null and c.date_changed >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate) ) " +
-                    " and ( (p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
-                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
-                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
-        }
-        SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
-        query.setParameter("uuid", cohortUuid);
-        if (syncDate != null) {
-            query.setParameter("syncDate", syncDate);
-        }
-        query.setMaxResults(size);
-        query.setFirstResult(startIndex);
-        List patientIds = query.list();
-
-        if (!patientIds.isEmpty()) {
-            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
-            criteria.add(Restrictions.in("patientId", patientIds));
-            return criteria.list();
-        }
-        return Collections.emptyList();
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Number countPatients(final String cohortUuid, final Date syncDate) throws DAOException {
-        String hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
-                " where c.uuid = :uuid and p.patient_id = m.patient_id " +
-                " and c.cohort_id = m.cohort_id " +
-                " and c.voided = false and p.voided = false ";
-        if (syncDate != null) {
-            hqlQuery = hqlQuery +
-                    " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is null and c.date_changed >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate) ) " +
-                    " and ( (p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
-                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
-                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
-        }
-        SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
-        query.addScalar("total");
-        query.setParameter("uuid", cohortUuid);
-        if (syncDate != null) {
-            query.setParameter("syncDate", syncDate);
-        }
-        return (Number) query.uniqueResult();
     }
 }

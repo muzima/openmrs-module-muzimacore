@@ -15,7 +15,6 @@ package org.openmrs.module.muzima.handler;
 
 import net.minidev.json.JSONArray;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Location;
@@ -42,7 +41,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -77,7 +75,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             /*Custom exception thrown by the validate function should not be added again into @queueProcessorException.
              It should add the runtime dao Exception while saving the data into @queueProcessorException collection */
             if (!e.getClass().equals(QueueProcessorException.class)) {
-                queueProcessorException.addException(e);
+                queueProcessorException.addException(new Exception("Exception while process payload ",e));
             }
         } finally {
             if (queueProcessorException.anyExceptions()) {
@@ -97,7 +95,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             validateUnsavedPatient();
             return true;
         } catch (Exception e) {
-            queueProcessorException.addException(e);
+            queueProcessorException.addException(new Exception("Exception while validating payload ",e));
             return false;
         } finally {
             if (queueProcessorException.anyExceptions()) {
@@ -112,14 +110,16 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     }
 
     private void validateUnsavedPatient() {
-        Patient savedPatient = findSimilarSavedPatient();
-        if (savedPatient != null) {
-            queueProcessorException.addException(
-                    new Exception(
-                            "Found a patient with similar characteristic :  patientId = " + savedPatient.getPatientId()
-                                    + " Identifier Id = " + savedPatient.getPatientIdentifier().getIdentifier()
-                    )
-            );
+        if(!JsonUtils.readAsBoolean(payload, "$['skipPatientMatching']")) {
+            Patient savedPatient = findSimilarSavedPatient();
+            if (savedPatient != null) {
+                queueProcessorException.addException(
+                        new Exception(
+                                "Found a patient with similar characteristic :  patientId = " + savedPatient.getPatientId()
+                                        + " Identifier Id = " + savedPatient.getPatientIdentifier().getIdentifier()
+                        )
+                );
+            }
         }
     }
 
@@ -135,7 +135,7 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
     }
 
     private void setPatientIdentifiersFromPayload() {
-        Set<PatientIdentifier> patientIdentifiers = new HashSet<PatientIdentifier>();
+        Set<PatientIdentifier> patientIdentifiers = new TreeSet<PatientIdentifier>();
         PatientIdentifier preferredIdentifier = getPreferredPatientIdentifierFromPayload();
         if (preferredIdentifier != null) {
             patientIdentifiers.add(preferredIdentifier);
@@ -323,7 +323,6 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
         }
     }
 
-
     private  void setUnsavedPatientCreatorFromPayload(){
         String userString = JsonUtils.readAsString(payload, "$['encounter']['encounter.user_system_id']");
         String providerString = JsonUtils.readAsString(payload, "$['encounter']['encounter.provider_id']");
@@ -346,12 +345,12 @@ public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
             PatientIdentifier identifier = unsavedPatient.getPatientIdentifier();
             if (identifier != null) {
                 List<Patient> patients = Context.getPatientService().getPatients(identifier.getIdentifier());
-                savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+                savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
             }
         } else {
             PersonName personName = unsavedPatient.getPersonName();
             List<Patient> patients = Context.getPatientService().getPatients(personName.getFullName());
-            savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+            savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
         }
         return savedPatient;
     }

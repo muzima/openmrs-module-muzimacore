@@ -42,18 +42,4 @@ public interface CoreDao {
 
     @Transactional(readOnly = true)
     Number countEncounters(final List<String> patientUuids, final Date syncDate) throws DAOException;
-
-    @Transactional(readOnly = true)
-    List<Cohort> getCohorts(final String name, final Date syncDate,
-                            int startIndex, int size) throws DAOException;
-
-    @Transactional(readOnly = true)
-    Number countCohorts(final String name, final Date syncDate) throws DAOException;
-
-    @Transactional(readOnly = true)
-    List<Patient> getPatients(final String cohortUuid, final Date syncDate,
-                              final int startIndex, final int size) throws DAOException;
-
-    @Transactional(readOnly = true)
-    Number countPatients(final String cohortUuid, final Date syncDate) throws DAOException;
 }

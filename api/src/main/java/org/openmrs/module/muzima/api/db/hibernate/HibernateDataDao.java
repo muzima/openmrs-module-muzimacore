@@ -233,4 +233,9 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
     }
+
+    public void detachDataFromHibernateSession(final T data){
+        getSessionFactory().getCurrentSession().evict(data);
+        getSessionFactory().getCurrentSession().flush();
+    }
 }

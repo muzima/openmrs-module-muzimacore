@@ -1,0 +1,111 @@
+<div id="wide-sidebar" class="row">
+    <side-navigation menu-item="duplicates"></side-navigation>
+    <div class="col-lg-8">
+        <div class="row">
+            <div class="col-lg-1">
+                <a href="#/duplicates"><button class="btn btn-default">Back</button></a>
+            </div>
+            <div class="col-lg-10"></div>
+            <div class="col-lg-1">
+                <!--<button class="btn btn-default" type="submit">Extend View</button>-->
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="checkbox pull-right">
+                    <label>
+                        <input ng-model="emr_checkbox.select_all" type="checkbox" ng-change="toggleCheckboxes('emr')"> Select All
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="queue_checkbox.select_all" ng-change="toggleCheckboxes('queue')"> Select All
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <strong>Existing Record</strong>
+            </div>
+            <div class="col-lg-6 text-right">
+                <strong>Queue Record</strong>
+            </div>
+        </div>
+        <span ng-repeat="category in categoryMap">
+            <div style="margin:0 auto; text-align:center"><strong>{{category}}</strong></div>
+            <div class="well">
+            <div ng-repeat="rowData in tableData|filter:{category:category}">
+                <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="col-md-4">{{rowData.label}}</label>
+                        <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
+                            <input type="text" class="form-control" ng-model="rowData.emrPatient" disabled>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="checkbox" ng-show="rowData.isConflict">
+                                <label>
+                                    <input ng-model="emr_checkbox[rowData.key]" type="checkbox" value="option1" aria-label="..."
+                                           ng-change="toggleIndividualCheckbox('emr',rowData.key)">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <div class="col-md-1">
+                            <div class="checkbox" ng-show="rowData.isConflict">
+                                <label>
+                                    <input ng-model="queue_checkbox[rowData.key]" type="checkbox" value="option1"
+                                           aria-label="..." ng-change="toggleIndividualCheckbox('queue',rowData.key)">
+                                </label>
+                            </div>
+                        </div>
+                        <label class="col-md-4">{{rowData.label}}</label>
+                        <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
+                            <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient"
+                                   ng-change="updatePage(rowData)" ng-disabled="!isEditableField(rowData.key)">
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <hr>
+            </div>
+            </div>
+        </span>
+        <div class="row">
+            <div class="col-lg-6">
+                <button class="btn btn-primary btn-block" ng-click="mergeDemographics()">MERGE AND REQUEUE</button>
+            </div>
+            <div class="col-lg-6">
+                <button class="btn btn-primary btn-block" ng-click="createAndRequeue()">CREATE AND REQUEUE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id='wait' class='loader'>
+        &nbsp;
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="merge-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Error!</h4>
+                </div>
+                <div class="modal-body text-danger">
+                    {{ popupMessage }}
+                </div>
+                <div class="modal-footer">
+                    <button id = "btnNo" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

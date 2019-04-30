@@ -118,14 +118,16 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
     }
 
     private void validateUnsavedPatient() {
-        Patient savedPatient = findSimilarSavedPatient();
-        if (savedPatient != null) {
-            queueProcessorException.addException(
-                new Exception(
-                        "Found a patient with similar characteristic :  patientId = " + savedPatient.getPatientId()
-                                + " Identifier Id = " + savedPatient.getPatientIdentifier().getIdentifier()
-                )
-            );
+        if(!JsonUtils.readAsBoolean(payload, "$['skipPatientMatching']")) {
+            Patient savedPatient = findSimilarSavedPatient();
+            if (savedPatient != null) {
+                queueProcessorException.addException(
+                        new Exception(
+                                "Found a patient with similar characteristic :  patientId = " + savedPatient.getPatientId()
+                                        + " Identifier Id = " + savedPatient.getPatientIdentifier().getIdentifier()
+                        )
+                );
+            }
         }
     }
 
@@ -278,7 +280,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
                     new Exception("Cannot create identifier. Identifier type name or uuid must be supplied"));
         }
 
-        if(StringUtils.isBlank(identifierTypeUuid)) {
+        if(StringUtils.isBlank(identifierValue)) {
             queueProcessorException.addException(
                     new Exception("Cannot create identifier. Supplied identifier value is blank for identifier type name:'"
                             + identifierTypeName + "', uuid:'" + identifierTypeUuid + "'"));
@@ -534,12 +536,12 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
             PatientIdentifier identifier = unsavedPatient.getPatientIdentifier();
             if (identifier != null) {
                 List<Patient> patients = Context.getPatientService().getPatients(identifier.getIdentifier());
-                savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+                savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
             }
         } else {
             PersonName personName = unsavedPatient.getPersonName();
             List<Patient> patients = Context.getPatientService().getPatients(personName.getFullName());
-            savedPatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+            savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
         }
         return savedPatient;
     }

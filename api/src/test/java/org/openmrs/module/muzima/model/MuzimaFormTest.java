@@ -1,16 +1,12 @@
 package org.openmrs.module.muzima.model;
 
-import org.javarosa.core.model.FormDef;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.BaseOpenmrsObjectTest;
 import org.openmrs.EncounterType;
 import org.openmrs.Form;
-import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 public class MuzimaFormTest extends BaseModuleContextSensitiveTest {
 
@@ -18,7 +14,6 @@ public class MuzimaFormTest extends BaseModuleContextSensitiveTest {
 
     @Before
     public void setUpTest() throws Exception {
-        MuzimaForm form = Context.getService(MuzimaForm.class);
         muzimaForm = new MuzimaForm();
         Form testForm = new Form();
         testForm.setId(1);

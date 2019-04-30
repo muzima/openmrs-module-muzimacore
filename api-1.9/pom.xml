@@ -1,0 +1,77 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.openmrs.module</groupId>
+        <artifactId>muzimacore</artifactId>
+        <version>1.4.2</version>
+    </parent>
+
+    <artifactId>muzimacore-api-1.9</artifactId>
+    <packaging>jar</packaging>
+    <name>Muzima Core Module API 1.9 - 2.0.*</name>
+    <description>API project for Muzima Core Module</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>reportingcompatibility-api</artifactId>
+            <version>1.5.13</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Begin OpenMRS core -->
+
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>${project.parent.artifactId}-api</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.api</groupId>
+            <artifactId>openmrs-api</artifactId>
+            <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javassist</artifactId>
+                    <groupId>javassist</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.openmrs.api</groupId>
+            <artifactId>openmrs-api</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>javassist</artifactId>
+                    <groupId>javassist</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- End OpenMRS core -->
+
+    </dependencies>
+
+    <!-- end spring boot test dependencies -->
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+    </build>
+
+</project>

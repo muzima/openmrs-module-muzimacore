@@ -28,12 +28,13 @@ public class MuzimaSettingsController {
         Map<String, Object> response = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
             MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);
-            int pages = (settingService.countDataSource(search).intValue() + pageSize - 1) / pageSize;
+            int pages = (settingService.countMuzimaSettings(search).intValue() + pageSize - 1) / pageSize;
             List<Object> objects = new ArrayList<Object>();
             for (MuzimaSetting setting : settingService.getPagedSettings(search, pageNumber, pageSize)) {
                 objects.add(WebConverter.convertMuzimaSetting(setting));
             }
             response.put("pages", pages);
+            response.put("totalItems", settingService.countMuzimaSettings(search).intValue());
             response.put("objects", objects);
         }
         return response;

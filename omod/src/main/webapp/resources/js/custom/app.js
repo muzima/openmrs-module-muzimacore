@@ -20,12 +20,18 @@ muzimaCoreModule.
             when('/update/forms/:muzimaform_uuid',{controller: UpdateCtrl, templateUrl: '../../moduleResources/muzimacore/partials/update/forms.html'}).
             when('/error/:uuid', {controller: ErrorCtrl, templateUrl: '../../moduleResources/muzimacore/partials/error.html'}).
             when('/errors', {controller: ErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/errors.html'}).
+            when('/duplicates', {controller: PotentialDuplicatesErrorsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/potential_duplicates.html'}).
+            when('/merge/:uuid', {controller: MergeCtrl, templateUrl: '../../moduleResources/muzimacore/partials/merge.html'}).
             when('/edit/:uuid', {controller: EditCtrl, templateUrl: '../../moduleResources/muzimacore/partials/edit.html'}).
             when('/setting/:uuid', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
             when('/settings', {controller: SettingsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/settings.html'}).
             when('/createSetting/', {controller: SettingCtrl, templateUrl: '../../moduleResources/muzimacore/partials/setting.html'}).
+		    when('/cohortDefinitions', {controller: CohortDefinitionsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinitions.html'}).
+            when('/cohortDefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
+            when('/cohortDefinition/:uuid', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
+            when('/createCohortDefinition', {controller: CohortDefinitionCtrl, templateUrl: '../../moduleResources/muzimacore/partials/cohortdefinition.html'}).
             when('/reportConfig/:uuid', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
-            when('/reportConfigs', {controller: ReportConfigurationsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfigurations.html'}).  
+            when('/reportConfigs', {controller: ReportConfigurationsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfigurations.html'}).
             when('/createReportConfig/', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
             otherwise({redirectTo: '/sources'});
     }]
@@ -89,6 +95,17 @@ muzimaCoreModule.factory('$data', function ($http) {
         return $http.post("error.json?uuid="+uuid,formData);
     };
 
+    var mergePatient = function(info) {
+        return $http.post('mergePatient.json', info);
+    };
+
+    var requeueDuplicatePatient = function(info) {
+        return $http.post('requeueDuplicatePatient.json', info);
+    };
+
+    var getPatientByIdentifier = function (identifier) {
+        return $http.get('../../ws/rest/v1/patient?identifier=' + identifier + "&v=full");
+    };
     return {
         getQueues: getQueues,
         getQueue: getQueue,
@@ -106,8 +123,12 @@ muzimaCoreModule.factory('$data', function ($http) {
 
         getEdit: getEdit,
         editErrors: editErrors,
-        validateData: validateData
-    }
+        validateData: validateData,
+
+        getPatientByIdentifier: getPatientByIdentifier,
+        mergePatient: mergePatient,
+        requeueDuplicatePatient: requeueDuplicatePatient
+    };
 });
 
 muzimaCoreModule.factory('FormService', function ($http) {
@@ -131,7 +152,7 @@ muzimaCoreModule.factory('FormService', function ($http) {
         return $http.get('../../module/muzimacore/discriminator.json', {cache: false});
     };
     var searchForms = function(search) {
-        return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description,retired)');
+        return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description,retired)&q=' + (search === undefined ? '' : search));
     };
 
     return {
@@ -302,11 +323,11 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
     var deleteReportConfiguration = function (uuid) {
         return $http.post("delete/reportConfig.json", {"uuid": uuid});
     };
-    
+
     var searchReportConfigCohorts = function(search) {
            return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
      };
-       
+
      var searchReportConfigReports = function(search) {
                return $http.get("reportConfigReports.json?search=" + (search === undefined ? '' : search));
      };
@@ -327,5 +348,37 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
         searchReportConfigReports: searchReportConfigReports,
         getReportsForReportConfiguration: getReportsForReportConfiguration,
         getCohortForReportConfiguration:getCohortForReportConfiguration
+    }
+});
+
+
+muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
+
+
+    var getCohortDefinitions = function (pageNumber, pageSize) {
+        return $http.get("cohortDefinitions.json?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
+    };
+    var getCohortDefinition = function (uuid) {
+            return $http.get("cohortDefinition.json?uuid=" + uuid);
+        };
+    var getAllCohorts = function () {
+            return $http.get("cohorts.json");
+        };
+    var getAllCohortsWithoutDefinition=function(){
+            return $http.get("cohortswithoutdefinition.json");
+         };
+    var saveCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled) {
+            return $http.post("cohortDefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition,
+                "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled});
+        };
+
+    return {
+
+        getCohortDefinitions: getCohortDefinitions,
+        getCohortDefinition:getCohortDefinition,
+        saveCohortDefinition:saveCohortDefinition,
+        getAllCohorts:getAllCohorts,
+        getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition
+
     }
 });

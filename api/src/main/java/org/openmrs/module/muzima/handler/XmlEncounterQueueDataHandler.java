@@ -16,7 +16,6 @@ package org.openmrs.module.muzima.handler;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Concept;
@@ -204,10 +203,10 @@ public class XmlEncounterQueueDataHandler implements QueueDataHandler {
             }
         } else if (!StringUtils.isBlank(patientIdentifier.getIdentifier())) {
             List<Patient> patients = Context.getPatientService().getPatients(patientIdentifier.getIdentifier());
-            candidatePatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+            candidatePatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
         } else {
             List<Patient> patients = Context.getPatientService().getPatients(unsavedPatient.getPersonName().getFullName());
-            candidatePatient = PatientSearchUtils.findPatient(patients, unsavedPatient);
+            candidatePatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, unsavedPatient);
         }
 
         if (candidatePatient == null) {

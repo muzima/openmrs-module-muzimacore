@@ -1173,10 +1173,15 @@
         </insert>
     </changeSet>
    <changeSet id="muzima-20180620158900" author="dileka">
+       <preConditions onFail="MARK_RAN">
+           <sqlCheck expectedResult="0">
+               SELECT COUNT(*) FROM muzima_setting where property = 'PatientCohort.AutoDownload'
+           </sqlCheck>
+       </preConditions>
         <insert tableName="muzima_setting">
             <column name="property" value="PatientCohort.AutoDownload" />
             <column name="name" value="Patient Cohort auto-download" />
-            <column name="description" value="Defines wether cohorts are downloaded automatically to muzima" />
+            <column name="description" value="Defines whether cohorts are downloaded automatically to muzima" />
             <column name="setting_data_type" value="STRING" />
             <column name="value_boolean" valueBoolean="true" />
             <column name="date_created" valueDate="2018-06-20T00:00:00" />
@@ -1203,7 +1208,7 @@
             <and>
                 <tableExists tableName="reporting_report_design"/>
             </and>
-            
+
         </preConditions>
         <createTable tableName="muzima_cohort_report_config">
             <column name="id" type="int" autoIncrement="true">
@@ -1214,12 +1219,12 @@
             </column>
             <column name="report_design_uuid" type="char(38)">
                 <constraints nullable="false"/>
-                
+
             </column>
             <column name="priority" type="tinyint" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
-            
+
             <column name="creator" type="int">
                 <constraints nullable="false"/>
             </column>
@@ -1247,12 +1252,6 @@
         <addForeignKeyConstraint constraintName="muzima_cohort_report_config_retired_by"
                                  baseTableName="muzima_cohort_report_config" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
-        <!-- <addForeignKeyConstraint constraintName="muzima_cohort_report_config_cohort_uuid"
-                                     baseTableName="muzima_cohort_report_config" baseColumnNames="cohort_uuid"
-                                     referencedTableName="cohort" referencedColumnNames="uuid"/>
-        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_report_design_uuid"
-                                 baseTableName="muzima_cohort_report_config" baseColumnNames="report_design_uuid"
-                                 referencedTableName="reporting_report_design" referencedColumnNames="uuid"/>-->
     </changeSet>
 
     <changeSet id="muzima-20180630154129" author="dileka">
@@ -1273,17 +1272,17 @@
             </column>
 
             <column name="status" type="varchar(255)"/>
-            
+
             <column name="patient_id" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="report_json" type="longblob">
-                
+
             </column>
             <column name="priority" type="tinyint" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
-            
+
             <column name="creator" type="int">
                 <constraints nullable="false"/>
             </column>
@@ -1321,6 +1320,265 @@
             1, now(), NULL, NULL, NULL, uuid());
         </sql>
     </changeSet>
-    
+
+
+    <changeSet id="muzima-20180720102200" author="bmokaya">
+        <dropNotNullConstraint columnDataType="int" columnName="patient" tableName="muzima_notification_data"/>
+    </changeSet>
+
+    <changeSet id="muzima-20180717115600" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="AudioContentComplexObs.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Complex Obs Audio Content" />
+            <column name="description" value="Specifies Concept Uuid for Complex Obs Audio Content" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-07-17T11:56:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="24caa622-691a-493b-b9ac-8ee70424ad47" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20180717120000" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="VideoContentComplexObs.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Complex Obs Video Content" />
+            <column name="description" value="Specifies Concept Uuid for Complex Obs Video Content" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-07-17T12:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="eaf882a3-3360-45b3-b480-ee9e634bc74f" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20180717120200" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="ImageContentComplexObs.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Complex Obs Image Content" />
+            <column name="description" value="Specifies Concept Uuid for Complex Obs Image Content" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-07-17T12:02:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="fd759595-6338-491b-ac37-62e699c1823c" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20180717120700" author="mssavai">
+        <insert tableName="muzima_setting">
+            <column name="property" value="FileContentComplexObs.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Complex Obs File Content" />
+            <column name="description" value="Specifies Concept Uuid for Complex Obs File Content" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-07-17T12:07:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="651fc189-127f-4b4c-98f3-121ed5ad182e" />
+        </insert>
+    </changeSet>
+    <changeSet id="expandedcohort-2015-03-19-15:50" author="msavai">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="expanded_cohort_definition"/></not>
+        </preConditions>
+        <comment>
+            Creating the expanded cohort table
+        </comment>
+        <createTable tableName="expanded_cohort_definition">
+            <column name="id" type="int"  autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_id" type="int"/>
+            <column name="sql_definition" type="text"/>
+            <column name="is_scheduled" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="voided" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-07-20-13:14" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="expanded_cohort_update_history"/></not>
+        </preConditions>
+        <comment>
+            Creating the expanded cohort update history table
+        </comment>
+        <createTable tableName="expanded_cohort_update_history">
+            <column name="id" type="int"  autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="members_added" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_updated" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-08-25-15:52" author="mssavai" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_update_history" columnName="members_removed"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the members_removed column
+        </comment>
+        <addColumn tableName="expanded_cohort_update_history">
+            <column name="members_removed" type="text"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-08-25-16:35" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="expanded_cohort_update_history" columnName="members_added"/>
+        </preConditions>
+        <comment>
+            Dropping null constraint on members_added column
+        </comment>
+        <dropNotNullConstraint tableName="expanded_cohort_update_history"
+                               columnName="members_added"
+                               columnDataType="text"/>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-08-27-13:12" author="mssavai" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="enable_member_addition"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the enable_member_addition column
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="enable_member_addition" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="expandedcohort-2018-08-27-13:16" author="mssavai" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="enable_member_removal"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the enable_member_removal column
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="enable_member_removal" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20180831113800" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="SHRStatus.isEnabled" />
+            <column name="name" value="SHR status" />
+            <column name="description" value="Specifies if smart card feature will be enabled on Android App" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-08-31T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="25e52b76-dbef-4629-aed2-5497a1f8303c" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20180831113900" author="samuelowino">
+        <insert tableName="muzima_setting">
+            <column name="property" value="GPSStatus.isEnabled" />
+            <column name="name" value="GPS status" />
+            <column name="description" value="Specifies if GPS tracking feature will be activated on mUzima mobile application" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2018-09-27T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="7c5f3458-c240-11e8-a355-529269fb145i" />
+        </insert>
+
+    </changeSet>
+
+    <changeSet id="muzima-20190214135300" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaWrapperConcept.ConceptUuid" />
+            <column name="name" value="Uuid for Media Wrapper Concept" />
+            <column name="description" value="Specifies Concept-Uuid for convenient set concept that wraps media complex obs with its metadata" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-02-14T13:53:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="b7c0c988-3047-11e9-873e-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20190214140100" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaCategoryOtherNonCoded.ConceptUuid" />
+            <column name="name" value="Concept Uuid for other non-coded category" />
+            <column name="description" value="Specifies Concept-Uuid for concept-set other non-coded option for media category" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-02-14T13:56:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="f81e3970-3047-11e9-873e-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20190214140300" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaContentComment.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Media Content Comment" />
+            <column name="description" value="Specifies Concept-Uuid for media comment concept" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-02-14T14:03:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="235e34e6-3048-11e9-873e-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20190220103000" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaCategoryFreeText.ConceptUuid" />
+            <column name="name" value="Concept Uuid for Other category text" />
+            <column name="description" value="Specifies Concept-Uuid for free text for other-non coded category option" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-02-20T10:30:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="adbda0a4-34d5-11e9-8667-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+    <changeSet id="muzima-20190430114100" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_cohort_report_config" columnName="report_design_uuid"/>
+            </and>
+        </preConditions>
+        <comment>
+            changing type for report_design column in muzima_cohort_report_config table
+        </comment>
+
+        <renameColumn tableName="muzima_cohort_report_config" oldColumnName="report_design_uuid" newColumnName="report_designs"
+                      columnDataType="${clob.type}"/>
+    </changeSet>
 
 </databaseChangeLog>
