@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class PatientSearchUtils {
     private PatientSearchUtils(){}
-    public static Patient findPatient(final List<Patient> patients, final Patient unsavedPatient) {
+    public static Patient findSimilarPatientByNameAndGender(final List<Patient> patients, final Patient unsavedPatient) {
         for (Patient patient : patients) {
             // match it using the person name and gender.
             PersonName savedPersonName = patient.getPersonName();
@@ -70,17 +70,19 @@ public class PatientSearchUtils {
                 }
             }
         }
-        if (savedPatient == null && !(candidatePatient.getPatientIdentifier() != null
+
+        if (savedPatient == null && (candidatePatient.getPatientIdentifier() != null
                 && StringUtils.isNotEmpty(candidatePatient.getPatientIdentifier().getIdentifier()) )) {
             List<Patient> patients = Context.getPatientService()
                     .getPatients(candidatePatient.getPatientIdentifier().getIdentifier());
-            savedPatient = PatientSearchUtils.findPatient(patients, candidatePatient);
+            savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, candidatePatient);
         }
+
         if(savedPatient == null && candidatePatient.getPersonName() != null
                 && StringUtils.isNotEmpty(candidatePatient.getPersonName().getFullName())){
             List<Patient> patients = Context.getPatientService()
                     .getPatients(candidatePatient.getPersonName().getFullName());
-            savedPatient = PatientSearchUtils.findPatient(patients, candidatePatient);
+            savedPatient = PatientSearchUtils.findSimilarPatientByNameAndGender(patients, candidatePatient);
         }
 
         return savedPatient;

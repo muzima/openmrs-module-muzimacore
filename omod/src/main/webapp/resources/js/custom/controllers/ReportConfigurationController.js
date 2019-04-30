@@ -1,18 +1,15 @@
 function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportConfigurations) {
     $scope.reportConfiguration = {};
-     $scope.search = { cohorts: '', reports: ''};
-     $scope.selected = {cohorts: '', reports: ''};
-     $scope.configReports = [];
-     $scope.checkboxModel = {
-            priority : false
-          };
-     
-      var createJson = function () {
-             var reportConfigurationJsonString = {"reports":$scope.configReports};
-             //reportConfigurationJsonString.reports["reports"] = $scope.configReports;
-             return angular.toJson(reportConfigurationJsonString);
-         };
-        
+    $scope.search = { cohorts: '', reports: ''};
+    $scope.selected = {cohorts: '', reports: ''};
+    $scope.configReports = [];
+    $scope.checkboxModel = {priority : false};
+
+    var createJson = function () {
+        var reportConfigurationJsonString = {"reports":$scope.configReports};
+        return angular.toJson(reportConfigurationJsonString);
+    };
+
     // initialize the view to be read only
     $scope.mode = "view";
     $scope.uuid = $routeParams.uuid;
@@ -26,26 +23,22 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     }
 
     $scope.edit = function () {
-         $muzimaReportConfigurations.getReportsForReportConfiguration($scope.reportConfiguration.uuid).
-            then(function (response) {
-                $scope.reports = response.data.objects;
-           
-                angular.forEach($scope.reports, function (report, index) {
-                                 $scope.configReports.push(report);
-                                    });
-                
+        $muzimaReportConfigurations.getReportsForReportConfiguration($scope.reportConfiguration.uuid).
+        then(function (response) {
+            $scope.reports = response.data.objects;
+
+            angular.forEach($scope.reports, function (report, index) {
+                $scope.configReports.push(report);
             });
-            
-             $muzimaReportConfigurations.getCohortForReportConfiguration($scope.reportConfiguration.uuid).
-                        then(function (response) {
-                           //console.log("22222222222222222222222")
-                            $scope.cohorts = response.data
-                            
-                            
-                        });
-                        
-             $scope.mode = "edit";
-        
+        });
+
+        $muzimaReportConfigurations.getCohortForReportConfiguration($scope.reportConfiguration.uuid).then(function (response) {
+            $scope.cohorts = response.data;
+            $scope.search.cohorts = response.data[0];
+        });
+
+        $scope.mode = "edit";
+
     };
 
     $scope.cancel = function () {
@@ -53,6 +46,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
             if ($scope.uuid === undefined) {
                 $location.path("/reportConfigs");
             } else {
+                $scope.configReports=[];
                 $scope.mode = "view"
             }
         } else {
@@ -61,7 +55,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     };
 
     $scope.save = function (reportConfiguration) {
-        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson(),reportConfiguration.priority).//$scope.checkboxModel.priority).
+        $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson(),reportConfiguration.priority).
         then(function () {
             $location.path("/reportConfigs");
         })
@@ -73,61 +67,60 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
             $location.path("/reportConfigs");
         })
     };
-    
-     /****************************************************************************************
-         ***** Group of methods to manipulate Cohorts
-         *****************************************************************************************/
-        $scope.$watch('search.cohorts', function (newValue, oldValue) {
-            if (newValue != oldValue) {
-                $muzimaReportConfigurations.searchReportConfigCohorts($scope.search.cohorts).
-                then(function (response) {
-                    $scope.cohorts = response.data.objects;
-                   // $scope.search.cohorts = response.data.objects;
-                });
+
+    /****************************************************************************************
+     ***** Group of methods to manipulate Cohorts
+     *****************************************************************************************/
+    $scope.$watch('search.cohorts', function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            $muzimaReportConfigurations.searchReportConfigCohorts($scope.search.cohorts).
+            then(function (response) {
+                $scope.cohorts = response.data.objects;
+            });
+        }
+    }, true);
+
+    /****************************************************************************************
+     ***** Group of methods to manipulate Reports
+     *****************************************************************************************/
+
+    $scope.$watch('search.reports', function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            $muzimaReportConfigurations.searchReportConfigReports($scope.search.reports).
+            then(function (response) {
+                $scope.reports = response.data.objects;
+            });
+        }
+    }, true);
+
+    $scope.addReport = function(report) {
+        var reportExists = _.find($scope.configReports, function (configReport) {
+            return configReport.uuid == report.uuid
+        });
+        if (!reportExists) {
+            $scope.configReports.push(report);
+            $scope.search.reports = '';
+        }
+    };
+
+    $scope.chosenReport = function (value) {
+        $scope.selected.report= value;
+    };
+
+    $scope.removeReport = function () {
+        angular.forEach($scope.configReports, function (configReport, index) {
+            if (configReport.uuid === $scope.selected.report) {
+                $scope.configReports.splice(index, 1);
+                $scope.selected.report = '';
             }
-        }, true);
-        
-         /****************************************************************************************
-          ***** Group of methods to manipulate Reports
-          *****************************************************************************************/
-                
-         $scope.$watch('search.reports', function (newValue, oldValue) {
-                    if (newValue != oldValue) {
-                        $muzimaReportConfigurations.searchReportConfigReports($scope.search.reports).
-                        then(function (response) {
-                            $scope.reports = response.data.objects;
-                        });
-                    }
-                }, true);
-        
-          $scope.addReport = function(report) {
-                var reportExists = _.find($scope.configReports, function (configReport) {
-                    return configReport.uuid == report.uuid
-                });
-                if (!reportExists) {
-                    $scope.configReports.push(report);
-                    $scope.search.reports = '';
-                }
-            };
-        
-            $scope.chosenReport = function (value) {
-                $scope.selected.report= value;
-            };
-            
-            $scope.removeReport = function () {
-                    angular.forEach($scope.configReports, function (configReport, index) {
-                        if (configReport.uuid === $scope.selected.report) {
-                            $scope.configReports.splice(index, 1);
-                            $scope.selected.report = '';
-                        }
-                    });
-                };
-        
+        });
+    };
+
 }
 
 function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations) {
     // initialize the paging structure
-  
+
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;

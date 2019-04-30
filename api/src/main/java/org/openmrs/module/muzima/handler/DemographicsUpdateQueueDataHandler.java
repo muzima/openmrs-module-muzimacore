@@ -31,8 +31,10 @@ import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
 import org.openmrs.module.muzima.model.QueueData;
+import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
 import org.openmrs.module.muzima.utils.PatientSearchUtils;
@@ -68,6 +70,10 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
             if (validate(queueData)) {
                 updateSavedPatientDemographics();
                 Context.getPatientService().savePatient(savedPatient);
+                String temporaryUuid = getTemporaryPatientUuidFromPayload();
+                if(!StringUtils.isNotEmpty(temporaryUuid)) {
+                    saveRegistrationData(temporaryUuid);
+                }
             }
         } catch (Exception e) {
             if (!e.getClass().equals(QueueProcessorException.class)) {
@@ -80,9 +86,37 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         }
     }
 
+    private String getTemporaryPatientUuidFromPayload(){
+        return JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.temporal_patient_uuid']");
+    }
+
+    private void saveRegistrationData(String temporaryUuid){
+        RegistrationDataService registrationDataService = Context.getService(RegistrationDataService.class);
+        RegistrationData registrationData = registrationDataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
+        if (registrationData == null) {
+            registrationData = new RegistrationData();
+            registrationData.setTemporaryUuid(temporaryUuid);
+            String assignedUuid = savedPatient.getUuid();
+            registrationData.setAssignedUuid(assignedUuid);
+            registrationDataService.saveRegistrationData(registrationData);
+        }
+    }
+
     private void updateSavedPatientDemographics(){
         if(unsavedPatient.getIdentifiers() != null){
-            savedPatient.addIdentifiers(unsavedPatient.getIdentifiers());
+            for(final PatientIdentifier identifier : unsavedPatient.getIdentifiers() ) {
+                boolean identifierExists = false;
+                for(PatientIdentifier savedPatientIdentifier: savedPatient.getIdentifiers()) {
+                    if (savedPatientIdentifier.getIdentifierType().equals(identifier.getIdentifierType())
+                            && savedPatientIdentifier.getIdentifier().equalsIgnoreCase(identifier.getIdentifier())) {
+                        identifierExists = true;
+                        break;
+                    }
+                }
+                if(!identifierExists){
+                    savedPatient.addIdentifier(identifier);
+                }
+            }
         }
         if(unsavedPatient.getPersonName() != null) {
             savedPatient.addName(unsavedPatient.getPersonName());
@@ -212,16 +246,49 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     }
 
     private void setUnsavedPatientIdentifiersFromPayload() {
-        List<PatientIdentifier> otherIdentifiers = getOtherPatientIdentifiersFromPayload();
-        if (!otherIdentifiers.isEmpty()) {
+        List<PatientIdentifier> demographicsUpdateIdentifiers = getDemographicsUpdatePatientIdentifiersFromPayload();
+        if (!demographicsUpdateIdentifiers.isEmpty()) {
             Set<PatientIdentifier> patientIdentifiers = new HashSet<PatientIdentifier>();
-            patientIdentifiers.addAll(otherIdentifiers);
+            patientIdentifiers.addAll(demographicsUpdateIdentifiers);
             setIdentifierTypeLocation(patientIdentifiers);
             unsavedPatient.addIdentifiers(patientIdentifiers);
         }
     }
 
-    private List<PatientIdentifier> getOtherPatientIdentifiersFromPayload() {
+    private List<PatientIdentifier> getDemographicsUpdatePatientIdentifiersFromPayload() {
+        List<PatientIdentifier> identifiers = new ArrayList<PatientIdentifier>();
+        PatientIdentifier demographicsUpdateMedicalRecordNumberIdentifier = getDemographicsUpdateMedicalRecordNumberIdentifierFromPayload();
+        if(demographicsUpdateMedicalRecordNumberIdentifier != null){
+            identifiers.add(demographicsUpdateMedicalRecordNumberIdentifier);
+        }
+
+        identifiers.addAll(getOtherDemographicsUpdatePatientIdentifiersFromPayload());
+        identifiers.addAll(getLegacyOtherDemographicsUpdatePatientIdentifiersFromPayload());
+        return identifiers;
+    }
+
+    private PatientIdentifier getDemographicsUpdateMedicalRecordNumberIdentifierFromPayload(){
+        PatientIdentifier medicalRecordNumber = null;
+        Object medicalRecordNumberObject = JsonUtils.readAsObject(payload, "$['demographicsupdate']['demographicsupdate.medical_record_number']");
+        if(medicalRecordNumberObject instanceof JSONObject) {
+            medicalRecordNumber = createPatientIdentifier((JSONObject)medicalRecordNumberObject);
+        } else if (medicalRecordNumberObject instanceof String){
+
+            //process as legacy demographics update medical record number
+            String medicalRecordNumberValueString = (String)medicalRecordNumberObject;
+            if(StringUtils.isNotEmpty(medicalRecordNumberValueString)) {
+                String identifierTypeName = "AMRS Universal ID";
+                PatientIdentifier preferredPatientIdentifier = createPatientIdentifier(identifierTypeName, medicalRecordNumberValueString);
+                if (preferredPatientIdentifier != null) {
+                    preferredPatientIdentifier.setPreferred(true);
+                    medicalRecordNumber = preferredPatientIdentifier;
+                }
+            }
+        }
+        return medicalRecordNumber;
+    }
+
+    private List<PatientIdentifier> getOtherDemographicsUpdatePatientIdentifiersFromPayload() {
         List<PatientIdentifier> otherIdentifiers = new ArrayList<PatientIdentifier>();
         try {
             Object otheridentifierObject = JsonUtils.readAsObject(payload, "$['demographicsupdate']['demographicsupdate.otheridentifier']");
@@ -255,6 +322,33 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         return otherIdentifiers;
     }
 
+    private List<PatientIdentifier> getLegacyOtherDemographicsUpdatePatientIdentifiersFromPayload() {
+        List<PatientIdentifier> legacyIdentifiers = new ArrayList<PatientIdentifier>();
+        Object identifierTypeNameObject = JsonUtils.readAsObject(payload, "$['demographicsupdate']['demographicsupdate.other_identifier_type']");
+        Object identifierValueObject = JsonUtils.readAsObject(payload, "$['demographicsupdate']['demographicsupdate.other_identifier_value']");
+
+        if (identifierTypeNameObject instanceof JSONArray) {
+            JSONArray identifierTypeName = (JSONArray) identifierTypeNameObject;
+            JSONArray identifierValue = (JSONArray) identifierValueObject;
+            for (int i = 0; i < identifierTypeName.size(); i++) {
+                PatientIdentifier identifier = createPatientIdentifier(identifierTypeName.get(i).toString(),
+                        identifierValue.get(i).toString());
+                if (identifier != null) {
+                    legacyIdentifiers.add(identifier);
+                }
+            }
+        } else if (identifierTypeNameObject instanceof String) {
+            String identifierTypeName = (String) identifierTypeNameObject;
+            String identifierValue = (String) identifierValueObject;
+            PatientIdentifier identifier = createPatientIdentifier(identifierTypeName, identifierValue);
+            if (identifier != null) {
+                legacyIdentifiers.add(identifier);
+            }
+        }
+
+        return legacyIdentifiers;
+    }
+
     private PatientIdentifier createPatientIdentifier(JSONObject identifierObject) {
         if(identifierObject == null){
             return null;
@@ -267,13 +361,16 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         return createPatientIdentifier(identifierUuid,identifierTypeName, identifierValue);
     }
 
+    private PatientIdentifier createPatientIdentifier(String identifierTypeName, String identifierValue) {
+        return createPatientIdentifier(null, identifierTypeName, identifierValue);
+    }
     private PatientIdentifier createPatientIdentifier(String identifierTypeUuid, String identifierTypeName, String identifierValue) {
         if(StringUtils.isBlank(identifierTypeUuid) && StringUtils.isBlank(identifierTypeName)) {
             queueProcessorException.addException(
                     new Exception("Cannot create identifier. Identifier type name or uuid must be supplied"));
         }
 
-        if(StringUtils.isBlank(identifierTypeUuid)) {
+        if(StringUtils.isBlank(identifierValue)) {
             queueProcessorException.addException(
                     new Exception("Cannot create identifier. Supplied identifier value is blank for identifier type name:'"
                             + identifierTypeName + "', uuid:'" + identifierTypeUuid + "'"));
@@ -330,7 +427,6 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
                         new Exception("Change of Birth Date requires manual review"));
             }
         }
-
     }
 
     private void setUnsavedPatientBirthDateEstimatedFromPayload(){
@@ -401,6 +497,12 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
                     }
                 }
             }
+
+            PersonAddress legacyPersonAddress = getLegacyPatientAddressFromPayload();
+            if(legacyPersonAddress != null){
+                addresses.add(legacyPersonAddress);
+            }
+
         } catch (InvalidPathException e) {
             log.error("Error while parsing person address", e);
         }
@@ -408,7 +510,6 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         if(!addresses.isEmpty()) {
             unsavedPatient.setAddresses(addresses);
         }
-
     }
 
     private PersonAddress getPatientAddressFromJsonObject(JSONObject addressJsonObject){
@@ -438,6 +539,36 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
             return patientAddress;
         }
     }
+
+    private PersonAddress getLegacyPatientAddressFromPayload(){
+        PersonAddress personAddress = null;
+
+        String county = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.county']");
+        if(StringUtils.isNotEmpty(county)) {
+            if(personAddress == null) personAddress = new PersonAddress();
+            personAddress.setStateProvince(county);
+        }
+
+        String location = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.location']");
+        if(StringUtils.isNotEmpty(location)) {
+            if (personAddress == null) personAddress = new PersonAddress();
+            personAddress.setAddress6(location);
+        }
+
+        String subLocation = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.sub_location']");
+        if(StringUtils.isNotEmpty(subLocation)) {
+            if (personAddress == null) personAddress = new PersonAddress();
+            personAddress.setAddress5(subLocation);
+        }
+
+        String village = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.village']");
+        if(StringUtils.isNotEmpty(village)) {
+            if (personAddress == null) personAddress = new PersonAddress();
+            personAddress.setCityVillage(village);
+        }
+        return personAddress;
+    }
+
     private void setUnsavedPatientPersonAttributesFromPayload() {
         Set<PersonAttribute> attributes = new TreeSet<PersonAttribute>();
         try {
@@ -466,6 +597,8 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
                     }
                 }
             }
+
+            attributes.addAll(getLegacyPersonAttributes());
         } catch (InvalidPathException ex) {
             log.error("Error while parsing person attribute", ex);
         }
@@ -488,8 +621,28 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         String attributeTypeName = (String) getElementFromJsonObject(attributeJsonObject,"attribute_type_name");
         String attributeTypeUuid = (String) getElementFromJsonObject(attributeJsonObject,"attribute_type_uuid");
 
+        return createPersonAttribute(attributeTypeName, attributeTypeUuid, attributeValue);
+    }
+
+    private Set<PersonAttribute> getLegacyPersonAttributes(){
+        Set<PersonAttribute> attributes = new TreeSet<PersonAttribute>();
+        String mothersName = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.mothers_name']");
+        if(StringUtils.isNotEmpty(mothersName))
+            attributes.add(createPersonAttribute("Mother's Name",null,mothersName));
+
+        String phoneNumber = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.phone_number']");
+        if(StringUtils.isNotEmpty(phoneNumber))
+            attributes.add(createPersonAttribute("Contact Phone Number",null, phoneNumber));
+        return attributes;
+    }
+
+    private PersonAttribute createPersonAttribute(String attributeTypeName, String attributeTypeUuid,String attributeValue){
         PersonService personService = Context.getPersonService();
-        PersonAttributeType attributeType = personService.getPersonAttributeTypeByUuid(attributeTypeUuid);
+        PersonAttributeType attributeType = null;
+
+        if(StringUtils.isNotEmpty(attributeTypeUuid)){
+            attributeType = personService.getPersonAttributeTypeByUuid(attributeTypeUuid);
+        }
 
         if(attributeType == null){
             attributeType = personService.getPersonAttributeTypeByName(attributeTypeName);

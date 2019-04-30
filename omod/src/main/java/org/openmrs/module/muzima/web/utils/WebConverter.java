@@ -25,6 +25,7 @@ import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
@@ -256,9 +257,10 @@ public class WebConverter {
     public static Map<String, Object> convertMuzimaCohort(final Cohort cohort) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (cohort != null) {
+            map.put("id",cohort.getId());
             map.put("uuid", cohort.getUuid());
             map.put("name", cohort.getName());
-            map.put("id", cohort.getId());
+            map.put("description",cohort.getDescription());
         }
         return map;
     }
@@ -283,7 +285,22 @@ public class WebConverter {
         }
         return map;
     }
-    
+    public static Map<String, Object> convertCohortDefinitionData(final CohortDefinitionData cohortDefinitionData){
+        Map<String, Object> map = new HashMap<String, Object>();
+        if(cohortDefinitionData!=null){
+            Cohort cohort = Context.getCohortService().getCohort(cohortDefinitionData.getCohortId());
+            map.put("cohortid",cohortDefinitionData.getCohortId());
+            map.put("name",cohort.getName());
+            map.put("description",cohort.getDescription());
+            map.put("definition",cohortDefinitionData.getDefinition());
+            map.put("isScheduledForExecution",cohortDefinitionData.getIsScheduledForExecution());
+            map.put("isMemberAdditionEnabled",cohortDefinitionData.getIsMemberAdditionEnabled());
+            map.put("isMemberRemovalEnabled",cohortDefinitionData.getIsMemberRemovalEnabled());
+            map.put("uuid",cohortDefinitionData.getUuid());
+        }
+        return map;
+    }
+
     public static Map<String, Object> convertMuzimaReportConfiguration(final ReportConfiguration reportConfiguration) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (reportConfiguration!= null) {
@@ -293,11 +310,11 @@ public class WebConverter {
             map.put("cohort", Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid()).getName());
             map.put("user",reportConfiguration.getCreator().toString());
             map.put("priority",reportConfiguration.getPriority());
-            
+
         }
         return map;
     }
-    
+
     public static Map<String, Object> convertMuzimaGeneratedReport(final MuzimaGeneratedReport generatedReport) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (generatedReport!= null) {
@@ -308,7 +325,7 @@ public class WebConverter {
         }
         return map;
     }
-    
+
     public static Map<String, Object> convertMuzimaReport( ReportDesign reportDesign) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (reportDesign != null) {

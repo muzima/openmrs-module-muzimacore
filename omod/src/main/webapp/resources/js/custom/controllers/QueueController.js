@@ -5,6 +5,7 @@ function QueueCtrl($scope, $routeParams, $location, $data) {
     $data.getQueue($scope.uuid).
     then(function (response) {
         $scope.queue = response.data;
+        $('#wait').hide();
     });
 
     $scope.delete = function () {
@@ -27,11 +28,14 @@ function QueuesCtrl($scope, $location, $data) {
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
+    $scope.totalItems = 0;
     $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
         $scope.queues = serverData.objects;
         $scope.noOfPages = serverData.pages;
+        $scope.totalItems = serverData.totalItems;
+        $('#wait').hide();
     });
 
     $scope.delete = function () {
@@ -48,6 +52,7 @@ function QueuesCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.queues = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         })
     };
@@ -59,6 +64,7 @@ function QueuesCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.queues = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);
@@ -71,6 +77,7 @@ function QueuesCtrl($scope, $location, $data) {
                 var serverData = response.data;
                 $scope.queues = serverData.objects;
                 $scope.noOfPages = serverData.pages;
+                $scope.totalItems = serverData.totalItems;
             });
         }
     }, true);

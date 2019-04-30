@@ -1,39 +1,22 @@
-<div id="wide-sidebar" class="row" xmlns:margin-top="http://www.w3.org/1999/xhtml"
-     xmlns:padding="http://www.w3.org/1999/xhtml">
-    <div class="col-lg-2">
-        <ul class="nav nav-tabs nav-stacked">
-            <li class="navigation-active"><a href="#/sources">Data Source</a></li>
-            <li><a href="#/configs">Setup Configurations</a></li>
-            <li><a href="#/queues">Queue Data</a></li>
-            <li><a href="#/registrations">Registrations</a></li>
-            <li><a href="#/forms">Muzima Forms</a></li>
-            <li><a href="#/errors">Error Data</a></li>
-            <li><a href="#/reportConfigs">Patient Reports</a></li>
-            <li><a href="#/settings">Settings</a></li>
-        </ul>
-    </div>
+<div id="wide-sidebar" class="row">
+    <side-navigation menu-item="patientReport"></side-navigation>
     <div class="col-lg-8">
+        <div id='wait' class='loader'>&nbsp;</div>
         <div ng-switch="mode">
             <div ng-switch-when="view">
-                
-
                 <div class="row">
                     <input class="col-lg-10 form-control" placeholder="Cohort ..." type="text" disabled="" ng-model="reportConfiguration.uuid">
                 </div>
-
                 <div class="row">
                     <input class="col-lg-10 form-control" placeholder="Report name ..." type="text" disabled="" ng-model="reportConfiguration.cohort">
                 </div>
-
                 <div class="row">
                     <input type="checkbox" name="priority" value="priority" ng-model="reportConfiguration.priority"> High Priority<br>
                 </div>
-               
                 <div class="row" style="margin-top: 14px; padding: 0">
                     <textarea class="col-lg-12 form-control" placeholder="." rows="10" disabled="" ng-model="reportConfiguration.report">
                     </textarea>
                 </div>
-               
                 <div class="row">
                     <button type="submit" ng-click="edit()" class="btn btn-primary">Edit</button>
                     <button type="submit" ng-click="cancel()" class="btn btn-danger">Close</button>
@@ -42,53 +25,41 @@
             </div>
             <div ng-switch-when="edit">
                 <form id="consult">
-                    <div class="row">
-                        <!--<input class="col-lg-10 form-control" placeholder="Cohort name ..." type="text" ng-model="reportConfiguration.cohortId">
-                        -->
-                        <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
+                    <div class="col-lg-8 row">
+                        <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." disabled="" autocomplete="off"
                                uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
                                uib-typeahead-wait-ms="500"  uib-typeahead-editable="false"/>
                     </div>
 
-                    <div class="row">
+                    <div class="col-lg-12 row">
                         <input type="checkbox" name="priority" value="priority" ng-model="reportConfiguration.priority"> High Priority<br>
                     </div>
-                    
-                    <div class="panel panel-default panel-body col-lg-12">
-                        <div active="active">
-                            <div index="1" heading="Reports">
-                                <div class="row col-lg-12">
-                                    <div class="col-md-2" style="margin-top: 14px; padding: 0">
-                                        <strong>Add Report</strong>
+                    <div class="col-lg-12 row">
+                        <div class="panel panel-default panel-body col-lg-12">
+                            <div active="active">
+                                <div index="1" heading="Reports">
+                                    <div class="row col-lg-12">
+                                        <div class="col-md-2" style="margin-top: 14px; padding: 0">
+                                            <strong>Add Report</strong>
+                                        </div>
+                                        <div class="col-md-5" style="margin-top: 8px">
+                                            <input type="text" ng-model="search.reports" class="form-control" placeholder="Search report by name ..." autocomplete="off"
+                                                   uib-typeahead="report as report.name for report in reports | filter:$viewValue | limitTo:8"
+                                                   uib-typeahead-wait-ms="500" typeahead-on-select="addReport($item)" uib-typeahead-editable="false"/>
+                                        </div>
                                     </div>
-                                    <div class="col-md-5" style="margin-top: 8px">
-                                        <input type="text" ng-model="search.reports" class="form-control" placeholder="Search report by name ..." autocomplete="off"
-                                               uib-typeahead="report as report.name for report in reports | filter:$viewValue | limitTo:8"
-                                               uib-typeahead-wait-ms="500" typeahead-on-select="addReport($item)" uib-typeahead-editable="false"/>
+                                    <div class="row col-lg-12">
+                                        <select class="col-lg-10 selectClass" size="8">
+                                            <option ng-click="chosenReport(report.uuid)" ng-repeat="report in configReports">{{report.name}}</option>
+                                        </select>
+                                        <button type="submit" ng-disabled="!selected.report" ng-click="removeReport()" class="btn btn-sm">Remove Report</button>
                                     </div>
-                                </div>
-                                <div class="row col-lg-12">
-                                    <select class="col-lg-10 selectClass" size="8">
-                                        <option ng-click="chosenReport(report.uuid)" ng-repeat="report in configReports">{{report.name}}</option>
-                                    </select>
-                                    <button type="submit" ng-disabled="!selected.report" ng-click="removeReport()" class="btn btn-sm">Remove Report</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!--<div class="row">
-                        <div class="col-lg-4 col-lg-offset-4 margin-top-lg pad-5 p-2 padding-5">
-                            <button type="submit" ng-click="" class="btn btn-success btn-large btn-lg btn-block">Add to List</button>
-                        </div>
-                    </div>-->
-
-                  <!--  <div class="row" style="margin-top: 14px; padding: 0">
-                        <textarea class="col-lg-12 form-control" placeholder="Report ..." rows="10" ng-model="reportConfiguration.reportId">
-                        </textarea>
-                    </div>-->
-                   
-                    <div class="row">
+                    <div class="col-md-12 row">
                         <button type="submit" ng-click="save(reportConfiguration)" class="btn btn-success">Save</button>
                         <button ng-show="reportConfiguration.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>
                         <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>

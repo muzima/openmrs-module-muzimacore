@@ -81,7 +81,7 @@ public class MuzimaSettingServiceImpl extends BaseOpenmrsService implements Muzi
      * @return the total number of the settings in the database.
      */
     @Override
-    public Number countDataSource(final String search) {
+    public Number countMuzimaSettings(final String search) {
         return dao.countSettings(search);
     }
 

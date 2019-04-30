@@ -51,6 +51,7 @@ public class MuzimaConfigsController {
             }
 
             response.put("pages", pages);
+            response.put("totalItems", configService.countConfigs(search).intValue());
             response.put("objects", objects);
         }
         return response;
