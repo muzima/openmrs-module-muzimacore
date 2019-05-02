@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
-import org.openmrs.api.ReportService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.ReportConfiguration;

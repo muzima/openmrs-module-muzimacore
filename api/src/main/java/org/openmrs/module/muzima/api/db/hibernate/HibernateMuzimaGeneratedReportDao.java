@@ -146,7 +146,7 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
 
     @Override
     @Transactional
-    public MuzimaGeneratedReport  getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId, Integer cohortReportConfigId) {
+    public MuzimaGeneratedReport  getLastMuzimaGeneratedReportByPatientIdAndCohortReportConfigId(Integer patientId, Integer cohortReportConfigId) {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("cohortReportConfigId", cohortReportConfigId));
         criteria.add(Restrictions.eq("patientId", patientId));

@@ -1,32 +1,52 @@
 <div id="wide-sidebar" class="row">
     <side-navigation menu-item="patientReport"></side-navigation>
     <div class="col-lg-8">
+        <div class="alert alert-danger alert-dismissible show" ng-show="error" role="alert">
+            <strong>Error: </strong> {{ error.statusText }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         <div id='wait' class='loader'>&nbsp;</div>
         <div ng-switch="mode">
             <div ng-switch-when="view">
-                <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Cohort ..." type="text" disabled="" ng-model="reportConfiguration.uuid">
-                </div>
-                <div class="row">
-                    <input class="col-lg-10 form-control" placeholder="Report name ..." type="text" disabled="" ng-model="reportConfiguration.cohort">
-                </div>
-                <div class="row">
-                    <input type="checkbox" name="priority" value="priority" ng-model="reportConfiguration.priority"> High Priority<br>
-                </div>
-                <div class="row" style="margin-top: 14px; padding: 0">
-                    <textarea class="col-lg-12 form-control" placeholder="." rows="10" disabled="" ng-model="reportConfiguration.report">
-                    </textarea>
-                </div>
-                <div class="row">
-                    <button type="submit" ng-click="edit()" class="btn btn-primary">Edit</button>
-                    <button type="submit" ng-click="cancel()" class="btn btn-danger">Close</button>
-                </div>
+                <table class="table table-borderless">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class=" col-lg-8 row">
+                                <input class="form-control" placeholder="Cohort name ..." type="text" disabled="" ng-model="reportConfiguration.cohort">
+                            </div>
+                            <div class="col-lg-8 row">
+                                <input class="form-control" placeholder="Report configuration ..." type="text" disabled="" ng-model="reportConfiguration.uuid">
+                            </div>
+                            <div class="col-lg-8 row">
+                                <input type="checkbox" name="priority" value="priority" ng-model="reportConfiguration.priority" disabled=""> High Priority
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="col-lg-8 row">
+                                <div class="col-lg-8 tree well">
+                                    <ul id='treeul'></ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit" ng-click="edit()" class="btn btn-primary">Edit</button>
+                            <button type="submit" ng-click="cancel()" class="btn btn-danger">Close</button>
+                        </td>
+                    </tr>
+                </table>
                 <span></span>
             </div>
             <div ng-switch-when="edit">
                 <form id="consult">
                     <div class="col-lg-8 row">
-                        <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." disabled="" autocomplete="off"
+                        <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." ng-disabled="reportConfiguration.uuid" autocomplete="off"
                                uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
                                uib-typeahead-wait-ms="500"  uib-typeahead-editable="false"/>
                     </div>
@@ -43,7 +63,7 @@
                                             <strong>Add Report</strong>
                                         </div>
                                         <div class="col-md-5" style="margin-top: 8px">
-                                            <input type="text" ng-model="search.reports" class="form-control" placeholder="Search report by name ..." autocomplete="off"
+                                            <input type="text" ng-required=true  ng-model="search.reports" class="form-control" placeholder="Search report by name ..." autocomplete="off"
                                                    uib-typeahead="report as report.name for report in reports | filter:$viewValue | limitTo:8"
                                                    uib-typeahead-wait-ms="500" typeahead-on-select="addReport($item)" uib-typeahead-editable="false"/>
                                         </div>
@@ -58,7 +78,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-12 row">
                         <button type="submit" ng-click="save(reportConfiguration)" class="btn btn-success">Save</button>
                         <button ng-show="reportConfiguration.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>

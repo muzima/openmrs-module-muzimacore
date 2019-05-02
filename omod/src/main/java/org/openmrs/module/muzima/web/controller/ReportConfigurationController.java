@@ -14,18 +14,12 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.Cohort;
-import org.openmrs.api.CohortService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.ReportConfiguration;
-import org.openmrs.module.muzima.task.MuzimaReportProcessor;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.service.ReportService;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,91 +42,26 @@ public class ReportConfigurationController {
         return WebConverter.convertMuzimaReportConfiguration(reportConfiguration);
     }
     
-    @ResponseBody
-    @RequestMapping(value = "/module/muzimacore/reportConfig/reports.json", method = RequestMethod.GET)
-    public Map<String, Object> getReportsForReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
-        Map<String, Object> response = new HashMap<String, Object>();
-        ReportConfiguration reportConfiguration;
-        ReportDesign reportDesign;
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        if (Context.isAuthenticated()) {
-            ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
-            reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
-    
-            reportDesign = Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportDesignUuid());
-            List<Object> objects = new ArrayList<Object>();
-            objects.add(WebConverter.convertMuzimaReport(reportDesign));
-            response.put("objects", objects);
-        }
-        System.out.println("gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
-        return response;
-    }
-    
-    @RequestMapping(value = "/module/muzimacore/reportConfig/singleCohort.json", method = RequestMethod.GET)
-    public Map<String, Object> getCohortForReportConfiguration(final @RequestParam(value = "uuid") String uuid) {
-        Map<String, Object> response = new HashMap<String, Object>();
-        ReportConfiguration reportConfiguration;
-        Cohort cohort;
-        System.out.println("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-        if (Context.isAuthenticated()) {
-            ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
-            reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
-            
-            cohort = Context.getService(CohortService.class).getCohortByUuid(reportConfiguration.getCohortUuid());
-            List<Object> objects = new ArrayList<Object>();
-            objects.add(WebConverter.convertMuzimaCohort(cohort));
-            response.put("objects", objects);
-        }
-        System.out.println("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww11111111");
-        return response;
-    }
-
     @RequestMapping(value = "/module/muzimacore/reportConfig.json", method = RequestMethod.POST)
     public void saveReportConfiguration(final @RequestBody Map<String, Object> map) {
-        System.out.println("sdfsdfdsf sd adsfasd f asd fasdf asdfads fgfffgfgfgfgf ffffffffffff");
         if (Context.isAuthenticated()) {
             String uuid = (String) map.get("uuid");
+            String cohortUuid = (String) map.get("cohortUuid");
+            String reportConfigJson = (String) map.get("reportConfigJson");
             Boolean priority = (Boolean) map.get("priority");
-            if (priority == null) {
-                priority = false;
-            }
+            if (priority == null) priority = false;
 
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
+            ReportConfiguration reportConfiguration;
             if (StringUtils.isNotBlank(uuid)) {
-                String cohortUuid = (String) map.get("cohortUuid");
-                String reportConfigJson = (String) map.get("reportConfigJson");
-                System.out.println("**************************************************************************************************");
-                System.out.println(reportConfigJson);
-                System.out.println("**************************************************************************************************");
-                String[] reports = reportConfigJson.substring(12, reportConfigJson.length() - 2).split("}");
-                ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
-                reportConfiguration.setCohortUuid(cohortUuid);
-
-                for (String report : reports) {
-                    String s1 = report.substring(report.indexOf("uuid") + 7, report.length() - 1);
-                    reportConfiguration.setReportDesignUuid(s1);
-                    reportConfiguration.setCohortUuid(cohortUuid);
-                    reportConfiguration.setPriority(priority);
-                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
-                }
+                reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
             } else {
-                String cohortUuid = (String) map.get("cohortUuid");
-                String reportConfigJson = (String) map.get("reportConfigJson");
-                System.out.println("**************************************************************************************************");
-                System.out.println(reportConfigJson);
-                System.out.println("**************************************************************************************************");
-                String[] reports = reportConfigJson.substring(12, reportConfigJson.length() - 2).split("}");
-
-                //TODO: This should be a map
-                for (String report : reports) {
-                    String s1 = report.substring(report.indexOf("uuid") + 7, report.length() - 1);
-                    ReportConfiguration reportConfiguration = new ReportConfiguration();
-                    reportConfiguration.setReportDesignUuid(s1);
-                    reportConfiguration.setCohortUuid(cohortUuid);
-                    reportConfiguration.setPriority(priority);
-                    reportConfigurationService.saveReportConfiguration(reportConfiguration);
-                }
+                reportConfiguration = new ReportConfiguration();
+                reportConfiguration.setCohortUuid(cohortUuid);
             }
+            reportConfiguration.setReportDesigns(reportConfigJson);
+            reportConfiguration.setPriority(priority);
+            reportConfigurationService.saveReportConfiguration(reportConfiguration);
         }
     }
 
@@ -143,7 +72,7 @@ public class ReportConfigurationController {
         ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
 
         reportConfiguration.setRetired(true);
-        reportConfiguration.setRetireReason("Deleting a data source object!");
+        reportConfiguration.setRetireReason("Deleted no longer needed configuration!");
         reportConfiguration.setDateRetired(new Date());
         reportConfigurationService.saveReportConfiguration(reportConfiguration);
     }

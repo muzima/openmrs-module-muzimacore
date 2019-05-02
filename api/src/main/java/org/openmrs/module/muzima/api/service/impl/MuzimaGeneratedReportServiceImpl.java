@@ -49,9 +49,9 @@ public class MuzimaGeneratedReportServiceImpl extends BaseOpenmrsService impleme
     }
     
     @Override
-    public MuzimaGeneratedReport getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(Integer patientId,
+    public MuzimaGeneratedReport getLastMuzimaGeneratedReportByPatientIdAndCohortReportConfigId(Integer patientId,
             Integer cohortReportConfigId) {
-        return dao.getLastMuzimaGeneratedReportByPatientIdANDCohortReportConfigId(patientId,cohortReportConfigId);
+        return dao.getLastMuzimaGeneratedReportByPatientIdAndCohortReportConfigId(patientId,cohortReportConfigId);
     }
     
     @Override

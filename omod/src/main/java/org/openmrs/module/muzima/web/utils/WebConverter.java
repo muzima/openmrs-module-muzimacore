@@ -305,12 +305,10 @@ public class WebConverter {
         Map<String, Object> map = new HashMap<String, Object>();
         if (reportConfiguration!= null) {
             map.put("uuid", reportConfiguration.getUuid());
-            //map.put("name", reportConfiguration.getName());
-            map.put("report", Context.getService(ReportService.class).getReportDesignByUuid(reportConfiguration.getReportDesignUuid()).getName());
+            map.put("reports", reportConfiguration.getReportDesigns());
             map.put("cohort", Context.getCohortService().getCohortByUuid(reportConfiguration.getCohortUuid()).getName());
             map.put("user",reportConfiguration.getCreator().toString());
             map.put("priority",reportConfiguration.getPriority());
-
         }
         return map;
     }
@@ -319,7 +317,6 @@ public class WebConverter {
         Map<String, Object> map = new HashMap<String, Object>();
         if (generatedReport!= null) {
             map.put("uuid", generatedReport.getUuid());
-            //map.put("name", reportConfiguration.getName());
             map.put("patientId", generatedReport.getPatientId());
             map.put("reportJson", generatedReport.getPatientId());
         }

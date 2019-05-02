@@ -18,12 +18,12 @@ import org.openmrs.scheduler.tasks.AbstractTask;
 
 /**
  */
-public class ReportDesignTask extends AbstractTask {
+public class GeneratePatientReportsTask extends AbstractTask {
 
-    private QueueDataProcessor processor;
+    private GeneratePatientReportsProcessor processor;
 
-    public ReportDesignTask() {
-        this.processor = new QueueDataProcessor();
+    public GeneratePatientReportsTask() {
+        this.processor = new GeneratePatientReportsProcessor();
     }
 
     /**
@@ -32,7 +32,7 @@ public class ReportDesignTask extends AbstractTask {
     @Override
     public void execute() {
         Context.openSession();
-        processor.processQueueData();
+        processor.generateReports();
         Context.closeSession();
     }
 }
