@@ -15,30 +15,22 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
     $scope.uuid = $routeParams.uuid;
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
+        $('#wait').hide();
     } else {
-        $muzimaReportConfigurations.getReportConfiguration($scope.uuid).
-        then(function (response) {
+        $muzimaReportConfigurations.getReportConfiguration($scope.uuid).then(function (response) {
             $scope.reportConfiguration = response.data;
+            var reports = JSON.parse(response.data.reports);
+            $scope.configReports = reports.reports;
+            $('#wait').hide();
+        }).then(function () {
+            $scope.bindData();
+            $scope.setEvent();
+            $('#wait').hide();
         });
     }
 
     $scope.edit = function () {
-        $muzimaReportConfigurations.getReportsForReportConfiguration($scope.reportConfiguration.uuid).
-        then(function (response) {
-            $scope.reports = response.data.objects;
-
-            angular.forEach($scope.reports, function (report, index) {
-                $scope.configReports.push(report);
-            });
-        });
-
-        $muzimaReportConfigurations.getCohortForReportConfiguration($scope.reportConfiguration.uuid).then(function (response) {
-            $scope.cohorts = response.data;
-            $scope.search.cohorts = response.data[0];
-        });
-
         $scope.mode = "edit";
-
     };
 
     $scope.cancel = function () {
@@ -58,11 +50,14 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
         $muzimaReportConfigurations.saveReportConfiguration(reportConfiguration.uuid, $scope.search.cohorts.uuid, createJson(),reportConfiguration.priority).
         then(function () {
             $location.path("/reportConfigs");
-        })
+        }, function (response) {
+            $scope.error = response;
+            $('#wait').hide();
+        });
     };
 
     $scope.delete = function () {
-        $reportConfigurations.deleteReportConfiguration($scope.uuid).
+        $muzimaReportConfigurations.deleteReportConfiguration($scope.uuid).
         then(function () {
             $location.path("/reportConfigs");
         })
@@ -116,6 +111,46 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
         });
     };
 
+
+    /****************************************************************************************
+     ***** Group of convenient methods to display a Json form
+     *****************************************************************************************/
+    $scope.bindData = function(){
+        $scope.ul_li_Data = '';
+        var jsonFormData = JSON.parse($scope.reportConfiguration.reports);
+        if (jsonFormData != undefined) {
+            $scope.to_ul(jsonFormData,'treeul');
+            $scope.ul_li_Data = '';
+        }
+    };
+
+    $scope.to_ul = function(branches, htmlElement) {
+        $.each(branches, function(key,value) {
+            if (":" + value == ':[object Object]' || angular.isArray(value)) {
+                $scope.ul_li_Data = $scope.ul_li_Data + "<li><span><i class = 'icon-minus-sign'></i>&nbsp;"
+                    + (isFinite(key)? "Entry:" + (parseInt(key, 10) + 1) : key);
+                $scope.ul_li_Data = $scope.ul_li_Data + "<ul>";
+                $scope.to_ul(value, htmlElement);
+                $scope.ul_li_Data = $scope.ul_li_Data + "</ul>";
+            } else{
+                $scope.ul_li_Data = $scope.ul_li_Data + "<li><span>" + key;
+                $scope.ul_li_Data = $scope.ul_li_Data + " : <b>" + value + "</b></span></li>";
+            }
+        });
+        $('#'+htmlElement).empty().append($scope.ul_li_Data);
+    };
+
+    $scope.setEvent = function () {
+        $('.icon-plus-sign, .icon-minus-sign').click(function () {
+            $(this).parent().parent().find("ul").toggle();
+            if ($(this).hasClass('icon-plus-sign')) {
+                $(this).removeClass("icon-plus-sign").addClass("icon-minus-sign");
+            } else if ($(this).hasClass('icon-minus-sign')) {
+                $(this).removeClass("icon-minus-sign").addClass("icon-plus-sign");
+            }
+        });
+    };
+
 }
 
 function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations) {
@@ -127,8 +162,17 @@ function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations
     $muzimaReportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
-        $scope.reportConfigurations = serverData.objects;
+        var reportConfigs = serverData.objects;
+        angular.forEach(reportConfigs, function (reportConfig) {
+            var reports = JSON.parse(reportConfig.reports);
+            reportConfig['reports'] = reports.reports;
+        });
+        $scope.reportConfigurations = reportConfigs;
         $scope.noOfPages = serverData.pages;
+        $('#wait').hide();
+    }, function (response) {
+        $scope.error = response;
+        $('#wait').hide();
     });
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
@@ -136,7 +180,12 @@ function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations
             $muzimaReportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
-                $scope.reportConfigurations = serverData.objects;
+                var reportConfigs = serverData.objects;
+                angular.forEach(reportConfigs, function (reportConfig) {
+                    var reports = JSON.parse(reportConfig.reports);
+                    reportConfig['reports'] = reports.reports;
+                });
+                $scope.reportConfigurations = reportConfigs;
                 $scope.noOfPages = serverData.pages;
             });
         }
@@ -148,25 +197,14 @@ function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations
             $muzimaReportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
             then(function (response) {
                 var serverData = response.data;
-                $scope.reportConfigurations = serverData.objects;
+                var reportConfigs = serverData.objects;
+                angular.forEach(reportConfigs, function (reportConfig) {
+                    var reports = JSON.parse(reportConfig.reports);
+                    reportConfig['reports'] = reports.reports;
+                });
+                $scope.reportConfigurations = reportConfigs;
                 $scope.noOfPages = serverData.pages;
             });
         }
     }, true);
-
-    $scope.settingDisplayValue = function(setting){
-        if(setting.datatype == 'STRING'){
-            return setting.value
-        } else if(setting.datatype == 'PASSWORD'){
-            var str = setting.value;
-            return str.replace(/./g, '*');
-        } else if(setting.datatype == 'BOOLEAN'){
-            if(setting.value == true){
-                return 'Enabled';
-            } else if(setting.value == false){
-                return 'Disabled';
-            }
-            return setting.value
-        }
-    }
 }

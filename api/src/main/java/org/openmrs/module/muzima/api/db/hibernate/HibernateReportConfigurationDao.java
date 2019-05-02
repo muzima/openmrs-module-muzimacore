@@ -62,6 +62,7 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
             //disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
+            //TODO: REALLY this is not how ypu search
             disjunction.add(Restrictions.ilike("reportId", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("cohortId", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);

@@ -331,13 +331,6 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
      var searchReportConfigReports = function(search) {
                return $http.get("reportConfigReports.json?search=" + (search === undefined ? '' : search));
      };
-     //searchReportsForReportConfiguration
-      var getReportsForReportConfiguration = function(uuid) {
-                return $http.get("reportConfig/reports.json?uuid="  + uuid);
-          };
-       var getCohortForReportConfiguration = function(uuid) {
-                      return $http.get("reportConfig/singleCohort.json?uuid="  + uuid);
-                };
 
     return {
         getReportConfigurations: getReportConfigurations,
@@ -345,15 +338,12 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
         saveReportConfiguration: saveReportConfiguration,
         deleteReportConfiguration: deleteReportConfiguration,
         searchReportConfigCohorts: searchReportConfigCohorts,
-        searchReportConfigReports: searchReportConfigReports,
-        getReportsForReportConfiguration: getReportsForReportConfiguration,
-        getCohortForReportConfiguration:getCohortForReportConfiguration
+        searchReportConfigReports: searchReportConfigReports
     }
 });
 
 
 muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
-
 
     var getCohortDefinitions = function (pageNumber, pageSize) {
         return $http.get("cohortDefinitions.json?pageNumber=" + pageNumber + "&pageSize=" + pageSize);

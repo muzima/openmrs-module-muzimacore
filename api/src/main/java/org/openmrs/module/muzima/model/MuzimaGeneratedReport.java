@@ -39,7 +39,6 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     public MuzimaGeneratedReport(String reportRequestUuid, Integer cohortReportConfigId){
         setCohortReportConfigId(cohortReportConfigId);
         setReportRequestUuid(reportRequestUuid);
-       
     }
 
     @Override
@@ -103,7 +102,7 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     }
     
     public String getReportJsonForMuzima(){
-        return new String(reportJson);
+        return reportJson == null ? null : new String(reportJson);
     }
     
     public void setPriority(final Boolean priority) {
