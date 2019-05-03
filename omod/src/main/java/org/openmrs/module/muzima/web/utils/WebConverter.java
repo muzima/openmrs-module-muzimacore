@@ -31,13 +31,12 @@ import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaForm;
-import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
+import org.openmrs.module.muzima.model.MuzimaPatientReport;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.reporting.report.ReportDesign;
-import org.openmrs.module.reporting.report.service.ReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -313,12 +312,12 @@ public class WebConverter {
         return map;
     }
 
-    public static Map<String, Object> convertMuzimaGeneratedReport(final MuzimaGeneratedReport generatedReport) {
+    public static Map<String, Object> convertMuzimaPatientReport(final MuzimaPatientReport patientReport) {
         Map<String, Object> map = new HashMap<String, Object>();
-        if (generatedReport!= null) {
-            map.put("uuid", generatedReport.getUuid());
-            map.put("patientId", generatedReport.getPatientId());
-            map.put("reportJson", generatedReport.getPatientId());
+        if (patientReport!= null) {
+            map.put("uuid", patientReport.getUuid());
+            map.put("patientId", patientReport.getPatientId());
+            map.put("reportJson", patientReport.getPatientId());
         }
         return map;
     }

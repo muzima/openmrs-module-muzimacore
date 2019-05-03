@@ -21,6 +21,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
             $scope.reportConfiguration = response.data;
             var reports = JSON.parse(response.data.reports);
             $scope.configReports = reports.reports;
+            $scope.search.cohorts = response.data.cohort;
             $('#wait').hide();
         }).then(function () {
             $scope.bindData();

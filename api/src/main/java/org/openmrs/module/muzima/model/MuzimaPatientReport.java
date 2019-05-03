@@ -20,7 +20,7 @@ import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
+public class MuzimaPatientReport extends BaseOpenmrsMetadata {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
@@ -33,10 +33,10 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
     private byte[] reportJson;
     private  Boolean priority;
 
-    public MuzimaGeneratedReport(){
+    public MuzimaPatientReport(){
     }    // used by hibernate
 
-    public MuzimaGeneratedReport(String reportRequestUuid, Integer cohortReportConfigId){
+    public MuzimaPatientReport(String reportRequestUuid, Integer cohortReportConfigId){
         setCohortReportConfigId(cohortReportConfigId);
         setReportRequestUuid(reportRequestUuid);
     }
@@ -101,7 +101,7 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
         return reportJson;
     }
     
-    public String getReportJsonForMuzima(){
+    public String getReportJsonAsString(){
         return reportJson == null ? null : new String(reportJson);
     }
     
@@ -122,14 +122,14 @@ public class MuzimaGeneratedReport extends BaseOpenmrsMetadata {
 
     @Override
     public String toString() {
-        return "MuzimaGeneratedReport{" +
+        return "MuzimaPatientReport{" +
                 "id=" + id +
                 ", uuid=" + getUuid() +
                 ", name='" + getName() +
                 ", description='" + getDescription() +
                 ", patientId='" + getPatientId() +
                 ", cohortReportConfigId='" + getCohortReportConfigId() +
-                ", reportJson='" + getReportJsonForMuzima() +
+                ", reportJson='" + getReportJsonAsString() +
                 ", priority='" + getPriority() +
                 '}';
     }
