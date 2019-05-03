@@ -52,7 +52,7 @@
         RegistrationData.hbm.xml
         MuzimaSetting.hbm.xml
         ReportConfiguration.hbm.xml
-        MuzimaGeneratedReport.hbm.xml
+        MuzimaPatientReport.hbm.xml
     </mappingFiles>
 
     <!-- Internationalization -->

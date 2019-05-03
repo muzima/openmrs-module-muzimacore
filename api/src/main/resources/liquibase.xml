@@ -1580,5 +1580,28 @@
         <renameColumn tableName="muzima_cohort_report_config" oldColumnName="report_design_uuid" newColumnName="report_designs"
                       columnDataType="${clob.type}"/>
     </changeSet>
+    <changeSet id="muzima-20190503023107" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_generated_report"/>
+        </preConditions>
+        <comment>
+            renames tables - patient reports
+        </comment>
+
+        <renameTable oldTableName="muzima_generated_report" newTableName="muzima_patient_report"/>
+    </changeSet>
+    <changeSet id="muzima-20190503023643" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_patient_report" columnName="name"/>
+            </not>
+        </preConditions>
+        <comment>
+            add name column to the patient reports table
+        </comment>
+        <addColumn tableName="muzima_patient_report">
+            <column name="name" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

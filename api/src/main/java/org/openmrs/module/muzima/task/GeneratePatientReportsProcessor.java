@@ -22,9 +22,9 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.muzima.api.service.MuzimaGeneratedReportService;
+import org.openmrs.module.muzima.api.service.MuzimaPatientReportService;
 import org.openmrs.module.muzima.api.service.ReportConfigurationService;
-import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
+import org.openmrs.module.muzima.model.MuzimaPatientReport;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -46,10 +46,10 @@ public class GeneratePatientReportsProcessor {
     
     public void generateReports() {
         if (!isRunning) {
-            log.info("Starting up Generate Report processor ...");
+            log.info("Starting up Muzima Patient Report processor ...");
             processAllReports();
         } else {
-            log.info("Muzima Generate Report processor aborting (another processor already running)!");
+            log.info("Muzima Patient Report processor aborting (another processor already running)!");
         }
     }
     
@@ -59,11 +59,10 @@ public class GeneratePatientReportsProcessor {
         
             List<ReportConfiguration> reportConfigurations = Context.getService(ReportConfigurationService.class).getAllReportConfigurations();
             ReportService reportService = Context.getService(ReportService.class);
-            ReportDefinitionService reportDefinitionService = Context.getService(ReportDefinitionService.class);
             ObsService obsService = Context.getService(ObsService.class);
             PersonService personService = Context.getService(PersonService.class);
             PatientService patientService = Context.getService(PatientService.class);
-            MuzimaGeneratedReportService muzimaGeneratedReportService = Context.getService(MuzimaGeneratedReportService.class);
+            MuzimaPatientReportService muzimaPatientReportService = Context.getService(MuzimaPatientReportService.class);
             RenderingMode selectedRenderingMode = null;
             List<ReportRequest> reportsToQueue = new ArrayList<ReportRequest>();
 
@@ -90,26 +89,26 @@ public class GeneratePatientReportsProcessor {
                     for (String patientIdString : patientList) {
                         Integer patientId = Integer.valueOf(patientIdString);
 
-                        MuzimaGeneratedReport lastGeneratedReport = muzimaGeneratedReportService
-                                .getLastMuzimaGeneratedReportByPatientIdAndCohortReportConfigId(patientId,configuration.getId());
+                        MuzimaPatientReport latestPatientReport = muzimaPatientReportService
+                                .getLatestPatientReportByPatientIdAndConfigId(patientId,configuration.getId());
 
-                        if (lastGeneratedReport != null) {
-                            if (!"completed".equals(lastGeneratedReport.getStatus())) {
-                                ReportRequest reportRequest = reportService.getReportRequestByUuid(lastGeneratedReport.getReportRequestUuid());
+                        if (latestPatientReport != null) {
+                            if (!"completed".equals(latestPatientReport.getStatus())) {
+                                ReportRequest reportRequest = reportService.getReportRequestByUuid(latestPatientReport.getReportRequestUuid());
 
                                 if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
-                                    byte[] data = reportService.loadRenderedOutput(reportRequest);
-                                    if (data != null) {
-                                        lastGeneratedReport.setReportJson(data);
-                                        lastGeneratedReport.setStatus("completed");
-                                        muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
+                                    byte[] byteData = reportService.loadRenderedOutput(reportRequest);
+                                    if (byteData != null) {
+                                        latestPatientReport.setReportJson(byteData);
+                                        latestPatientReport.setStatus("completed");
+                                        muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
                                     } else {
-                                        lastGeneratedReport.setStatus("failed");
-                                        muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
+                                        latestPatientReport.setStatus("failed");
+                                        muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
                                     }
                                 } else if ("FAILED".equals(reportRequest.getStatus().toString())) {
-                                    lastGeneratedReport.setStatus("failed");
-                                    muzimaGeneratedReportService.saveMuzimaGeneratedReport(lastGeneratedReport);
+                                    latestPatientReport.setStatus("failed");
+                                    muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
                                 }
                             }
 
@@ -130,14 +129,15 @@ public class GeneratePatientReportsProcessor {
                                     reportRequest.setPriority(ReportRequest.Priority.LOW);
                                     reportsToQueue.add(reportRequest);
 
-                                    MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
-                                    muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
-                                    muzimaGeneratedReport.setCohortReportConfigId(configuration.getId());
-                                    muzimaGeneratedReport.setPatientId(patientId);
-                                    muzimaGeneratedReport.setPriority(configuration.getPriority());
-                                    muzimaGeneratedReport.setStatus("progress");
+                                    MuzimaPatientReport muzimaPatientReport = new MuzimaPatientReport();
+                                    muzimaPatientReport.setName(design.getName() + "[" + cohort.getName() + "]");
+                                    muzimaPatientReport.setReportRequestUuid(reportRequest.getUuid());
+                                    muzimaPatientReport.setCohortReportConfigId(configuration.getId());
+                                    muzimaPatientReport.setPatientId(patientId);
+                                    muzimaPatientReport.setPriority(configuration.getPriority());
+                                    muzimaPatientReport.setStatus("progress");
 
-                                    muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
+                                    muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
                                 }
                             }
                         } else {
@@ -151,13 +151,14 @@ public class GeneratePatientReportsProcessor {
                                 reportRequest.setPriority(ReportRequest.Priority.LOW);
                                 reportRequest = reportService.queueReport(reportRequest);
 
-                                MuzimaGeneratedReport muzimaGeneratedReport = new MuzimaGeneratedReport();
-                                muzimaGeneratedReport.setReportRequestUuid(reportRequest.getUuid());
-                                muzimaGeneratedReport.setCohortReportConfigId(configuration.getId());
-                                muzimaGeneratedReport.setPatientId(patientId);
-                                muzimaGeneratedReport.setPriority(configuration.getPriority());
-                                muzimaGeneratedReport.setStatus("progress");
-                                muzimaGeneratedReportService.saveMuzimaGeneratedReport(muzimaGeneratedReport);
+                                MuzimaPatientReport muzimaPatientReport = new MuzimaPatientReport();
+                                muzimaPatientReport.setName(design.getName() + "[" + cohort.getName() + "]");
+                                muzimaPatientReport.setReportRequestUuid(reportRequest.getUuid());
+                                muzimaPatientReport.setCohortReportConfigId(configuration.getId());
+                                muzimaPatientReport.setPatientId(patientId);
+                                muzimaPatientReport.setPriority(configuration.getPriority());
+                                muzimaPatientReport.setStatus("progress");
+                                muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

@@ -58,7 +58,7 @@
         <constructor-arg ref="dbSessionFactory"/>
     </bean>
 
-    <bean id="muzimaGeneratedReportDAO" class="org.openmrs.module.muzima.api.db.hibernate.HibernateMuzimaGeneratedReportDao">
+    <bean id="muzimaPatientReportDAO" class="org.openmrs.module.muzima.api.db.hibernate.HibernateMuzimaPatientReportDao">
         <constructor-arg ref="dbSessionFactory"/>
     </bean>
 
@@ -382,15 +382,15 @@
     <bean parent="serviceContext">
         <property name="moduleService">
             <list>
-                <value>org.openmrs.module.muzima.api.service.MuzimaGeneratedReportService</value>
+                <value>org.openmrs.module.muzima.api.service.MuzimaPatientReportService</value>
                 <bean
                         class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
                     <property name="transactionManager">
                         <ref bean="transactionManager" />
                     </property>
                     <property name="target">
-                        <bean class="org.openmrs.module.muzima.api.service.impl.MuzimaGeneratedReportServiceImpl">
-                            <constructor-arg name="dao" ref="muzimaGeneratedReportDAO"/>
+                        <bean class="org.openmrs.module.muzima.api.service.impl.MuzimaPatientReportServiceImpl">
+                            <constructor-arg name="dao" ref="muzimaPatientReportDAO"/>
                         </bean>
                     </property>
                     <property name="preInterceptors">

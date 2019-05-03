@@ -14,29 +14,29 @@
 package org.openmrs.module.muzima.api.service;
 
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
+import org.openmrs.module.muzima.model.MuzimaPatientReport;
 
 import java.util.List;
 
-public interface MuzimaGeneratedReportService extends OpenmrsService {
+public interface MuzimaPatientReportService extends OpenmrsService {
 
-    MuzimaGeneratedReport getMuzimaGeneratedReportById(final Integer id);
+    MuzimaPatientReport getMuzimaPatientReportById(final Integer id);
     
-    List<MuzimaGeneratedReport> getMuzimaGeneratedReportByPatientId(final Integer id);
+    List<MuzimaPatientReport> getMuzimaPatientReportByPatientId(final Integer patientId);
     
-    MuzimaGeneratedReport getLastPriorityMuzimaGeneratedReportByPatientId(final Integer id);
+    MuzimaPatientReport getLatestPatientReportByPatientId(final Integer patientId);
     
-    MuzimaGeneratedReport getLastMuzimaGeneratedReportByPatientIdAndCohortReportConfigId(Integer patientId, Integer cohortReportConfigId);
+    MuzimaPatientReport getLatestPatientReportByPatientIdAndConfigId(Integer patientId, Integer configId);
     
-    MuzimaGeneratedReport getMuzimaGeneratedReportByUuid(final String uuid);
+    MuzimaPatientReport getMuzimaPatientReportByUuid(final String uuid);
     
-    MuzimaGeneratedReport saveMuzimaGeneratedReport(MuzimaGeneratedReport muzimageneratedReport);
+    MuzimaPatientReport saveMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
 
-    void deleteMuzimaGeneratedReport(MuzimaGeneratedReport muzimageneratedReport);
+    void deleteMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
 
-    List<MuzimaGeneratedReport> getAllMuzimaGeneratedReports();
+    List<MuzimaPatientReport> getAllMuzimaPatientReports();
 
-    Number countMuzimaGeneratedReports();
+    Number countMuzimaPatientReports();
 
     /**
      * Get the total number of the settings in the database with partial matching search term.
@@ -45,7 +45,7 @@ public interface MuzimaGeneratedReportService extends OpenmrsService {
      * @param patientId the search term.
      * @return the total number of the settings in the database.
      */
-    Number countDataSource(final Integer patientId);
+    Number countMuzimaPatientReports(final Integer patientId);
 
     /**
      * Get settings with matching search term for a particular page.
@@ -55,7 +55,6 @@ public interface MuzimaGeneratedReportService extends OpenmrsService {
      * @param pageSize   the size of the page.
      * @return list of all settings with matching search term for a particular page.
      */
-    List<MuzimaGeneratedReport> getPagedMuzimaGeneratedReports(final Integer patientId, final Integer pageNumber,
-            final Integer pageSize);
+    List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber, final Integer pageSize);
 
 }

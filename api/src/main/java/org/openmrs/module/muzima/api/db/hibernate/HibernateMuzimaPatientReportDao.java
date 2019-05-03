@@ -22,40 +22,40 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
-import org.openmrs.module.muzima.api.db.MuzimaGeneratedReportDao;
-import org.openmrs.module.muzima.model.MuzimaGeneratedReport;
+import org.openmrs.module.muzima.api.db.MuzimaPatientReportDao;
+import org.openmrs.module.muzima.model.MuzimaPatientReport;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportDao {
+public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     private DbSessionFactory sessionFactory;
-    protected Class mappedClass = MuzimaGeneratedReport.class;
+    protected Class mappedClass = MuzimaPatientReport.class;
     private final Log log = LogFactory.getLog(this.getClass());
 
-    public HibernateMuzimaGeneratedReportDao(DbSessionFactory sessionFactory){
+    public HibernateMuzimaPatientReportDao(DbSessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     @Transactional
-    public List<MuzimaGeneratedReport> getAll() {
-        Criteria criteria = session().createCriteria(MuzimaGeneratedReport.class);
+    public List<MuzimaPatientReport> getAllMuzimaPatientReports() {
+        Criteria criteria = session().createCriteria(MuzimaPatientReport.class);
         criteria.add(Restrictions.eq("retired", false));
         return criteria.list();
     }
 
     /**
-     * Get generatedReports with matching search term for particular page.
+     * Get Patient Reports with matching search term for particular page.
      *
      * @param patientId     the search term.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
-     * @return list of generatedReports for the page.
+     * @return list of patient reports for the page.
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<MuzimaGeneratedReport> getPagedMuzimaGeneratedReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {
+    public List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {
         Criteria criteria = session().createCriteria(mappedClass);
             Disjunction disjunction = Restrictions.disjunction();
             disjunction.add(Restrictions.eq("patientId", patientId));
@@ -81,7 +81,7 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
      */
     @Override
     @Transactional
-    public Number countMuzimaGeneratedReports(final Integer patientId) {
+    public Number countMuzimaPatientReports(final Integer patientId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
    
             Disjunction disjunction = Restrictions.disjunction();
@@ -96,7 +96,7 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
 
     @Override
     @Transactional
-    public Number countMuzimaGeneratedReports(){
+    public Number countMuzimaPatientReports(){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.setProjection(Projections.rowCount());
@@ -104,29 +104,28 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
     }
     
     @Override
-    public MuzimaGeneratedReport getMuzimaGeneratedReportById(Integer id) {
+    public MuzimaPatientReport getMuzimaPatientReportById(Integer id) {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("id", id));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        return (MuzimaGeneratedReport) criteria.uniqueResult();
+        return (MuzimaPatientReport) criteria.uniqueResult();
     }
 
     
     @Override
-    public MuzimaGeneratedReport getLastPriorityMuzimaGeneratedReportByPatientId(Integer patientId) {
+    public MuzimaPatientReport getLatestPatientReportByPatientId(Integer patientId) {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        criteria.add(Restrictions.eq("priority", Boolean.TRUE));
         criteria.addOrder(Order.desc("dateCreated"));
         criteria.setMaxResults(1);
-        return (MuzimaGeneratedReport) criteria.uniqueResult();
+        return (MuzimaPatientReport) criteria.uniqueResult();
         
     }
     
     @Override
     @Transactional
-    public List<MuzimaGeneratedReport> getMuzimaGeneratedReportByPatientId(Integer patientId){
+    public List<MuzimaPatientReport> getMuzimaPatientReportByPatientId(Integer patientId){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
@@ -135,45 +134,45 @@ public class HibernateMuzimaGeneratedReportDao implements MuzimaGeneratedReportD
 
     @Override
     @Transactional
-    public MuzimaGeneratedReport getMuzimaGeneratedReportByUuid(String uuid){
-        MuzimaGeneratedReport muzimaGeneratedReport = null;
+    public MuzimaPatientReport getMuzimaPatientReportByUuid(String uuid){
+        MuzimaPatientReport muzimaPatientReport = null;
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        muzimaGeneratedReport = (MuzimaGeneratedReport)criteria.uniqueResult();
-        return muzimaGeneratedReport;
+        muzimaPatientReport = (MuzimaPatientReport)criteria.uniqueResult();
+        return muzimaPatientReport;
     }
 
     @Override
     @Transactional
-    public MuzimaGeneratedReport  getLastMuzimaGeneratedReportByPatientIdAndCohortReportConfigId(Integer patientId, Integer cohortReportConfigId) {
+    public MuzimaPatientReport getLatestPatientReportByPatientIdAndConfigId(Integer patientId, Integer configId) {
         Criteria criteria = session().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("cohortReportConfigId", cohortReportConfigId));
+        criteria.add(Restrictions.eq("cohortReportConfigId", configId));
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.addOrder(Order.desc("dateCreated"));
         criteria.setMaxResults(1);
-       return (MuzimaGeneratedReport)criteria.uniqueResult();
+       return (MuzimaPatientReport)criteria.uniqueResult();
     }
     
     @Override
-    public List<MuzimaGeneratedReport> getMuzimaGeneratedReportByCohortReportConfigId(Integer cohortReportConfigId) {
+    public List<MuzimaPatientReport> getMuzimaPatientReportByConfigId(Integer configId) {
         Criteria criteria = session().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("cohortReportConfigId", cohortReportConfigId));
+        criteria.add(Restrictions.eq("cohortReportConfigId", configId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         return criteria.list();
     }
     
     @Override
     @Transactional
-    public MuzimaGeneratedReport saveOrUpdateMuzimaGeneratedReport(final MuzimaGeneratedReport muzimaGeneratedReport){
-        session().saveOrUpdate(muzimaGeneratedReport);
-        return muzimaGeneratedReport;
+    public MuzimaPatientReport saveOrUpdateMuzimaPatientReport(final MuzimaPatientReport muzimaPatientReport){
+        session().saveOrUpdate(muzimaPatientReport);
+        return muzimaPatientReport;
     }
 
     @Override
-    public void deleteMuzimaGeneratedReport(MuzimaGeneratedReport muzimaGeneratedReport){
-        session().delete(muzimaGeneratedReport);
+    public void deleteMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport){
+        session().delete(muzimaPatientReport);
     }
 
     private DbSession session() {
