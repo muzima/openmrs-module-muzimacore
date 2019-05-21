@@ -311,7 +311,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                 || concept.getDatatype().isTime()
                 || concept.getDatatype().isDateTime()) {
             obs.setValueDatetime(parseDate(value));
-        } else if (concept.getDatatype().isCoded()) {
+        } else if (concept.getDatatype().isCoded() || concept.getDatatype().isBoolean() ) {
             String[] valueCodedElements = StringUtils.split(value, "\\^");
             int valueCodedId = Integer.parseInt(valueCodedElements[0]);
             Concept valueCoded = Context.getConceptService().getConcept(valueCodedId);
@@ -471,6 +471,6 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      * @return boolean
      */
     public boolean isValidObs(Obs obs){
-        return (obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText() || (obs.getConcept().isSet() && obs.isObsGrouping()));
+        return (obs.getConcept().getDatatype().isBoolean() || obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText() || (obs.getConcept().isSet() && obs.isObsGrouping()));
     }
 }
