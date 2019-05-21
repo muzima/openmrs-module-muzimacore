@@ -1335,7 +1335,7 @@
         </insert>
     </changeSet>
 
-    <!--Adding scheduled task to periodically refresh ETL tables-->
+    <!--Inserting Muzima Queue Data Processor into schedule_task_config table-->
     <changeSet id="${project.parent.artifactId}-20180802-1220" author="aojwang">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
