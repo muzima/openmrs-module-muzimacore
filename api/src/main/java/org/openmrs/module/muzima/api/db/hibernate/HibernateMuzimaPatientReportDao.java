@@ -62,6 +62,7 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
             criteria.add(disjunction);
       
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.add(Restrictions.eq("status", "completed"));
         if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
         }
@@ -89,9 +90,9 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
             criteria.add(disjunction);
         
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.add(Restrictions.eq("status", "completed"));
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
-        
     }
 
     @Override
@@ -99,6 +100,7 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     public Number countMuzimaPatientReports(){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.add(Restrictions.eq("status", "completed"));
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
     }
@@ -117,6 +119,7 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.add(Restrictions.eq("status", "completed"));
         criteria.addOrder(Order.desc("dateCreated"));
         criteria.setMaxResults(1);
         return (MuzimaPatientReport) criteria.uniqueResult();
@@ -129,18 +132,17 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.add(Restrictions.eq("status", "completed"));
         return criteria.list();
     }
 
     @Override
     @Transactional
     public MuzimaPatientReport getMuzimaPatientReportByUuid(String uuid){
-        MuzimaPatientReport muzimaPatientReport = null;
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        muzimaPatientReport = (MuzimaPatientReport)criteria.uniqueResult();
-        return muzimaPatientReport;
+        return (MuzimaPatientReport)criteria.uniqueResult();
     }
 
     @Override

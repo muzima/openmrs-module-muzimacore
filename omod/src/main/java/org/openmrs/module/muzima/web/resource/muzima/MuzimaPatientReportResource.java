@@ -10,6 +10,7 @@ import org.openmrs.module.muzima.api.service.MuzimaPatientReportService;
 import org.openmrs.module.muzima.model.MuzimaPatientReport;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.webservices.rest.web.RequestContext;
+import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
@@ -35,27 +36,22 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
     protected NeedsPaging<MuzimaPatientReport> doGetAll(RequestContext context) throws ResponseException {
         MuzimaPatientReportService service = Context.getService(MuzimaPatientReportService.class);
         List<MuzimaPatientReport> all = service.getAllMuzimaPatientReports();
-        System.out.println("1111111111111111111111111111");
         return new NeedsPaging<MuzimaPatientReport>(all, context);
     }
    //ToDo
     @Override
     protected PageableResult doSearch(final RequestContext context) {
-        System.out.println("22222222222222222222222222");
         HttpServletRequest request = context.getRequest();
         Integer startIndex = context.getStartIndex();
         Integer limit =  context.getLimit();;
-        System.out.println("333333333333333333333");
 
-        String nameParameter = request.getParameter("q");
+        String uuid = request.getParameter("patientUuid");
         List<MuzimaPatientReport> muzimaPatientReports = new ArrayList<MuzimaPatientReport>();
 
-        if (nameParameter != null) {
-            System.out.println("444444444444444444444444444");
+        if (uuid != null) {
             PatientService patientService = Context.getService(PatientService.class);
-            Patient patient = patientService.getPatientByUuid(nameParameter);
+            Patient patient = patientService.getPatientByUuid(uuid);
             MuzimaPatientReportService service = Context.getService(MuzimaPatientReportService.class);
-            System.out.println("pppppppppppppppppppppppppppppppp"+patient.getId()+nameParameter);
             muzimaPatientReports = service.getPagedMuzimaPatientReports(patient.getId(), startIndex, limit);
         }
         return new NeedsPaging<MuzimaPatientReport>(muzimaPatientReports, context);
@@ -63,12 +59,9 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
 
     @Override
     public MuzimaPatientReport getByUniqueId(String uuid) {
-        System.out.println("333333333333333333");
-        System.out.println("llllllllllllllllllllllllllllllll"+uuid);
         PatientService patientService = Context.getService(PatientService.class);
         Patient patient = patientService.getPatientByUuid(uuid);
         MuzimaPatientReportService service = Context.getService(MuzimaPatientReportService.class);
-        System.out.println("pppppppppppppppppppppppppppppppp"+patient.getId());
         return service.getLatestPatientReportByPatientId(patient.getId());
     }
 
@@ -76,9 +69,7 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
     @Override
     public Object retrieve(String uuid, RequestContext context) throws ResponseException {
         MuzimaPatientReportService service = Context.getService(MuzimaPatientReportService.class);
-        PatientService patientService = Context.getService(PatientService.class);
-        Patient patient = patientService.getPatientByUuid(uuid);
-        return asRepresentation(service.getLatestPatientReportByPatientId(patient.getId()), context.getRepresentation());
+        return asRepresentation(service.getMuzimaPatientReportByUuid(uuid), context.getRepresentation());
     }
     
     //ToDo 
