@@ -123,7 +123,7 @@ public class GeneratePatientReportsProcessor {
                                     ReportRequest reportRequest = new ReportRequest();
                                     Map<String, Object> params = new LinkedHashMap<String, Object>();
 
-                                    params.put("patient", personService.getPerson(patientId));
+                                    params.put("person", personService.getPerson(patientId));
                                     reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
                                     reportRequest.setRenderingMode(selectedRenderingMode);
                                     reportRequest.setPriority(ReportRequest.Priority.LOW);
@@ -145,7 +145,7 @@ public class GeneratePatientReportsProcessor {
                                 ReportRequest reportRequest = new ReportRequest();
                                 Map<String, Object> params = new LinkedHashMap<String, Object>();
 
-                                params.put("patient", personService.getPerson(patientId));
+                                params.put("person", personService.getPerson(patientId));
                                 reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
                                 reportRequest.setRenderingMode(selectedRenderingMode);
                                 reportRequest.setPriority(ReportRequest.Priority.LOW);
