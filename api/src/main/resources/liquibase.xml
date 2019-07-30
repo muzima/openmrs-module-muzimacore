@@ -15,6 +15,11 @@
     <property name="clob.type" value="longtext"/>
 
     <changeSet id="html5form-2013-06-11-12:30" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                    <tableExists tableName="html5forms_tag" schemaName="openmrs"/>
+             </not>
+        </preConditions>
         <comment>
             Table for tags
         </comment>
@@ -38,6 +43,11 @@
     </changeSet>
 
     <changeSet id="html5form-2013-06-12-05:30" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="html5forms_form_tag_mapping" schemaName="openmrs"/>
+            </not>
+        </preConditions>
         <comment>
             Table for tags to form mapping
         </comment>
@@ -55,7 +65,7 @@
 
     <changeSet id="muzima-20170828-1813" author="aojwang">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="html5forms_form_tag_mapping" schemaName="openmrs"/>
+                <tableExists tableName="html5forms_form_tag_mapping" schemaName="openmrs"/>
         </preConditions>
         <comment>
             change charset to utf-8
@@ -66,6 +76,11 @@
     </changeSet>
 
     <changeSet id="html5form-2013-06-13-07:15" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="html5forms_form" schemaName="openmrs"/>
+            </not>
+        </preConditions>
         <comment>
             Table for forms
         </comment>
@@ -86,10 +101,16 @@
         </comment>
         <sql>
             ALTER TABLE html5forms_form CONVERT TO CHARACTER SET utf8
-        </sql>
+    </sql>
     </changeSet>
 
     <changeSet id="html5form-2013-06-25-18:15" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="html5forms_form" columnName="model"/>
+                <columnExists tableName="html5forms_form" columnName="form"/>
+            </not>
+        </preConditions>
         <comment>
             adding new columns to html5forms
         </comment>
@@ -102,28 +123,44 @@
     </changeSet>
 
     <changeSet id="html5form-2013-07-1-18:15" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+                 <columnExists tableName="html5forms_form" columnName="form"/>
+                 <columnExists tableName="html5forms_form" columnName="model"/>
+        </preConditions>
         <comment>
             removing columns
         </comment>
-        <dropColumn columnName="form"
-                    tableName="html5forms_form"/>
-        <dropColumn columnName="model"
-                    tableName="html5forms_form"/>
+        <dropColumn columnName="form" tableName="html5forms_form"/>
+        <dropColumn columnName="model" tableName="html5forms_form"/>
     </changeSet>
 
     <changeSet id="html5form-2013-07-1-20:15" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="html5forms_form" columnName="form"/>
+                <columnExists tableName="html5forms_form" columnName="model"/>
+            </not>
+        </preConditions>
         <comment>
             adding new columns to html5forms
         </comment>
-        <addColumn tableName="html5forms_form">
-            <column name="model" type="${clob.type}"></column>
-        </addColumn>
-        <addColumn tableName="html5forms_form">
-            <column name="form" type="${clob.type}"></column>
-        </addColumn>
+        <addColumn tableName="html5forms_form"> <column name="model" type="${clob.type}"></column> </addColumn>
+        <addColumn tableName="html5forms_form"> <column name="form" type="${clob.type}"></column>  </addColumn>
     </changeSet>
 
     <changeSet id="muzimaform-2013-07-10-12:00" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzimaforms_form"/>
+                <tableExists tableName="muzimaforms_tag"/>
+                <tableExists tableName="muzimaforms_tag_map"/>
+            </not>
+            <and>
+                <tableExists tableName="html5forms_form"/>
+                <tableExists tableName="html5forms_tag"/>
+                <tableExists tableName="html5forms_form_tag_mapping"/>
+            </and>
+        </preConditions>
         <comment>
             renames tables - prefix html5 to muzima
         </comment>
@@ -131,26 +168,44 @@
         <renameTable oldTableName="html5forms_form" newTableName="muzimaforms_form"/>
         <renameTable oldTableName="html5forms_tag" newTableName="muzimaforms_tag"/>
         <renameTable oldTableName="html5forms_form_tag_mapping" newTableName="muzimaforms_tag_map"/>
-
     </changeSet>
 
     <changeSet id="muzimaform-2013-07-10-16:30" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+              <and>
+                  <tableExists tableName="muzimaforms_tag"/>
+                  <tableExists tableName="muzimaforms_form"/>
+              </and>
+             <and>
+                 <columnExists tableName="muzimaforms_tag" columnName="html5forms_tag_id"/>
+                 <columnExists tableName="muzimaforms_form" columnName="model"/>
+                 <columnExists tableName="muzimaforms_form" columnName="form"/>
+             </and>
+        </preConditions>
         <comment>
-            renaming old columns and adding new column to html5forms
+            renaming old columns in html5forms
         </comment>
+        <renameColumn tableName="muzimaforms_tag" oldColumnName="html5forms_tag_id" newColumnName="muzimaforms_tag_id" columnDataType="int"/>
+        <renameColumn tableName="muzimaforms_form" oldColumnName="model" newColumnName="model_xml" columnDataType="${clob.type}"/>
+        <renameColumn tableName="muzimaforms_form" oldColumnName="form" newColumnName="form_html" columnDataType="${clob.type}"/>
+    </changeSet>
 
-        <renameColumn tableName="muzimaforms_tag" oldColumnName="html5forms_tag_id" newColumnName="muzimaforms_tag_id"
-                      columnDataType="int"/>
-        <renameColumn tableName="muzimaforms_form" oldColumnName="model" newColumnName="model_xml"
-                      columnDataType="${clob.type}"/>
-        <renameColumn tableName="muzimaforms_form" oldColumnName="form" newColumnName="form_html"
-                      columnDataType="${clob.type}"/>
-        <addColumn tableName="muzimaforms_form">
-            <column name="model_json" type="${clob.type}"></column>
-        </addColumn>
+    <changeSet id="html5form-2019-07-29-10:10" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzimaforms_form" columnName="model_json"/>
+            </not>
+        </preConditions>
+        <comment>
+            adding new column to html5forms
+        </comment>
+        <addColumn tableName="muzimaforms_form"> <column name="model_json" type="${clob.type}"></column> </addColumn>
     </changeSet>
 
     <changeSet id="muzimaform-2013-07-10-18:00" author="ThoughtWorks">
+        <preConditions>
+                <tableExists tableName="muzimaforms_tag"/>
+        </preConditions>
         <comment>
             renaming columns removed autoincrement - fixing that
         </comment>
@@ -158,8 +213,13 @@
     </changeSet>
 
     <changeSet id="muzimaform-2013-07-10-18:30" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzimaforms_tag" columnName="muzimaforms_tag_id"/>
+            </not>
+        </preConditions>
         <comment>
-            renaming columns removed autoincrement - fixing that
+            adding back columns removed autoincrement - fixing that
         </comment>
         <addColumn tableName="muzimaforms_tag">
             <column name="muzimaforms_tag_id" type="int" autoIncrement="true">
@@ -170,15 +230,39 @@
     </changeSet>
 
     <changeSet id="muzimaform-2013-07-10-19:00" author="ThoughtWorks">
+        <preConditions>
+            <and>
+                <tableExists tableName="muzimaforms_tag"/>
+            </and>
+        </preConditions>
         <comment>
             adding unique constraint
         </comment>
+
+        <!--First drop the existing constraints on these tables-->
+        <dropUniqueConstraint tableName="muzimaforms_tag" constraintName="unique-tag-name"/>
+
+        <!--Finally add the new constraints-->
         <addUniqueConstraint constraintName="unique-tag-name" tableName="muzimaforms_tag" columnNames="name"/>
     </changeSet>
 
     <changeSet id="muzimaform-2013-07-10-20:00" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="muzimaforms_form"/>
+            </and>
+            <not>
+                <columnExists tableName="muzimaforms_form" columnName="creator"/>
+                <columnExists tableName="muzimaforms_form" columnName="date_created"/>
+                <columnExists tableName="muzimaforms_form" columnName="changed_by"/>
+                <columnExists tableName="muzimaforms_form" columnName="date_changed"/>
+                <columnExists tableName="muzimaforms_form" columnName="retired"/>
+                <columnExists tableName="muzimaforms_form" columnName="date_retired"/>
+                <columnExists tableName="muzimaforms_form" columnName="retire_reason"/>
+            </not>
+        </preConditions>
         <comment>
-            adding audit columns
+            adding muzimaforms_form audit columns
         </comment>
         <addColumn tableName="muzimaforms_form">
             <column name="creator" valueNumeric="1" type="int"/>
@@ -190,7 +274,26 @@
             <column name="date_retired" type="date"/>
             <column name="retire_reason" type="text"/>
         </addColumn>
+    </changeSet>
 
+    <changeSet id="muzimaform-2013-07-10-21:00" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="muzimaforms_tag"/>
+            </and>
+            <not>
+                <columnExists tableName="muzimaforms_tag" columnName="creator"/>
+                <columnExists tableName="muzimaforms_tag" columnName="date_created"/>
+                <columnExists tableName="muzimaforms_tag" columnName="changed_by"/>
+                <columnExists tableName="muzimaforms_tag" columnName="date_changed"/>
+                <columnExists tableName="muzimaforms_tag" columnName="retired"/>
+                <columnExists tableName="muzimaforms_tag" columnName="date_retired"/>
+                <columnExists tableName="muzimaforms_tag" columnName="retire_reason"/>
+            </not>
+        </preConditions>
+        <comment>
+            adding muzimaforms_tag audit columns
+        </comment>
         <addColumn tableName="muzimaforms_tag">
             <column name="creator" valueNumeric="1" type="int"/>
             <column name="date_created" valueDate="2007-05-04" type="date"/>
@@ -201,7 +304,26 @@
             <column name="date_retired" type="date"/>
             <column name="retire_reason" type="text"/>
         </addColumn>
+    </changeSet>
 
+    <changeSet id="muzimaform-2013-07-10-22:00" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="muzimaforms_tag_map"/>
+            </and>
+            <not>
+                <columnExists tableName="muzimaforms_tag_map" columnName="creator"/>
+                <columnExists tableName="muzimaforms_tag_map" columnName="date_created"/>
+                <columnExists tableName="muzimaforms_tag_map" columnName="changed_by"/>
+                <columnExists tableName="muzimaforms_tag_map" columnName="date_changed"/>
+                <columnExists tableName="muzimaforms_tag_map" columnName="retired"/>
+                <columnExists tableName="muzimaforms_tag_map" columnName="date_retired"/>
+                <columnExists tableName="muzimaforms_tag_map" columnName="retire_reason"/>
+            </not>
+        </preConditions>
+        <comment>
+            adding muzimaforms_tag_map audit columns
+        </comment>
         <addColumn tableName="muzimaforms_tag_map">
             <column name="creator" valueNumeric="1" type="int"/>
             <column name="date_created" valueDate="2007-05-04" type="date"/>
@@ -215,32 +337,41 @@
     </changeSet>
 
     <changeSet id="muzimaform-2013-07-15-16:30" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="muzimaforms_form"/>
+                <tableExists tableName="muzimaforms_tag"/>
+            </and>
+            <not>
+                <columnExists tableName="muzimaforms_form" columnName="uuid"/>
+                <columnExists tableName="muzimaforms_tag" columnName="uuid"/>
+            </not>
+        </preConditions>
         <comment>
             adding unique constraint
         </comment>
-        <addColumn tableName="muzimaforms_form">
-            <column name="uuid" type="char(38)"/>
-        </addColumn>
+        <addColumn tableName="muzimaforms_form"> <column name="uuid" type="char(38)"/></addColumn>
+        <addColumn tableName="muzimaforms_tag"> <column name="uuid" type="char(38)"/> </addColumn>
 
-        <addColumn tableName="muzimaforms_tag">
-            <column name="uuid" type="char(38)"/>
-        </addColumn>
-        <addUniqueConstraint constraintName="unique-muzimaforms-form-uuid" tableName="muzimaforms_form"
-                             columnNames="uuid"/>
-        <addUniqueConstraint constraintName="unique-muzimaforms-tag-uuid" tableName="muzimaforms_tag"
-                             columnNames="uuid"/>
+        <addUniqueConstraint constraintName="unique-muzimaforms-form-uuid" tableName="muzimaforms_form" columnNames="uuid"/>
+        <addUniqueConstraint constraintName="unique-muzimaforms-tag-uuid" tableName="muzimaforms_tag" columnNames="uuid"/>
     </changeSet>
 
     <changeSet id="muzimaform-2013-08-20-16:40" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="muzimaforms_form"/>
+            </and>
+            <not>
+                <columnExists tableName="muzimaforms_form" columnName="name"/>
+                <columnExists tableName="muzimaforms_tag" columnName="description"/>
+            </not>
+        </preConditions>
         <comment>
             Adding the name and description columns
         </comment>
-        <addColumn tableName="muzimaforms_form">
-            <column name="name" type="varchar(255)"/>
-        </addColumn>
-        <addColumn tableName="muzimaforms_form">
-            <column name="description" type="varchar(255)"/>
-        </addColumn>
+        <addColumn tableName="muzimaforms_form"> <column name="name" type="varchar(255)"/> </addColumn>
+        <addColumn tableName="muzimaforms_form"> <column name="description" type="varchar(255)"/> </addColumn>
     </changeSet>
 
     <changeSet id="muzimaform-2013-08-20-17:08" author="ThoughtWorks" runOnChange="true">
@@ -264,6 +395,13 @@
     </changeSet>
 
     <changeSet id="muzimaform-2013-12-01-09:30" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzimaforms_form" columnName="retired"/>
+                <columnExists tableName="muzimaforms_tag" columnName="retired"/>
+                <columnExists tableName="muzimaforms_tag_map" columnName="retired"/>
+            </and>
+        </preConditions>
         <comment>
             Adding default values for boolean columns in muzimaforms_form related tables
         </comment>
@@ -273,23 +411,27 @@
     </changeSet>
 
     <changeSet id="muzimaform-2013-12-02-09:30" author="ThoughtWorks">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzimaforms_form" columnName="retired"/>
+                <columnExists tableName="muzimaforms_tag" columnName="retired"/>
+                <columnExists tableName="muzimaforms_tag_map" columnName="retired"/>
+            </and>
+        </preConditions>
         <comment>
             Adding default values for the existing records in muzimaforms_form related tables
         </comment>
-        <update tableName="muzimaforms_form">
-            <column name="retired" valueBoolean="false"/>
+        <update tableName="muzimaforms_form"> <column name="retired" valueBoolean="false"/>
             <where>
                 retired is null
             </where>
         </update>
-        <update tableName="muzimaforms_tag">
-            <column name="retired" valueBoolean="false"/>
+        <update tableName="muzimaforms_tag"> <column name="retired" valueBoolean="false"/>
             <where>
                 retired is null
             </where>
         </update>
-        <update tableName="muzimaforms_tag_map">
-            <column name="retired" valueBoolean="false"/>
+        <update tableName="muzimaforms_tag_map"> <column name="retired" valueBoolean="false"/>
             <where>
                 retired is null
             </where>
@@ -325,12 +467,15 @@
     </changeSet>
 
     <changeSet id="muzimaform-2014-10-16" author="SahajSoft">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzimaforms_form" columnName="version"/>
+            </not>
+        </preConditions>
         <comment>
             Adding version column
         </comment>
-        <addColumn tableName="muzimaforms_form">
-            <column name="version" type="varchar(255)"/>
-        </addColumn>
+        <addColumn tableName="muzimaforms_form"> <column name="version" type="varchar(255)"/> </addColumn>
     </changeSet>
 
     <changeSet id="muzima-20180706-1247" author="aojwang">
@@ -346,6 +491,16 @@
     </changeSet>
 
     <changeSet id="muzimaform-2014-10-31" author="SahajSoft">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzimaforms_form" schemaName="openmrs"/>
+        </preConditions>
+        <comment>
+           Add table form Foreign Key Constraint
+        </comment>
+        <!--First drop the existing constraints on this table-->
+        <dropForeignKeyConstraint baseTableName="muzimaforms_form" constraintName="fk_muzimaforms_form_openmrs_form"/>
+
+        <!--Finally add the new constraints-->
         <addForeignKeyConstraint baseColumnNames="form"
                                  baseTableName="muzimaforms_form"
                                  constraintName="fk_muzimaforms_form_openmrs_form"
@@ -361,12 +516,9 @@
                 <columnExists tableName="muzimaforms_form" columnName="version"/>
             </and>
         </preConditions>
-        <dropColumn columnName="name"
-                    tableName="muzimaforms_form"/>
-        <dropColumn columnName="description"
-                    tableName="muzimaforms_form"/>
-        <dropColumn columnName="version"
-                    tableName="muzimaforms_form"/>
+        <dropColumn columnName="name" tableName="muzimaforms_form"/>
+        <dropColumn columnName="description" tableName="muzimaforms_form"/>
+        <dropColumn columnName="version" tableName="muzimaforms_form"/>
     </changeSet>
 
     <changeSet id="muzima-2013-04-18-10-50" author="nribeka">
@@ -680,12 +832,8 @@
             </and>
         </preConditions>
         <addColumn tableName="muzima_notification_data">
-            <column name="status" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="source" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
+            <column name="status" type="varchar(50)"> <constraints nullable="false"/> </column>
+            <column name="source" type="varchar(50)"> <constraints nullable="false"/> </column>
         </addColumn>
     </changeSet>
     <changeSet id="muzima-20140312-110700" author="nribeka">
@@ -719,13 +867,8 @@
                 </not>
             </and>
         </preConditions>
-        <addColumn tableName="muzima_notification_data">
-            <column name="status" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="source" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
+        <addColumn tableName="muzima_notification_data">  <column name="status" type="varchar(50)"> <constraints nullable="false"/> </column>
+            <column name="source" type="varchar(50)"> <constraints nullable="false"/> </column>
         </addColumn>
     </changeSet>
 
@@ -736,9 +879,7 @@
             </not>
         </preConditions>
         <addColumn tableName="muzima_notification_data">
-            <column name="role" type="varchar(255)">
-                <constraints nullable="true"/>
-            </column>
+            <column name="role" type="varchar(255)"> <constraints nullable="true"/> </column>
         </addColumn>
         <addForeignKeyConstraint constraintName="muzima_notification_data_role"
                                  baseTableName="muzima_notification_data" baseColumnNames="role"
@@ -804,6 +945,9 @@
         <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="muzima_queue_data" columnName="location_id"/>
+                <columnExists tableName="muzima_queue_data" columnName="location_name"/>
+                <columnExists tableName="muzima_queue_data" columnName="provider_id"/>
+                <columnExists tableName="muzima_queue_data" columnName="provider_name"/>
             </not>
         </preConditions>
         <addColumn tableName="muzima_queue_data">
@@ -831,7 +975,10 @@
     <changeSet id="muzima-20150820-112000" author="shwetha">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists tableName="muzima_error_data" columnName="location_id"/>
+                <columnExists tableName="muzima_queue_data" columnName="location_id"/>
+                <columnExists tableName="muzima_queue_data" columnName="location_name"/>
+                <columnExists tableName="muzima_queue_data" columnName="provider_id"/>
+                <columnExists tableName="muzima_queue_data" columnName="provider_name"/>
             </not>
         </preConditions>
         <addColumn tableName="muzima_error_data">
@@ -883,18 +1030,18 @@
     </changeSet>
 
     <changeSet id="muzima-20150909-113000" author="shwetha">
-        <preConditions onFail="MARK_RAN">
+          <preConditions onFail="MARK_RAN">
             <and>
                 <columnExists tableName="muzima_queue_data" columnName="location_id"/>
                 <columnExists tableName="muzima_queue_data" columnName="location_name"/>
             </and>
+              <not>
+                  <columnExists tableName="muzima_queue_data" columnName="location"/>
+              </not>
         </preConditions>
         <dropColumn tableName="muzima_queue_data" columnName="location_id"/>
         <dropColumn tableName="muzima_queue_data" columnName="location_name"/>
-        <addColumn tableName="muzima_queue_data">
-            <column name="location" type="int">
-                <constraints nullable="true"/>
-            </column>
+        <addColumn tableName="muzima_queue_data"> <column name="location" type="int"> <constraints nullable="true"/> </column>
         </addColumn>
         <addForeignKeyConstraint constraintName="muzima_queue_data_location"
                                  baseTableName="muzima_queue_data" baseColumnNames="location"
@@ -907,13 +1054,13 @@
                 <columnExists tableName="muzima_error_data" columnName="location_id"/>
                 <columnExists tableName="muzima_error_data" columnName="location_name"/>
             </and>
+            <not>
+                <columnExists tableName="muzima_error_data" columnName="location"/>
+            </not>
         </preConditions>
         <dropColumn tableName="muzima_error_data" columnName="location_id"/>
         <dropColumn tableName="muzima_error_data" columnName="location_name"/>
-        <addColumn tableName="muzima_error_data">
-            <column name="location" type="int">
-                <constraints nullable="true"/>
-            </column>
+        <addColumn tableName="muzima_error_data"> <column name="location" type="int"> <constraints nullable="true"/> </column>
         </addColumn>
         <addForeignKeyConstraint constraintName="muzima_error_data_location"
                                  baseTableName="muzima_error_data" baseColumnNames="location"
@@ -926,13 +1073,13 @@
                 <columnExists tableName="muzima_queue_data" columnName="provider_id"/>
                 <columnExists tableName="muzima_queue_data" columnName="provider_name"/>
             </and>
+            <not>
+                <columnExists tableName="muzima_queue_data" columnName="provider"/>
+            </not>
         </preConditions>
         <dropColumn tableName="muzima_queue_data" columnName="provider_id"/>
         <dropColumn tableName="muzima_queue_data" columnName="provider_name"/>
-        <addColumn tableName="muzima_queue_data">
-            <column name="provider" type="int">
-                <constraints nullable="true"/>
-            </column>
+        <addColumn tableName="muzima_queue_data"> <column name="provider" type="int"> <constraints nullable="true"/> </column>
         </addColumn>
         <addForeignKeyConstraint constraintName="muzima_queue_data_provider"
                                  baseTableName="muzima_queue_data" baseColumnNames="provider"
@@ -945,13 +1092,13 @@
                 <columnExists tableName="muzima_error_data" columnName="provider_id"/>
                 <columnExists tableName="muzima_error_data" columnName="provider_name"/>
             </and>
+            <not>
+                <columnExists tableName="muzima_error_data" columnName="provider"/>
+            </not>
         </preConditions>
         <dropColumn tableName="muzima_error_data" columnName="provider_id"/>
         <dropColumn tableName="muzima_error_data" columnName="provider_name"/>
-        <addColumn tableName="muzima_error_data">
-            <column name="provider" type="int">
-                <constraints nullable="true"/>
-            </column>
+        <addColumn tableName="muzima_error_data"> <column name="provider" type="int"> <constraints nullable="true"/> </column>
         </addColumn>
         <addForeignKeyConstraint constraintName="muzima_error_data_provider"
                                  baseTableName="muzima_error_data" baseColumnNames="provider"
@@ -964,10 +1111,7 @@
                 <columnExists tableName="muzima_error_data" columnName="patientUuid"/>
             </not>
         </preConditions>
-        <addColumn tableName="muzima_error_data">
-            <column name="patientUuid" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
+        <addColumn tableName="muzima_error_data"> <column name="patientUuid" type="varchar(255)"> <constraints nullable="false"/> </column>
         </addColumn>
     </changeSet>
 
@@ -977,10 +1121,7 @@
                 <columnExists tableName="muzima_queue_data" columnName="patientUuid"/>
             </not>
         </preConditions>
-        <addColumn tableName="muzima_queue_data">
-            <column name="patientUuid" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
+        <addColumn tableName="muzima_queue_data"> <column name="patientUuid" type="varchar(255)"> <constraints nullable="false"/> </column>
         </addColumn>
     </changeSet>
 
@@ -990,44 +1131,68 @@
                 <columnExists tableName="muzima_archive_data" columnName="patientUuid"/>
             </not>
         </preConditions>
-        <addColumn tableName="muzima_archive_data">
-            <column name="patientUuid" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
+        <addColumn tableName="muzima_archive_data"> <column name="patientUuid" type="varchar(255)"> <constraints nullable="false"/> </column>
         </addColumn>
     </changeSet>
     <changeSet author="mssavai" id="muzima-20151102-105200">
         <preConditions onFail="MARK_RAN">
             <and>
+                <tableExists tableName="muzima_error_data"/>
+            </and>
+            <and>
                 <columnExists tableName="muzima_error_data" columnName="patientUuid"/>
             </and>
+            <not>
+                <columnExists tableName="muzima_error_data" columnName="patient_uuid"/>
+            </not>
         </preConditions>
-        <renameColumn columnDataType="varchar(255)"
-                      newColumnName="patient_uuid"
-                      oldColumnName="patientUuid"
-                      tableName="muzima_error_data"/>
+        <comment>
+            Renaming patientUuid to patient_uuid
+        </comment>
+        <renameColumn  tableName="muzima_error_data"
+                       oldColumnName="patientUuid"
+                       newColumnName="patient_uuid"
+                       columnDataType="varchar(255)" />
     </changeSet>
     <changeSet author="mssavai" id="muzima-20151102-105300">
         <preConditions onFail="MARK_RAN">
             <and>
+                <tableExists tableName="muzima_queue_data"/>
+            </and>
+            <and>
                 <columnExists tableName="muzima_queue_data" columnName="patientUuid"/>
             </and>
+            <not>
+                <columnExists tableName="muzima_queue_data" columnName="patient_uuid"/>
+            </not>
         </preConditions>
-        <renameColumn columnDataType="varchar(255)"
-                      newColumnName="patient_uuid"
-                      oldColumnName="patientUuid"
-                      tableName="muzima_queue_data"/>
+        <comment>
+            Renaming patientUuid to patient_uuid
+        </comment>
+        <renameColumn    tableName="muzima_queue_data"
+                         oldColumnName="patientUuid"
+                         newColumnName="patient_uuid"
+                         columnDataType="varchar(255)" />
     </changeSet>
     <changeSet author="mssavai" id="muzima-20151102-105400">
         <preConditions onFail="MARK_RAN">
             <and>
+                <tableExists tableName="muzima_archive_data"/>
+            </and>
+            <and>
                 <columnExists tableName="muzima_archive_data" columnName="patientUuid"/>
             </and>
+            <not>
+                <columnExists tableName="muzima_archive_data" columnName="patient_uuid"/>
+            </not>
         </preConditions>
-        <renameColumn columnDataType="varchar(255)"
-                      newColumnName="patient_uuid"
+        <comment>
+            Renaming patientUuid to patient_uuid
+        </comment>
+        <renameColumn tableName="muzima_archive_data"
                       oldColumnName="patientUuid"
-                      tableName="muzima_archive_data"/>
+                      newColumnName="patient_uuid"
+                      columnDataType="varchar(255)" />
     </changeSet>
 
     <changeSet id="smbugua" author="muzima-2015-10-15-20-13-12">
@@ -1102,7 +1267,20 @@
             ALTER TABLE muzimaregistration_registration_data CONVERT TO CHARACTER SET utf8
         </sql>
     </changeSet>
+
     <changeSet id="muzima-20160901-093538" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="muzimaforms_form" schemaName="openmrs"/>
+                <tableExists tableName="muzimaforms_form" schemaName="openmrs"/>
+                <tableExists tableName="muzimaforms_tag_map" schemaName="openmrs"/>
+                <not>
+                    <tableExists tableName="muzima_form" schemaName="openmrs"/>
+                    <tableExists tableName="muzima_form_tag" schemaName="openmrs"/>
+                    <tableExists tableName="muzima_form_tag_map" schemaName="openmrs"/>
+                </not>
+            </and>
+        </preConditions>
         <comment>
             Renames tables - prefix muzimaform to muzima and rename columns and constraints appropriately
         </comment>
@@ -1158,6 +1336,11 @@
     </changeSet>
 
     <changeSet id="muzima-20160901-115152" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists tableName="muzima_form_tag"/>
+            </and>
+        </preConditions>
         <comment>
             Rename primary key in table muzima_form_tag using raw sql since renameColumn loses autoIncrement feature
         </comment>
