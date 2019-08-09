@@ -228,25 +228,8 @@
         </addColumn>
 
     </changeSet>
-
-    <changeSet id="muzimaform-2013-07-10-19:00" author="ThoughtWorks">
-        <preConditions>
-            <and>
-                <tableExists tableName="muzimaforms_tag"/>
-            </and>
-        </preConditions>
-        <comment>
-            adding unique constraint
-        </comment>
-
-        <!--First drop the existing constraints on these tables-->
-        <dropUniqueConstraint tableName="muzimaforms_tag" constraintName="unique-tag-name"/>
-
-        <!--Finally add the new constraints-->
-        <addUniqueConstraint constraintName="unique-tag-name" tableName="muzimaforms_tag" columnNames="name"/>
-    </changeSet>
-
-    <changeSet id="muzimaform-2013-07-10-20:00" author="ThoughtWorks">
+ <!--Removed changeset to add back constraintName unique-tag-name added previously-->
+   <changeSet id="muzimaform-2013-07-10-20:00" author="ThoughtWorks">
         <preConditions onFail="MARK_RAN">
             <and>
                 <tableExists tableName="muzimaforms_form"/>
@@ -490,17 +473,19 @@
         </sql>
     </changeSet>
 
-    <changeSet id="muzimaform-2014-10-31" author="SahajSoft">
+    <changeSet id="muzimaform-2019-08-07" author="pwangoo">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="muzimaforms_form" schemaName="openmrs"/>
+            <and>
+                <tableExists tableName="muzimaforms_form" schemaName="openmrs"/>
+                    <not>
+                        <foreignKeyConstraintExists foreignKeyName="fk_muzimaforms_form_openmrs_form"/>
+                    </not>
+            </and>
         </preConditions>
         <comment>
-           Add table form Foreign Key Constraint
+           Add  muzimaforms_form Foreign Key Constraint
         </comment>
-        <!--First drop the existing constraints on this table-->
-        <dropForeignKeyConstraint baseTableName="muzimaforms_form" constraintName="fk_muzimaforms_form_openmrs_form"/>
-
-        <!--Finally add the new constraints-->
+               <!-- add the new constraints-->
         <addForeignKeyConstraint baseColumnNames="form"
                                  baseTableName="muzimaforms_form"
                                  constraintName="fk_muzimaforms_form_openmrs_form"
@@ -975,10 +960,10 @@
     <changeSet id="muzima-20150820-112000" author="shwetha">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists tableName="muzima_queue_data" columnName="location_id"/>
-                <columnExists tableName="muzima_queue_data" columnName="location_name"/>
-                <columnExists tableName="muzima_queue_data" columnName="provider_id"/>
-                <columnExists tableName="muzima_queue_data" columnName="provider_name"/>
+                <columnExists tableName="muzima_error_data" columnName="location_id"/>
+                <columnExists tableName="muzima_error_data" columnName="location_name"/>
+                <columnExists tableName="muzima_error_data" columnName="provider_id"/>
+                <columnExists tableName="muzima_error_data" columnName="provider_name"/>
             </not>
         </preConditions>
         <addColumn tableName="muzima_error_data">
@@ -1034,10 +1019,10 @@
             <and>
                 <columnExists tableName="muzima_queue_data" columnName="location_id"/>
                 <columnExists tableName="muzima_queue_data" columnName="location_name"/>
-            </and>
               <not>
                   <columnExists tableName="muzima_queue_data" columnName="location"/>
               </not>
+            </and>
         </preConditions>
         <dropColumn tableName="muzima_queue_data" columnName="location_id"/>
         <dropColumn tableName="muzima_queue_data" columnName="location_name"/>
@@ -1138,13 +1123,11 @@
         <preConditions onFail="MARK_RAN">
             <and>
                 <tableExists tableName="muzima_error_data"/>
-            </and>
-            <and>
                 <columnExists tableName="muzima_error_data" columnName="patientUuid"/>
+                <not>
+                    <columnExists tableName="muzima_error_data" columnName="patient_uuid"/>
+                </not>
             </and>
-            <not>
-                <columnExists tableName="muzima_error_data" columnName="patient_uuid"/>
-            </not>
         </preConditions>
         <comment>
             Renaming patientUuid to patient_uuid
@@ -1158,13 +1141,12 @@
         <preConditions onFail="MARK_RAN">
             <and>
                 <tableExists tableName="muzima_queue_data"/>
-            </and>
-            <and>
                 <columnExists tableName="muzima_queue_data" columnName="patientUuid"/>
+
+                <not>
+                    <columnExists tableName="muzima_queue_data" columnName="patient_uuid"/>
+                </not>
             </and>
-            <not>
-                <columnExists tableName="muzima_queue_data" columnName="patient_uuid"/>
-            </not>
         </preConditions>
         <comment>
             Renaming patientUuid to patient_uuid
@@ -1178,13 +1160,12 @@
         <preConditions onFail="MARK_RAN">
             <and>
                 <tableExists tableName="muzima_archive_data"/>
-            </and>
-            <and>
                 <columnExists tableName="muzima_archive_data" columnName="patientUuid"/>
+
+                    <not>
+                        <columnExists tableName="muzima_archive_data" columnName="patient_uuid"/>
+                    </not>
             </and>
-            <not>
-                <columnExists tableName="muzima_archive_data" columnName="patient_uuid"/>
-            </not>
         </preConditions>
         <comment>
             Renaming patientUuid to patient_uuid
@@ -1268,7 +1249,7 @@
         </sql>
     </changeSet>
 
-    <changeSet id="muzima-20160901-093538" author="smbugua">
+    <changeSet id="muzima-20190808-095338" author="pwangoo">
         <preConditions onFail="MARK_RAN">
             <and>
                 <tableExists tableName="muzimaforms_form" schemaName="openmrs"/>
@@ -1278,6 +1259,9 @@
                     <tableExists tableName="muzima_form" schemaName="openmrs"/>
                     <tableExists tableName="muzima_form_tag" schemaName="openmrs"/>
                     <tableExists tableName="muzima_form_tag_map" schemaName="openmrs"/>
+
+                    <foreignKeyConstraintExists foreignKeyName="muzima_form_openmrs_form"/>
+
                 </not>
             </and>
         </preConditions>
@@ -1285,13 +1269,7 @@
             Renames tables - prefix muzimaform to muzima and rename columns and constraints appropriately
         </comment>
 
-        <!--First drop the existing constraints on these tables-->
-        <dropForeignKeyConstraint baseTableName="muzimaforms_form" constraintName="fk_muzimaforms_form_openmrs_form"/>
-        <dropUniqueConstraint tableName="muzimaforms_form" constraintName="unique-muzimaforms-form-uuid"/>
-        <dropUniqueConstraint tableName="muzimaforms_tag" constraintName="unique-muzimaforms-tag-uuid"/>
-        <dropUniqueConstraint tableName="muzimaforms_tag" constraintName="unique-tag-name"/>
-
-        <!--Then rename the tables-->
+        <!--rename the tables-->
         <renameTable oldTableName="muzimaforms_form" newTableName="muzima_form"/>
         <renameTable oldTableName="muzimaforms_tag" newTableName="muzima_form_tag"/>
         <renameTable oldTableName="muzimaforms_tag_map" newTableName="muzima_form_tag_map"/>
@@ -1335,10 +1313,10 @@
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
 
-    <changeSet id="muzima-20160901-115152" author="smbugua">
+    <changeSet id="muzima-20190806-150052" author="pwangoo">
         <preConditions onFail="MARK_RAN">
             <and>
-                <tableExists tableName="muzima_form_tag"/>
+                <columnExists tableName="muzima_form_tag" columnName="muzimaforms_tag_id"/>
             </and>
         </preConditions>
         <comment>
@@ -1406,20 +1384,21 @@
         </sql>
     </changeSet>
 
-    <changeSet id="muzima-20160922-145252" author="smbugua">
+    <changeSet id="muzima-20190808-101052" author="pwangoo">
         <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists tableName="muzima_form" columnName="meta_json"/>
-            </not>
+            <and>
+                <tableExists tableName="muzima_form"/>
+                <not>
+                    <columnExists tableName="muzima_form" columnName="meta_json"/>
+                </not>
+            </and>
         </preConditions>
 
         <comment>
             Add column metadata to store metadata as a json blob
         </comment>
 
-        <addColumn tableName="muzima_form">
-            <column name="meta_json" type="${clob.type}"/>
-        </addColumn>
+        <addColumn tableName="muzima_form"> <column name="meta_json" type="${clob.type}"/> </addColumn>
     </changeSet>
     <changeSet id="muzima-20170912151100" author="mssavai">
         <preConditions onFail="MARK_RAN">
@@ -1481,7 +1460,10 @@
         </sql>
     </changeSet>
 
-    <changeSet id="muzima-20170922145600" author="mssavai">
+    <changeSet id="muzima-20190813185600" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='2a277ceb-7f23-4cc0-9e9b-1686985df121'</sqlCheck>
+        </preConditions>
         <insert tableName="muzima_setting">
             <column name="property" value="PatientIdentifier.AutoGeneration" />
             <column name="name" value="Patient Identifier auto-generation" />
@@ -1494,7 +1476,10 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20171017151600" author="mssavai">
+    <changeSet id="muzima-20190813185700" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='aae1a60f-f6ac-4d00-8af7-80270d715114'</sqlCheck>
+        </preConditions>
         <insert tableName="muzima_setting">
             <column name="property" value="PatientIdentifier.AutoGenerationSourceName" />
             <column name="name" value="Patient Identifier auto-generation Source name" />
@@ -1507,7 +1492,10 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20180214100000" author="bmokaya">
+    <changeSet id="muzima-20190813185800" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_data_source` WHERE `uuid` ='0d62b128-010e-4c1b-ba86-ef963b7f8a72'</sqlCheck>
+        </preConditions>
         <comment>Creating a default mUzima data source with the name Mobile Devices</comment>
         <insert tableName="muzima_data_source">
             <column name="name" value="Mobile Devices"/>
@@ -1543,11 +1531,26 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20180720102200" author="bmokaya">
+    <changeSet id="muzima-20190807172200" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_notification_data" columnName="patient"/>
+            </and>
+            <sqlCheck expectedResult="NO">
+                SELECT is_Nullable
+                FROM  INFORMATION_SCHEMA.COLUMNS
+                WHERE table_name='muzima_notification_data'
+                AND column_name='patient'
+            </sqlCheck>
+        </preConditions>
         <dropNotNullConstraint columnDataType="int" columnName="patient" tableName="muzima_notification_data"/>
     </changeSet>
 
-    <changeSet id="muzima-20180717115600" author="mssavai">
+    <changeSet id="muzima-20190813265900" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='24caa622-691a-493b-b9ac-8ee70424ad47'</sqlCheck>
+        </preConditions>
+        <comment>Specifies Concept Uuid for Complex Obs Audio Content</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="AudioContentComplexObs.ConceptUuid" />
             <column name="name" value="Concept Uuid for Complex Obs Audio Content" />
@@ -1560,7 +1563,11 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20180717120000" author="mssavai">
+    <changeSet id="muzima-20190814312000" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='eaf882a3-3360-45b3-b480-ee9e634bc74f'</sqlCheck>
+        </preConditions>
+        <comment>Specifies Concept Uuid for Complex Obs Video Content</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="VideoContentComplexObs.ConceptUuid" />
             <column name="name" value="Concept Uuid for Complex Obs Video Content" />
@@ -1573,7 +1580,11 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20180717120200" author="mssavai">
+    <changeSet id="muzima-20190814342200" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='fd759595-6338-491b-ac37-62e699c1823c'</sqlCheck>
+        </preConditions>
+        <comment>Specifies Concept Uuid for Complex Obs Image Content</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="ImageContentComplexObs.ConceptUuid" />
             <column name="name" value="Concept Uuid for Complex Obs Image Content" />
@@ -1586,7 +1597,11 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20180717120700" author="mssavai">
+    <changeSet id="muzima-20190814352400" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='651fc189-127f-4b4c-98f3-121ed5ad182e'</sqlCheck>
+        </preConditions>
+        <comment>Specifies Concept Uuid for for Complex Obs File Content</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="FileContentComplexObs.ConceptUuid" />
             <column name="name" value="Concept Uuid for Complex Obs File Content" />
@@ -1600,7 +1615,9 @@
     </changeSet>
     <changeSet id="expandedcohort-2015-03-19-15:50" author="msavai">
         <preConditions onFail="MARK_RAN">
-            <not><tableExists tableName="expanded_cohort_definition"/></not>
+            <not>
+                <tableExists tableName="expanded_cohort_definition"/>
+            </not>
         </preConditions>
         <comment>
             Creating the expanded cohort table
@@ -1635,7 +1652,9 @@
     </changeSet>
     <changeSet id="expandedcohort-2018-07-20-13:14" author="mssavai">
         <preConditions onFail="MARK_RAN">
-            <not><tableExists tableName="expanded_cohort_update_history"/></not>
+            <not>
+                <tableExists tableName="expanded_cohort_update_history"/>
+            </not>
         </preConditions>
         <comment>
             Creating the expanded cohort update history table
@@ -1710,7 +1729,11 @@
         </addColumn>
     </changeSet>
 
-    <changeSet id="muzima-20180831113800" author="bmokaya">
+    <changeSet id="muzima-20190708143800" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='25e52b76-dbef-4629-aed2-5497a1f8303c'</sqlCheck>
+        </preConditions>
+        <comment>Specifies if smart card feature will be enabled on Android App</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="SHRStatus.isEnabled" />
             <column name="name" value="SHR status" />
@@ -1723,7 +1746,11 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20180831113900" author="samuelowino">
+    <changeSet id="muzima-20190708144000" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='7c5f3458-c240-11e8-a355-529269fb145i'</sqlCheck>
+        </preConditions>
+        <comment>Specifies if GPS tracking feature will be activated on mUzima mobile application</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="GPSStatus.isEnabled" />
             <column name="name" value="GPS status" />
@@ -1737,7 +1764,11 @@
 
     </changeSet>
 
-    <changeSet id="muzima-20190214135300" author="bmokaya">
+    <changeSet id="muzima-20190708144100" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='b7c0c988-3047-11e9-873e-d0577bcb2fe6'</sqlCheck>
+        </preConditions>
+        <comment>Specifies Concept-Uuid for convenient set concept that wraps media complex obs with its metadata</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="MediaWrapperConcept.ConceptUuid" />
             <column name="name" value="Uuid for Media Wrapper Concept" />
@@ -1750,7 +1781,11 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20190214140100" author="bmokaya">
+    <changeSet id="muzima-20190708142100" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='f81e3970-3047-11e9-873e-d0577bcb2fe6'</sqlCheck>
+        </preConditions>
+        <comment>Specifies Concept-Uuid for concept-set other non-coded option for media category</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="MediaCategoryOtherNonCoded.ConceptUuid" />
             <column name="name" value="Concept Uuid for other non-coded category" />
@@ -1763,7 +1798,11 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20190214140300" author="bmokaya">
+    <changeSet id="muzima-20190708146100" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='235e34e6-3048-11e9-873e-d0577bcb2fe6'</sqlCheck>
+        </preConditions>
+        <comment>Specifies Concept-Uuid for media comment concept</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="MediaContentComment.ConceptUuid" />
             <column name="name" value="Concept Uuid for Media Content Comment" />
@@ -1776,7 +1815,11 @@
         </insert>
     </changeSet>
 
-    <changeSet id="muzima-20190220103000" author="bmokaya">
+    <changeSet id="muzima-20190708148100" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from `muzima_setting` WHERE `uuid` ='adbda0a4-34d5-11e9-8667-d0577bcb2fe6'</sqlCheck>
+        </preConditions>
+        <comment>Specifies Concept-Uuid for free text for other-non coded category option</comment>
         <insert tableName="muzima_setting">
             <column name="property" value="MediaCategoryFreeText.ConceptUuid" />
             <column name="name" value="Concept Uuid for Other category text" />
@@ -1789,4 +1832,48 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20190808172200" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_archive_data" columnName="patientUuid"/>
+            </and>
+            <sqlCheck expectedResult="NO">
+                SELECT is_Nullable
+                FROM  INFORMATION_SCHEMA.COLUMNS
+                WHERE table_name='muzima_archive_data'
+                AND column_name='patientUuid'
+            </sqlCheck>
+        </preConditions>
+        <dropNotNullConstraint columnDataType="varchar(255)" columnName="patientUuid" tableName="muzima_archive_data"/>
+    </changeSet>
+
+    <changeSet id="muzima-20190808173000" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_queue_data" columnName="patientUuid"/>
+            </and>
+            <sqlCheck expectedResult="NO">
+                SELECT is_Nullable
+                FROM  INFORMATION_SCHEMA.COLUMNS
+                WHERE table_name='muzima_queue_data'
+                AND column_name='patientUuid'
+            </sqlCheck>
+        </preConditions>
+        <dropNotNullConstraint columnDataType="varchar(255)" columnName="patientUuid" tableName="muzima_queue_data"/>
+    </changeSet>
+
+    <changeSet id="muzima-20190808173600" author="pwangoo">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="muzima_error_data" columnName="patientUuid"/>
+            </and>
+            <sqlCheck expectedResult="NO">
+                SELECT is_Nullable
+                FROM  INFORMATION_SCHEMA.COLUMNS
+                WHERE table_name='muzima_error_data'
+                AND column_name='patientUuid'
+            </sqlCheck>
+        </preConditions>
+        <dropNotNullConstraint columnDataType="varchar(255)" columnName="patientUuid" tableName="muzima_error_data"/>
+    </changeSet>
 </databaseChangeLog>
