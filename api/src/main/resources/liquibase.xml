@@ -1603,5 +1603,20 @@
             <column name="name" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="muzima-20190822212731" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="muzima_setting"/>
+        </preConditions>
+        <comment>
+            Modify muzima setting for Patient Reports
+        </comment>
+        <update tableName="muzima_setting">
+            <column name="setting_data_type" value="BOOLEAN"/>
+            <column name="property" value="PatientReport.isEnabled"/>
+            <column name="name" value="Patient Report Download Status"/>
+            <column name="description" value="Whether patient reports will be downloaded to mobile device"/>
+            <where>uuid = 'aae1a60f-f6ac-4d00-ffff-80270d715114'</where>
+        </update>
+    </changeSet>
 
 </databaseChangeLog>
