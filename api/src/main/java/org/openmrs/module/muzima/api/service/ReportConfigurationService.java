@@ -24,7 +24,6 @@ public interface ReportConfigurationService extends OpenmrsService {
 
     ReportConfiguration getReportConfigurationByUuid(final String uuid);
     
-
     ReportConfiguration saveReportConfiguration(ReportConfiguration reportConfiguration);
 
     void deleteReportConfiguration(ReportConfiguration reportConfiguration);
@@ -34,21 +33,20 @@ public interface ReportConfigurationService extends OpenmrsService {
     Number countReportConfigurations();
 
     /**
-     * Get the total number of the settings in the database with partial matching search term.
-     *
+     * Get the total number of the Report Configurations in the database with partial matching search term.
      *
      * @param search the search term.
-     * @return the total number of the settings in the database.
+     * @return the total number of the Report Configuration in the database.
      */
-    Number countDataSource(final String search);
+    Number countReportConfigurations(final String search);
 
     /**
-     * Get settings with matching search term for a particular page.
+     * Get Report Configuration with matching search term for a particular page.
      *
      * @param search     the search term.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
-     * @return list of all settings with matching search term for a particular page.
+     * @return list of all report configurations with matching search term for a particular page.
      */
     List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize);
 

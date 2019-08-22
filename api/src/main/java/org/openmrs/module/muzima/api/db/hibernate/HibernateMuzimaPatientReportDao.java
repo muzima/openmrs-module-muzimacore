@@ -74,21 +74,18 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     /**
-     * Get the total number of settings with matching search term.
-     *
+     * Get the total number of patient reports with matching search term.
      *
      * @param patientId the search term.
-     * @return total number of settings in the database.
+     * @return total number of patient reports in the database.
      */
     @Override
     @Transactional
     public Number countMuzimaPatientReports(final Integer patientId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
-   
-            Disjunction disjunction = Restrictions.disjunction();
-            disjunction.add(Restrictions.eq("patientId", patientId));
-            criteria.add(disjunction);
-        
+        Disjunction disjunction = Restrictions.disjunction();
+        disjunction.add(Restrictions.eq("patientId", patientId));
+        criteria.add(disjunction);
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.add(Restrictions.eq("status", "completed"));
         criteria.setProjection(Projections.rowCount());
@@ -113,7 +110,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
         return (MuzimaPatientReport) criteria.uniqueResult();
     }
 
-    
     @Override
     public MuzimaPatientReport getLatestPatientReportByPatientId(Integer patientId) {
         Criteria criteria = session().createCriteria(mappedClass);
@@ -123,7 +119,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
         criteria.addOrder(Order.desc("dateCreated"));
         criteria.setMaxResults(1);
         return (MuzimaPatientReport) criteria.uniqueResult();
-        
     }
     
     @Override

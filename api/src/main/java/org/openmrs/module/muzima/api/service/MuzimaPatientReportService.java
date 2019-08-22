@@ -39,21 +39,21 @@ public interface MuzimaPatientReportService extends OpenmrsService {
     Number countMuzimaPatientReports();
 
     /**
-     * Get the total number of the settings in the database with partial matching search term.
+     * Get the total number of the patient reports in the database with partial matching search term.
      *
      *
      * @param patientId the search term.
-     * @return the total number of the settings in the database.
+     * @return the total number of the patient reports in the database.
      */
     Number countMuzimaPatientReports(final Integer patientId);
 
     /**
-     * Get settings with matching search term for a particular page.
+     * Get patient reports with matching search term for a particular page.
      *
      * @param patientId     the search term.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
-     * @return list of all settings with matching search term for a particular page.
+     * @return list of all patient reports with matching search term for a particular page.
      */
     List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber, final Integer pageSize);
 

@@ -28,9 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * TODO: Write brief description about the class here.
- */
 @Controller
 @RequestMapping(value = "/module/muzimacore/reportConfigs.json")
 public class ReportConfigurationsController {
@@ -43,7 +40,7 @@ public class ReportConfigurationsController {
         Map<String, Object> response = new HashMap<String, Object>();
         if (Context.isAuthenticated()) {
             ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
-            int pages = (reportConfigurationService.countDataSource(search).intValue() + pageSize - 1) / pageSize;
+            int pages = (reportConfigurationService.countReportConfigurations(search).intValue() + pageSize - 1) / pageSize;
             List<Object> objects = new ArrayList<Object>();
             for (ReportConfiguration reportConfiguration : reportConfigurationService.getPagedReportConfigurations(search, pageNumber, pageSize)) {
                 objects.add(WebConverter.convertMuzimaReportConfiguration(reportConfiguration));

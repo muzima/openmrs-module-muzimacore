@@ -48,12 +48,12 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
     }
 
     /**
-     * Get reportConfigurations with matching search term for particular page.
+     * Get Report Configurations with matching search term for particular page.
      *
      * @param search     the search term.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
-     * @return list of reportConfigurations for the page.
+     * @return list of Report Configurations for the page.
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -61,8 +61,6 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
         Criteria criteria = session().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
-            //disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
-            //TODO: REALLY this is not how ypu search
             disjunction.add(Restrictions.ilike("reportId", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("cohortId", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
@@ -78,13 +76,6 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
         return criteria.list();
     }
 
-    /**
-     * Get the total number of settings with matching search term.
-     *
-     *
-     * @param search the search term.
-     * @return total number of settings in the database.
-     */
     @Override
     @Transactional
     public Number countReportConfigurations(final String search) {
@@ -98,7 +89,6 @@ public class HibernateReportConfigurationDao implements ReportConfigurationDao {
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
-        
     }
 
     @Override
