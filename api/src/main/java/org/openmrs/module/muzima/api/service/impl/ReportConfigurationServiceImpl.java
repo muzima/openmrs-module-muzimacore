@@ -48,8 +48,6 @@ public class ReportConfigurationServiceImpl extends BaseOpenmrsService implement
         return dao.getReportConfigurationByUuid(uuid);
     }
 
-    
-
     @Override
     public ReportConfiguration saveReportConfiguration(ReportConfiguration reportConfiguration){
         return dao.saveOrUpdateReportConfiguration(reportConfiguration);
@@ -70,26 +68,11 @@ public class ReportConfigurationServiceImpl extends BaseOpenmrsService implement
         return dao.countReportConfigurations();
     }
 
-    /**
-     * Get the total number of the settings in the database with partial matching search term.
-     *
-     *
-     * @param search the search term.
-     * @return the total number of the settings in the database.
-     */
     @Override
-    public Number countDataSource(final String search) {
+    public Number countReportConfigurations(final String search) {
         return dao.countReportConfigurations(search);
     }
 
-    /**
-     * Get settings with matching search term for a particular page.
-     *
-     * @param search     the search term.
-     * @param pageNumber the page number.
-     * @param pageSize   the size of the page.
-     * @return list of all settings with matching search term for a particular page.
-     */
     @Override
     public List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize) {
         return dao.getPagedReportConfigurations(search, pageNumber, pageSize);

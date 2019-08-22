@@ -23,13 +23,6 @@ public interface ReportConfigurationDao {
 
     List<ReportConfiguration> getPagedReportConfigurations(final String search, final Integer pageNumber, final Integer pageSize);
 
-    /**
-     * Get the total number of data source with matching search term.
-     *
-     *
-     * @param search the search term.
-     * @return total number of data source in the database.
-     */
     Number countReportConfigurations(final String search);
 
     Number countReportConfigurations();

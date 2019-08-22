@@ -30,14 +30,16 @@ import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.report.ReportDesign;
 import org.openmrs.module.reporting.report.ReportRequest;
 import org.openmrs.module.reporting.report.definition.ReportDefinition;
-import org.openmrs.module.reporting.report.definition.service.ReportDefinitionService;
 import org.openmrs.module.reporting.report.renderer.RenderingMode;
 import org.openmrs.module.reporting.report.service.ReportService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-/**
- */
 public class GeneratePatientReportsProcessor {
     
     private static Boolean isRunning = false;
@@ -93,21 +95,21 @@ public class GeneratePatientReportsProcessor {
                                 .getLatestPatientReportByPatientIdAndConfigId(patientId,configuration.getId());
 
                         if (latestPatientReport != null) {
-                            if (!"completed".equals(latestPatientReport.getStatus())) {
+                            if (!"COMPLETED".equals(latestPatientReport.getStatus())) {
                                 ReportRequest reportRequest = reportService.getReportRequestByUuid(latestPatientReport.getReportRequestUuid());
 
                                 if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
                                     byte[] byteData = reportService.loadRenderedOutput(reportRequest);
                                     if (byteData != null) {
                                         latestPatientReport.setReportJson(byteData);
-                                        latestPatientReport.setStatus("completed");
+                                        latestPatientReport.setStatus("COMPLETED");
                                         muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
                                     } else {
-                                        latestPatientReport.setStatus("failed");
+                                        latestPatientReport.setStatus("FAILED");
                                         muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
                                     }
                                 } else if ("FAILED".equals(reportRequest.getStatus().toString())) {
-                                    latestPatientReport.setStatus("failed");
+                                    latestPatientReport.setStatus("FAILED");
                                     muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
                                 }
                             }
@@ -135,7 +137,7 @@ public class GeneratePatientReportsProcessor {
                                     muzimaPatientReport.setCohortReportConfigId(configuration.getId());
                                     muzimaPatientReport.setPatientId(patientId);
                                     muzimaPatientReport.setPriority(configuration.getPriority());
-                                    muzimaPatientReport.setStatus("progress");
+                                    muzimaPatientReport.setStatus("PROGRESS");
 
                                     muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
                                 }
@@ -157,7 +159,7 @@ public class GeneratePatientReportsProcessor {
                                 muzimaPatientReport.setCohortReportConfigId(configuration.getId());
                                 muzimaPatientReport.setPatientId(patientId);
                                 muzimaPatientReport.setPriority(configuration.getPriority());
-                                muzimaPatientReport.setStatus("progress");
+                                muzimaPatientReport.setStatus("PROGRESS");
                                 muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
                             } catch (Exception e) {
                                 e.printStackTrace();

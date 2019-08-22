@@ -10,7 +10,6 @@ import org.openmrs.module.muzima.api.service.MuzimaPatientReportService;
 import org.openmrs.module.muzima.model.MuzimaPatientReport;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.webservices.rest.web.RequestContext;
-import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
@@ -38,7 +37,7 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
         List<MuzimaPatientReport> all = service.getAllMuzimaPatientReports();
         return new NeedsPaging<MuzimaPatientReport>(all, context);
     }
-   //ToDo
+
     @Override
     protected PageableResult doSearch(final RequestContext context) {
         HttpServletRequest request = context.getRequest();
@@ -65,14 +64,12 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
         return service.getLatestPatientReportByPatientId(patient.getId());
     }
 
-    //ToDo    
     @Override
     public Object retrieve(String uuid, RequestContext context) throws ResponseException {
         MuzimaPatientReportService service = Context.getService(MuzimaPatientReportService.class);
         return asRepresentation(service.getMuzimaPatientReportByUuid(uuid), context.getRepresentation());
     }
     
-    //ToDo 
     @Override
     public void delete(MuzimaPatientReport muzimaPatientReport, String s, RequestContext requestContext) throws ResponseException {
         throw new ResourceDoesNotSupportOperationException();
@@ -81,7 +78,6 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
     //ToDo 
     @Override
     public void purge(MuzimaPatientReport muzimaPatientReport, RequestContext requestContext) throws ResponseException {
-        
     }
     
     public MuzimaPatientReport newDelegate() {
@@ -99,7 +95,6 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
         return muzimaPatientReport;
     }
     
-    //ToDo 
     public DelegatingResourceDescription getRepresentationDescription(final Representation rep) {
         DelegatingResourceDescription description = null;
 
