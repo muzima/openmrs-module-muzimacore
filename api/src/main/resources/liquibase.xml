@@ -1619,4 +1619,17 @@
         </update>
     </changeSet>
 
+    <changeSet id="muzima-20190418094500" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="MediaTitle.ConceptUuid" />
+            <column name="name" value="Concept Uuid for the title of the media" />
+            <column name="description" value="Specifies Concept-Uuid for the title of the media uploaded" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-04-18T09:45:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="0080ecb8-61a6-11e9-a5ac-d0577bcb2fe6" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
