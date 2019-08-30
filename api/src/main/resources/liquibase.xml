@@ -1854,7 +1854,7 @@
                 AND column_name='patientUuid'
                 AND IS_NULLABLE='NO'
                 GROUP by table_name
-                HAVING count(*) > 1 )
+                HAVING count(*) > 0 )
                 then 1
                 else 0
                 end
@@ -1877,7 +1877,7 @@
                 AND column_name='patientUuid'
                 AND IS_NULLABLE='NO'
                 GROUP by table_name
-                HAVING count(*) > 1 )
+                HAVING count(*) > 0 )
                 then 1
                 else 0
                 end
@@ -1900,7 +1900,7 @@
                 AND column_name='patientUuid'
                 AND IS_NULLABLE='NO'
                 GROUP by table_name
-                HAVING count(*) > 1 )
+                HAVING count(*) > 0 )
                 then 1
                 else 0
                 end
