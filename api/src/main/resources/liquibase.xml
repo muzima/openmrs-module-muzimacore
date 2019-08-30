@@ -1536,11 +1536,19 @@
             <and>
                 <columnExists tableName="muzima_notification_data" columnName="patient"/>
             </and>
-            <sqlCheck expectedResult="NO">
-                SELECT is_Nullable
+            <sqlCheck expectedResult="1">
+                SELECT
+                CASE WHEN EXISTS(
+                SELECT count(*)
                 FROM  INFORMATION_SCHEMA.COLUMNS
                 WHERE table_name='muzima_notification_data'
                 AND column_name='patient'
+                AND IS_NULLABLE='NO'
+                GROUP by table_name
+                HAVING count(*) > 1 )
+                then 1
+                else 0
+                end
             </sqlCheck>
         </preConditions>
         <dropNotNullConstraint columnDataType="int" columnName="patient" tableName="muzima_notification_data"/>
@@ -1837,12 +1845,20 @@
             <and>
                 <columnExists tableName="muzima_archive_data" columnName="patientUuid"/>
             </and>
-            <sqlCheck expectedResult="NO">
-                SELECT is_Nullable
+            <sqlCheck expectedResult="1">
+                SELECT
+                CASE WHEN EXISTS(
+                SELECT count(*)
                 FROM  INFORMATION_SCHEMA.COLUMNS
                 WHERE table_name='muzima_archive_data'
                 AND column_name='patientUuid'
-            </sqlCheck>
+                AND IS_NULLABLE='NO'
+                GROUP by table_name
+                HAVING count(*) > 1 )
+                then 1
+                else 0
+                end
+               </sqlCheck>
         </preConditions>
         <dropNotNullConstraint columnDataType="varchar(255)" columnName="patientUuid" tableName="muzima_archive_data"/>
     </changeSet>
@@ -1852,12 +1868,20 @@
             <and>
                 <columnExists tableName="muzima_queue_data" columnName="patientUuid"/>
             </and>
-            <sqlCheck expectedResult="NO">
-                SELECT is_Nullable
+            <sqlCheck expectedResult="1">
+                SELECT
+                CASE WHEN EXISTS(
+                SELECT count(*)
                 FROM  INFORMATION_SCHEMA.COLUMNS
                 WHERE table_name='muzima_queue_data'
                 AND column_name='patientUuid'
-            </sqlCheck>
+                AND IS_NULLABLE='NO'
+                GROUP by table_name
+                HAVING count(*) > 1 )
+                then 1
+                else 0
+                end
+               </sqlCheck>
         </preConditions>
         <dropNotNullConstraint columnDataType="varchar(255)" columnName="patientUuid" tableName="muzima_queue_data"/>
     </changeSet>
@@ -1867,12 +1891,20 @@
             <and>
                 <columnExists tableName="muzima_error_data" columnName="patientUuid"/>
             </and>
-            <sqlCheck expectedResult="NO">
-                SELECT is_Nullable
+            <sqlCheck expectedResult="1">
+                SELECT
+                CASE WHEN EXISTS(
+                SELECT count(*)
                 FROM  INFORMATION_SCHEMA.COLUMNS
                 WHERE table_name='muzima_error_data'
                 AND column_name='patientUuid'
-            </sqlCheck>
+                AND IS_NULLABLE='NO'
+                GROUP by table_name
+                HAVING count(*) > 1 )
+                then 1
+                else 0
+                end
+             </sqlCheck>
         </preConditions>
         <dropNotNullConstraint columnDataType="varchar(255)" columnName="patientUuid" tableName="muzima_error_data"/>
     </changeSet>
