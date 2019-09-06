@@ -109,6 +109,19 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
      * @return all saved data.
      */
     @Override
+    public List<T> getAllDataByFormDataUuid(final String formDataUuid) {
+        List<T> list = new ArrayList<T>();
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("formDataUuid", formDataUuid));
+        return criteria.list();
+    }
+
+    /**
+     * Return all saved data.
+     *
+     * @return all saved data.
+     */
+    @Override
     public List<T> getAllData() {
         List<T> list = new ArrayList<T>();
         for (T data : getAll()) {
