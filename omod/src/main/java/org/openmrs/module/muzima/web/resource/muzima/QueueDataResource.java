@@ -169,6 +169,7 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
         delegatingResourceDescription.addRequiredProperty("provider");
         delegatingResourceDescription.addRequiredProperty("formName");
         delegatingResourceDescription.addRequiredProperty("patientUuid");
+        delegatingResourceDescription.addProperty("formDataUuid");
         return delegatingResourceDescription;
     }
 
@@ -271,6 +272,11 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
         queueData.setLocation(location);
         queueData.setProvider(provider);
         queueData.setPatientUuid(patientUuid);
+
+        Object formDataUuid = propertiesToCreate.get("formDataUuid");
+        if(formDataUuid != null){
+            queueData.setFormDataUuid(formDataUuid.toString());
+        }
 
         propertiesToCreate.put("location",location);
         propertiesToCreate.put("provider",provider);

@@ -7,6 +7,7 @@ import org.openmrs.module.muzima.model.ArchiveData;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
+import org.openmrs.module.muzima.model.FormDataStatus;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.model.QueueData;
 
@@ -177,6 +178,12 @@ public interface DataService extends OpenmrsService {
      * @should return null when no archive data with matching uuid.
      */
     ArchiveData getArchiveDataByUuid(final String uuid);
+
+    List<ArchiveData> getArchiveDataByFormDataUuid(final String formDataUuid);
+
+    List<ErrorData> getErrorDataByFormDataUuid(final String formDataUuid);
+
+    List<QueueData> getQueueDataByFormDataUuid(final String formDataUuid);
 
     /**
      * Return all saved archive data.
@@ -480,4 +487,5 @@ public interface DataService extends OpenmrsService {
      */
     List<QueueData> mergeDuplicatePatient(@NotNull final String errorDataUuid, @NotNull final String existingPatientUuid, @NotNull String payload);
 
+    FormDataStatus getFormDataStatusByFormDataUuid(String formDataUuid);
 }
