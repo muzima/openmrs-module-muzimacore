@@ -228,6 +228,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      * @param parentObs - Obs
      * @param obsObject - Object
      */
+
     private void processObs(final Encounter encounter, final Obs parentObs, final Object obsObject) {
         if (obsObject instanceof JSONObject) {
             JSONObject obsJsonObject = (JSONObject) obsObject;
@@ -235,10 +236,9 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                 String[] conceptElements = StringUtils.split(conceptQuestion, "\\^");
                 if (conceptElements.length < 3)
                     continue;
-                int conceptId = Integer.parseInt(conceptElements[0]);
-                Concept concept = Context.getConceptService().getConcept(conceptId);
+                Concept concept = getConceptByUuidOrId(conceptElements[0]);
                 if (concept == null) {
-                    queueProcessorException.addException(new Exception("Unable to find Concept for Question with ID: " + conceptId));
+                    queueProcessorException.addException(new Exception("Unable to find Concept for Question with ID: " + conceptElements[0]));
                 } else {
                     if (concept.isSet()) {
                         Obs obsGroup = new Obs();
@@ -313,10 +313,14 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             obs.setValueDatetime(parseDate(value));
         } else if (concept.getDatatype().isCoded() || concept.getDatatype().isBoolean() ) {
             String[] valueCodedElements = StringUtils.split(value, "\\^");
-            int valueCodedId = Integer.parseInt(valueCodedElements[0]);
-            Concept valueCoded = Context.getConceptService().getConcept(valueCodedId);
+
+            Concept valueCoded = null;
+            if(valueCodedElements.length >= 3){
+                valueCoded = getConceptByUuidOrId(valueCodedElements[0]);
+            }
+
             if (valueCoded == null) {
-                queueProcessorException.addException(new Exception("Unable to find concept for value coded with id: " + valueCodedId));
+                queueProcessorException.addException(new Exception("Unable to find concept for value coded with identifier: " + valueCodedElements[0]));
             } else {
                 obs.setValueCoded(valueCoded);
             }
@@ -329,6 +333,17 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         if (parentObs != null) {
             parentObs.addGroupMember(obs);
         }
+    }
+
+    private Concept getConceptByUuidOrId(String uuidOrId){
+        Concept concept;
+        if (uuidOrId.matches("-?(0|[1-9]\\d*)")) {
+            int conceptId = Integer.parseInt(uuidOrId);
+            concept = Context.getConceptService().getConcept(conceptId);
+        } else {
+            concept = Context.getConceptService().getConceptByUuid(uuidOrId);
+        }
+        return concept;
     }
 
     /**
