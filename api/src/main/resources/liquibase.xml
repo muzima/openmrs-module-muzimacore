@@ -1642,7 +1642,7 @@
         </comment>
         <addColumn tableName="muzima_queue_data">
             <column name="form_data_uuid" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
         </addColumn>
     </changeSet>
@@ -1658,7 +1658,7 @@
         </comment>
         <addColumn tableName="muzima_error_data">
             <column name="form_data_uuid" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
         </addColumn>
     </changeSet>
@@ -1674,7 +1674,7 @@
         </comment>
         <addColumn tableName="muzima_archive_data">
             <column name="form_data_uuid" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
         </addColumn>
     </changeSet>
