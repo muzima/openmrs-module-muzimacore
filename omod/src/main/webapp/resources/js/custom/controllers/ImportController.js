@@ -75,7 +75,7 @@ function ImportCtrl($scope, FileUploadService, FormService, _, $location, $route
             showErrorMessage("The form name already exists !! Please use some other name.");
         });
     };
-mm
+
     $scope.getURL = function (formType) {
         if (formType == 'html') return 'html/upload.form';
         if (formType == 'odk') return 'odk/upload.form';

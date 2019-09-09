@@ -337,7 +337,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
 
     private Concept getConceptByUuidOrId(String uuidOrId){
         Concept concept;
-        if (uuidOrId.matches("-?(0|[1-9]\\d*)")) {
+        if (StringUtils.isNumeric(uuidOrId)) {
             int conceptId = Integer.parseInt(uuidOrId);
             concept = Context.getConceptService().getConcept(conceptId);
         } else {
