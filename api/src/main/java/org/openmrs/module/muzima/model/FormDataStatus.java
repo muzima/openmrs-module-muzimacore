@@ -7,7 +7,6 @@ public class FormDataStatus extends BaseOpenmrsData {
     private Integer id;
     private String status;
 
-
     /**
      * @return id - The unique Identifier for the object
      */

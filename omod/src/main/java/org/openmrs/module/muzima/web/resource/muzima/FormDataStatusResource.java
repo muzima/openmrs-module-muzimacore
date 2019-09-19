@@ -35,11 +35,11 @@ public class FormDataStatusResource  extends DataDelegatingCrudResource<FormData
     public FormDataStatus newDelegate() {
         return new FormDataStatus();
     }
+
     @Override
     public FormDataStatus save(final FormDataStatus delegate) {
         return delegate;
     }
-
 
     public String getDisplayString(final FormDataStatus formDataStatus) {
         StringBuilder builder = new StringBuilder();

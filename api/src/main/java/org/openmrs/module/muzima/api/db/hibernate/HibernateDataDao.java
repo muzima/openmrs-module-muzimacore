@@ -104,9 +104,8 @@ public abstract class HibernateDataDao<T extends Data> extends HibernateSingleCl
     }
 
     /**
-     * Return all saved data.
-     *
-     * @return all saved data.
+     * {@inheritDoc}
+     * @see DataDao#getAllDataByFormDataUuid(String)
      */
     @Override
     public List<T> getAllDataByFormDataUuid(final String formDataUuid) {
