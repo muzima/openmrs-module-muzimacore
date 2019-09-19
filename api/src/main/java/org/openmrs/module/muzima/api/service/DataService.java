@@ -179,10 +179,34 @@ public interface DataService extends OpenmrsService {
      */
     ArchiveData getArchiveDataByUuid(final String uuid);
 
+    /**
+     * Return all archived data with the given form data uuid.
+     *
+     * @param formDataUuid the form data uuid
+     * @return the list of archived data with the matching formDataUuid
+     * @should return the list of archived data with the matching formDataUuid
+     * @should return empty list  when no archived data with matching formDataUuid
+     */
     List<ArchiveData> getArchiveDataByFormDataUuid(final String formDataUuid);
 
+    /**
+     * Return all error data with the given form data uuid.
+     *
+     * @param formDataUuid the form data uuid
+     * @return the list of error data with the matching formDataUuid
+     * @should return the list of error data with the matching formDataUuid
+     * @should return empty list  when no error data with matching formDataUuid
+     */
     List<ErrorData> getErrorDataByFormDataUuid(final String formDataUuid);
 
+    /**
+     * Return all queue data with the given form data uuid.
+     *
+     * @param formDataUuid the form data uuid
+     * @return the list of queue data with the matching formDataUuid
+     * @should return the list of queue data with the matching formDataUuid
+     * @should return empty list  when no queue data with matching formDataUuid
+     */
     List<QueueData> getQueueDataByFormDataUuid(final String formDataUuid);
 
     /**
@@ -482,10 +506,20 @@ public interface DataService extends OpenmrsService {
      * to reflect the duplicate patient's uuid already in the system. The payload is re-queued with descriminator "json-update-demographics" instead
      * of the "json-registration". All ErrorData records bearing the patient UUID in error are also fetched updated and re-queued.
      * @param errorDataUuid String - UUID of ErrorData record with duplicate patient details submitted for registration.
-     * @param formData  String - payload with demographic information to be updated to the existing patient.
+     * @param existingPatientUuid  String - uuid for the existing patient.
+     * @param payload  String - payload with demographic information to be updated to the existing patient.
      * @return List of QueueData - A list of newly submitted QueuedData.
      */
     List<QueueData> mergeDuplicatePatient(@NotNull final String errorDataUuid, @NotNull final String existingPatientUuid, @NotNull String payload);
-
+    /**
+     * Get formDataStatus for form data with given form data uuid.
+     *
+     * @param formDataUuid     the form data uuid.
+     * @return the formDataStatus for form data with given form data uuid
+     * @should return with status 'archived' if form data was archived
+     * @should return with status 'errored' if form data was placed on error queue
+     * @should return with status 'queued' if form data is on queue waiting to be processed
+     * @should return with status 'unknown' if form data with given formDataUuid cannot be traced
+     */
     FormDataStatus getFormDataStatusByFormDataUuid(String formDataUuid);
 }

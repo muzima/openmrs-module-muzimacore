@@ -771,8 +771,6 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
         } else {
             formDataStatus.setStatus("unknown");
         }
-        System.out.println("formDataUuid="+formDataStatus.getUuid()
-                +"Status="+formDataStatus.getStatus());
         return formDataStatus;
     }
 }

@@ -228,7 +228,6 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      * @param parentObs - Obs
      * @param obsObject - Object
      */
-
     private void processObs(final Encounter encounter, final Obs parentObs, final Object obsObject) {
         if (obsObject instanceof JSONObject) {
             JSONObject obsJsonObject = (JSONObject) obsObject;
