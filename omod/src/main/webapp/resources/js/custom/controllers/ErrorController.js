@@ -133,23 +133,35 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
     $('#btnValidate').click(function(){
         $('#wait').show();
         $('.messages').hide();
-        var jsonDataToValidate = $('#editJson').val();
-        $data.validateData($scope.uuid,jsonDataToValidate).
-        then(function (result) {
-            $scope.ul_li_Data = '';
-            $scope.to_ul(result.data,'treeError');
-            //IF THERE ARE NO VALIDATION ERRORS THEN ENABLE UPDATE BUTTON
-            if(Object.keys(result.data.Errors).length == 0){
-                $( "#btnUpdate" ).prop( "disabled", false );
-                $scope.isValid = true;
-            }
-            else{
-                $scope.isValid = false;
-                $('html,body').animate({scrollTop: $('#errorList').offset().top},1000);
-            }
-            $('.messages').show();
+        try{
+            var jsonDataToValidate = $('#editJson').val();
+            //parse to check if payload is valid. If invalid this will be caught as an exception
+            JSON.parse(jsonDataToValidate);
+            $data.validateData($scope.uuid,jsonDataToValidate).
+            then(function (result) {
+                $scope.ul_li_Data = '';
+                $scope.to_ul(result.data,'treeError');
+                //IF THERE ARE NO VALIDATION ERRORS THEN ENABLE UPDATE BUTTON
+                if(Object.keys(result.data.Errors).length == 0){
+                    $( "#btnUpdate" ).prop( "disabled", false );
+                    $scope.isValid = true;
+                }
+                else{
+                    $scope.isValid = false;
+                    $('html,body').animate({scrollTop: $('#errorList').offset().top},1000);
+                }
+                $('.messages').show();
+                $('#wait').hide();
+            });
+        } catch (e){
             $('#wait').hide();
-        });
+            var jsonFormDataError = JSON.parse('{"Errors":{"001":"Invalid Json Payload"}}');
+            $scope.isValid = false;
+            $('html,body').animate({scrollTop: $('#errorList').offset().top},1000);
+            $scope.ul_li_Data = '';
+            $scope.to_ul(jsonFormDataError,'treeError');
+            $('.messages').show();
+        }
     });
 
     $('#btnUpdate').click(function(){
