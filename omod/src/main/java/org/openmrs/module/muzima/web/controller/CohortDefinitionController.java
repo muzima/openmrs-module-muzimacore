@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -48,12 +49,19 @@ public class CohortDefinitionController {
             boolean isScheduled = (Boolean) map.get("isScheduledForExecution");
             boolean isMemberAdditionEnabled = (Boolean) map.get("isMemberAdditionEnabled");
             boolean isMemberRemovalEnabled = (Boolean) map.get("isMemberRemovalEnabled");
+            String retireReason = (String) map.get("retireReason");
 
             CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
 
             CohortDefinitionData cohortDefinitionData;
             if (StringUtils.isNotBlank(uuid)) {
                 cohortDefinitionData = expandedCohortDataService.getCohortDefinitionDataByUuid(uuid);
+                if (StringUtils.isNotBlank(retireReason)) {
+                    cohortDefinitionData.setVoided(true);
+                    cohortDefinitionData.setVoidReason(retireReason);
+                    cohortDefinitionData.setVoidedBy(Context.getAuthenticatedUser());
+                    cohortDefinitionData.setDateVoided(new Date());
+                }
             } else {
                 cohortDefinitionData = new CohortDefinitionData();
             }
