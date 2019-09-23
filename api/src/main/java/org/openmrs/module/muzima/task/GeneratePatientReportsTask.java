@@ -14,6 +14,10 @@
 package org.openmrs.module.muzima.task;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.Module;
+import org.openmrs.module.ModuleFactory;
+import org.openmrs.module.muzima.api.service.MuzimaSettingService;
+import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.scheduler.tasks.AbstractTask;
 
 /**
@@ -23,7 +27,12 @@ public class GeneratePatientReportsTask extends AbstractTask {
     private GeneratePatientReportsProcessor processor;
 
     public GeneratePatientReportsTask() {
-        this.processor = new GeneratePatientReportsProcessor();
+        MuzimaSettingService muzimaSettingService = Context.getService(MuzimaSettingService.class);
+        MuzimaSetting muzimaSetting = muzimaSettingService.getMuzimaSettingByProperty("PatientReport.isEnabled");
+        Module module = ModuleFactory.getModuleById("reporting");
+        if (module != null && module.isStarted() && muzimaSetting.getValueBoolean()) {
+            this.processor = new GeneratePatientReportsProcessor();
+        }
     }
 
     /**
@@ -31,8 +40,10 @@ public class GeneratePatientReportsTask extends AbstractTask {
      */
     @Override
     public void execute() {
-        Context.openSession();
-        processor.generateReports();
-        Context.closeSession();
+        if (processor != null) {
+            Context.openSession();
+            processor.generateReports();
+            Context.closeSession();
+        }
     }
 }
