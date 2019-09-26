@@ -16,6 +16,7 @@ package org.openmrs.module.muzima.api.service;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MuzimaSettingService extends OpenmrsService {
@@ -41,7 +42,7 @@ public interface MuzimaSettingService extends OpenmrsService {
      * @param search the search term.
      * @return the total number of the settings in the database.
      */
-    Number countMuzimaSettings(final String search);
+    Number countMuzimaSettings(final String search, final Date syncdate);
 
     /**
      * Get settings with matching search term for a particular page.
@@ -51,6 +52,6 @@ public interface MuzimaSettingService extends OpenmrsService {
      * @param pageSize   the size of the page.
      * @return list of all settings with matching search term for a particular page.
      */
-    List<MuzimaSetting> getPagedSettings(final String search, final Integer pageNumber, final Integer pageSize);
+    List<MuzimaSetting> getPagedSettings(final String search, final Date syncdate, final Integer pageNumber, final Integer pageSize);
 
 }
