@@ -22,7 +22,7 @@ public interface MuzimaSettingDao {
 
     List<MuzimaSetting> getAll();
 
-    List<MuzimaSetting> getPagedSettings(final String search, final Date syncdate, final Integer pageNumber, final Integer pageSize);
+    List<MuzimaSetting> getPagedSettings(final String search, final Date syncDate, final Integer pageNumber, final Integer pageSize);
 
     /**
      * Get the total number of data source with matching search term.
