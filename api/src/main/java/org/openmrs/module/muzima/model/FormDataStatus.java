@@ -7,6 +7,14 @@ public class FormDataStatus extends BaseOpenmrsData {
     private Integer id;
     private String status;
 
+
+    public FormDataStatus(){
+        super();
+    }
+
+    public FormDataStatus(String formDataUuid){
+        setUuid(formDataUuid);
+    }
     /**
      * @return id - The unique Identifier for the object
      */
@@ -21,14 +29,6 @@ public class FormDataStatus extends BaseOpenmrsData {
     @Override
     public void setId(final Integer id) {
         this.id = id;
-    }
-
-    public FormDataStatus(){
-        super();
-    }
-
-    public FormDataStatus(String formDataUuid){
-        setUuid(formDataUuid);
     }
 
     public String getStatus() {
