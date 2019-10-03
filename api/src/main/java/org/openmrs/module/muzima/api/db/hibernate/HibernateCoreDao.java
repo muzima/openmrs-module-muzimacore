@@ -76,8 +76,9 @@ public class HibernateCoreDao implements CoreDao {
                     Restrictions.and(
                             Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
                             Restrictions.isNotNull("dateCreated"))));
+        } else {
+            criteria.add(Restrictions.eq("voided", false));
         }
-        criteria.add(Restrictions.eq("voided", false));
 
         criteria.setMaxResults(size);
         criteria.setFirstResult(startIndex);
@@ -106,8 +107,9 @@ public class HibernateCoreDao implements CoreDao {
                     Restrictions.and(
                             Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
                             Restrictions.isNotNull("dateCreated"))));
+        } else {
+            criteria.add(Restrictions.eq("voided", false));
         }
-        criteria.add(Restrictions.eq("voided", false));
 
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
@@ -138,8 +140,9 @@ public class HibernateCoreDao implements CoreDao {
                     Restrictions.and(
                             Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
                             Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
+        } else {
+            criteria.add(Restrictions.eq("voided", false));
         }
-        criteria.add(Restrictions.eq("voided", false));
 
         criteria.setMaxResults(size);
         criteria.setFirstResult(startIndex);
@@ -169,8 +172,9 @@ public class HibernateCoreDao implements CoreDao {
                     Restrictions.and(
                             Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
                             Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
+        } else {
+            criteria.add(Restrictions.eq("voided", false));
         }
-        criteria.add(Restrictions.eq("voided", false));
 
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();

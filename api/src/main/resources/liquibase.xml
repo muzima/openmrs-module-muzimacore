@@ -1631,5 +1631,52 @@
             <column name="uuid" value="0080ecb8-61a6-11e9-a5ac-d0577bcb2fe6" />
         </insert>
     </changeSet>
+    <changeSet id="muzima-201909041456" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_queue_data" columnName="form_data_uuid"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the form_data_uuid column to muzima_queue_data table
+        </comment>
+        <addColumn tableName="muzima_queue_data">
+            <column name="form_data_uuid" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-201909041500" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_error_data" columnName="form_data_uuid"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the form_data_uuid column to muzima_error_data table
+        </comment>
+        <addColumn tableName="muzima_error_data">
+            <column name="form_data_uuid" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-201909041505" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="muzima_archive_data" columnName="form_data_uuid"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the form_data_uuid column to muzima_archive_data table
+        </comment>
+        <addColumn tableName="muzima_archive_data">
+            <column name="form_data_uuid" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
