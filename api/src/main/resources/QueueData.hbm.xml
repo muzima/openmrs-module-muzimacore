@@ -35,6 +35,8 @@
         <property name="formName" type="java.lang.String" column="form_name" not-null="false"/>
 
         <property name="patientUuid" type="java.lang.String" column="patient_uuid" not-null="false"/>
+
+        <property name="formDataUuid" type="java.lang.String" column="form_data_uuid" not-null="false"/>
     </class>
 
 </hibernate-mapping>

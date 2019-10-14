@@ -51,6 +51,7 @@ public class SourceController {
             String uuid = (String) map.get("uuid");
             String name = (String) map.get("name");
             String description = (String) map.get("description");
+            String retireReason = (String) map.get("retireReason");
             DataService dataService = Context.getService(DataService.class);
             if (StringUtils.isNotBlank(uuid)) {
                 DataSource dataSource = dataService.getDataSourceByUuid(uuid);
@@ -60,7 +61,7 @@ public class SourceController {
                     dataService.saveDataSource(dataSource);
                 } else {
                     dataSource.setRetired(true);
-                    dataSource.setRetireReason("Deleting a data source object!");
+                    dataSource.setRetireReason(retireReason);
                     dataService.saveDataSource(dataSource);
                 }
             } else {
