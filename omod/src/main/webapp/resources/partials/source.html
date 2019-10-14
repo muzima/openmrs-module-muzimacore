@@ -23,7 +23,7 @@
                 <span></span>
             </div>
             <div ng-switch-when="edit">
-                <form id="consult">
+                <form id="consult" name="consult">
                     <div class="row">
                         <input class="col-lg-10 form-control" placeholder="Source name ..." type="text" ng-model="source.name">
                     </div>
@@ -35,8 +35,12 @@
                         <input class="col-lg-10 form-control" placeholder="Source uuid ..." type="text" disabled="" ng-model="source.uuid">
                     </div>
                     <div class="row">
+                        <input class="col-lg-10 form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="source.retireReason" ng-show="retire_source" ng-required="retire_source"/>
+                    </div>
+                    <div class="row">
                         <button type="submit" ng-click="save(source)" class="btn btn-success">Save</button>
-                        <button ng-show="source.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>
+                        <button ng-click="toggleRetireSource(source)" ng-show="!retire_source && source.uuid" class="btn btn-danger">Retire</button>
+                        <button type="submit" ng-show="retire_source" ng-click="consult.$valid && delete(source)" class="btn btn-danger">Retire</button>
                         <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
                     </div>
                     <span></span>

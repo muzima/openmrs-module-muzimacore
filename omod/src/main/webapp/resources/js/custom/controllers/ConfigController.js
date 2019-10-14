@@ -14,6 +14,8 @@ function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
     $scope.extractedConcepts = [];
     $scope.extractedNotUsedConcepts = [];
     $scope.configConcepts = [];
+    $scope.retire_config = false;
+    $scope.retire_reason = false;
 
     // initialize the view to be read only
     $scope.mode = "view";
@@ -80,11 +82,19 @@ function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
         return angular.toJson(configJsonString);
     };
 
-    $scope.delete = function () {
-        $configs.deleteConfiguration($scope.uuid).
-        then(function () {
-            $location.path("/configs");
-        })
+    $scope.toggleRetireConfig = function(){
+        $scope.retire_config = true;
+    };
+
+    $scope.delete = function (config) {
+        if(!config.retireReason){
+             $scope.config.retireReasonError = true;
+        }else{
+            $configs.deleteConfiguration(config.uuid,config.retireReason).
+            then(function () {
+                $location.path("/configs");
+            });
+        }
     };
 
     $scope.edit = function () {

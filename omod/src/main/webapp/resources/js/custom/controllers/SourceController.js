@@ -3,6 +3,7 @@ function SourceCtrl($scope, $routeParams, $location, $data) {
     $scope.source = {};
     // initialize the view to be read only
     $scope.mode = "view";
+    $scope.retire_source = false;
     $scope.uuid = $routeParams.uuid;
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
@@ -38,8 +39,12 @@ function SourceCtrl($scope, $routeParams, $location, $data) {
         })
     };
 
-    $scope.delete = function () {
-        $data.deleteSource($scope.uuid).
+    $scope.toggleRetireSource = function(source){
+        $scope.retire_source = true;
+    };
+
+    $scope.delete = function (source) {
+        $data.deleteSource(source.uuid,source.retireReason).
         then(function () {
             $location.path("/sources");
         })
