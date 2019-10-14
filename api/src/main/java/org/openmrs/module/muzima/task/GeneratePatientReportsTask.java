@@ -30,7 +30,7 @@ public class GeneratePatientReportsTask extends AbstractTask {
         MuzimaSettingService muzimaSettingService = Context.getService(MuzimaSettingService.class);
         MuzimaSetting muzimaSetting = muzimaSettingService.getMuzimaSettingByProperty("PatientReport.isEnabled");
         Module module = ModuleFactory.getModuleById("reporting");
-        if (module != null && module.isStarted() && muzimaSetting.getValueBoolean()) {
+        if(module != null && module.isStarted() && muzimaSetting.getValueBoolean()) {
             this.processor = new GeneratePatientReportsProcessor();
         }
     }
@@ -40,7 +40,7 @@ public class GeneratePatientReportsTask extends AbstractTask {
      */
     @Override
     public void execute() {
-        if (processor != null) {
+        if(processor != null) {
             Context.openSession();
             processor.generateReports();
             Context.closeSession();
