@@ -43,7 +43,6 @@ public class JsonUtils {
 
     private static final String DATE_PATTERN = "dd-MM-yyyy";
 
-
     /**
      * Write boolean value into the json object. The method will only write the boolean value if the object passed
      * as the first argument is an instance of <code>{@link net.minidev.json.JSONObject}</code>.

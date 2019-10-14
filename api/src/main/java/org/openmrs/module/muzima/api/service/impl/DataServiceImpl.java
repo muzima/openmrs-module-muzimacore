@@ -31,11 +31,13 @@ import org.openmrs.module.muzima.model.ArchiveData;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
+import org.openmrs.module.muzima.model.FormDataStatus;
 import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.util.HandlerUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -323,6 +325,20 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
         return getArchiveDataDao().getDataByUuid(uuid);
     }
 
+    @Override
+    public List<ArchiveData> getArchiveDataByFormDataUuid(final String formDataUuid){
+        return getArchiveDataDao().getAllDataByFormDataUuid(formDataUuid);
+    }
+
+    @Override
+    public List<ErrorData> getErrorDataByFormDataUuid(final String formDataUuid){
+        return getErrorDataDao().getAllDataByFormDataUuid(formDataUuid);
+    }
+
+    @Override
+    public List<QueueData> getQueueDataByFormDataUuid(final String formDataUuid){
+        return getQueueDataDao().getAllDataByFormDataUuid(formDataUuid);
+    }
     /**
      * Return all saved archive data.
      *
@@ -742,5 +758,19 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
             registrationData.setAssignedUuid(permanentUuid);
             registrationDataService.saveRegistrationData(registrationData);
         }
+    }
+
+    public FormDataStatus getFormDataStatusByFormDataUuid(String formDataUuid){
+        FormDataStatus formDataStatus = new FormDataStatus(formDataUuid);
+        if(getArchiveDataByFormDataUuid(formDataUuid).size()>0){
+            formDataStatus.setStatus("archived");
+        } else if (getErrorDataByFormDataUuid(formDataUuid).size()>0){
+            formDataStatus.setStatus("errored");
+        } else if(getQueueDataByFormDataUuid(formDataUuid).size()>0){
+            formDataStatus.setStatus("queued");
+        } else {
+            formDataStatus.setStatus("unknown");
+        }
+        return formDataStatus;
     }
 }

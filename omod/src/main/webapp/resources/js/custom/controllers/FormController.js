@@ -7,6 +7,7 @@ function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
         $scope.xformToUpload = "";
         $scope.htmlFormToUpload = "";
         $scope.fetchingForms = false;
+        $scope.retireReasonError = false;
 
         getTags().then(setTags);
         getForms().then(setForms);
@@ -91,6 +92,9 @@ function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
 
 
     $scope.remove = function (muzimaform) {
+       if(!muzimaform.retireReason){
+         $scope.retireReasonError = true;
+       }else{
         var form = muzimaform.form;
         FormService.retire(muzimaform.form, muzimaform.retireReason || '')
             .then(function () {
@@ -101,6 +105,7 @@ function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
                     }
                 }
             });
+       }
     };
 
     $scope.saveTag = function (muzimaform) {
