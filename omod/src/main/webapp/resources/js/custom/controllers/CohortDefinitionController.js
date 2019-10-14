@@ -82,12 +82,22 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
             })
     };
 
-    $scope.delete = function () {
-        $cohortDefinitionService.deleteSource($scope.uuid).
+    $scope.toggleRetireCohortDefinition = function(){
+        $scope.retireCohortDefinition = true;
+    };
+
+    $scope.delete = function (cohortDefinition) {
+         if(cohortDefinition.isScheduledForExecution===undefined){
+             cohortDefinition.isScheduledForExecution=false;
+         }
+         $cohortDefinitionService.deleteCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
+            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled,
+            cohortDefinition.retireReason).
             then(function () {
                 $location.path("/cohortDefinitions");
-            })
+            });
     };
+
     $scope.cohortselected = function(cohortDefinition,cohorts){
                 angular.forEach(cohorts,function(cohort,key){
                     if(cohortDefinition.cohortid==cohort.id){

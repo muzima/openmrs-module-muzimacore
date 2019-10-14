@@ -41,7 +41,7 @@
                 <span></span>
             </div>
             <div ng-switch-when="edit">
-                <form id="definition">
+                <form id="definition" name="definition">
                     <div class="row col-lg-8">
                         <select class="form-control" ng-model="cohortDefinition.cohortid" ng-change="cohortselected(cohortDefinition,cohorts)"
                                  ng-disabled="cohortDefinition.uuid" ng-options="cohort.id as cohort.name for cohort in cohorts">
@@ -73,7 +73,12 @@
                         </div>
                     </div>
                     <div class="row col-lg-8">
+                        <input class="col-lg-8 form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="cohortDefinition.retireReason" ng-show="retireCohortDefinition" ng-required="retireCohortDefinition"/>
+                    </div>
+                    <div class="row col-lg-8">
                         <button type="submit" ng-disabled="definitionsavingdisabled(cohortDefinition.definition)" ng-click="save(cohortDefinition)" class="btn btn-primary">Save</button>
+                        <button ng-click="toggleRetireCohortDefinition()" ng-show="!retireCohortDefinition && cohortDefinition.uuid" class="btn btn-danger">Retire</button>
+                        <button type="submit" ng-show="retireCohortDefinition" ng-click="definition.$valid && delete(cohortDefinition)" class="btn btn-danger">Retire</button>
                         <button type="submit" ng-click="cancel()" class="btn btn-warning">Cancel</button>
                     </div>
                     <span></span>
