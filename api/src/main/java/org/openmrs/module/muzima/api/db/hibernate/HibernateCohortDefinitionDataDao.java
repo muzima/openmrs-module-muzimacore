@@ -51,6 +51,7 @@ public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao
 
     public List<CohortDefinitionData> getAll(){
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("voided", Boolean.FALSE));
         return (List<CohortDefinitionData>) criteria.list();
     }
 
@@ -62,6 +63,7 @@ public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao
         if (pageSize != null) {
             criteria.setMaxResults(pageSize);
         }
+        criteria.add(Restrictions.eq("voided", Boolean.FALSE));
         return (List<CohortDefinitionData>) criteria.list();
     }
 

@@ -3,7 +3,6 @@ package org.openmrs.module.muzima.api.service.impl;
 import org.dom4j.DocumentException;
 import org.javarosa.xform.parse.ValidationMessages;
 import org.javarosa.xform.parse.XFormParser;
-import org.openmrs.EncounterType;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
@@ -120,6 +119,9 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         if (isFormExists(formUUID)) {
             MuzimaForm retrievedForm = dao.getFormByUuid(formUUID);
             if (retrievedForm != null) {
+                HTMLConceptParser parser = new HTMLConceptParser();
+                String metaJson = parser.createConceptMetadata(parser.parse(html));
+                retrievedForm.setMetaJson(metaJson);
                 retrievedForm.setHtml(html);
                 return save(retrievedForm);
             }

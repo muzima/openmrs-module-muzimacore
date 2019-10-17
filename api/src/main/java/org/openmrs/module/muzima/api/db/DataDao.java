@@ -42,6 +42,16 @@ public interface DataDao<T extends Data> extends SingleClassDao<T> {
     T getDataByUuid(final String uuid);
 
     /**
+     * Return all saved data with the given form data uuid.
+     *
+     * @param formDataUuid the form data uuid
+     * @return the list of data with the matching formDataUuid
+     * @should return the list of data with the matching formDataUuid
+     * @should return empty list  when no data with matching formDataUuid
+     */
+    List<T> getAllDataByFormDataUuid(final String formDataUuid);
+
+    /**
      * Return all saved data.
      *
      * @return all saved data.

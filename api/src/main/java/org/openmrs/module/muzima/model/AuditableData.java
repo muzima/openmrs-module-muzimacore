@@ -37,6 +37,8 @@ public abstract class AuditableData extends BaseOpenmrsData implements Data {
 
     private String patientUuid;
 
+    private String formDataUuid;
+
     /**
      * **** Audit information ******
      */
@@ -52,6 +54,7 @@ public abstract class AuditableData extends BaseOpenmrsData implements Data {
         setProvider(data.getProvider());
         setFormName(data.getFormName());
         setPatientUuid(data.getPatientUuid());
+        setFormDataUuid(data.getFormDataUuid());
     }
 
     /**
@@ -155,5 +158,13 @@ public abstract class AuditableData extends BaseOpenmrsData implements Data {
 
     public void setPatientUuid(String patientUuid) {
         this.patientUuid = patientUuid;
+    }
+
+    public String getFormDataUuid() {
+        return formDataUuid;
+    }
+
+    public void setFormDataUuid(String formDataUuid) {
+        this.formDataUuid = formDataUuid;
     }
 }

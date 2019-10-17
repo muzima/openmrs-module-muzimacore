@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 
+import java.util.Date;
 import java.util.List;
 
 public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
@@ -60,7 +61,7 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
      */
     @Override
     @SuppressWarnings("unchecked")
-    public List<MuzimaSetting> getPagedSettings(final String search, final Integer pageNumber, final Integer pageSize) {
+    public List<MuzimaSetting> getPagedSettings(final String search, final Date syncDate, final Integer pageNumber, final Integer pageSize) {
         Criteria criteria = session().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -69,7 +70,23 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
             disjunction.add(Restrictions.ilike("description", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
         }
-        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+
+        if (syncDate != null) {
+            criteria.add(Restrictions.or(
+                    Restrictions.or(
+                            Restrictions.and(
+                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                    Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateRetired"))),
+                            Restrictions.and(
+                                    Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
+                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateRetired")))),
+                    Restrictions.and(
+                            Restrictions.and(Restrictions.isNotNull("dateRetired"), Restrictions.ge("dateRetired", syncDate)),
+                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
+        } else {
+            criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        }
+
         if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
         }
@@ -89,7 +106,7 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
      */
     @Override
     @Transactional
-    public Number countSettings(final String search) {
+    public Number countSettings(final String search, final Date syncDate) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
@@ -98,7 +115,21 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
             disjunction.add(Restrictions.ilike("description", search, MatchMode.ANYWHERE));
             criteria.add(disjunction);
         }
-        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        if (syncDate != null) {
+            criteria.add(Restrictions.or(
+                    Restrictions.or(
+                            Restrictions.and(
+                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                    Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateRetired"))),
+                            Restrictions.and(
+                                    Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
+                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateRetired")))),
+                    Restrictions.and(
+                            Restrictions.and(Restrictions.isNotNull("dateRetired"), Restrictions.ge("dateRetired", syncDate)),
+                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
+        } else {
+            criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        }
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
     }
