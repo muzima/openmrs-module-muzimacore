@@ -20,6 +20,7 @@ import org.openmrs.module.muzima.api.db.MuzimaSettingDao;
 import org.openmrs.module.muzima.api.service.MuzimaSettingService;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 
+import java.util.Date;
 import java.util.List;
 
 public class MuzimaSettingServiceImpl extends BaseOpenmrsService implements MuzimaSettingService{
@@ -81,8 +82,8 @@ public class MuzimaSettingServiceImpl extends BaseOpenmrsService implements Muzi
      * @return the total number of the settings in the database.
      */
     @Override
-    public Number countMuzimaSettings(final String search) {
-        return dao.countSettings(search);
+    public Number countMuzimaSettings(final String search, final Date syncdate) {
+        return dao.countSettings(search,syncdate);
     }
 
     /**
@@ -94,7 +95,7 @@ public class MuzimaSettingServiceImpl extends BaseOpenmrsService implements Muzi
      * @return list of all settings with matching search term for a particular page.
      */
     @Override
-    public List<MuzimaSetting> getPagedSettings(final String search, final Integer pageNumber, final Integer pageSize) {
-        return dao.getPagedSettings(search, pageNumber, pageSize);
+    public List<MuzimaSetting> getPagedSettings(final String search, final Date syncDate, final Integer pageNumber, final Integer pageSize) {
+        return dao.getPagedSettings(search, syncDate, pageNumber, pageSize);
     }
 }

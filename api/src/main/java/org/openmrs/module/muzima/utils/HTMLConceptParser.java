@@ -10,6 +10,7 @@ package org.openmrs.module.muzima.utils;
 
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,23 +33,29 @@ public class HTMLConceptParser {
         //Select all elements containing data-concept attr and is not a div.
         Elements elements = htmlDoc.select("*:not(div)[" + DATA_CONCEPT_TAG + "]");
         for (Element element : elements) {
-            concepts.add(getConceptName(element.attr(DATA_CONCEPT_TAG)));
+            concepts.add(getConceptIdenttifier(element.attr(DATA_CONCEPT_TAG)));
         }
         return new ArrayList<String>(concepts);
     }
 
-    private static String getConceptName(String conceptName) {
-        if (conceptName != null && conceptName.trim().length() > 0 && conceptName.split("\\^").length > 1) {
-            return conceptName.split("\\^")[0];
+    private static String getConceptIdenttifier(String rawConceptName) {
+        if (rawConceptName != null && rawConceptName.trim().length() > 0 && rawConceptName.split("\\^").length > 1) {
+            return rawConceptName.split("\\^")[0];
         }
         return "";
     }
 
-    public String createConceptMetadata(List<String> conceptIds) {
+    public String createConceptMetadata(List<String> conceptIdentifiers) {
         ConceptService cs = Context.getConceptService();
         JSONArray conceptsArray = new JSONArray();
-        for (String conceptId : conceptIds) {
-            Concept concept = cs.getConcept(Integer.parseInt(conceptId));
+        for (String uuidOrId : conceptIdentifiers) {
+            Concept concept;
+            if (StringUtils.isNumeric(uuidOrId)) {
+                int conceptId = Integer.parseInt(uuidOrId);
+                concept = Context.getConceptService().getConcept(conceptId);
+            } else {
+                concept = Context.getConceptService().getConceptByUuid(uuidOrId);
+            }
             if (concept != null) {
                 JSONObject conceptJson = new JSONObject();
                 conceptJson.put("uuid", concept.getUuid());

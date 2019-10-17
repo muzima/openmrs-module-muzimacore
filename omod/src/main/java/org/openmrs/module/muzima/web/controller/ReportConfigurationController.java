@@ -73,11 +73,12 @@ public class ReportConfigurationController {
     @RequestMapping(value = "/module/muzimacore/delete/reportConfig.json", method = RequestMethod.POST)
     public void deleteReportConfiguration(final @RequestBody Map<String, Object> map) {
         String uuid = (String) map.get("uuid");
+        String retireReason = (String) map.get("retireReason");
         ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
         ReportConfiguration reportConfiguration = reportConfigurationService.getReportConfigurationByUuid(uuid);
 
         reportConfiguration.setRetired(true);
-        reportConfiguration.setRetireReason("Deleted no longer needed configuration!");
+        reportConfiguration.setRetireReason(retireReason);
         reportConfiguration.setDateRetired(new Date());
         reportConfigurationService.saveReportConfiguration(reportConfiguration);
     }

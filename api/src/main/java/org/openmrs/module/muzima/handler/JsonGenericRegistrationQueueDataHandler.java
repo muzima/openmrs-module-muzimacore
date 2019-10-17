@@ -429,6 +429,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         patientAddress.setAddress6((String)getElementFromJsonObject(addressJsonObject,"address6"));
         patientAddress.setCityVillage((String)getElementFromJsonObject(addressJsonObject,"cityVillage"));
         patientAddress.setCountyDistrict((String)getElementFromJsonObject(addressJsonObject,"countyDistrict"));
+        patientAddress.setStateProvince((String)getElementFromJsonObject(addressJsonObject,"stateProvince"));
         patientAddress.setCountry((String)getElementFromJsonObject(addressJsonObject,"country"));
         patientAddress.setPostalCode((String)getElementFromJsonObject(addressJsonObject,"postalCode"));
         patientAddress.setLatitude((String)getElementFromJsonObject(addressJsonObject,"latitude"));

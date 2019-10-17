@@ -44,7 +44,7 @@
                 <span></span>
             </div>
             <div ng-switch-when="edit">
-                <form id="consult">
+                <form id="consult" name="reportConfig">
                     <div class="col-lg-8 row">
                         <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." ng-disabled="reportConfiguration.uuid" autocomplete="off"
                                uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
@@ -78,9 +78,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row col-lg-8">
+                        <input class="col-lg-8 form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="reportConfiguration.retireReason" ng-show="retireReportConfiguration" ng-required="retireReportConfiguration"/>
+                        <div ng-show="retireReasonError" style="color:red">Retire reason is required</div>
+                    </div>
                     <div class="col-md-12 row">
                         <button type="submit" ng-click="save(reportConfiguration)" class="btn btn-success">Save</button>
-                        <button ng-show="reportConfiguration.uuid" type="submit" ng-click="delete()" class="btn btn-danger">Delete</button>
+                        <button ng-click="toggleRetireReportConfiguration()" ng-show="!retireReportConfiguration && reportConfiguration.uuid" class="btn btn-danger">Retire</button>
+                        <button type="submit" ng-show="retireReportConfiguration" ng-click="delete(reportConfiguration)" class="btn btn-danger">Retire</button>
                         <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
                     </div>
                     <span></span>
