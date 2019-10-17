@@ -1,0 +1,28 @@
+{
+  "dataSource": "Mobile Device",
+  "discriminator": "json-relationship",
+  "payload": {
+      "uuid": "1e9ad79e-4f14-494f-98da-0e9c6664a0f0",
+      "personA": {
+          "uuid": "f35b1449-70a7-11e9-8989-d0577bcb2ec4"
+      },
+      "personB": {
+          "uuid": "f35b1241-70a7-11e9-8989-d0577bcb2ec4",
+          "birthdate": "1984-04-16 06:15:00",
+          "birthdate_estimated": true,
+          "given_name": "Example",
+          "middle_name": "of",
+          "family_name": "Patient",
+          "gender": "M"
+      },
+      "relationshipType": {
+          "uuid": "8d91a01c-c2cc-11de-8d13-0010c6dffd0f"
+      }
+  },
+  "encounter": {
+    "encounter.provider_id_select": "3332-4",
+    "encounter.provider_id": "3332-4",
+    "encounter.encounter_datetime": "04-09-2017"
+  }
+}
+
