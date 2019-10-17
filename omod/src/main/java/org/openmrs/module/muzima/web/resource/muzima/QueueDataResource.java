@@ -23,6 +23,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.handler.ObsQueueDataHandler;
+import org.openmrs.module.muzima.handler.RelationshipQueueDataHandler;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.QueueData;
@@ -212,6 +213,7 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
      */
     @Override
     public Object create(final SimpleObject propertiesToCreate, final RequestContext context) throws ResponseException{
+        System.out.println(propertiesToCreate.toString());
         Object dataSourceObject = propertiesToCreate.get("dataSource");
         if (dataSourceObject == null) {
             throw new ConversionException("The data source property is missing!");
@@ -246,6 +248,8 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
             payload = payloadObject.toString();
         }
 
+        System.out.println(payload);
+
         String discriminator = null;
         if(propertiesToCreate.get("discriminator") != null){
             discriminator = propertiesToCreate.get("discriminator").toString();
@@ -260,6 +264,9 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
 
         if(StringUtils.equals(discriminator, ObsQueueDataHandler.DISCRIMINATOR_VALUE)){
             formName = "Individual Obs";
+        } else if (StringUtils.equals(discriminator, RelationshipQueueDataHandler.DISCRIMINATOR_VALUE)) {
+            formName = "Relationship";
+            System.out.println("relationship");
         } else {
             location = extractLocationFromPayload(payload);
             formName = extractFormNameFromPayload(payload);
@@ -277,8 +284,15 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
         propertiesToCreate.put("formName",formName);
         propertiesToCreate.put("patientUuid", patientUuid);
 
-        setConvertedProperties(queueData, propertiesToCreate, getCreatableProperties(), true);
+try {
+    System.out.println("before convert");
+    setConvertedProperties(queueData, propertiesToCreate, getCreatableProperties(), true);
+    System.out.println("just converted and about to save");
+} catch ( ConversionException e) {
+    e.printStackTrace();
+}
         queueData = save(queueData);
+        System.out.println("nimesave");
         return ConversionUtil.convertToRepresentation(queueData, Representation.DEFAULT);
     }
 
