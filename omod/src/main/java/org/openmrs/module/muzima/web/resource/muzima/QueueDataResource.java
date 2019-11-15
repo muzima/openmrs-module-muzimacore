@@ -23,6 +23,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.handler.ObsQueueDataHandler;
+import org.openmrs.module.muzima.handler.RelationshipQueueDataHandler;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.QueueData;
@@ -46,6 +47,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -261,6 +263,8 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
 
         if(StringUtils.equals(discriminator, ObsQueueDataHandler.DISCRIMINATOR_VALUE)){
             formName = "Individual Obs";
+        } else if (StringUtils.equals(discriminator, RelationshipQueueDataHandler.DISCRIMINATOR_VALUE)) {
+            formName = "Relationship";
         } else {
             location = extractLocationFromPayload(payload);
             formName = extractFormNameFromPayload(payload);
@@ -274,9 +278,7 @@ public class QueueDataResource extends DataDelegatingCrudResource<QueueData> {
         queueData.setPatientUuid(patientUuid);
 
         Object formDataUuid = propertiesToCreate.get("formDataUuid");
-        if(formDataUuid != null){
-            queueData.setFormDataUuid(formDataUuid.toString());
-        }
+        if(formDataUuid != null) queueData.setFormDataUuid(formDataUuid.toString());
 
         propertiesToCreate.put("location",location);
         propertiesToCreate.put("provider",provider);

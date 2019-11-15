@@ -1679,4 +1679,24 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="muzima-20190829172700" author="smbugua">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = 'f8c4ea54-9e8f-4f47-86c1-ab52f0bc719f';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add Relationships Setting</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="Relationships.isEnabled"/>
+            <column name="name" value="Relationships status" />
+            <column name="description" value="Specifies if Relationships feature will be enabled for this implementation" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-08-29T17:27:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="f8c4ea54-9e8f-4f47-86c1-ab52f0bc719f" />
+        </insert>
+
+    </changeSet>
+
 </databaseChangeLog>
