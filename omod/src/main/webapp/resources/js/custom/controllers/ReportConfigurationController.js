@@ -57,11 +57,19 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
         });
     };
 
-    $scope.delete = function () {
-        $muzimaReportConfigurations.deleteReportConfiguration($scope.uuid).
-        then(function () {
-            $location.path("/reportConfigs");
-        })
+    $scope.toggleRetireReportConfiguration = function(){
+        $scope.retireReportConfiguration = true;
+    };
+
+    $scope.delete = function (reportConfiguration) {
+        if(!reportConfiguration.retireReason){
+             $scope.retireReasonError = true;
+        }else{
+            $muzimaReportConfigurations.deleteReportConfiguration(reportConfiguration.uuid,reportConfiguration.retireReason).
+            then(function () {
+                $location.path("/reportConfigs");
+            });
+        }
     };
 
     /****************************************************************************************

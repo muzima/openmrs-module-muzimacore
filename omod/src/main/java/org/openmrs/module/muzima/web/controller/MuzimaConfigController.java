@@ -59,6 +59,8 @@ public class MuzimaConfigController {
             String name = (String) map.get("name");
             String description = (String) map.get("description");
             String configJson = (String) map.get("configJson");
+            String retireReason = (String) map.get("retireReason");
+
             MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
             if (StringUtils.isNotBlank(uuid)) {
                 MuzimaConfig config = configService.getConfigByUuid(uuid);
@@ -68,7 +70,7 @@ public class MuzimaConfigController {
                     config.setConfigJson(configJson);
                 } else {
                     config.setRetired(true);
-                    config.setRetireReason("Deleting a configuration source object!");
+                    config.setRetireReason(retireReason);
                     config.setRetiredBy(Context.getAuthenticatedUser());
                     config.setDateRetired(new Date());
                 }

@@ -15,13 +15,14 @@ package org.openmrs.module.muzima.api.db;
 
 import org.openmrs.module.muzima.model.MuzimaSetting;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MuzimaSettingDao {
 
     List<MuzimaSetting> getAll();
 
-    List<MuzimaSetting> getPagedSettings(final String search, final Integer pageNumber, final Integer pageSize);
+    List<MuzimaSetting> getPagedSettings(final String search, final Date syncDate, final Integer pageNumber, final Integer pageSize);
 
     /**
      * Get the total number of data source with matching search term.
@@ -30,7 +31,7 @@ public interface MuzimaSettingDao {
      * @param search the search term.
      * @return total number of data source in the database.
      */
-    Number countSettings(final String search);
+    Number countSettings(final String search, final Date syncdate);
 
     Number countSettings();
 

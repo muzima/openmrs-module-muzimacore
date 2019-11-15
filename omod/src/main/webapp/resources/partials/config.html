@@ -174,8 +174,15 @@
                     </tr>
                     <tr>
                         <td>
+                            <input class="col-lg-10 form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="config.retireReason" ng-show="retire_config" ng-required="retire_config"/>
+                            <div ng-show="config.retireReasonError" style="color:red">Retire reason is required</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             <button type="submit" ng-click="save(config)" class="btn btn-success">Save</button>
-                            <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="config.uuid">Delete</button>
+                            <button type="submit" ng-click="toggleRetireConfig()" class="btn btn-danger" ng-show="!retire_config && config.uuid">Retire</button>
+                            <button type="submit" ng-click="delete(config)" class="btn btn-danger" ng-show="retire_config">Retire</button>
                             <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
                         </td>
                     </tr>

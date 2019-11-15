@@ -79,8 +79,8 @@ muzimaCoreModule.factory('$data', function ($http) {
     var saveSource = function (uuid, name, description) {
         return $http.post("source.json", {"uuid": uuid, "name": name, "description": description});
     };
-    var deleteSource = function (uuid) {
-        return $http.post("source.json", {"uuid": uuid});
+    var deleteSource = function (uuid,retireReason) {
+        return $http.post("source.json", {"uuid": uuid,"retireReason": retireReason});
     };
     var getEdit = function (uuid) {
         return $http.get("edit.json?uuid=" + uuid);
@@ -247,8 +247,8 @@ muzimaCoreModule.factory('$configs', function($http) {
     var saveConfiguration = function (uuid, name, description, configJson) {
         return $http.post("config.json", {"uuid": uuid, "name": name, "description": description, "configJson": configJson});
     };
-    var deleteConfiguration = function (uuid) {
-        return $http.post("config.json", {"uuid": uuid});
+    var deleteConfiguration = function (uuid,retireReason) {
+        return $http.post("config.json", {"uuid": uuid, "retireReason": retireReason});
     };
     var searchConfigForms = function(search) {
         return $http.get("configForms.json?search=" + (search === undefined ? '' : search));
@@ -320,8 +320,8 @@ muzimaCoreModule.factory('$muzimaReportConfigurations', function($http) {
     var saveReportConfiguration = function (uuid, cohortUuid,configJson, priority) {
         return $http.post("reportConfig.json", {"uuid": uuid,"cohortUuid": cohortUuid, "reportConfigJson": configJson, "priority": priority});
     };
-    var deleteReportConfiguration = function (uuid) {
-        return $http.post("delete/reportConfig.json", {"uuid": uuid});
+    var deleteReportConfiguration = function (uuid,retireReason) {
+        return $http.post("delete/reportConfig.json", {"uuid": uuid, "retireReason": retireReason});
     };
 
     var searchReportConfigCohorts = function(search) {
@@ -362,13 +362,18 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
                 "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled});
         };
 
+    var deleteCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled, retireReason) {
+        return $http.post("cohortDefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition, "isScheduledForExecution": isScheduledForExecution,
+         "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled, "retireReason": retireReason});
+    };
+
     return {
 
         getCohortDefinitions: getCohortDefinitions,
         getCohortDefinition:getCohortDefinition,
         saveCohortDefinition:saveCohortDefinition,
         getAllCohorts:getAllCohorts,
-        getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition
-
+        getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition,
+        deleteCohortDefinition : deleteCohortDefinition
     }
 });
