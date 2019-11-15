@@ -98,7 +98,7 @@
                             </div>
 
                             <div class="retire-form" ng-show="muzimaform.retired">
-                                <input type="text" class="retire-reason" placeholder="Retire reason" ng-model="muzimaform.retireReason" ng-show="muzimaform.retired" style="margin-top: 15px;"/>
+                                <input type="text" ng-class="retireReasonError? 'retire-reason-error' : 'retire-reason'" placeholder="Retire reason" ng-model="muzimaform.retireReason" ng-show="muzimaform.retired" style="margin-top: 15px;"/>
                                 <a class="btn btn-danger" ng-click="remove(muzimaform)" ng-show="muzimaform.retired">Retire</a>
                                 <a class="btn btn-default" ng-click="toggleRetireForm(muzimaform)" ng-show="muzimaform.retired">Cancel</a>
                             </div>

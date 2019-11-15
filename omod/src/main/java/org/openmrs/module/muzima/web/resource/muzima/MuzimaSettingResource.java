@@ -7,6 +7,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaSettingService;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
+import org.openmrs.module.muzima.web.resource.utils.ResourceUtils;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
@@ -21,6 +22,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/setting",
@@ -50,8 +52,13 @@ public class MuzimaSettingResource extends MetadataDelegatingCrudResource<Muzima
             }
         } else {
             String nameParameter = request.getParameter("q");
+            String syncDateParameter = request.getParameter("syncDate");
+            System.out.println("syncDateParameter: "+syncDateParameter);
+            Date syncDate = ResourceUtils.parseDate(syncDateParameter);
             if (nameParameter != null) {
-                muzimaSettings = Context.getService(MuzimaSettingService.class).getPagedSettings(nameParameter, startIndex, limit);
+                muzimaSettings = Context.getService(MuzimaSettingService.class).getPagedSettings(nameParameter, syncDate, startIndex, limit);
+            } else {
+                muzimaSettings = Context.getService(MuzimaSettingService.class).getPagedSettings(null, syncDate, startIndex, limit);
             }
         }
         return new NeedsPaging<MuzimaSetting>(muzimaSettings, context);
