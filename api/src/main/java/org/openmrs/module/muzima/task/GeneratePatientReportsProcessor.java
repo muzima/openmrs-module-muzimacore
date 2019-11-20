@@ -92,7 +92,7 @@ public class GeneratePatientReportsProcessor {
                         Integer patientId = Integer.valueOf(patientIdString);
 
                         MuzimaPatientReport latestPatientReport = muzimaPatientReportService
-                                .getLatestPatientReportByPatientIdAndConfigId(patientId,configuration.getId());
+                                .getLatestPatientReportByPatientIdAndConfigId(patientId, configuration.getId());
 
                         if (latestPatientReport != null) {
                             if (!"COMPLETED".equals(latestPatientReport.getStatus())) {
@@ -131,36 +131,42 @@ public class GeneratePatientReportsProcessor {
                                     reportRequest.setPriority(ReportRequest.Priority.LOW);
                                     reportsToQueue.add(reportRequest);
 
-                                    MuzimaPatientReport muzimaPatientReport = new MuzimaPatientReport();
-                                    muzimaPatientReport.setName(design.getName() + "[" + cohort.getName() + "]");
+                                    latestPatientReport.setName(design.getName() + " [" + cohort.getName() + "]");
+                                    latestPatientReport.setReportRequestUuid(reportRequest.getUuid());
+                                    latestPatientReport.setCohortReportConfigId(configuration.getId());
+                                    latestPatientReport.setPatientId(patientId);
+                                    latestPatientReport.setPriority(configuration.getPriority());
+                                    latestPatientReport.setStatus("PROGRESS");
+
+                                    muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                }
+                            }
+                        } else {
+                            try {
+                                MuzimaPatientReport muzimaPatientReport = muzimaPatientReportService.getMuzimaPatientReportByName(design.getName());
+
+                                if (muzimaPatientReport == null) {
+                                    // this is a new instance of this report so save it
+                                    ReportRequest reportRequest = new ReportRequest();
+                                    Map<String, Object> params = new LinkedHashMap<String, Object>();
+
+                                    params.put("person", personService.getPerson(patientId));
+                                    reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
+                                    reportRequest.setRenderingMode(selectedRenderingMode);
+                                    reportRequest.setPriority(ReportRequest.Priority.LOW);
+                                    reportRequest = reportService.queueReport(reportRequest);
+
+                                    muzimaPatientReport = new MuzimaPatientReport();
+                                    muzimaPatientReport.setName(design.getName());
                                     muzimaPatientReport.setReportRequestUuid(reportRequest.getUuid());
                                     muzimaPatientReport.setCohortReportConfigId(configuration.getId());
                                     muzimaPatientReport.setPatientId(patientId);
                                     muzimaPatientReport.setPriority(configuration.getPriority());
                                     muzimaPatientReport.setStatus("PROGRESS");
-
                                     muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
-                                }
-                            }
-                        } else {
-                            try {
-                                ReportRequest reportRequest = new ReportRequest();
-                                Map<String, Object> params = new LinkedHashMap<String, Object>();
+                                } else
+                                    log.info("We have similar report in different Cohorts!");
 
-                                params.put("person", personService.getPerson(patientId));
-                                reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
-                                reportRequest.setRenderingMode(selectedRenderingMode);
-                                reportRequest.setPriority(ReportRequest.Priority.LOW);
-                                reportRequest = reportService.queueReport(reportRequest);
-
-                                MuzimaPatientReport muzimaPatientReport = new MuzimaPatientReport();
-                                muzimaPatientReport.setName(design.getName() + "[" + cohort.getName() + "]");
-                                muzimaPatientReport.setReportRequestUuid(reportRequest.getUuid());
-                                muzimaPatientReport.setCohortReportConfigId(configuration.getId());
-                                muzimaPatientReport.setPatientId(patientId);
-                                muzimaPatientReport.setPriority(configuration.getPriority());
-                                muzimaPatientReport.setStatus("PROGRESS");
-                                muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

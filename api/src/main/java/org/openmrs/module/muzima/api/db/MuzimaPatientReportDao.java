@@ -24,13 +24,6 @@ public interface MuzimaPatientReportDao {
     List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber,
                                                            final Integer pageSize);
 
-    /**
-     * Get the total number of data source with matching search term.
-     *
-     *
-     * @param patientId the search term.
-     * @return total number of reports in the database.
-     */
     Number countMuzimaPatientReports(final Integer patientId);
 
     Number countMuzimaPatientReports();
@@ -39,15 +32,15 @@ public interface MuzimaPatientReportDao {
     
     MuzimaPatientReport getLatestPatientReportByPatientId(Integer patientId);
     
-    List<MuzimaPatientReport> getMuzimaPatientReportByPatientId(Integer patientId);
+    List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(Integer patientId);
     
     MuzimaPatientReport getMuzimaPatientReportByUuid(String Uuid);
     
     MuzimaPatientReport getLatestPatientReportByPatientIdAndConfigId(Integer patientId, Integer configId);
     
-    List<MuzimaPatientReport> getMuzimaPatientReportByConfigId(Integer configId);
-    
     MuzimaPatientReport saveOrUpdateMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
 
     void deleteMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
+
+    MuzimaPatientReport getMuzimaPatientReportByName(String reportName);
 }

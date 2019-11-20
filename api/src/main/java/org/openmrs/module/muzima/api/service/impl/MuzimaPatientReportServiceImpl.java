@@ -39,8 +39,8 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     }
 
     @Override
-    public List<MuzimaPatientReport> getMuzimaPatientReportByPatientId(final  Integer patientId){
-        return dao.getMuzimaPatientReportByPatientId(patientId);
+    public List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(final  Integer patientId){
+        return dao.getMuzimaPatientReportsByPatientId(patientId);
     }
     
     @Override
@@ -57,14 +57,16 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     public MuzimaPatientReport getMuzimaPatientReportById(Integer id) {
         return dao.getMuzimaPatientReportById(id);
     }
-    
-    
+
+    @Override
+    public MuzimaPatientReport getMuzimaPatientReportByName(String reportName) {
+        return dao.getMuzimaPatientReportByName(reportName);
+    }
+
     @Override
     public MuzimaPatientReport getMuzimaPatientReportByUuid(final String uuid){
         return dao.getMuzimaPatientReportByUuid(uuid);
     }
-
-    
 
     @Override
     public MuzimaPatientReport saveMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport){
@@ -87,11 +89,11 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     }
 
     /**
-     * Get the total number of the settings in the database with partial matching search term.
+     * Get the total number of the patient reports in the database for a specific patient
      *
      *
-     * @param patientId the search term.
-     * @return the total number of the settings in the database.
+     * @param patientId the patient id.
+     * @return the total number of the patient reports in the database.
      */
     @Override
     public Number countMuzimaPatientReports(final Integer patientId) {
@@ -99,12 +101,12 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     }
 
     /**
-     * Get settings with matching search term for a particular page.
+     * Get patient reports for a particular page.
      *
-     * @param patientId    the search term.
+     * @param patientId    the patient id.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
-     * @return list of all settings with matching search term for a particular page.
+     * @return list of all patient reports for this patient for a particular page.
      */
     @Override
     public List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {

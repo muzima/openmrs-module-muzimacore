@@ -13,8 +13,6 @@
  */
 package org.openmrs.module.muzima.api.db.hibernate;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
@@ -31,7 +29,6 @@ import java.util.List;
 public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     private DbSessionFactory sessionFactory;
     protected Class mappedClass = MuzimaPatientReport.class;
-    private final Log log = LogFactory.getLog(this.getClass());
 
     public HibernateMuzimaPatientReportDao(DbSessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
@@ -46,9 +43,9 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     /**
-     * Get Patient Reports with matching search term for particular page.
+     * Get particular page of patient reports for specified patient.
      *
-     * @param patientId     the search term.
+     * @param patientId  the specified patient.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
      * @return list of patient reports for the page.
@@ -57,9 +54,9 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     @SuppressWarnings("unchecked")
     public List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {
         Criteria criteria = session().createCriteria(mappedClass);
-            Disjunction disjunction = Restrictions.disjunction();
-            disjunction.add(Restrictions.eq("patientId", patientId));
-            criteria.add(disjunction);
+        Disjunction disjunction = Restrictions.disjunction();
+        disjunction.add(Restrictions.eq("patientId", patientId));
+        criteria.add(disjunction);
       
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.add(Restrictions.eq("status", "completed"));
@@ -74,10 +71,10 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     /**
-     * Get the total number of patient reports with matching search term.
+     * Get the total number of patient reports for specified patient.
      *
-     * @param patientId the search term.
-     * @return total number of patient reports in the database.
+     * @param patientId the specified patient.
+     * @return total number of patient reports in the database for the specified patient.
      */
     @Override
     @Transactional
@@ -123,7 +120,7 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     
     @Override
     @Transactional
-    public List<MuzimaPatientReport> getMuzimaPatientReportByPatientId(Integer patientId){
+    public List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(Integer patientId){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
@@ -153,14 +150,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
     
     @Override
-    public List<MuzimaPatientReport> getMuzimaPatientReportByConfigId(Integer configId) {
-        Criteria criteria = session().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("cohortReportConfigId", configId));
-        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
-        return criteria.list();
-    }
-    
-    @Override
     @Transactional
     public MuzimaPatientReport saveOrUpdateMuzimaPatientReport(final MuzimaPatientReport muzimaPatientReport){
         session().saveOrUpdate(muzimaPatientReport);
@@ -170,6 +159,15 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     @Override
     public void deleteMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport){
         session().delete(muzimaPatientReport);
+    }
+
+    @Override
+    public MuzimaPatientReport getMuzimaPatientReportByName(String reportName) {
+        Criteria criteria = session().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("name", reportName));
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.setMaxResults(1);
+        return (MuzimaPatientReport)criteria.uniqueResult();
     }
 
     private DbSession session() {
