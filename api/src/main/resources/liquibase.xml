@@ -1699,4 +1699,61 @@
 
     </changeSet>
 
+    <changeSet id="muzima-20191117190900" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = 'f268a5cf-5583-4e8a-9704-20f638732021';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add Event Logging Setting</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="Logging.isEnabled"/>
+            <column name="name" value="Event Logging status" />
+            <column name="description" value="Specifies whether Event Logging feature will be enabled for this implementation" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-11-17T19:09:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="f268a5cf-5583-4e8a-9704-20f638732021" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20191117191200" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = '5e75dd1e-ae43-4e3c-8860-bb7fcc1d79ff';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add Event Logs server URL Setting</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="LogServer.url"/>
+            <column name="name" value="Event Logs server URL" />
+            <column name="description" value="Specifies the URL of the Server where event logs should be transmitted" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-11-17T19:12:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="5e75dd1e-ae43-4e3c-8860-bb7fcc1d79ff" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20191117191800" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = '6babf927-e531-4119-8369-2981133d836c';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add Event Logs server Connection key Setting</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="LogServer.connectionKey"/>
+            <column name="name" value="Event Logs server Connection Key" />
+            <column name="description" value="Specifies the Connection Key for use while transmitting logs to the Logs server" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-11-17T19:18:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="6babf927-e531-4119-8369-2981133d836c" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
