@@ -20,16 +20,18 @@ import java.util.List;
 
 public interface MuzimaPatientReportService extends OpenmrsService {
 
-    MuzimaPatientReport getMuzimaPatientReportById(final Integer id);
-    
-    List<MuzimaPatientReport> getMuzimaPatientReportByPatientId(final Integer patientId);
-    
-    MuzimaPatientReport getLatestPatientReportByPatientId(final Integer patientId);
-    
-    MuzimaPatientReport getLatestPatientReportByPatientIdAndConfigId(Integer patientId, Integer configId);
-    
     MuzimaPatientReport getMuzimaPatientReportByUuid(final String uuid);
-    
+
+    MuzimaPatientReport getMuzimaPatientReportById(final Integer id);
+
+    MuzimaPatientReport getMuzimaPatientReportByName(final String reportName);
+
+    List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(final Integer patientId);
+
+    MuzimaPatientReport getLatestPatientReportByPatientId(final Integer patientId);
+
+    MuzimaPatientReport getLatestPatientReportByPatientIdAndConfigId(Integer patientId, Integer configId);
+
     MuzimaPatientReport saveMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
 
     void deleteMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
@@ -39,21 +41,20 @@ public interface MuzimaPatientReportService extends OpenmrsService {
     Number countMuzimaPatientReports();
 
     /**
-     * Get the total number of the patient reports in the database with partial matching search term.
+     * Get the total number of the patient reports in the database for a particular patient.
      *
-     *
-     * @param patientId the search term.
-     * @return the total number of the patient reports in the database.
+     * @param patientId the specific patient.
+     * @return the total number of the patient reports in the database for the patient.
      */
     Number countMuzimaPatientReports(final Integer patientId);
 
     /**
-     * Get patient reports with matching search term for a particular page.
+     * Get paged patient reports for a specific patient.
      *
-     * @param patientId     the search term.
+     * @param patientId the specific patient.
      * @param pageNumber the page number.
      * @param pageSize   the size of the page.
-     * @return list of all patient reports with matching search term for a particular page.
+     * @return list of all patient reports for the specific patient for a particular page.
      */
     List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber, final Integer pageSize);
 

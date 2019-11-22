@@ -105,15 +105,21 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
     private void createRelationship() {
         Person personA = validateOrCreate(getPersonUuidFromPayload("personA"), "personA");
         Person personB = validateOrCreate(getPersonUuidFromPayload("personB"), "personB");
+        try {
+            if (personA != null && personB !=null) {
+                RelationshipType relationshipType = personService.getRelationshipTypeByUuid(getRelationshipTypeUuidFromPayload());
+                Relationship relationship = new Relationship(personA, personB, relationshipType);
 
-        if (personA != null && personB !=null) {
-            RelationshipType relationshipType = personService.getRelationshipTypeByUuid(getRelationshipTypeUuidFromPayload());
-            Relationship relationship = new Relationship(personA, personB, relationshipType);
+                // We reuse the uuid created on the mobile device
+                relationship.setUuid(getRelationshipUuidFromPayload());
 
-            personService.saveRelationship(relationship);
+                personService.saveRelationship(relationship);
+            }
+        } catch (Exception e) {
+            log.error(e);
         }
-
     }
+
     private Person validateOrCreate(String personUuid, String root){
         Person p = personService.getPersonByUuid(personUuid);
         if (p == null) {
@@ -124,6 +130,9 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
                 person.setBirthdateEstimated(getPersonBirthDateEstimatedFromPayload(root));
                 person.setGender(getPersonGenderFromPayload(root));
                 person.setCreator(getCreatorFromPayload());
+
+                // We reuse the person uuid created on the mobile device
+                person.setUuid(personUuid);
 
                 p = personService.savePerson(person);
             } catch (Exception e) {
@@ -136,6 +145,10 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
 
     private String getPersonUuidFromPayload(String root){
         return JsonUtils.readAsString(payload, root + "['uuid']");
+    }
+
+    private String getRelationshipUuidFromPayload(){
+        return JsonUtils.readAsString(payload, "$['uuid']");
     }
 
     private String getRelationshipTypeUuidFromPayload(){
