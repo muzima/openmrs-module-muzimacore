@@ -25,6 +25,8 @@ import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
+import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
@@ -47,7 +49,7 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
      * @see org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource#doSearch(org.openmrs.module.webservices.rest.web.RequestContext)
      */
     @Override
-    protected NeedsPaging<FakeCohort> doSearch(final RequestContext context) {
+    protected PageableResult doSearch(final RequestContext context) {
         HttpServletRequest request = context.getRequest();
         String nameParameter = request.getParameter("q");
         String syncDateParameter = request.getParameter("syncDate");
@@ -59,24 +61,19 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
 
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
-                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate,context.getStartIndex(),context.getLimit());
+                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate);
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
                 fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);
             }
 
-            return new NeedsPaging<FakeCohort>(fakeCohorts, context) {
-                public boolean hasMoreResults() {
-                    return cohortCount > context.getStartIndex() + cohorts.size();
-                }
-            };
-
+            boolean hasMoreResults = cohortCount > context.getStartIndex() + cohorts.size();
+            return new AlreadyPaged<FakeCohort>(context,fakeCohorts,hasMoreResults);
         } else {
             final List<Cohort> cohorts = Context.getCohortService().getAllCohorts();
-
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
-                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate,context.getStartIndex(),context.getLimit());
+                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate);
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
                 fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);

@@ -143,8 +143,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         return (Number) criteria.uniqueResult();
     }
 
-    private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate,
-                                final int startIndex, final int size) throws DAOException{
+    private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate) throws DAOException{
         String addedMembersSql = "select GROUP_CONCAT(e.members_added) from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
         SQLQuery addedMembersQuery = getSessionFactory().getCurrentSession().createSQLQuery(addedMembersSql);
         List addedMembersList = new ArrayList();
@@ -168,8 +167,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         return addedMembersList;
     }
 
-    private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate,
-                                             final int startIndex, final int size) throws DAOException{
+    private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate) throws DAOException{
         String removedMembersSql = "select GROUP_CONCAT(e.members_removed) from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
         SQLQuery removedMembersSqlQuery = getSessionFactory().getCurrentSession().createSQLQuery(removedMembersSql);
         List removedMembersIds = new ArrayList();
@@ -199,14 +197,14 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                                      final int startIndex, final int size) throws DAOException {
 
         //This will take care of cohort members who were added to cohort since sync date but have not been changed themselves
-        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, startIndex, size);
-        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
 
         String hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
                 " and c.voided = false and p.voided = false " +
-                " and m.end_date is null end";
+                " and m.end_date is null ";
         if (syncDate != null) {
             hqlQuery = hqlQuery +
                     " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
@@ -248,7 +246,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
                 " and c.voided = false and p.voided = false "+
-                " and m.end_date is null end";
+                " and m.end_date is null ";
         if (syncDate != null) {
             hqlQuery = hqlQuery +
                     " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
@@ -271,10 +269,9 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
 
 
     @Transactional(readOnly = true)
-    public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate,
-                                               final int startIndex, final int size) throws DAOException{
-        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, startIndex, size);
-        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
+    public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate) throws DAOException{
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
 
         if(!removedMembersIds.isEmpty()){
             for(int memberId:addedMembersIds) {
@@ -293,14 +290,13 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         return Collections.emptyList();
     }
 
-    public boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate,
-                                             final int startIndex, final int size) throws DAOException{
-        List<Patient> removedPatients = getPatientsRemovedFromCohort(cohortUuid,syncDate,startIndex,size);
+    public boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate) throws DAOException{
+        List<Patient> removedPatients = getPatientsRemovedFromCohort(cohortUuid,syncDate);
         if(removedPatients.size() > 0){
             return true;
         }
-        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, startIndex, size);
-        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, startIndex, size);
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
 
         for(int memberId:removedMembersIds) {
             int index = addedMembersIds.indexOf(memberId);
