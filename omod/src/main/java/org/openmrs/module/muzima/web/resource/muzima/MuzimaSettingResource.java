@@ -53,7 +53,6 @@ public class MuzimaSettingResource extends MetadataDelegatingCrudResource<Muzima
         } else {
             String nameParameter = request.getParameter("q");
             String syncDateParameter = request.getParameter("syncDate");
-            System.out.println("syncDateParameter: "+syncDateParameter);
             Date syncDate = ResourceUtils.parseDate(syncDateParameter);
             if (nameParameter != null) {
                 muzimaSettings = Context.getService(MuzimaSettingService.class).getPagedSettings(nameParameter, syncDate, startIndex, limit);
