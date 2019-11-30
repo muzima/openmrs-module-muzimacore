@@ -63,14 +63,14 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
     }
 
     @Override
-    public List<Encounter> getEncounters(final List<String> patientUuids, final Date syncDate,
-                                         final int startIndex, final int size) throws APIException {
-        return getCoreDao().getEncounters(patientUuids, syncDate, startIndex, size);
+    public List<Encounter> getEncounters(final List<String> patientUuids,final int maxEncounterResultsPerPatient,
+                                         final Date syncDate) throws APIException {
+        return getCoreDao().getEncounters(patientUuids, maxEncounterResultsPerPatient, syncDate);
     }
 
     @Override
-    public Number countEncounters(final List<String> patientUuids, final Date syncDate) throws APIException {
-        return getCoreDao().countEncounters(patientUuids, syncDate);
+    public Number countEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient, final Date syncDate) throws APIException {
+        return getCoreDao().countEncounters(patientUuids, maxEncounterResultsPerPatient, syncDate);
     }
 
     @Override
