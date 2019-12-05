@@ -71,7 +71,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
                 updateSavedPatientDemographics();
                 Context.getPatientService().savePatient(savedPatient);
                 String temporaryUuid = getTemporaryPatientUuidFromPayload();
-                if(!StringUtils.isNotEmpty(temporaryUuid)) {
+                if(StringUtils.isNotEmpty(temporaryUuid)) {
                     saveRegistrationData(temporaryUuid);
                 }
             }
