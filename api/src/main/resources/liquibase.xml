@@ -1756,6 +1756,63 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20191203163000" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = '35a658af-cdfa-4ac4-ac35-a1e40e1def0d';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add Setting for enabling Geomapping feature</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="LoggingDeidentification.isEnabled"/>
+            <column name="name" value="Logging Deidentification status" />
+            <column name="description" value="Specifies whether Deidentification of logging information will be done for this implementation" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-12-03T16:30:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="35a658af-cdfa-4ac4-ac35-a1e40e1def0d" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20191203155800" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = '3933439b-cc1e-46a8-abb2-6d3587d1baf0';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add Setting for enabling Geomapping feature</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="GeoMapping.isEnabled"/>
+            <column name="name" value="Geomapping feature status" />
+            <column name="description" value="Specifies whether Geomapping feature will be enabled for this implementation" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-12-03T15:58:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="3933439b-cc1e-46a8-abb2-6d3587d1baf0" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20191203164100" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = '0309dfba-a66b-4b03-a10b-5ca8ed37ff70';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add maps key setting</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="MapsApi.key"/>
+            <column name="name" value="Maps API Key" />
+            <column name="description" value="Specifies the Key for accessing maps services" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-12-03T16:41:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="0309dfba-a66b-4b03-a10b-5ca8ed37ff70" />
+        </insert>
+    </changeSet>
+
     <changeSet id="muzima-20191128132500" author="mssavai">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
