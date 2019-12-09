@@ -13,10 +13,8 @@
  */
 package org.openmrs.module.muzima.api.db;
 
-import org.openmrs.Cohort;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
-import org.openmrs.Patient;
 import org.openmrs.api.db.DAOException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +35,9 @@ public interface CoreDao {
                              final Date syncDate) throws DAOException;
 
     @Transactional(readOnly = true)
-    List<Encounter> getEncounters(final List<String> patientUuids, final Date syncDate,
-                                  final int startIndex, final int size) throws DAOException;
+    List<Encounter> getEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient,
+                                  final Date syncDate) throws DAOException;
 
     @Transactional(readOnly = true)
-    Number countEncounters(final List<String> patientUuids, final Date syncDate) throws DAOException;
+    Number countEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient, final Date syncDate) throws DAOException;
 }

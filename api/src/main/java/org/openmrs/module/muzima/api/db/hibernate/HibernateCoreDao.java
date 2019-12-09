@@ -118,65 +118,80 @@ public class HibernateCoreDao implements CoreDao {
     /**
      * {@inheritDoc}
      *
-     * @see CoreDao#getEncounters(java.util.List, Date, int, int)
+     * @see CoreDao#getEncounters(java.util.List, int, Date)
      */
     @Override
     @Transactional(readOnly = true)
     @SuppressWarnings("unchecked")
-    public List<Encounter> getEncounters(final List<String> patientUuids, final Date syncDate,
-                                         final int startIndex, final int size) throws DAOException {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Encounter.class);
-        criteria.createAlias("patient", "patient");
-        criteria.add(Restrictions.in("patient.uuid", patientUuids));
-        if (syncDate != null) {
-            criteria.add(Restrictions.or(
-                    Restrictions.or(
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
-                                    Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
-                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
-        } else {
-            criteria.add(Restrictions.eq("voided", false));
-        }
+    public List<Encounter> getEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient,
+                                         final Date syncDate) throws DAOException {
+        List<Encounter> encounters = new ArrayList<Encounter>();
+        for(String patientUuid:patientUuids) {
+            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Encounter.class);
+            criteria.createAlias("patient", "patient");
+            criteria.add(Restrictions.eq("patient.uuid", patientUuid));
+            if (syncDate != null) {
+                criteria.add(Restrictions.or(
+                        Restrictions.or(
+                                Restrictions.and(
+                                        Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                        Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
+                                Restrictions.and(
+                                        Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
+                                        Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
+                        Restrictions.and(
+                                Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
+                                Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
 
-        criteria.setMaxResults(size);
-        criteria.setFirstResult(startIndex);
-        return criteria.list();
+                criteria.addOrder(Order.desc("dateCreated"));
+                criteria.addOrder(Order.desc("dateChanged"));
+                criteria.addOrder(Order.desc("dateVoided"));
+            } else {
+                criteria.add(Restrictions.eq("voided", false));
+                criteria.addOrder(Order.desc("dateCreated"));
+                criteria.addOrder(Order.desc("dateChanged"));
+            }
+            criteria.setMaxResults(maxEncounterResultsPerPatient);
+            criteria.setFirstResult(0);
+            encounters.addAll(criteria.list());
+        }
+        return encounters;
     }
 
     /**
      * {@inheritDoc}
      *
-     * @see CoreDao#countEncounters(java.util.List, Date)
+     * @see CoreDao#countEncounters(java.util.List, int, Date)
      */
     @Override
     @Transactional(readOnly = true)
-    public Number countEncounters(final List<String> patientUuids, final Date syncDate) throws DAOException {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Encounter.class);
-        criteria.createAlias("patient", "patient");
-        criteria.add(Restrictions.in("patient.uuid", patientUuids));
-        if (syncDate != null) {
-            criteria.add(Restrictions.or(
-                    Restrictions.or(
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
-                                    Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
-                            Restrictions.and(
-                                    Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
-                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
-                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
-        } else {
-            criteria.add(Restrictions.eq("voided", false));
-        }
+    public Number countEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient, final Date syncDate) throws DAOException {
+        int encountersCount = 0;
+        for(String patientUuid:patientUuids) {
+            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Encounter.class);
+            criteria.createAlias("patient", "patient");
+            criteria.add(Restrictions.eq("patient.uuid", patientUuid));
+            if (syncDate != null) {
+                criteria.add(Restrictions.or(
+                        Restrictions.or(
+                                Restrictions.and(
+                                        Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                        Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateVoided"))),
+                                Restrictions.and(
+                                        Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
+                                        Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateVoided")))),
+                        Restrictions.and(
+                                Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
+                                Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))));
+            } else {
+                criteria.add(Restrictions.eq("voided", false));
+            }
+            criteria.setMaxResults(maxEncounterResultsPerPatient);
+            criteria.setFirstResult(0);
 
-        criteria.setProjection(Projections.rowCount());
-        return (Number) criteria.uniqueResult();
+            criteria.setProjection(Projections.rowCount());
+            encountersCount += ((Number) criteria.uniqueResult()).intValue();
+        }
+        return encountersCount;
     }
 }

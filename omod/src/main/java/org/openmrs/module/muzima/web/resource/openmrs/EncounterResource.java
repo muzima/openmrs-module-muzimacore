@@ -18,6 +18,8 @@ import org.openmrs.Encounter;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CoreService;
+import org.openmrs.module.muzima.api.service.MuzimaSettingService;
+import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.muzima.web.resource.utils.ResourceUtils;
 import org.openmrs.module.muzima.web.resource.wrapper.FakeEncounter;
@@ -27,9 +29,11 @@ import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
+import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
 import org.openmrs.module.webservices.rest.web.resource.impl.AlreadyPaged;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
+import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.resource.impl.ServiceSearcher;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
@@ -39,6 +43,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY;
 
 /**
  * TODO: Write brief description about the class here.
@@ -52,7 +58,16 @@ public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter>
      * @see org.openmrs.module.webservices.rest.web.resource.impl.DelegatingCrudResource#doSearch(org.openmrs.module.webservices.rest.web.RequestContext)
      */
     @Override
-    protected AlreadyPaged<FakeEncounter> doSearch(final RequestContext context) {
+    protected PageableResult doSearch(final RequestContext context) {
+
+        MuzimaSettingService muzimaSettingService = Context.getService(MuzimaSettingService.class);
+        MuzimaSetting muzimaSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
+        int maxEncounterResultsPerPatient = muzimaSetting!= null && StringUtils.isNumeric(muzimaSetting.getValueString()) ?
+                Integer.parseInt(muzimaSetting.getValueString()) : 3; //Setting 3 as default results size
+        if(maxEncounterResultsPerPatient == 0){
+            return new AlreadyPaged<FakeEncounter>(context, new ArrayList<FakeEncounter>(), false);
+        }
+
         HttpServletRequest request = context.getRequest();
         String patientParameter = request.getParameter("patient");
         String syncDateParameter = request.getParameter("syncDate");
@@ -60,17 +75,14 @@ public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter>
             CoreService coreService = Context.getService(CoreService.class);
             String[] patientUuids = StringUtils.split(patientParameter, ",");
             Date syncDate = ResourceUtils.parseDate(syncDateParameter);
-            int encounterCount = coreService.countEncounters(Arrays.asList(patientUuids), syncDate).intValue();
-            List<Encounter> encounters = coreService.getEncounters(Arrays.asList(patientUuids), syncDate,
-                    context.getStartIndex(), context.getLimit());
-            boolean hasMore = encounterCount > context.getStartIndex() + encounters.size();
+            List<Encounter> encounters = coreService.getEncounters(Arrays.asList(patientUuids), maxEncounterResultsPerPatient, syncDate);
 
             List<FakeEncounter> fakeEncounters = new ArrayList<FakeEncounter>();
             for (Encounter encounter : encounters) {
                 fakeEncounters.add(FakeEncounter.copyEncounter(encounter));
             }
 
-            return new AlreadyPaged<FakeEncounter>(context, fakeEncounters, hasMore);
+            return new NeedsPaging<FakeEncounter>(fakeEncounters, context);
         } else {
 
             AlreadyPaged<Encounter> pagedEncounter =

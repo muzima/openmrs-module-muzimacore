@@ -1813,4 +1813,23 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20191128132500" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = 'eb780e26-30a0-4e53-b3da-a3f56f13ccde';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add Event Logs server Connection key Setting</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="Encounter.maxDownloadSize"/>
+            <column name="name" value="Maximum number of Encounters downloaded per patient" />
+            <column name="description" value="Specifies the maximum number of encounters to be downloaded into mUzima per patient" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2019-11-27T13:25:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="eb780e26-30a0-4e53-b3da-a3f56f13ccde" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
