@@ -35,7 +35,7 @@ public interface CoreDao {
                              final Date syncDate) throws DAOException;
 
     @Transactional(readOnly = true)
-    List<Encounter> getEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatientPerPatient,
+    List<Encounter> getEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient,
                                   final Date syncDate) throws DAOException;
 
     @Transactional(readOnly = true)

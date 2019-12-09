@@ -123,7 +123,7 @@ public class HibernateCoreDao implements CoreDao {
     @Override
     @Transactional(readOnly = true)
     @SuppressWarnings("unchecked")
-    public List<Encounter> getEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatientPerPatient,
+    public List<Encounter> getEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient,
                                          final Date syncDate) throws DAOException {
         List<Encounter> encounters = new ArrayList<Encounter>();
         for(String patientUuid:patientUuids) {
@@ -151,7 +151,7 @@ public class HibernateCoreDao implements CoreDao {
                 criteria.addOrder(Order.desc("dateCreated"));
                 criteria.addOrder(Order.desc("dateChanged"));
             }
-            criteria.setMaxResults(maxEncounterResultsPerPatientPerPatient);
+            criteria.setMaxResults(maxEncounterResultsPerPatient);
             criteria.setFirstResult(0);
             encounters.addAll(criteria.list());
         }
