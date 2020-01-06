@@ -1832,4 +1832,84 @@
         </insert>
     </changeSet>
 
+    <!-- Gamification settings -->
+
+    <changeSet id="muzima-20100922145600" author="owino">
+        <insert tableName="muzima_setting">
+            <column name="property" value="Gamification.LeaderBoardBronze" />
+            <column name="name" value="Gamification first level leaderboard" />
+            <column name="description" value="Defines the google play games api, reference key for gamification leaderboard-bronze" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2020-01-22T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="1c4bf541-a760-414f-be72-7dbb11747c37" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20110922145600" author="owino">
+        <insert tableName="muzima_setting">
+            <column name="property" value="Gamification.LeaderBoardSilver" />
+            <column name="name" value="Gamification second level leaderboard" />
+            <column name="description" value="Defines the google play games api, reference key for gamification leaderboard-silver" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2020-01-22T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="1c4bf541-e760-515b-be72-7dbb11747c37" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20110922145600" author="owino">
+        <insert tableName="muzima_setting">
+            <column name="property" value="Gamification.LeaderBoardGold" />
+            <column name="name" value="Gamification second level leaderboard" />
+            <column name="description" value="Defines the google play games api, reference key for gamification leaderboard-gold" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2020-01-22T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="1a4ae541-f760-515c-ba72-7def11747c37" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20110922145600" author="owino">
+        <insert tableName="muzima_setting">
+            <column name="property" value="Gamification.LeaderBoardGold" />
+            <column name="name" value="Gamification second level leaderboard" />
+            <column name="description" value="Defines the google play games api, reference key for gamification leaderboard-gold" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2020-01-22T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="1a4ae541-f760-515c-ba72-7def11747c37" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20120922145600" author="owino">
+        <insert tableName="muzima_setting">
+            <column name="property" value="Gamification.AchievementEntry" />
+            <column name="name" value="Gamification first level achievement" />
+            <column name="description" value="Defines the google play games api, reference key for gamification achievement entry level" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2020-01-22T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="1a5ae641-f760-525c-ba72-7def11747c37" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20130922145600" author="owino">
+        <insert tableName="muzima_setting">
+            <column name="property" value="Gamification.AchievementAdvanced" />
+            <column name="name" value="Gamification advanced level achievement" />
+            <column name="description" value="Defines the google play games api, reference key for gamification achievement advanced level" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2020-01-22T00:00:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="1e5aa641-f760-525e-ba72-7def11747c37" />
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
