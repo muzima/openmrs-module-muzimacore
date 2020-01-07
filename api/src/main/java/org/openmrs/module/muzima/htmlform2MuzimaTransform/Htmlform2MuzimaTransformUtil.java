@@ -136,6 +136,26 @@ public class Htmlform2MuzimaTransformUtil {
 		}
 	}
 	
+	/**
+	 * Loads a W3C XML document from a file.
+	 * 
+	 * @param filename The name of the file to be loaded
+	 * @return a document object model object representing the XML file
+	 * @throws Exception
+	 */
+	public static Document loadXML(String filename) {
+		DocumentBuilder builder;
+		try {
+			builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			
+			return builder.parse(new File(filename));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	//TODO needed??
 	//	/**
 	//	 * Creaets an OpenMRS Obs instance

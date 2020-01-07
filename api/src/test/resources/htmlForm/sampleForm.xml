@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <htmlform>
+ <macros>
+          count=1, 2, 3
+</macros>
+	You can count like $count
+     <translations> 
+     	<code name="night_sweats">   
+     	<variant locale="en" value="night sweats"/> 
+     	<variant locale="fr" value="sueurs nocturnes"/>
+     	</code>
+     	<code name="fivr">   
+     	<variant locale="en" value="fever"/> 
+     	<variant locale="fr" value="feeevee"/>
+     	</code>
+ 	</translations> 
+	<obs conceptId="1234" labelCode="night_sweats"/> 
+<repeat>
+    <template>
+		<obsgroup groupingConceptId="1295">
+            <tr>
+                <td><obs conceptId="1297" answerConceptId="{concept}" answerLabel="{effect}" labelText=""/></td>
+                <td><obs conceptId="3063"/></td>
+            </tr>
+        </obsgroup>
+    </template>
+    <render concept="6355" effect="Nausées/vomissements"/>
+    <render concept="16" effect="Diarrhée"/>
+   
+</repeat>
+
+	 <repeat with="['664','No Complaints'], ['832','fivr']">
+	 <obs conceptId="1069" answerConceptId="{0}" answerLabel="{1}" style="checkbox" /><br/>
+	 </repeat>
+	 
+	 <includeIf velocityTest="!(($patient.gender == 'F') || ($patient.gender == 'M')) || (! $patient.age)">
+  <b><font color='darkorange' size='+2'>ERROR: Unknown gender or date of birth.  Please update patient demographics before filling out this form.</font></b>
+</includeIf>
+<excludeIf velocityTest="!(($patient.gender == 'F') || ($patient.gender == 'M')) || (! $patient.age)">
+  
+</excludeIf>
+
+	 <!-- this is a comment, it shouldn't show after processing -->
+	 
+ </htmlform>
+
+ 
+ 
