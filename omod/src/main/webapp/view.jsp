@@ -8,6 +8,7 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/styles/bootstrap/css/bootstrap.css"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/styles/custom/custom.css"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/styles/alert/alert.css"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/styles/custom/muzima.css"/>
 
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/alert/alert.js" />
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/jquery/jquery.js" />
