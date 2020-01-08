@@ -207,3 +207,57 @@
 .table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
     border: none;
 }
+
+.wait-convert {
+    background-image: url('../../images/wait.gif');
+    width: 64px;
+    height: 100%;
+    margin: auto;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hide {
+    display: none;
+}
+/* modal styles */
+.modal-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  .modal-body {
+    flex-grow: 1;
+  }
+  .modal-footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    border: none;
+  }
+  .modal-button {
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+  }
+  .form-details {
+    border-bottom: 1px solid #00000020;
+  }
+  .form-details tr td {
+    padding: 5px 10px;
+  }
+  .form-review {
+    overflow: auto;
+    height: 700px;
+    padding: 10px;
+  }
+  .tab-review {
+    width: 50%;
+  }
+  /* this selector is important to fix a design issue in the tabs of the review */
+.form-review div ul li a {
+    text-align: center !important;
+    color: #004f47 !important;
+    text-decoration: none !important;
+}

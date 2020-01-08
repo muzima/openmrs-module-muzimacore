@@ -16,6 +16,7 @@ muzimaCoreModule.
             when('/registration/:uuid', {controller: ViewRegistrationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/registration.html'}).
             when('/forms', {controller: FormsCtrl,  templateUrl: '../../moduleResources/muzimacore/partials/forms.html'}).
             when('/xforms', {controller: XFormsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/xforms.html'}).
+            when('/htmlformentry', {controller: HtmlFormEntryCtrl, templateUrl: '../../moduleResources/muzimacore/partials/htmlFormEntry.html'}).
             when('/import/forms', {controller: ImportCtrl, templateUrl: '../../moduleResources/muzimacore/partials/import/forms.html'}).
             when('/update/forms/:muzimaform_uuid',{controller: UpdateCtrl, templateUrl: '../../moduleResources/muzimacore/partials/update/forms.html'}).
             when('/error/:uuid', {controller: ErrorCtrl, templateUrl: '../../moduleResources/muzimacore/partials/error.html'}).
