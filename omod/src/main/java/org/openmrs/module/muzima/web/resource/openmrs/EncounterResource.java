@@ -51,7 +51,7 @@ import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MAXIMUM_E
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/encounter",
         supportedClass = FakeEncounter.class,
-        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter> {
 
     /**

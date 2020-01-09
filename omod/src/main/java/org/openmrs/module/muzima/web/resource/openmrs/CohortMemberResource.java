@@ -49,7 +49,7 @@ import java.util.List;
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/member",
         supportedClass = FakeCohortMember.class,
-        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 public class CohortMemberResource extends DelegatingCrudResource<FakeCohortMember> {
 
     @Override
