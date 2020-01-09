@@ -17,7 +17,7 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/formdatastatus",
-        supportedClass = FormDataStatus.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedClass = FormDataStatus.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 
 public class FormDataStatusResource  extends DataDelegatingCrudResource<FormDataStatus> {
     public FormDataStatus getByUniqueId(final String formDataUuid){
