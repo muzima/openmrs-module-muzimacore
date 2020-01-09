@@ -39,7 +39,7 @@ import java.util.List;
 
 
 @Component("muzima.MuzimaCohortDao")
-@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 2.0.1")
+@OpenmrsProfile(openmrsPlatformVersion = "1.9.9 - 2.0.*")
 public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao {
 
     @Autowired
