@@ -14,7 +14,8 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
         $scope.selectedHtmlFormId = -1;
         $scope.htmlFormEntryModuleStarted = true;
         $scope.htmlForms = [];
-        $scope.service = HtmlFormEntryService;
+        $scope.htmlFormEntryService = HtmlFormEntryService;
+        $scope.formService = FormService;
         $scope.fetch();
     };
 
@@ -107,7 +108,7 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
     }
 
     $scope.markConvertedForms = function() {
-        FormService.all()
+        $scope.formService.all()
         .then(forms => {
             let muzimaForms = forms.data.results;
             let formUUIDs = muzimaForms.map(formObject => formObject.form);
@@ -130,7 +131,7 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
 angular.module('muzimaCoreModule').controller('ModalFormReviewCtrl', function ($uibModal, $log, $document) {
     var $ctrl = this;
 
-    $ctrl.open = function (size, form, service) {
+    $ctrl.open = function (size, form, htmlFormEntryService, formService) {
 
         $ctrl.form = form;
 
@@ -146,8 +147,11 @@ angular.module('muzimaCoreModule').controller('ModalFormReviewCtrl', function ($
                 form: function () {
                     return form;
                 },
-                service: function () {
-                    return service;
+                htmlFormEntryService: function () {
+                    return htmlFormEntryService;
+                },
+                formService: function () {
+                    return formService;
                 }
             }
         });
@@ -161,17 +165,17 @@ angular.module('muzimaCoreModule').controller('ModalFormReviewCtrl', function ($
     };
 });
 
-angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', function ($uibModalInstance, form, service) {
+angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', function ($uibModalInstance, form, htmlFormEntryService, formService) {
     var $ctrl = this;
     $ctrl.form = form;
     $ctrl.converting = true;
     $ctrl.convertedForm = {};
 
-    service.convert({
-        form
-    }).then(function (res) {
+    
+    htmlFormEntryService.convert($ctrl.form.id)
+    .then(function (res) {
         $ctrl.converting = false;
-        $ctrl.convertedForm = res;
+        $ctrl.convertedForm = res.data;
         alertFunc(1, 'Conversion Succeeded');
     }).catch(function (error) {
         $ctrl.converting = false;
@@ -180,7 +184,7 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
     });
 
     // prevent routing while converting
-    
+
 
     function routeChange(event, newUrl, oldUrl) {
 
@@ -192,6 +196,7 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
     }
 
     $ctrl.save = function () {
+        formService.save($ctrl.convertedForm)
         alertFunc(1, 'Form Saved Successfully');
         $ctrl.form.converted = true;
         $uibModalInstance.close($ctrl.convertedForm);
