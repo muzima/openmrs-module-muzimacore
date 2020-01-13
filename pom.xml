@@ -149,7 +149,7 @@
             </dependency>
             <dependency>
                 <groupId>org.openmrs.module</groupId>
-                <artifactId>htmlformentry</artifactId>
+                <artifactId>htmlformentry-api</artifactId>
                 <version>3.9.2</version>
                 <type>jar</type>
                 <scope>provided</scope>
