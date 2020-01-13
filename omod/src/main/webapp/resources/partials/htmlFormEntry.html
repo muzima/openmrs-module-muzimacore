@@ -197,13 +197,13 @@
                                     </tbody>
                                     </table>
                                 </div>
-                                <div class="form-review">
+                                <div class="form-preview">
                                     <div ng-show="$ctrl.converting" class="wait-convert"></div>
                                     <uib-tabset active="active" ng-show="!$ctrl.converting">
-                                        <uib-tab index="0" heading="HTML Review" class="tab-review" style="width: 50%; text-align: center !important; color: #004f47 !important;">
+                                        <uib-tab index="0" heading="HTML Review" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
                                             <div bind-unsafe-html="$ctrl.convertedForm.html? $ctrl.getBody($ctrl.convertedForm.html) : ''"></div>
                                         </uib-tab>
-                                        <uib-tab index="1" heading="HTML Code" class="tab-review" style="width: 50%; text-align: center !important; color: #004f47 !important;">
+                                        <uib-tab index="1" heading="HTML Code" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
                                           <div>
                                             <pre>
                                               <code>
