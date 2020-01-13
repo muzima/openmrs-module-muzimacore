@@ -225,17 +225,17 @@ muzimaCoreModule.factory('HtmlFormEntryService', function ($http) {
 
     var moduleState = function () {
 
-        return $http.get('htmlFormEntrymoduleStatus.form');
+        return $http.get('htmlFormEntryModuleStatus.form');
     };
 
     var getHtmlForms = function () {
         
-        return $http.get('htmlformentry.form');
+        return $http.get('htmlFormEntry.form');
     };
 
     var convert = function (id) {
         
-        return $http.post(`htmlformentry.form?id=${id}`);
+        return $http.post(`htmlFormEntry.form?id=${id}`);
     };
 
     var getDiscriminatorTypes = function () {

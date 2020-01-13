@@ -22,7 +22,7 @@ import java.util.ArrayList;
 public class MuzimaHtmlFormEntryController {
 
     @ResponseBody
-    @RequestMapping(value = "module/muzimacore/htmlformentry.form", method = RequestMethod.GET)
+    @RequestMapping(value = "module/muzimacore/htmlFormEntry.form", method = RequestMethod.GET)
     public Map<String, Object> getHtmlForms() {
         Map<String, Object> response = new HashMap<String, Object>();
         List<Object> objects = new ArrayList<Object>();
@@ -43,7 +43,7 @@ public class MuzimaHtmlFormEntryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "module/muzimacore/htmlformentry.form", method = RequestMethod.POST)
+    @RequestMapping(value = "module/muzimacore/htmlFormEntry.form", method = RequestMethod.POST)
     public Map<String, Object> convertHtmlForms(final @RequestParam(value = "id") Integer id) {
         Map<String, Object> response = new HashMap<String, Object>();
         // some dummy values for the dummy response
@@ -70,7 +70,7 @@ public class MuzimaHtmlFormEntryController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "module/muzimacore/htmlFormEntrymoduleStatus.form", method = RequestMethod.GET)
+    @RequestMapping(value = "module/muzimacore/htmlFormEntryModuleStatus.form", method = RequestMethod.GET)
     public boolean htmlFormEntryModuleStatus() {
         return ModuleFactory.isModuleStarted("htmlformentry");
     }
