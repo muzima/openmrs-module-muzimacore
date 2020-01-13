@@ -176,8 +176,6 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
     });
 
     // prevent routing while converting
-
-
     function routeChange(event, newUrl, oldUrl) {
 
         let reply = confirm('Do you want to cancel the conversion?');
