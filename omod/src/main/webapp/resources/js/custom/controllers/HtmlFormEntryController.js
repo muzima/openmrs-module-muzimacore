@@ -39,14 +39,6 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
                 console.info(error);
             });
 
-        // HtmlFormEntryService.getDiscriminatorTypes()
-        //     .then(function (results) {
-        //         $scope.discriminatorTypes = results.data;
-        //         $scope.discriminator = $scope.discriminatorTypes[0];
-        //     }).catch(function (error) {
-        //         showErrorMessage("There was an error connecting the server");
-        //         console.info(error);
-        //     });
     };
 
     var showErrorMessage = function (content, cl, time) {
