@@ -37,6 +37,7 @@ import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.reporting.report.ReportDesign;
+import org.openmrs.module.htmlformentry.HtmlForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -327,6 +328,18 @@ public class WebConverter {
         if (reportDesign != null) {
             map.put("uuid", reportDesign.getUuid());
             map.put("name", reportDesign.getName());
+        }
+        return map;
+    }
+
+    public static Map<String, Object> convertHtmlForm(HtmlForm  htmlForm) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (htmlForm != null) {
+            map.put("id", htmlForm.getForm().getFormId());
+            map.put("uuid", htmlForm.getForm().getUuid());
+            map.put("xmlData", htmlForm.getXmlData());
+            map.put("name", htmlForm.getForm().getName());
+            map.put("description", htmlForm.getForm().getDescription());
         }
         return map;
     }
