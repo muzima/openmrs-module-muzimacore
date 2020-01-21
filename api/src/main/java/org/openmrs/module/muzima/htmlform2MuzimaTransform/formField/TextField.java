@@ -108,7 +108,7 @@ public class TextField implements FormField {
 		} else {
 			sb.append("<div class=\"form-group freetext\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 			if (required) {
-				sb.append("<span class=\"required error-message\">*</span>");
+				sb.append("<span class=\"required\">*</span>");
 			}
 			sb.append("</label>\r\n" + "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name
 			        + "\"\r\n" + "           type=\"text\" data-concept=\"" + this.dataConcept + "\"");
