@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,15 +38,19 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.criterion.MatchMode;
 import org.openmrs.Concept;
+import org.openmrs.ConceptNumeric;
 import org.openmrs.Drug;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifierType;
 import org.openmrs.Person;
 import org.openmrs.PersonName;
+import org.openmrs.Program;
 import org.openmrs.Provider;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.DrugEditor;
 import org.openmrs.propertyeditor.EncounterTypeEditor;
@@ -54,6 +59,7 @@ import org.openmrs.propertyeditor.PatientEditor;
 import org.openmrs.propertyeditor.PersonEditor;
 import org.openmrs.propertyeditor.UserEditor;
 import org.openmrs.util.OpenmrsUtil;
+import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -66,16 +72,6 @@ import org.xml.sax.InputSource;
 public class Htmlform2MuzimaTransformUtil {
 	
 	public static Log log = LogFactory.getLog(Htmlform2MuzimaTransformUtil.class);
-	
-	/**
-	 * Returns the HTML Form Entry service from the Context
-	 *
-	 * @return HTML Form Entry service
-	 */
-	//	public static HtmlFormEntryService getService() {
-	//		return Context.getService(HtmlFormEntryService.class);
-	//	}
-	//TODO how is the formconversion service to be exposed
 	
 	/**
 	 * Converts a string to specified type
@@ -155,91 +151,6 @@ public class Htmlform2MuzimaTransformUtil {
 		}
 		return null;
 	}
-	
-	//TODO needed??
-	//	/**
-	//	 * Creaets an OpenMRS Obs instance
-	//	 *
-	//	 * @param formField the form field that specifies the concept associated with the Obs
-	//	 * @param value value associated with the Obs
-	//	 * @param datetime date/time associated with the Obs (may be null)
-	//	 * @param accessionNumber accession number associatd with the Obs (may be null)
-	//	 * @return the created Obs instance
-	//	 */
-	//
-	//	public static Obs createObs(FormField formField, Object value, Date datetime, String accessionNumber) {
-	//		Concept concept = formField.getField().getConcept();
-	//		if (concept == null)
-	//			throw new FormEntryException("Can't create an Obs for a formField that doesn't represent a Concept");
-	//		return createObs(concept, value, datetime, accessionNumber);
-	//	}
-	
-	//	/**
-	//	 * Creates an OpenMRS Obs instance
-	//	 *
-	//	 * @param concept concept associated with the Obs
-	//	 * @param value value associated with the Obs
-	//	 * @param datetime date/time associated with the Obs (may be null)
-	//	 * @param accessionNumber accession number associated with the Obs (may be null)
-	//	 * @return the created Obs instance
-	//	 */
-	//	public static Obs createObs(Concept concept, Object value, Date datetime, String accessionNumber) {
-	//		Obs obs = new Obs();
-	//		obs.setConcept(concept);
-	//		ConceptDatatype dt = obs.getConcept().getDatatype();
-	//		if (dt.isNumeric()) {
-	//			obs.setValueNumeric(Double.parseDouble(value.toString()));
-	//		} else if (HtmlFormEntryConstants.COMPLEX_UUID.equals(dt.getUuid())) {
-	//			obs.setComplexData((ComplexData) value);
-	//			obs.setValueComplex(obs.getComplexData().getTitle());
-	//		} else if (dt.isText()) {
-	//			if (value instanceof Location) {
-	//				Location location = (Location) value;
-	//				obs.setValueText(location.getId().toString() + " - " + location.getName());
-	//			} else if (value instanceof Person) {
-	//				Person person = (Person) value;
-	//				obs.setValueText(person.getId().toString() + " - " + person.getPersonName().toString());
-	//			} else {
-	//				obs.setValueText(value.toString());
-	//			}
-	//		} else if (dt.isCoded()) {
-	//            if (value instanceof Drug) {
-	//                obs.setValueDrug((Drug) value);
-	//                obs.setValueCoded(((Drug) value).getConcept());
-	//            } else if (value instanceof ConceptName) {
-	//                obs.setValueCodedName((ConceptName) value);
-	//                obs.setValueCoded(obs.getValueCodedName().getConcept());
-	//            } else if (value instanceof Concept) {
-	//				obs.setValueCoded((Concept) value);
-	//            } else {
-	//				obs.setValueCoded((Concept) convertToType(value.toString(), Concept.class));
-	//            }
-	//		} else if (dt.isBoolean()) {
-	//			if (value != null) {
-	//				try {
-	//					obs.setValueAsString(value.toString());
-	//				}
-	//				catch (ParseException e) {
-	//					throw new IllegalArgumentException("Unable to convert " + value + " to a Boolean Obs value", e);
-	//				}
-	//			}
-	//		} else if (ConceptDatatype.DATE.equals(dt.getHl7Abbreviation())
-	//		        || ConceptDatatype.TIME.equals(dt.getHl7Abbreviation())
-	//		        || ConceptDatatype.DATETIME.equals(dt.getHl7Abbreviation())) {
-	//			Date date = (Date) value;
-	//			obs.setValueDatetime(date);
-	//		} else if ("ZZ".equals(dt.getHl7Abbreviation())) {
-	//			// don't set a value
-	//		} else {
-	//			throw new IllegalArgumentException("concept datatype not yet implemented: " + dt.getName()
-	//			        + " with Hl7 Abbreviation: " + dt.getHl7Abbreviation());
-	//		}
-	//		if (datetime != null)
-	//			obs.setObsDatetime(datetime);
-	//		if (accessionNumber != null)
-	//			obs.setAccessionNumber(accessionNumber);
-	//		return obs;
-	//	}
 	
 	/**
 	 * Converts an xml string to a Document object
@@ -395,19 +306,6 @@ public class Htmlform2MuzimaTransformUtil {
 		}
 		return sw.toString();
 	}
-	
-	//	TODO get htmlform Schema
-	//	public static HtmlFormSchema getHtmlFormSchema(HtmlForm htmlForm, FormEntryContext.Mode mode) {
-	//		try {
-	//			Patient patient = HtmlFormEntryUtil.getFakePerson();
-	//			FormEntrySession fes = new FormEntrySession(patient, null, mode, htmlForm, null);
-	//			fes.getHtmlToDisplay();
-	//			return fes.getContext().getSchema();
-	//		}
-	//		catch (Exception e) {
-	//			throw new IllegalStateException("Unable to load html form schema for htmlform: " + htmlForm, e);
-	//		}
-	//	}
 	
 	/**
 	 * Combines a Date object that contains only a date component (day, month, year) with a Date
@@ -622,65 +520,248 @@ public class Htmlform2MuzimaTransformUtil {
 		return sb.toString();
 	}
 	
-	//	//TODO needed?
-	//	/**
-	//	 * Given a include/exclude string. fetch the test expression
-	//	 *
-	//	 * @param teststr
-	//	 * @return a substring of a test expression
-	//	 * @throws BadFormDesignException
-	//	 * @should extract the correct expression from teststr
-	//	 */
-	//	public static String getTestStr(String teststr) throws BadFormDesignException {
-	//		if (StringUtils.isBlank(teststr))
-	//			throw new BadFormDesignException("Can't extract the test expression from " + teststr);
-	//		
-	//		//get the text inside the quotes, i.e the expression
-	//		String[] actualExpression = StringUtils.substringsBetween(teststr, "\"", "\"");
-	//		
-	//		if (actualExpression == null || actualExpression.length != 1 || StringUtils.isBlank(actualExpression[0])) {
-	//			throw new BadFormDesignException("Can't extract the test expression from " + teststr);//throw bad design exception here
-	//		}
-	//		
-	//		return actualExpression[0];
-	//	}
+	/**
+	 * utility method that puts underscore '_' in between words in a string
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String addUnderScoreBetweenWord(String s) {
+		String outString = s.toLowerCase().replaceAll("\\s", "_");
+		
+		return outString;
+	}
 	
 	/**
-	 * Read the global property htmlformentry.archiveDir and return the correct path
+	 * Utility method for htmlform tags converion creates muzimaform name attribute from a concept
+	 * by converting the concept name to string separated with underscores.
 	 * 
-	 * @return String representation of archive directory path
-	 * @should return null if htmlformentry.archiveDir is not defined
-	 * @should replace %Y with a four digit year value
-	 * @should replace %M with a 2 digit month value
-	 * @should prepend the application data if specified value is not absolute.
+	 * @param concept
+	 * @param locale
+	 * @return
+	 * @should include unit for numeric concepts.
 	 */
-	public static String getArchiveDirPath() {
-		String value = Context.getAdministrationService().getGlobalProperty("htmlformentry.archiveDir");
-		if (value != null && org.springframework.util.StringUtils.hasLength(value)) {
+	public static String createNameAttributeFromConcept(Concept concept, Locale locale) {
+		String l;
+		String name;
+		
+		if (concept.getDatatype().isNumeric()) {
 			
-			//Replace %Y and %M if any
-			Date today = new Date();
-			GregorianCalendar gCal = new GregorianCalendar();
-			value = value.replace("%Y", String.valueOf(gCal.get(Calendar.YEAR)));
-			value = value.replace("%y", String.valueOf(gCal.get(Calendar.YEAR)));
+			String units;
 			
-			int month = gCal.get(Calendar.MONTH);
-			month++;
-			if (month < 10) {
-				value = value.replace("%M", "0" + month);
-				value = value.replace("%m", "0" + month);
+			if (concept instanceof ConceptNumeric) {
+				units = ((ConceptNumeric) concept).getUnits();
 			} else {
-				value = value.replace("%M", String.valueOf(month));
-				value = value.replace("%m", String.valueOf(month));
+				ConceptNumeric asConceptNumeric = Context.getConceptService().getConceptNumeric(concept.getConceptId());
+				if (asConceptNumeric == null) {
+					units = null;
+				}
+				units = asConceptNumeric.getUnits();
 			}
 			
-			//Check if not absolute concatenate with application directory
-			File path = new File(value);
-			if (!path.isAbsolute()) {
-				return OpenmrsUtil.getApplicationDataDirectory() + File.separator + value;
-			}
-			return value;
+			l = concept.getName(locale, false).getName() + " " + units;
+			
+		} else {
+			l = concept.getName(locale, false).getName();
+			
 		}
-		return null;
+		name = addUnderScoreBetweenWord(l);
+		return name;
+		
 	}
+	
+	/**
+	 * Utility method for htmlform tags converion creates an muzimaform dataconcept attribute for a
+	 * coded observation returns {conceptId}^{conceptName}^99DCT
+	 * 
+	 * @param concept
+	 * @param locale
+	 * @return
+	 */
+	
+	public static String createDataConceptAttributeFromConcept(Concept concept, Locale locale) {
+		String conceptId = concept.getId().toString();
+		String conceptName;
+		String dataConcept;
+		
+		if (concept.getDatatype().isNumeric()) {
+			String units;
+			if (concept instanceof ConceptNumeric) {
+				units = ((ConceptNumeric) concept).getUnits();
+			} else {
+				ConceptNumeric asConceptNumeric = Context.getConceptService().getConceptNumeric(concept.getConceptId());
+				if (asConceptNumeric == null) {
+					units = null;
+				}
+				units = asConceptNumeric.getUnits();
+			}
+			
+			conceptName = concept.getName(locale, false).getName() + " " + units;
+			
+		} else {
+			conceptName = concept.getName(locale, false).getName();
+			
+		}
+		dataConcept = conceptId + "^" + conceptName + "^99DCT";
+		return dataConcept;
+	}
+	
+	/**
+	 * Find Drug by UUID
+	 * 
+	 * @param uuid
+	 * @return
+	 */
+	public static Drug getDrug(String uuid) {
+		Drug drug = null;
+		if (StringUtils.isNotBlank(uuid)) {
+			try {
+				drug = Context.getConceptService().getDrugByUuid(uuid);
+			}
+			catch (Exception e) {
+				log.error("Failed to find drug: ", e);
+			}
+		}
+		return drug;
+	}
+	
+	/**
+	 * Get the concept by id where the id can either be: 1) an integer id like 5090 2) a mapping
+	 * type id like "XYZ:HT" 3) a uuid like "a3e12268-74bf-11df-9768-17cfc9833272" 4) the fully
+	 * qualified name of a Java constant that contains one of above
+	 *
+	 * @param id the concept identifier
+	 * @return the concept if exist, else null
+	 * @should find a concept by its conceptId
+	 * @should find a concept by its mapping
+	 * @should find a concept by its uuid
+	 * @should find a concept by static constant
+	 * @should return null otherwise
+	 * @should find a concept by its mapping with a space in between
+	 */
+	public static Concept getConcept(String id) {
+		return HtmlFormEntryUtil.getConcept(id);
+	}
+	
+	/**
+	 * Gets a concept by id, mapping, or uuid. (See #getConcept(String) for precise details.) If no
+	 * concept is found, throws an IllegalArgumentException with the given message.
+	 *
+	 * @param id
+	 * @param errorMessageIfNotFound
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public static Concept getConcept(String id, String errorMessageIfNotFound) throws IllegalArgumentException {
+		
+		Concept c = null;
+		try {
+			c = getConcept(id);
+		}
+		catch (Exception ex) {
+			throw new IllegalArgumentException(errorMessageIfNotFound, ex);
+		}
+		if (c == null)
+			throw new IllegalArgumentException(errorMessageIfNotFound);
+		return c;
+	}
+	
+	/**
+	 * Get the location by:
+	 * <ol>
+	 * <li>an integer id like 5090</li>
+	 * <li>a uuid like "a3e12268-74bf-11df-9768-17cfc9833272"</li>
+	 * <li>a name like "Boston"</li>
+	 * <li>an id/name pair like "501 - Boston" (this format is used when saving a location on a obs
+	 * as a value text)</li>
+	 * <li>"GlobalProperty:property.name"</li>
+	 * <li>"UserProperty:propertyName"</li>
+	 *
+	 * @param id
+	 * @param context
+	 * @return the location if exist, else null
+	 * @should find a location by its locationId
+	 * @should find a location by name
+	 * @should find a location by its uuid
+	 * @should find a location by global property
+	 * @should find a location by user property
+	 * @should find a location by session attribute
+	 * @should not fail if trying to find a location by session attribute and we have no session
+	 * @should return null otherwise
+	 */
+	public static Location getLocation(String id) {
+		return HtmlFormEntryUtil.getLocation(id);
+	}
+	
+	/***
+	 * Get the program by: 1)an integer id like 5090 or 2) uuid like
+	 * "a3e12268-74bf-11df-9768-17cfc9833272" or 3) name of *associated concept* (not name of
+	 * program), like "MDR-TB Program"
+	 *
+	 * @param id
+	 * @return the program if exist, else null
+	 * @should find a program by its id
+	 * @should find a program by name of associated concept
+	 * @should find a program by its uuid
+	 * @should return null otherwise
+	 */
+	public static Program getProgram(String id) {
+		return HtmlFormEntryUtil.getProgram(id);
+	}
+	
+	/***
+	 * Get the person by: 1)an integer id like 5090 or 2) uuid like
+	 * "a3e12268-74bf-11df-9768-17cfc9833272" or 3) a username like "mgoodrich" or 4) an id/name
+	 * pair like "5090 - Bob Jones" (this format is used when saving a person on a obs as a value
+	 * text)
+	 * 
+	 * @param id
+	 * @return the person if exist, else null
+	 * @should find a person by its id
+	 * @should find a person by its uuid
+	 * @should find a person by username of corresponding user
+	 * @should return null otherwise
+	 */
+	public static Person getPerson(String id) {
+		return HtmlFormEntryUtil.getPerson(id);
+	}
+	
+	/***
+	 * Get the patient identifier type by: 1)an integer id like 5090 or 2) uuid like
+	 * "a3e12268-74bf-11df-9768-17cfc9833272" or 3) a name like "Temporary Identifier"
+	 * 
+	 * @param id
+	 * @return the identifier type if exist, else null
+	 * @should find an identifier type by its id
+	 * @should find an identifier type by its uuid
+	 * @should find an identifier type by its name
+	 * @should return null otherwise
+	 */
+	public static PatientIdentifierType getPatientIdentifierType(String id) {
+		return HtmlFormEntryUtil.getPatientIdentifierType(id);
+	}
+	
+	/**
+	 * Translates a String into a Date.
+	 * 
+	 * @param value use "now" for the current timestamp, "today" for the current date with a
+	 *            timestamp of 00:00, or a date string that can be parsed by SimpleDateFormat with
+	 *            the format parameter.
+	 * @param format the pattern SimpleDateTime will use to parse the value, if other than "now" or
+	 *            "today".
+	 * @return Date on success; null for an invalid value
+	 * @throws IllegalArgumentException if a date string cannot be parsed with the format string you
+	 *             provided
+	 * @see java.text.SimpleDateFormat
+	 * @should return a Date object with current date and time for "now"
+	 * @shold return a Date with current date, but time of 00:00:00:00, for "today"
+	 * @should return a Date object matching the value param if a format is specified
+	 * @should return null for null value
+	 * @should return null if format is null and value not in [ null, "now", "today" ]
+	 * @should fail if date parsing fails
+	 */
+	public static Date translateDatetimeParam(String value, String format) {
+		return HtmlFormEntryUtil.translateDatetimeParam(value, format);
+	}
+	
 }
