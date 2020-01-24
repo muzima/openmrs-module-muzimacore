@@ -24,7 +24,7 @@ public interface MuzimaPatientReportService extends OpenmrsService {
 
     MuzimaPatientReport getMuzimaPatientReportById(final Integer id);
 
-    MuzimaPatientReport getMuzimaPatientReportByName(final String reportName);
+    MuzimaPatientReport getMuzimaPatientReportByName(final Integer patientId, final String reportName);
 
     List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(final Integer patientId);
 

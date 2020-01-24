@@ -162,8 +162,9 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     @Override
-    public MuzimaPatientReport getMuzimaPatientReportByName(String reportName) {
+    public MuzimaPatientReport getMuzimaPatientReportByName(final Integer patientId, final String reportName) {
         Criteria criteria = session().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("name", reportName));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.setMaxResults(1);
