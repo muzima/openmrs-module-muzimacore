@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/patientreport",
-        supportedClass = MuzimaPatientReport.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedClass = MuzimaPatientReport.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 @Handler(supports = MuzimaPatientReport.class)
 public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<MuzimaPatientReport> {
     private static final Log log = LogFactory.getLog(MuzimaPatientReportResource.class);

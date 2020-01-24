@@ -63,7 +63,7 @@ import static org.openmrs.module.muzima.web.resource.utils.ResourceUtils.parseDa
  * TODO: Write brief description about the class here.
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/notificationdata",
-        supportedClass = NotificationData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedClass = NotificationData.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 public class NotificationDataResource extends DataDelegatingCrudResource<NotificationData> {
     private static final DateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     private static final Logger logger = LoggerFactory.getLogger(org.openmrs.module.muzima.utils.JsonUtils.class.getSimpleName());

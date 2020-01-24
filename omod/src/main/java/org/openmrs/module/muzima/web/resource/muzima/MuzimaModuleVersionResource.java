@@ -16,7 +16,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import java.sql.Timestamp;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/muzimacoreversion",
-        supportedClass = MuzimaModuleVersion.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedClass = MuzimaModuleVersion.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 @Handler(supports = MuzimaModuleVersion.class)
 public class MuzimaModuleVersionResource extends MetadataDelegatingCrudResource<MuzimaModuleVersion> {
     @Override
