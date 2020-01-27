@@ -20,6 +20,14 @@ public class Option {
 		label = "";
 	}
 	
+	/**
+	 * the constructor below is intended for use in autocomplete fields to generate 'source'
+	 */
+	public Option(Concept concept, Locale locale) {
+		this.label = concept.getName(locale, false).getName();
+		this.value = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+	}
+	
 	public Option(String label, String value, boolean selected) {
 		this.label = label;
 		this.value = value;
@@ -52,7 +60,7 @@ public class Option {
 	
 	/**
 	 * Gets the value for the Option
-	 * 
+	 *
 	 * @return value
 	 */
 	public String getValue() {
