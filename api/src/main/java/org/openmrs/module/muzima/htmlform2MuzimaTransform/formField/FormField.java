@@ -14,4 +14,6 @@ public interface FormField {
 	public String generateHtml();
 	
 	public void setDefaultValue(Object defaultValue);
+	
+	public String getJs();
 }
