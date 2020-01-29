@@ -109,4 +109,16 @@ public class FieldFactory {
 		dataConcept = conceptId + "^" + conceptName + "^99DCT";
 		return dataConcept;
 	}
+	
+	/**
+	 * Utility method to escape strings to be used in javascript
+	 */
+	public static String escapeJs(String s) {
+		s = s.replaceAll("\n", "\\\\n");
+		s = s.replaceAll("'", "\\\\'");
+		s = s.replaceAll("\"", "\\\\\"");
+		s = s.replaceAll("[.]", "\\\\\\\\.");
+		
+		return s;
+	}
 }
