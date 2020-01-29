@@ -95,7 +95,7 @@ public class ToggleCheckbox implements FormField {
 			sb.append(" disabled=\"disabled\"");
 		}
 		sb.append("/>\r\n" + "</div>");
-		
+		setJs();
 		return sb.toString();
 	}
 	
@@ -170,10 +170,11 @@ public class ToggleCheckbox implements FormField {
 	}
 	
 	public String getJs() {
-		return js;
+		setJs();
+		return this.js;
 	}
 	
-	public void setJs(String js) {
+	public void setJs() {
 		this.js = "function() {\r\n" + "  var target = $(this).attr(\"toggleHide\");\r\n"
 		        + "  if ($(this).is(\":checked\")) {\r\n" + "    $(\"#\" + target + \", .\" + target).fadeIn();\r\n"
 		        + "  } else {\r\n" + "    $(\"#\" + target + \", .\" + target).hide();\r\n"
