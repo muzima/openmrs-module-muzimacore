@@ -79,6 +79,41 @@ public class ToggleCheckbox implements FormField {
 		this.disabled = disabled;
 	}
 	
+	public ToggleCheckbox(Concept concept, String value, Locale locale, String fieldLabel, String ansLabel,
+	    String toggleTarget) {
+		this.fieldLabel = fieldLabel;
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
+		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+		this.toggleTarget = toggleTarget;
+		this.answerLabel = ansLabel;
+		this.value = value;
+	}
+	
+	public ToggleCheckbox(Concept concept, String value, Locale locale, String fieldLabel, String ansLabel,
+	    String toggleTarget, boolean toggleDimInd) {
+		this.fieldLabel = fieldLabel;
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
+		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+		this.toggleTarget = toggleTarget;
+		this.answerLabel = ansLabel;
+		this.value = value;
+		this.toggleTarget = toggleTarget;
+		this.toggleDimInd = toggleDimInd;
+	}
+	
+	public ToggleCheckbox(Concept concept, String value, Locale locale, String fieldLabel, String ansLabel,
+	    String toggleTarget, boolean toggleDimInd, boolean disabled) {
+		this.fieldLabel = fieldLabel;
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
+		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+		this.toggleTarget = toggleTarget;
+		this.answerLabel = ansLabel;
+		this.value = value;
+		this.toggleTarget = toggleTarget;
+		this.toggleDimInd = toggleDimInd;
+		this.disabled = disabled;
+	}
+	
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
