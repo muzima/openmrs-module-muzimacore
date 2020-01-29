@@ -155,21 +155,23 @@ public class TextField implements FormField {
 		this.required = required;
 	}
 	
-	private String setJs() {
+	private void setJs() {
 		String jsString = null;
 		if (!(textFieldMaxLength == null)) {
 			jsString = "\r\n$(formId).validate({\r\n" + "  rules: {\r\n" + FieldFactory.escapeJs(this.name) + ": {\r\n"
 			        + "      required: true,\r\n" + "      maxlength: " + this.textFieldMaxLength + "\r\n" + "    }\r\n"
 			        + "  }\r\n" + "});\r\n";
-			
+			this.js = jsString;
 		}
-		return null;
+		
 	}
 	
+	@Override
 	public String getJs() {
-		setJs();
-		return this.js;
-		
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 	public void setTextFieldMaxLength(Integer maxlength) {

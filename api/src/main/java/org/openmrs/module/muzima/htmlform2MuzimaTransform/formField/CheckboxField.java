@@ -17,6 +17,8 @@ public class CheckboxField extends SingleOptionField {
 	
 	private boolean required = false;
 	
+	private String js = null;
+	
 	public CheckboxField() {
 		super();
 	}
@@ -78,4 +80,11 @@ public class CheckboxField extends SingleOptionField {
 		this.required = required;
 	}
 	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
+	}
 }

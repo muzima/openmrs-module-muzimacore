@@ -23,6 +23,8 @@ public class UploadField implements FormField {
 	
 	private boolean required;
 	
+	private String js = null;
+	
 	public UploadField(Concept concept, Locale locale, String label) {
 		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
 		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
@@ -44,6 +46,14 @@ public class UploadField implements FormField {
 	@Override
 	public void setDefaultValue(Object defaultValue) {
 		this.defaultValue = (Obs) defaultValue;
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 	public String getFieldLabel() {

@@ -30,7 +30,7 @@ public class ToggleCheckbox implements FormField {
 	
 	private boolean disabled = false;
 	
-	private String js;
+	private String js = null;
 	
 	//	public ToggleCheckbox() {
 	//	}
@@ -97,6 +97,22 @@ public class ToggleCheckbox implements FormField {
 		sb.append("/>\r\n" + "</div>");
 		setJs();
 		return sb.toString();
+	}
+	
+	public void setJs() {
+		this.js = "function() {\r\n" + "  var target = $(this).attr(\"toggleHide\");\r\n"
+		        + "  if ($(this).is(\":checked\")) {\r\n" + "    $(\"#\" + target + \", .\" + target).fadeIn();\r\n"
+		        + "  } else {\r\n" + "    $(\"#\" + target + \", .\" + target).hide();\r\n"
+		        + "    clearContainerInputs($(\"#\" + target + \", .\" + target));\r\n" + "  }\r\n" + "}";
+		
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 	/**
@@ -167,19 +183,6 @@ public class ToggleCheckbox implements FormField {
 	
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
-	}
-	
-	public String getJs() {
-		setJs();
-		return this.js;
-	}
-	
-	public void setJs() {
-		this.js = "function() {\r\n" + "  var target = $(this).attr(\"toggleHide\");\r\n"
-		        + "  if ($(this).is(\":checked\")) {\r\n" + "    $(\"#\" + target + \", .\" + target).fadeIn();\r\n"
-		        + "  } else {\r\n" + "    $(\"#\" + target + \", .\" + target).hide();\r\n"
-		        + "    clearContainerInputs($(\"#\" + target + \", .\" + target));\r\n" + "  }\r\n" + "}";
-		
 	}
 	
 	public String getName() {

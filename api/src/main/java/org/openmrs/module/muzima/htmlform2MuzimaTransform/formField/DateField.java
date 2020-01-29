@@ -27,6 +27,8 @@ public class DateField implements FormField {
 	
 	private boolean allowFutureDates = false;
 	
+	private String js = null;
+	
 	public DateField(Concept concept, Locale locale, String label, boolean allowFutureDate, Date defaultDate) {
 		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
 		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
@@ -78,6 +80,14 @@ public class DateField implements FormField {
 	public void setDefaultValue(Object defaultValue) {
 		this.defaultValue = dateFormat.format(defaultValue);
 		
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 	public String getFieldLabel() {

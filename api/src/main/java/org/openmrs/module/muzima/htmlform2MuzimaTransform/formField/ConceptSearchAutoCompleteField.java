@@ -108,7 +108,7 @@ public class ConceptSearchAutoCompleteField implements FormField {
 			sb.append(" value=\"" + defaultValue.getValue() + "\"");
 		}
 		sb.append(">\r\n </div>");
-		
+		setJs();
 		return sb.toString();
 		
 	}
@@ -122,7 +122,7 @@ public class ConceptSearchAutoCompleteField implements FormField {
 		
 	}
 	
-	public String getJs() {
+	public void setJs() {
 		String elementName = FieldFactory.escapeJs(this.name);
 		String valueName = this.name.replaceAll("\\.", "_");
 		String js = "\r\n" + autoCompleteSourceArray + "\r\n    $('#" + elementName + "').autocomplete({\r\n"
@@ -134,7 +134,15 @@ public class ConceptSearchAutoCompleteField implements FormField {
 		        + "            });\r\n" + "        },\r\n" + "        select: function (event, ui) {\r\n"
 		        + "            $('input[name=\"" + elementName + "\"]').val(ui.item.val);\r\n" + "            $('#"
 		        + elementName + "').val(ui.item.label);\r\n" + "            return false;\r\n" + "        }\r\n" + "    });";
-		return js;
+		this.js = js;
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 	//TODO handle AllowedConceptSetIds

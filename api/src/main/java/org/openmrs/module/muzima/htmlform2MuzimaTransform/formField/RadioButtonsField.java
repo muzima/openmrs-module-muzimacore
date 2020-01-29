@@ -20,6 +20,8 @@ public class RadioButtonsField extends SingleOptionField {
 	
 	private String answerSeparator = null;
 	
+	private String js = null;
+	
 	/**
 	 * Default Constructor
 	 */
@@ -59,6 +61,14 @@ public class RadioButtonsField extends SingleOptionField {
 		
 		sb.append(" </div>\r\n" + "</div>");
 		return sb.toString();
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 	/**

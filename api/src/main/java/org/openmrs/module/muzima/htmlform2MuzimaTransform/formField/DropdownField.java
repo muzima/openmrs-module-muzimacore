@@ -20,6 +20,8 @@ public class DropdownField extends SingleOptionField {
 	
 	private Integer size;
 	
+	private String js = null;
+	
 	public DropdownField() {
 	}
 	
@@ -71,6 +73,14 @@ public class DropdownField extends SingleOptionField {
 		sb.append("</select>");
 		
 		return null;
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 }

@@ -120,7 +120,7 @@ public class NumberField implements FormField {
 		}
 		sb.append("/>");
 		//creates scripts that contain javascript to use for client side validation
-		createJS();
+		setJS();
 		return sb.toString();
 	}
 	
@@ -185,7 +185,7 @@ public class NumberField implements FormField {
 	}
 	
 	//handles client side validation using jQuery validate plugin 
-	private void createJS() {
+	private void setJS() {
 		StringBuilder jsSb = new StringBuilder();
 		if (absoluteMinimum != null && absoluteMaximum != null) {
 			jsSb.append("\r\n $(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
@@ -214,8 +214,9 @@ public class NumberField implements FormField {
 		this.js = jsSb.toString();
 	}
 	
+	@Override
 	public String getJs() {
-		createJS();
+		setJS();
 		return js;
 	}
 	

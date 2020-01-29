@@ -23,7 +23,7 @@ public class TimeField implements FormField {
 	
 	private boolean hideSeconds = false;
 	
-	private String js;
+	private String js = null;
 	
 	public TimeField(Concept concept, Locale locale, String label, Date defaultTime) {
 		this.setName(FieldFactory.createNameAttributeFromConcept(concept, locale));
@@ -103,6 +103,7 @@ public class TimeField implements FormField {
 		}
 		sb.append("<input hidden type=\"text\" id=\"" + this.name + "\" name=\"" + this.name + "\"/>\r\n");
 		sb.append("</div>\r\n</div>\r\n");
+		setJs();
 		return sb.toString();
 	}
 	
@@ -164,18 +165,23 @@ public class TimeField implements FormField {
 		this.hideSeconds = hideSeconds;
 	}
 	
+	@Override
 	public String getJs() {
-		return this.js;
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
-	protected void setJs() {
+	private void setJs() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("    \r\n" + "    let hour = document.getElementById(\"" + getName() + ".hours\");\r\n"
-		        + "    let min = document.getElementById(\"" + getName() + ".minutes\");\r\n");
+		sb.append(
+		    "    \r\n" + "    let hour = document.getElementById(\"" + FieldFactory.escapeJs(this.name) + ".hours\");\r\n"
+		            + "    let min = document.getElementById(\"" + FieldFactory.escapeJs(this.name) + ".minutes\");\r\n");
 		if (!hideSeconds) {
-			sb.append("    let sec = document.getElementById(\"" + getName() + ".seconds\");\r\n");
+			sb.append("    let sec = document.getElementById(\"" + FieldFactory.escapeJs(this.name) + ".seconds\");\r\n");
 		}
-		sb.append("    let times = document.getElementById(\"" + getName() + "\");\r\n" + "    \r\n"
+		sb.append("    let times = document.getElementById(\"" + FieldFactory.escapeJs(this.name) + "\");\r\n" + "    \r\n"
 		        + "    let timeChange = function() {\r\n" + "        times.value = hour.value+\":\"+min.value");
 		if (!hideSeconds) {
 			sb.append("+\":\"+sec.value; \r\n");
