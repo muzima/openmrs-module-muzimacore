@@ -23,6 +23,10 @@ public class DropdownField extends SingleOptionField {
 	public DropdownField() {
 	}
 	
+	public DropdownField(Integer size) {
+		this.size = size;
+	}
+	
 	public DropdownField(Concept concept, Locale locale, String label, Integer size) {
 		this.size = size;
 		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
