@@ -188,23 +188,23 @@ public class NumberField implements FormField {
 	private void createJS() {
 		StringBuilder jsSb = new StringBuilder();
 		if (absoluteMinimum != null && absoluteMaximum != null) {
-			jsSb.append(" $(formId).validate({\r\n" + "        rules: {\r\n '" + name
+			jsSb.append("\r\n $(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
 			        + "': {\r\n number: true, \r\n range: [" + absoluteMinimum + "," + absoluteMaximum + "]");
 			if (this.required) {
 				jsSb.append(" \r\n required : true");
 			}
 			jsSb.append("\r\n  } } });");
 		} else if (absoluteMaximum != null && absoluteMinimum == null) {
-			jsSb.append(" $(formId).validate({\r\n" + "        rules: {\r\n '" + name + "': {\r\n number: true, \r\n max: "
-			        + absoluteMaximum);
+			jsSb.append(" $(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
+			        + "': {\r\n number: true, \r\n max: " + absoluteMaximum);
 			if (this.required) {
 				jsSb.append(" \r\n required : true");
 			}
 			jsSb.append("\r\n  } } });");
 			
 		} else if (absoluteMinimum != null && absoluteMaximum == null) {
-			jsSb.append("$(formId).validate({\r\n" + "        rules: {\r\n '" + name + "': {\r\n number: true, \r\n min: "
-			        + absoluteMinimum);
+			jsSb.append("$(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
+			        + "': {\r\n number: true, \r\n min: " + absoluteMinimum);
 			if (this.required) {
 				jsSb.append(" \r\n required : true");
 			}
@@ -215,6 +215,7 @@ public class NumberField implements FormField {
 	}
 	
 	public String getJs() {
+		createJS();
 		return js;
 	}
 	
