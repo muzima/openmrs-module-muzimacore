@@ -164,7 +164,7 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
     $ctrl.convertedForm = {};
 
     
-    htmlFormEntryService.convert($ctrl.form.id)
+    htmlFormEntryService.convert($ctrl.form.id, $ctrl.form)
     .then(function (res) {
         $ctrl.converting = false;
         $ctrl.convertedForm = res.data;
