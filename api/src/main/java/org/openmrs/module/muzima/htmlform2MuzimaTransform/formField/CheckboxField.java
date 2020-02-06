@@ -5,10 +5,9 @@ import java.util.Locale;
 import org.openmrs.Concept;
 
 /**
- * generates html code for radio button {@code <input type="radio"/>}
+ * A checkbox field, like {@code <input type="checkbox"/>}
  */
-
-public class RadioButtonsField extends SingleOptionField {
+public class CheckboxField extends SingleOptionField {
 	
 	private String fieldLabel;
 	
@@ -18,18 +17,13 @@ public class RadioButtonsField extends SingleOptionField {
 	
 	private boolean required = false;
 	
-	private String answerSeparator = null;
-	
 	private String js = null;
 	
-	/**
-	 * Default Constructor
-	 */
-	public RadioButtonsField() {
+	public CheckboxField() {
 		super();
 	}
 	
-	public RadioButtonsField(Concept concept, Locale locale, String label) {
+	public CheckboxField(Concept concept, Locale locale, String label) {
 		this.setName(FieldFactory.createNameAttributeFromConcept(concept, locale));
 		this.setDataConcept(FieldFactory.createDataConceptAttributeFromConcept(concept, locale));
 		this.fieldLabel = label;
@@ -38,11 +32,11 @@ public class RadioButtonsField extends SingleOptionField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<div class=\"form-group\">\r\n <div class=\"form-group\">\r\n <span><strong>" + this.fieldLabel);
+		sb.append("<div class=\"section\">\r\n" + "<h4>" + this.fieldLabel);
 		if (this.required) {
 			sb.append(" <span class=\"required\">*</span>");
 		}
-		sb.append(" </strong></span> \r\n");
+		sb.append(" </h4> \r\n");
 		
 		for (int i = 0; i < getOptions().size(); ++i) {
 			Option option = getOptions().get(i);
@@ -50,41 +44,16 @@ public class RadioButtonsField extends SingleOptionField {
 			if (!selected)
 				selected = getDefaultValue() == null ? option.getValue().equals("")
 				        : getDefaultValue().equals(option.getValue());
-			sb.append("<div class=\"radio\">\r\n" + "            <label>\r\n" + "                <input name=\"" + this.name
-			        + "\" type=\"radio\"\r\n" + "                       data-concept=\"" + this.dataConcept + "\"\r\n"
+			sb.append("<div class=\"form-group\">\r\n" + "            <label  class=\"font-normal\">\r\n"
+			        + "                <input id=\"" + option.getLabel() + "_" + this.name + "\" type=\"checkbox\"\r\n"
+			        + "                       data-concept=\"" + this.dataConcept + "\"\r\n"
 			        + "                       value=\"" + option.getValue() + "\">\r\n" + option.getLabel() + "\r\n"
 			        + "            </label>\r\n" + "        </div>");
-			if (i < getOptions().size() - 1) {
-				sb.append(getAnswerSeparator());
-			}
+			
 		}
 		
-		sb.append(" </div>\r\n" + "</div>");
+		sb.append("</div>");
 		return sb.toString();
-	}
-	
-	@Override
-	public String getJs() {
-		if (this.js != null) {
-			return this.js;
-		}
-		return "";
-	}
-	
-	/**
-	 * @return the answerSeparator
-	 */
-	public String getAnswerSeparator() {
-		if (answerSeparator == null)
-			answerSeparator = "&#160;";
-		return answerSeparator;
-	}
-	
-	/**
-	 * @param answerSeparator the answerSeparator to set
-	 */
-	public void setAnswerSeparator(String answerSeparator) {
-		this.answerSeparator = answerSeparator;
 	}
 	
 	public String getName() {
@@ -109,5 +78,13 @@ public class RadioButtonsField extends SingleOptionField {
 	
 	public void setRequired(boolean required) {
 		this.required = required;
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 }

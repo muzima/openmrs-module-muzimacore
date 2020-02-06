@@ -43,7 +43,7 @@ public abstract class SingleOptionField implements FormField {
 	}
 	
 	/**
-	 * Adds an Option to this Widget
+	 * Adds an Option to this Field
 	 * 
 	 * @param option
 	 */
@@ -54,7 +54,7 @@ public abstract class SingleOptionField implements FormField {
 	}
 	
 	/**
-	 * Returns all Options for this Widget
+	 * Returns all Options for this Field
 	 * 
 	 * @return
 	 */
@@ -63,7 +63,7 @@ public abstract class SingleOptionField implements FormField {
 	}
 	
 	/**
-	 * Sets all Options for this Widget
+	 * Sets all Options for this Field
 	 * 
 	 * @param options
 	 */

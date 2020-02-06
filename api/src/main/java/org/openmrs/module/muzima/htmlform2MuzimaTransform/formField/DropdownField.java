@@ -20,11 +20,23 @@ public class DropdownField extends SingleOptionField {
 	
 	private Integer size;
 	
+	private String js = null;
+	
 	public DropdownField() {
+	}
+	
+	public DropdownField(Integer size) {
+		this.size = size;
 	}
 	
 	public DropdownField(Concept concept, Locale locale, String label, Integer size) {
 		this.size = size;
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
+		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+		this.fieldLabel = label;
+	}
+	
+	public DropdownField(Concept concept, Locale locale, String label) {
 		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
 		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
 		this.fieldLabel = label;
@@ -67,6 +79,14 @@ public class DropdownField extends SingleOptionField {
 		sb.append("</select>");
 		
 		return null;
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 }

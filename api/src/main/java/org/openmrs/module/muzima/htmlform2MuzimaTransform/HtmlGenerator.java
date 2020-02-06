@@ -18,9 +18,11 @@ import org.openmrs.Role;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.util.LocaleUtility;
-//import org.openmrs.module.htmlformentry.handler.AttributeDescriptor;
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.AttributeDescriptor;
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.TagHandler;
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.IteratingTagHandler;
+
 //import org.openmrs.module.htmlformentry.handler.IteratingTagHandler;
-//import org.openmrs.module.htmlformentry.handler.TagHandler;
 //import org.openmrs.module.htmlformentry.matching.ObsGroupEntity;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -32,7 +34,7 @@ import org.w3c.dom.NodeList;
  * be displayed as a form in a web browser. It can apply the {@code <macros>...</macros>} section,
  * and replace tags like {@code <obs/>}.
  */
-public class HtmlGenerator {
+public class HtmlGenerator implements TagHandler {
 	
 	/**
 	 * Takes an XML string, finds the {@code <macros></macros>} section in it, and applies those
@@ -479,4 +481,154 @@ public class HtmlGenerator {
 		return substitutionSet;
 	}
 	
+	/**
+	 * Applies all the HTML Form Entry tags in a specific XML file (excluding
+	 * {@code <macro>, <translations>, and <repeat>)}, by calling the appropriate tag handler (see
+	 * {@see org.openmrs.module.htmlformentry.handler}) for each tag
+	 * <p/>
+	 *
+	 * @param xml the xml string to process
+	 * @return the xml string (which should now be html with javascript) after tag processing
+	 * @throws Exception
+	 */
+	public String applyTags(String xml) throws Exception {
+		
+		Document doc = Htmlform2MuzimaTransformUtil.stringToDocument(xml);
+		Node content = Htmlform2MuzimaTransformUtil.findChild(doc, "htmlform");
+		StringWriter outHtmlStringWriter = new StringWriter();
+		StringWriter outJsStringWriter = new StringWriter();
+		outHtmlStringWriter
+		        .write("<html>\r\n" + "<head>\r\n" + "    <link href=\"css/bootstrap.min.css\" rel=\"stylesheet\">\r\n"
+		                + "    <link href=\"css/muzima.css\" rel=\"stylesheet\">   \r\n"
+		                + "    <link href=\"css/bootstrap-datetimepicker.min.css\" rel=\"stylesheet\">\r\n"
+		                + "    <link href=\"css/ui-darkness/jquery-ui-1.10.4.custom.min.css\" rel=\"stylesheet\">\r\n"
+		                + "    <script src=\"js/jquery.min.js\"></script>\r\n"
+		                + "    <script src=\"js/jquery-ui-1.10.4.custom.min.js\"></script>\r\n"
+		                + "    <script src=\"js/jquery.validate.min.js\"></script>\r\n"
+		                + "    <script src=\"js/additional-methods.min.js\"></script>\r\n"
+		                + "    <script src=\"js/muzima.js\"></script>\r\n"
+		                + "    <script src=\"js/bootstrap-datetimepicker.min.js\"></script>\r\n"
+		                + "    <title>Basic Encounter Form Template</title>\r\n" + "</head>\r\n"
+		                + "<body class=\"col-md-8 col-md-offset-2\">\r\n" + "<div id=\"pre_populate_data\"></div>");
+		
+		outJsStringWriter.write("\r\n <script type=\"text/javascript\">\r\n" + "$(document).ready(function () {");
+		
+		applyTagsHelper(new PrintWriter(outHtmlStringWriter), new PrintWriter(outJsStringWriter), null, content, null);
+		
+		outJsStringWriter.write("\r\n" + "});\r\n" + "</script>");
+		outHtmlStringWriter.write(outJsStringWriter.toString());
+		
+		return outHtmlStringWriter.toString();
+	}
+	
+	private void applyTagsHelper(PrintWriter outHtmlPrintWriter, PrintWriter outJsPrintWriter, Node parent, Node node,
+	        Map<String, TagHandler> tagHandlerCache) {
+		if (tagHandlerCache == null)
+			tagHandlerCache = new HashMap<String, TagHandler>();
+		TagHandler handler = null;
+		// Find the handler for this node
+		{
+			String name = node.getNodeName();
+			if (name != null) {
+				if (tagHandlerCache.containsKey(name)) {
+					// we've looked this up before (though it could be null)
+					handler = tagHandlerCache.get(name);
+				} else {
+					handler = Htmlform2MuzimaTransformUtil.getMuzimaFormService().getHtmlformTagHandlerByTagName(name);
+					tagHandlerCache.put(name, handler);
+				}
+			}
+		}
+		
+		if (handler == null)
+			handler = this; // do default actions
+			
+		boolean handleContents = handler.doStartTag(outHtmlPrintWriter, outJsPrintWriter, parent, node);
+		
+		// Unless the handler told us to skip them, then iterate over any children
+		if (handleContents) {
+			if (handler != null && handler instanceof IteratingTagHandler) {
+				// recurse as many times as the tag wants
+				IteratingTagHandler iteratingHandler = (IteratingTagHandler) handler;
+				while (iteratingHandler.shouldRunAgain(outHtmlPrintWriter, outJsPrintWriter, parent, node)) {
+					NodeList list = node.getChildNodes();
+					for (int i = 0; i < list.getLength(); ++i) {
+						applyTagsHelper(outHtmlPrintWriter, outJsPrintWriter, node, list.item(i), tagHandlerCache);
+					}
+				}
+				
+			} else { // recurse to contents once
+				NodeList list = node.getChildNodes();
+				for (int i = 0; i < list.getLength(); ++i) {
+					applyTagsHelper(outHtmlPrintWriter, outJsPrintWriter, node, list.item(i), tagHandlerCache);
+				}
+			}
+		}
+		
+		//handler.doEndTag(session, out, parent, node);		
+	}
+	
+	/**
+	 * Provides default getAttributeDescriptors handling (returns null)
+	 */
+	@Override
+	public List<AttributeDescriptor> getAttributeDescriptors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/**
+	 * Provides default start tag handling for tags with no custom handler
+	 * <p/>
+	 * Default behavior is simply to leave the tag unprocessed. That is, any basic HTML tags are
+	 * left as is.
+	 *
+	 * @should close br tags
+	 */
+	@Override
+	public boolean doStartTag(PrintWriter outHtmlPrintWriter, PrintWriter outJsPrintWriter, Node parent, Node node) {
+		if (node.getNodeType() == Node.TEXT_NODE) {
+			outHtmlPrintWriter.print(node.getNodeValue());
+		} else if (node.getNodeType() == Node.COMMENT_NODE) {
+			// do nothing
+		} else {
+			outHtmlPrintWriter.print("<");
+			outHtmlPrintWriter.print(node.getNodeName());
+			NamedNodeMap attrs = node.getAttributes();
+			if (attrs != null) {
+				for (int i = 0; i < attrs.getLength(); ++i) {
+					Node attr = attrs.item(i);
+					outHtmlPrintWriter.print(" ");
+					outHtmlPrintWriter.print(attr.getNodeName());
+					outHtmlPrintWriter.print("=\"");
+					outHtmlPrintWriter.print(attr.getNodeValue());
+					outHtmlPrintWriter.print("\"");
+				}
+			}
+			// added so that a single <br/> tag isn't rendered as two line breaks: see HTML-342
+			if ("br".equalsIgnoreCase(node.getNodeName())) {
+				outHtmlPrintWriter.print("/>");
+			} else {
+				outHtmlPrintWriter.print(">");
+			}
+		}
+		//replaces htmlformentry's doend tag
+		if (!"br".equalsIgnoreCase(node.getNodeName())) {
+			outHtmlPrintWriter.print("</" + node.getNodeName() + ">");
+		}
+		return true;
+	}
+	
+	/**
+	 * Removes htmlform tag and wraps the form in the div tag.
+	 *
+	 * @param xml
+	 * @return xml
+	 * @should remove htmlform tag and wrap form in div
+	 */
+	public String wrapInDiv(String xml) {
+		xml = xml.trim();
+		xml = xml.replaceAll("(?s)<htmlform>(.*)</htmlform>", "<div class=\"htmlform\">$1</div>");
+		return xml;
+	}
 }

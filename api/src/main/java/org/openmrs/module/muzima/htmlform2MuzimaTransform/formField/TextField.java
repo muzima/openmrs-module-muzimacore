@@ -33,6 +33,8 @@ public class TextField implements FormField {
 	
 	private boolean required = false;
 	
+	private String js = null;
+	
 	/**
 	 * Default constructor implements the text field as a simple input field, like
 	 * {@code <input type="text"/>}.
@@ -52,6 +54,7 @@ public class TextField implements FormField {
 		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
 		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
 		this.fieldLabel = label;
+		
 	}
 	
 	/**
@@ -127,6 +130,7 @@ public class TextField implements FormField {
 			}
 			sb.append("\">\r\n" + "</div>\r\n");
 		}
+		setJs();
 		return sb.toString();
 	}
 	
@@ -149,6 +153,30 @@ public class TextField implements FormField {
 	
 	public void setRequired(boolean required) {
 		this.required = required;
+	}
+	
+	private void setJs() {
+		String jsString = null;
+		if (!(textFieldMaxLength == null)) {
+			jsString = "\r\n$(formId).validate({\r\n" + "  rules: {\r\n" + FieldFactory.escapeJs(this.name) + ": {\r\n"
+			        + "      required: true,\r\n" + "      maxlength: " + this.textFieldMaxLength + "\r\n" + "    }\r\n"
+			        + "  }\r\n" + "});\r\n";
+			this.js = jsString;
+		}
+		
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
+	}
+	
+	public void setTextFieldMaxLength(Integer maxlength) {
+		this.textFieldMaxLength = maxlength;
+		
 	}
 	
 }

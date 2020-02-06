@@ -120,7 +120,7 @@ public class NumberField implements FormField {
 		}
 		sb.append("/>");
 		//creates scripts that contain javascript to use for client side validation
-		createJS();
+		setJS();
 		return sb.toString();
 	}
 	
@@ -185,26 +185,26 @@ public class NumberField implements FormField {
 	}
 	
 	//handles client side validation using jQuery validate plugin 
-	private void createJS() {
+	private void setJS() {
 		StringBuilder jsSb = new StringBuilder();
 		if (absoluteMinimum != null && absoluteMaximum != null) {
-			jsSb.append(" $(formId).validate({\r\n" + "        rules: {\r\n '" + name
+			jsSb.append("\r\n $(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
 			        + "': {\r\n number: true, \r\n range: [" + absoluteMinimum + "," + absoluteMaximum + "]");
 			if (this.required) {
 				jsSb.append(" \r\n required : true");
 			}
 			jsSb.append("\r\n  } } });");
 		} else if (absoluteMaximum != null && absoluteMinimum == null) {
-			jsSb.append(" $(formId).validate({\r\n" + "        rules: {\r\n '" + name + "': {\r\n number: true, \r\n max: "
-			        + absoluteMaximum);
+			jsSb.append(" $(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
+			        + "': {\r\n number: true, \r\n max: " + absoluteMaximum);
 			if (this.required) {
 				jsSb.append(" \r\n required : true");
 			}
 			jsSb.append("\r\n  } } });");
 			
 		} else if (absoluteMinimum != null && absoluteMaximum == null) {
-			jsSb.append("$(formId).validate({\r\n" + "        rules: {\r\n '" + name + "': {\r\n number: true, \r\n min: "
-			        + absoluteMinimum);
+			jsSb.append("$(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
+			        + "': {\r\n number: true, \r\n min: " + absoluteMinimum);
 			if (this.required) {
 				jsSb.append(" \r\n required : true");
 			}
@@ -214,7 +214,9 @@ public class NumberField implements FormField {
 		this.js = jsSb.toString();
 	}
 	
+	@Override
 	public String getJs() {
+		setJS();
 		return js;
 	}
 	

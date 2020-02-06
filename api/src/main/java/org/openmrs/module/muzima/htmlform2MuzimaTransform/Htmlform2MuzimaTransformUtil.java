@@ -42,6 +42,8 @@ import org.openmrs.ConceptNumeric;
 import org.openmrs.Drug;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
+import org.openmrs.LocationTag;
+import org.openmrs.OpenmrsMetadata;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Person;
@@ -502,7 +504,7 @@ public class Htmlform2MuzimaTransformUtil {
 	}
 	
 	/**
-	 * @param s the string to conver to camelcase
+	 * @param s the string to convert to camelcase
 	 * @return should return the passed in string in the camelcase format
 	 */
 	public static String toCamelCase(String s) {
@@ -529,6 +531,17 @@ public class Htmlform2MuzimaTransformUtil {
 	public static String addUnderScoreBetweenWord(String s) {
 		String outString = s.toLowerCase().replaceAll("\\s", "_");
 		
+		return outString;
+	}
+	
+	/**
+	 * utility method that puts underscore '\\' in between words in a string
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static String addEscapeBeforeDot(String s) {
+		String outString = s.toLowerCase().replaceAll("\\.", "\\\\.");
 		return outString;
 	}
 	
@@ -709,6 +722,66 @@ public class Htmlform2MuzimaTransformUtil {
 		return HtmlFormEntryUtil.getProgram(id);
 	}
 	
+	public static List<Location> getLocationsByTags(String attributeName, Map<String, String> parameters) {
+		List<Location> locations = null;
+		
+		String locationTags = parameters.get(attributeName);
+		
+		if (locationTags != null) {
+			List<LocationTag> tags = new ArrayList<LocationTag>();
+			String[] temp = locationTags.split(",");
+			for (String s : temp) {
+				if (s != null && !s.isEmpty()) {
+					LocationTag tag = getLocationTag(s);
+					if (tag == null) {
+						throw new RuntimeException("Cannot find tag: " + tag);
+					}
+					tags.add(tag);
+				}
+			}
+			locations = new ArrayList<Location>();
+			locations.addAll(Context.getLocationService().getLocationsHavingAnyTag(tags));
+		}
+		return locations;
+	}
+	
+	/**
+	 * Fetches a location tag by name or id
+	 * 
+	 * @param identifier
+	 * @return
+	 */
+	public static LocationTag getLocationTag(String identifier) {
+		
+		LocationTag tag = null;
+		
+		if (identifier != null) {
+			
+			identifier = identifier.trim();
+			
+			// first try to fetch by id
+			try {
+				Integer id = Integer.valueOf(identifier);
+				tag = Context.getLocationService().getLocationTag(id);
+				
+				if (tag != null) {
+					return tag;
+				}
+			}
+			catch (NumberFormatException e) {}
+			
+			// if not, try to fetch by name
+			tag = Context.getLocationService().getLocationTagByName(identifier);
+			
+			if (tag != null) {
+				return tag;
+			}
+			
+		}
+		
+		return null;
+	}
+	
 	/***
 	 * Get the person by: 1)an integer id like 5090 or 2) uuid like
 	 * "a3e12268-74bf-11df-9768-17cfc9833272" or 3) a username like "mgoodrich" or 4) an id/name
@@ -762,6 +835,18 @@ public class Htmlform2MuzimaTransformUtil {
 	 */
 	public static Date translateDatetimeParam(String value, String format) {
 		return HtmlFormEntryUtil.translateDatetimeParam(value, format);
+	}
+	
+	public static String format(OpenmrsMetadata md) {
+		return HtmlFormEntryUtil.format(md);
+	}
+	
+	public static String format(OpenmrsMetadata md, Locale locale) {
+		return HtmlFormEntryUtil.format(md, locale);
+	}
+	
+	public static MuzimaFormService getMuzimaFormService() {
+		return Context.getService(MuzimaFormService.class);
 	}
 	
 }
