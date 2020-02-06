@@ -67,11 +67,6 @@ public class ObsElement implements HtmlGeneratorElement {
 	
 	private Locale locale = Context.getLocale();
 	
-	private String id;
-	
-	//TODO is class required?
-	private String clazz;
-	
 	private Concept concept;
 	
 	private String valueLabel;
@@ -80,21 +75,9 @@ public class ObsElement implements HtmlGeneratorElement {
 	
 	private String defaultValue;
 	
-	protected boolean showUnits = false;
-	
-	private String unitsCode;
-	
 	private String dateLabel;
 	
 	private DateField dateField;
-	
-	private String accessionNumberLabel;
-	
-	private TextField accessionNumberField;
-	
-	private String commentFieldLabel;
-	
-	private TextField commentFieldField;
 	
 	private boolean allowFutureDates = false;
 	
@@ -113,6 +96,8 @@ public class ObsElement implements HtmlGeneratorElement {
 	private String answerLabel;
 	
 	private boolean required;
+	
+	private String jsString = null;
 	
 	//these are for conceptSelects:
 	private List<Concept> concepts = null; //possible concepts
@@ -197,13 +182,6 @@ public class ObsElement implements HtmlGeneratorElement {
 			allowFutureDates = true;
 		if ("true".equals(parameters.get("required"))) {
 			required = true;
-		}
-		if (parameters.get("id") != null) {
-			id = parameters.get("id");
-		}
-		//TODO is class required?
-		if (parameters.get("class") != null) {
-			clazz = parameters.get("class");
 		}
 		
 		isLocationObs = "location".equals(parameters.get("style"));
@@ -387,10 +365,9 @@ public class ObsElement implements HtmlGeneratorElement {
 									answerLabel = (parameters.get("answerLabel") != null) ? parameters.get("answerLabel")
 									        : cn.getName(locale, false).getName();
 									if (number != null) {
-										
-										valueField = new CheckboxField(cn, locale, valueLabel);
-										((CheckboxField) valueField)
-										        .addOption(new Option(answerLabel, parameters.get("answer"), false));
+										valueField = createToggleCheckbox(cn, null,
+										    (isPrecise ? number.toString() : Integer.valueOf(number.intValue()).toString()),
+										    locale, valueLabel, answerLabel, parameters.get("toggle"));
 									}
 									
 								}
@@ -625,394 +602,313 @@ public class ObsElement implements HtmlGeneratorElement {
 								valueField.setDefaultValue(initialValue);
 							}
 						}
+					} else if (concept.getDatatype().isCoded()) {
+						if (parameters.get("answerConceptIds") != null) {
+							try {
+								for (StringTokenizer st = new StringTokenizer(parameters.get("answerConceptIds"), ","); st
+								        .hasMoreTokens();) {
+									Concept c = Htmlform2MuzimaTransformUtil.getConcept(st.nextToken());
+									if (c == null)
+										throw new RuntimeException("Cannot find concept " + st.nextToken());
+									conceptAnswers.add(c);
+								}
+							}
+							catch (Exception ex) {
+								throw new RuntimeException("Error in answer list for concept " + concept.getConceptId()
+								        + " (" + ex.toString() + "): " + conceptAnswers);
+							}
+						} else if (answerConceptSetIds != null && !isAutocomplete) {
+							try {
+								for (StringTokenizer st = new StringTokenizer(answerConceptSetIds, ","); st
+								        .hasMoreTokens();) {
+									Concept answerConceptSet = Htmlform2MuzimaTransformUtil.getConcept(st.nextToken());
+									conceptAnswers
+									        .addAll(Context.getConceptService().getConceptsByConceptSet(answerConceptSet));
+								}
+							}
+							catch (Exception ex) {
+								throw new RuntimeException(
+								        "Error loading answer concepts from answerConceptSet " + answerConceptSetIds, ex);
+							}
+						} else if (parameters.get("answerClasses") != null && !isAutocomplete) {
+							try {
+								for (StringTokenizer st = new StringTokenizer(parameters.get("answerClasses"), ","); st
+								        .hasMoreTokens();) {
+									String className = st.nextToken().trim();
+									ConceptClass cc = Context.getConceptService().getConceptClassByName(className);
+									if (cc == null) {
+										throw new RuntimeException("Cannot find concept class " + className);
+									}
+									conceptAnswers.addAll(Context.getConceptService().getConceptsByClass(cc));
+								}
+								Collections.sort(conceptAnswers, conceptNameComparator);
+							}
+							catch (Exception ex) {
+								throw new RuntimeException("Error in answer class list for concept " + concept.getConceptId()
+								        + " (" + ex.toString() + "): " + conceptAnswers);
+							}
+						}
+						
+						if (answerConcept != null) {
+							// if there's also an answer concept specified, this is a single
+							// checkbox
+							answerLabel = parameters.get("answerLabel");
+							if (answerLabel == null) {
+								String answerCode = parameters.get("answerCode");
+								if (answerCode != null) {
+									//translations have been handled
+									answerLabel = answerCode;
+								} else {
+									answerLabel = answerConcept.getName(locale, false).getName();
+								}
+							}
+							valueField = createToggleCheckbox(concept, answerConcept, null, locale, valueLabel, answerLabel,
+							    parameters.get("toggle"));
+							
+							if (defaultValue != null) {
+								Concept initialValue1 = Htmlform2MuzimaTransformUtil.getConcept(defaultValue);
+								if (initialValue1 == null) {
+									throw new IllegalArgumentException(
+									        "Invalid default value. Cannot find concept: " + defaultValue);
+								}
+								if (!answerConcept.equals(initialValue1)) {
+									throw new IllegalArgumentException("Invalid default value: " + defaultValue
+									        + ". The only allowed answer is: " + answerConcept.getId());
+								}
+								valueField.setDefaultValue(initialValue1);
+							}
+						} else if ("true".equals(parameters.get("multiple"))) {
+							// if this is a select-multi, we need a group of checkboxes
+							//this was not implemented in htmlformentry but is needed in muzima
+							if (conceptAnswers != null) {
+								valueField = new CheckboxField(concept, locale, valueLabel);
+							}
+							
+						} else {
+							// allow selecting one of multiple possible coded values
+							
+							// if no answers are specified explicitly (by conceptAnswers or conceptClasses), get them from concept.answers.
+							if (!parameters.containsKey("answerConceptIds") && !parameters.containsKey("answerClasses")
+							        && !parameters.containsKey("answerDrugs") && !parameters.containsKey("answerDrugId")
+							        && !parameters.containsKey("answerConceptSetIds")) {
+								conceptAnswers = new ArrayList<Concept>();
+								for (ConceptAnswer ca : concept.getAnswers(false)) {
+									conceptAnswers.add(ca.getAnswerConcept());
+								}
+								Collections.sort(conceptAnswers, conceptNameComparator);
+							}
+							
+							if (isAutocomplete) {
+								List<ConceptClass> cptClasses = new ArrayList<ConceptClass>();
+								if (parameters.get("answerClasses") != null) {
+									for (StringTokenizer st = new StringTokenizer(parameters.get("answerClasses"), ","); st
+									        .hasMoreTokens();) {
+										String className = st.nextToken().trim();
+										ConceptClass cc = Context.getConceptService().getConceptClassByName(className);
+										cptClasses.add(cc);
+									}
+								}
+								if ((conceptAnswers == null || conceptAnswers.isEmpty())
+								        && (cptClasses == null || cptClasses.isEmpty()) && answerConceptSetIds == null) {
+									throw new RuntimeException(
+									        "style \"autocomplete\" but there are no possible answers. Looked for answerConcepts and "
+									                + "answerClasses attributes, answerConceptSetIds, and answers for concept "
+									                + concept.getConceptId());
+								}
+								//TODO handle dynamic autocomplete, ask if it even needed because it is not in the htmlform specification
+								//								if ("true".equals(parameters.get("selectMulti"))) {
+								//									DynamicAutocompleteField dacw = new DynamicAutocompleteField(conceptAnswers, cptClasses);
+								//									dacw.setAllowedConceptSetIds(answerConceptSetIds);
+								//									valueField = dacw;
+								//								} else 
+								
+								ConceptSearchAutoCompleteField csaw = new ConceptSearchAutoCompleteField(concept, locale,
+								        valueLabel, conceptAnswers, cptClasses);
+								csaw.setAllowedConceptSetIds(answerConceptSetIds);
+								valueField = csaw;
+								//TODO handle drugs autocomplete		
+								//							} else if (parameters.get("answerDrugs") != null) {
+								//								// we support searching through all drugs via AJAX
+								//								RemoteJsonAutocompleteField widget = new RemoteJsonAutocompleteField(
+								//								        "/" + WebConstants.WEBAPP_NAME + "/module/htmlformentry/drugSearch.form");
+								//								widget.setValueTemplate("Drug:{{id}}");
+								//								if (parameters.get("displayTemplate") != null) {
+								//									widget.setDisplayTemplate(parameters.get("displayTemplate"));
+								//								} else {
+								//									widget.setDisplayTemplate("{{name}}");
+								//								}
+								//								if (existingObs != null && existingObs.getValueDrug() != null) {
+								//									widget.setDefaultValue(new Option(existingObs.getValueDrug().getName(),
+								//									        existingObs.getValueDrug().getDrugId().toString(), true));
+								//								}
+								//								valueField = widget;
+								
+							} else if (parameters.get("answerDrugId") != null) {
+								String answerDrugId = parameters.get("answerDrugId");
+								if (StringUtils.isNotBlank(answerDrugId)) {
+									Drug drug = Htmlform2MuzimaTransformUtil.getDrug(answerDrugId);
+									if (drug == null) {
+										throw new IllegalArgumentException(
+										        "Cannot find Drug for answerDrugId: " + answerDrugId
+										                + " in answerDrugId attribute value. Parameters: " + parameters);
+									}
+									valueField = createToggleCheckbox(concept, null, "Drug:" + drug.getId().toString(),
+									    locale, valueLabel, drug.getName(), null);
+								}
+							} else {
+								// Show Radio Buttons if specified, otherwise default to DropDown 
+								boolean isRadio = "radio".equals(parameters.get("style"));
+								if (isRadio) {
+									valueField = new RadioButtonsField(concept, locale, valueLabel);
+									if (answerSeparator != null) {
+										((RadioButtonsField) valueField).setAnswerSeparator(answerSeparator);
+									}
+								} else {
+									valueField = buildDropdownField(concept, locale, valueLabel, size);
+								}
+								for (int i = 0; i < conceptAnswers.size(); ++i) {
+									Concept c = conceptAnswers.get(i);
+									String label = null;
+									if (answerLabels != null && i < answerLabels.size()) {
+										label = answerLabels.get(i);
+									} else {
+										label = c.getName(locale, false).getName();
+									}
+									((SingleOptionField) valueField).addOption(new Option(c, label, locale, false));
+								}
+							}
+							if (defaultValue != null) {
+								Concept initialValue2 = Htmlform2MuzimaTransformUtil.getConcept(defaultValue);
+								if (initialValue2 == null) {
+									throw new IllegalArgumentException(
+									        "Invalid default value. Cannot find concept: " + defaultValue);
+								}
+								
+								if (!conceptAnswers.contains(initialValue2)) {
+									String allowedIds = "";
+									for (Concept conceptAnswer : conceptAnswers) {
+										allowedIds += conceptAnswer.getId() + ", ";
+									}
+									allowedIds = allowedIds.substring(0, allowedIds.length() - 2);
+									throw new IllegalArgumentException("Invalid default value: " + defaultValue
+									        + ". The only allowed answers are: " + allowedIds);
+								}
+								valueField.setDefaultValue(initialValue2);
+							}
+						}
+					} else if (concept.getDatatype().isBoolean()) {
+						String noStr = parameters.get("noLabel");
+						Concept yesConcept = Htmlform2MuzimaTransformUtil.getConcept("1065");
+						Concept noConcept = Htmlform2MuzimaTransformUtil.getConcept("1066");
+						if (StringUtils.isEmpty(noStr)) {
+							noStr = noConcept.getName(locale, false).getName();
+						}
+						String yesStr = parameters.get("yesLabel");
+						if (StringUtils.isEmpty(yesStr)) {
+							yesStr = yesConcept.getName(locale, false).getName();
+						}
+						
+						if ("checkbox".equals(parameters.get("style"))) {
+							valueField = createToggleCheckbox(concept,
+							    parameters.get("value") != null ? noConcept : yesConcept, null, locale, valueLabel,
+							    parameters.get("value") != null ? noStr : yesStr, parameters.get("toggle"));
+							valueLabel = "";
+						} else if ("no_yes".equals(parameters.get("style"))) {
+							valueField = new RadioButtonsField(concept, locale, valueLabel);
+							((RadioButtonsField) valueField).addOption(new Option(noConcept, noStr, locale, false));
+							((RadioButtonsField) valueField).addOption(new Option(yesConcept, yesStr, locale, false));
+						} else if ("yes_no".equals(parameters.get("style"))) {
+							valueField = new RadioButtonsField(concept, locale, valueLabel);
+							((RadioButtonsField) valueField).addOption(new Option(yesConcept, yesStr, locale, false));
+							((RadioButtonsField) valueField).addOption(new Option(yesConcept, yesStr, locale, false));
+						} else if ("no_yes_dropdown".equals(parameters.get("style"))) {
+							valueField = new DropdownField(concept, locale, valueLabel);
+							((DropdownField) valueField).addOption(new Option());
+							((DropdownField) valueField).addOption(new Option(noConcept, noStr, locale, false));
+							((DropdownField) valueField).addOption(new Option(yesConcept, yesStr, locale, false));
+						} else if ("yes_no_dropdown".equals(parameters.get("style"))) {
+							valueField = new DropdownField();
+							((DropdownField) valueField).addOption(new Option());
+							((DropdownField) valueField).addOption(new Option(yesConcept, yesStr, locale, false));
+							((DropdownField) valueField).addOption(new Option(noConcept, noStr, locale, false));
+						} else {
+							throw new RuntimeException("Boolean with style = " + parameters.get("style")
+							        + " not yet implemented (concept = " + concept.getConceptId() + ")");
+						}
+						
+						if (defaultValue != null) {
+							defaultValue = defaultValue.trim();
+							
+							//Check the default value. Do not use Boolean.valueOf as it only tests for 'true'.
+							Boolean initialValue3 = null;
+							if (defaultValue.equalsIgnoreCase(Boolean.TRUE.toString())) {
+								initialValue3 = true;
+							} else if (defaultValue.equalsIgnoreCase(Boolean.FALSE.toString())) {
+								initialValue3 = false;
+							} else if (defaultValue.isEmpty()) {
+								initialValue3 = null;
+							} else {
+								throw new IllegalArgumentException(
+								        "Invalid default value " + defaultValue + ". Must be 'true', 'false' or ''.");
+							}
+							valueField.setDefaultValue(initialValue);
+						}
+						
 					}
-					//				else if (concept.getDatatype().isCoded()) {
-					//				if (parameters.get("answerConceptIds") != null) {
-					//					try {
-					//						for (StringTokenizer st = new StringTokenizer(parameters.get("answerConceptIds"), ","); st
-					//						        .hasMoreTokens();) {
-					//							Concept c = tmlform2MuzimaTransformUtil.getConcept(st.nextToken());
-					//							if (c == null)
-					//								throw new RuntimeException("Cannot find concept " + st.nextToken());
-					//							conceptAnswers.add(c);
-					//						}
-					//					}
-					//					catch (Exception ex) {
-					//						throw new RuntimeException("Error in answer list for concept " + concept.getConceptId() + " ("
-					//						        + ex.toString() + "): " + conceptAnswers);
-					//					}
-					//				} else if (answerConceptSetIds != null && !isAutocomplete) {
-					//					try {
-					//						for (StringTokenizer st = new StringTokenizer(answerConceptSetIds, ","); st.hasMoreTokens();) {
-					//							Concept answerConceptSet = tmlform2MuzimaTransformUtil.getConcept(st.nextToken());
-					//							conceptAnswers.addAll(Context.getConceptService().getConceptsByConceptSet(answerConceptSet));
-					//						}
-					//					}
-					//					catch (Exception ex) {
-					//						throw new RuntimeException(
-					//						        "Error loading answer concepts from answerConceptSet " + answerConceptSetIds, ex);
-					//					}
-					//				} else if (parameters.get("answerClasses") != null && !isAutocomplete) {
-					//					try {
-					//						for (StringTokenizer st = new StringTokenizer(parameters.get("answerClasses"), ","); st
-					//						        .hasMoreTokens();) {
-					//							String className = st.nextToken().trim();
-					//							ConceptClass cc = Context.getConceptService().getConceptClassByName(className);
-					//							if (cc == null) {
-					//								throw new RuntimeException("Cannot find concept class " + className);
-					//							}
-					//							conceptAnswers.addAll(Context.getConceptService().getConceptsByClass(cc));
-					//						}
-					//						Collections.sort(conceptAnswers, conceptNameComparator);
-					//					}
-					//					catch (Exception ex) {
-					//						throw new RuntimeException("Error in answer class list for concept " + concept.getConceptId() + " ("
-					//						        + ex.toString() + "): " + conceptAnswers);
-					//					}
-					//				}
-					//				
-					//				if (answerConcept != null) {
-					//					// if there's also an answer concept specified, this is a single
-					//					// checkbox
-					//					answerLabel = parameters.get("answerLabel");
-					//					if (answerLabel == null) {
-					//						String answerCode = parameters.get("answerCode");
-					//						if (answerCode != null) {
-					//							answerLabel = context.getTranslator().translate(userLocaleStr, answerCode);
-					//						} else {
-					//							answerLabel = answerConcept.getName(locale, false).getName();
-					//						}
-					//					}
-					//					valueField = createCheckboxField(answerLabel, answerConcept.getConceptId().toString(),
-					//					    parameters.get("toggle"));
-					//					if (existingObsList != null && !existingObsList.isEmpty()) {
-					//						for (int i = 0; i < existingObsList.size(); i++) {
-					//							((DynamicAutocompleteField) valueField).addInitialValue(existingObsList.get(i).getValueCoded());
-					//						}
-					//					} else if (existingObs != null) {
-					//						valueField.setDefaultValue(existingObs.getValueCoded());
-					//					} else if (defaultValue != null && Mode.ENTER.equals(context.getMode())) {
-					//						Concept initialValue = tmlform2MuzimaTransformUtil.getConcept(defaultValue);
-					//						if (initialValue == null) {
-					//							throw new IllegalArgumentException(
-					//							        "Invalid default value. Cannot find concept: " + defaultValue);
-					//						}
-					//						if (!answerConcept.equals(initialValue)) {
-					//							throw new IllegalArgumentException("Invalid default value: " + defaultValue
-					//							        + ". The only allowed answer is: " + answerConcept.getId());
-					//						}
-					//						valueField.setDefaultValue(initialValue);
-					//					}
-					//				} else if ("true".equals(parameters.get("multiple"))) {
-					//					// if this is a select-multi, we need a group of checkboxes
-					//					throw new RuntimeException("Multi-select coded questions are not yet implemented");
-					//				} else {
-					//					// allow selecting one of multiple possible coded values
-					//					
-					//					// if no answers are specified explicitly (by conceptAnswers or conceptClasses), get them from concept.answers.
-					//					if (!parameters.containsKey("answerConceptIds") && !parameters.containsKey("answerClasses")
-					//					        && !parameters.containsKey("answerDrugs") && !parameters.containsKey("answerDrugId")
-					//					        && !parameters.containsKey("answerConceptSetIds")) {
-					//						conceptAnswers = new ArrayList<Concept>();
-					//						for (ConceptAnswer ca : concept.getAnswers(false)) {
-					//							conceptAnswers.add(ca.getAnswerConcept());
-					//						}
-					//						Collections.sort(conceptAnswers, conceptNameComparator);
-					//					}
-					//					
-					//					if (isAutocomplete) {
-					//						List<ConceptClass> cptClasses = new ArrayList<ConceptClass>();
-					//						if (parameters.get("answerClasses") != null) {
-					//							for (StringTokenizer st = new StringTokenizer(parameters.get("answerClasses"), ","); st
-					//							        .hasMoreTokens();) {
-					//								String className = st.nextToken().trim();
-					//								ConceptClass cc = Context.getConceptService().getConceptClassByName(className);
-					//								cptClasses.add(cc);
-					//							}
-					//						}
-					//						if ((conceptAnswers == null || conceptAnswers.isEmpty())
-					//						        && (cptClasses == null || cptClasses.isEmpty()) && answerConceptSetIds == null) {
-					//							throw new RuntimeException(
-					//							        "style \"autocomplete\" but there are no possible answers. Looked for answerConcepts and "
-					//							                + "answerClasses attributes, answerConceptSetIds, and answers for concept "
-					//							                + concept.getConceptId());
-					//						}
-					//						if ("true".equals(parameters.get("selectMulti"))) {
-					//							DynamicAutocompleteField dacw = new DynamicAutocompleteField(conceptAnswers, cptClasses);
-					//							dacw.setAllowedConceptSetIds(answerConceptSetIds);
-					//							valueField = dacw;
-					//						} else {
-					//							ConceptSearchAutocompleteField csaw = new ConceptSearchAutocompleteField(conceptAnswers,
-					//							        cptClasses);
-					//							csaw.setAllowedConceptSetIds(answerConceptSetIds);
-					//							valueField = csaw;
-					//						}
-					//					} else if (parameters.get("answerDrugs") != null) {
-					//						// we support searching through all drugs via AJAX
-					//						RemoteJsonAutocompleteField widget = new RemoteJsonAutocompleteField(
-					//						        "/" + WebConstants.WEBAPP_NAME + "/module/htmlformentry/drugSearch.form");
-					//						widget.setValueTemplate("Drug:{{id}}");
-					//						if (parameters.get("displayTemplate") != null) {
-					//							widget.setDisplayTemplate(parameters.get("displayTemplate"));
-					//						} else {
-					//							widget.setDisplayTemplate("{{name}}");
-					//						}
-					//						if (existingObs != null && existingObs.getValueDrug() != null) {
-					//							widget.setDefaultValue(new Option(existingObs.getValueDrug().getName(),
-					//							        existingObs.getValueDrug().getDrugId().toString(), true));
-					//						}
-					//						valueField = widget;
-					//						
-					//					} else if (parameters.get("answerDrugId") != null) {
-					//						String answerDrugId = parameters.get("answerDrugId");
-					//						if (StringUtils.isNotBlank(answerDrugId)) {
-					//							Drug drug = tmlform2MuzimaTransformUtil.getDrug(answerDrugId);
-					//							if (drug == null) {
-					//								throw new IllegalArgumentException("Cannot find Drug for answerDrugId: " + answerDrugId
-					//								        + " in answerDrugId attribute value. Parameters: " + parameters);
-					//							}
-					//							valueField = createCheckboxField(drug.getName(), "Drug:" + drug.getId().toString(), null);
-					//							if (existingObs != null && existingObs.getValueDrug() != null) {
-					//								valueField.setDefaultValue(true);
-					//							}
-					//						}
-					//					} else {
-					//						// Show Radio Buttons if specified, otherwise default to Drop
-					//						// Down 
-					//						boolean isRadio = "radio".equals(parameters.get("style"));
-					//						if (isRadio) {
-					//							valueField = new RadioButtonsField();
-					//							if (answerSeparator != null) {
-					//								((RadioButtonsField) valueField).setAnswerSeparator(answerSeparator);
-					//							}
-					//						} else {
-					//							valueField = buildDropdownField(size);
-					//						}
-					//						for (int i = 0; i < conceptAnswers.size(); ++i) {
-					//							Concept c = conceptAnswers.get(i);
-					//							String label = null;
-					//							if (answerLabels != null && i < answerLabels.size()) {
-					//								label = answerLabels.get(i);
-					//							} else {
-					//								label = c.getName(locale, false).getName();
-					//							}
-					//							((SingleOptionField) valueField)
-					//							        .addOption(new Option(label, c.getConceptId().toString(), false));
-					//						}
-					//					}
-					//					if (existingObsList != null && !existingObsList.isEmpty()) {
-					//						for (int i = 0; i < existingObsList.size(); i++) {
-					//							((DynamicAutocompleteField) valueField).addInitialValue(existingObsList.get(i).getValueCoded());
-					//						}
-					//					}
-					//					if (existingObs != null) {
-					//						if (existingObs.getValueDrug() != null) {
-					//							valueField.setDefaultValue(existingObs.getValueDrug());
-					//						} else {
-					//							valueField.setDefaultValue(existingObs.getValueCoded());
-					//						}
-					//					} else if (defaultValue != null && Mode.ENTER.equals(context.getMode())) {
-					//						Concept initialValue = tmlform2MuzimaTransformUtil.getConcept(defaultValue);
-					//						if (initialValue == null) {
-					//							throw new IllegalArgumentException(
-					//							        "Invalid default value. Cannot find concept: " + defaultValue);
-					//						}
-					//						
-					//						if (!conceptAnswers.contains(initialValue)) {
-					//							String allowedIds = "";
-					//							for (Concept conceptAnswer : conceptAnswers) {
-					//								allowedIds += conceptAnswer.getId() + ", ";
-					//							}
-					//							allowedIds = allowedIds.substring(0, allowedIds.length() - 2);
-					//							throw new IllegalArgumentException("Invalid default value: " + defaultValue
-					//							        + ". The only allowed answers are: " + allowedIds);
-					//						}
-					//						valueField.setDefaultValue(initialValue);
-					//					}
-					//				}
-					//			}
-					//				else if (concept.getDatatype().isBoolean()) {
-					//				String noStr = parameters.get("noLabel");
-					//				if (StringUtils.isEmpty(noStr)) {
-					//					noStr = context.getTranslator().translate(userLocaleStr, "general.no");
-					//				}
-					//				String yesStr = parameters.get("yesLabel");
-					//				if (StringUtils.isEmpty(yesStr)) {
-					//					yesStr = context.getTranslator().translate(userLocaleStr, "general.yes");
-					//				}
-					//				
-					//				if ("checkbox".equals(parameters.get("style"))) {
-					//					valueField = createCheckboxField(valueLabel,
-					//					    parameters.get("value") != null ? parameters.get("value") : "true", parameters.get("toggle"));
-					//					valueLabel = "";
-					//				} else if ("no_yes".equals(parameters.get("style"))) {
-					//					valueField = new RadioButtonsField();
-					//					((RadioButtonsField) valueField).addOption(new Option(noStr, "false", false));
-					//					((RadioButtonsField) valueField).addOption(new Option(yesStr, "true", false));
-					//				} else if ("yes_no".equals(parameters.get("style"))) {
-					//					valueField = new RadioButtonsField();
-					//					((RadioButtonsField) valueField).addOption(new Option(yesStr, "true", false));
-					//					((RadioButtonsField) valueField).addOption(new Option(noStr, "false", false));
-					//				} else if ("no_yes_dropdown".equals(parameters.get("style"))) {
-					//					valueField = new DropdownField();
-					//					((DropdownField) valueField).addOption(new Option());
-					//					((DropdownField) valueField).addOption(new Option(noStr, "false", false));
-					//					((DropdownField) valueField).addOption(new Option(yesStr, "true", false));
-					//				} else if ("yes_no_dropdown".equals(parameters.get("style"))) {
-					//					valueField = new DropdownField();
-					//					((DropdownField) valueField).addOption(new Option());
-					//					((DropdownField) valueField).addOption(new Option(yesStr, "true", false));
-					//					((DropdownField) valueField).addOption(new Option(noStr, "false", false));
-					//				} else {
-					//					throw new RuntimeException("Boolean with style = " + parameters.get("style")
-					//					        + " not yet implemented (concept = " + concept.getConceptId() + ")");
-					//				}
-					//				
-					//				if (existingObs != null) {
-					//					valueField.setDefaultValue(existingObs.getValueAsBoolean());
-					//				} else if (defaultValue != null && Mode.ENTER.equals(context.getMode())) {
-					//					defaultValue = defaultValue.trim();
-					//					
-					//					//Check the default value. Do not use Boolean.valueOf as it only tests for 'true'.
-					//					Boolean initialValue = null;
-					//					if (defaultValue.equalsIgnoreCase(Boolean.TRUE.toString())) {
-					//						initialValue = true;
-					//					} else if (defaultValue.equalsIgnoreCase(Boolean.FALSE.toString())) {
-					//						initialValue = false;
-					//					} else if (defaultValue.isEmpty()) {
-					//						initialValue = null;
-					//					} else {
-					//						throw new IllegalArgumentException(
-					//						        "Invalid default value " + defaultValue + ". Must be 'true', 'false' or ''.");
-					//					}
-					//					valueField.setDefaultValue(initialValue);
-					//				}
-					//				
-					//				// TODO: in 1.7-compatible version of the module, we can replace the H17 checks
-					//				// used below with the new isDate, isTime, and isDatetime
-					//				
-					//			} 
 					
-					//				else {
-					//				DateField dateField = null;
-					//				TimeField timeField = null;
-					//				boolean disableTime = "false".equalsIgnoreCase(parameters.get("allowTime"));
-					//				boolean hideSeconds = "true".equalsIgnoreCase(parameters.get("hideSeconds"));
-					//				
-					//				if (ConceptDatatype.DATE.equals(concept.getDatatype().getHl7Abbreviation())
-					//				        || (ConceptDatatype.DATETIME.equals(concept.getDatatype().getHl7Abbreviation()) && disableTime)) {
-					//					valueField = new DateField();
-					//				} else if (ConceptDatatype.TIME.equals(concept.getDatatype().getHl7Abbreviation())) {
-					//					valueField = new TimeField();
-					//					if (hideSeconds) {
-					//						((TimeField) valueField).setHideSeconds(true);
-					//					}
-					//				} else if (ConceptDatatype.DATETIME.equals(concept.getDatatype().getHl7Abbreviation())) {
-					//					dateField = new DateField();
-					//					timeField = new TimeField();
-					//					if (hideSeconds) {
-					//						timeField.setHideSeconds(true);
-					//					}
-					//					valueField = new DateTimeField(dateField, timeField);
-					//				} else {
-					//					throw new RuntimeException("Cannot handle datatype: " + concept.getDatatype().getName()
-					//					        + " (for concept " + concept.getConceptId() + ")");
-					//				}
-					//				
-					//				if (defaultValue != null && parameters.get("defaultDatetime") != null) {
-					//					throw new IllegalArgumentException("Cannot set defaultDatetime and defaultValue at the same time.");
-					//				} else if (defaultValue == null) {
-					//					defaultValue = parameters.get("defaultDatetime");
-					//				}
-					//				
-					//				if (existingObs != null) {
-					//					valueField.setDefaultValue(existingObs.getValueDatetime());
-					//				} else if (defaultValue != null && Mode.ENTER.equals(context.getMode())) {
-					//					valueField
-					//					        .setDefaultValue(tmlform2MuzimaTransformUtil.translateDatetimeParam(defaultValue, defaultDatetimeFormat));
-					//				}
-					//				
-					//				if (dateField != null) {
-					//					context.registerField(dateField);
-					//				}
-					//				if (timeField != null) {
-					//					context.registerField(timeField);
-					//				}
-					//			}
+					else {
+						DateField dateField = null;
+						TimeField timeField = null;
+						boolean disableTime = "false".equalsIgnoreCase(parameters.get("allowTime"));
+						boolean hideSeconds = "true".equalsIgnoreCase(parameters.get("hideSeconds"));
+						
+						if (ConceptDatatype.DATE.equals(concept.getDatatype().getHl7Abbreviation())
+						        || (ConceptDatatype.DATETIME.equals(concept.getDatatype().getHl7Abbreviation())
+						                && disableTime)) {
+							valueField = new DateField(concept, locale, valueLabel);
+						} else if (ConceptDatatype.TIME.equals(concept.getDatatype().getHl7Abbreviation())) {
+							valueField = new TimeField(concept, locale, valueLabel, null);
+							if (hideSeconds) {
+								((TimeField) valueField).setHideSeconds(true);
+							}
+						} else if (ConceptDatatype.DATETIME.equals(concept.getDatatype().getHl7Abbreviation())) {
+							valueField = new DateTimeField(concept, locale, valueLabel);
+						} else {
+							throw new RuntimeException("Cannot handle datatype: " + concept.getDatatype().getName()
+							        + " (for concept " + concept.getConceptId() + ")");
+						}
+						
+						if (defaultValue != null && parameters.get("defaultDatetime") != null) {
+							throw new IllegalArgumentException(
+							        "Cannot set defaultDatetime and defaultValue at the same time.");
+						} else if (defaultValue == null) {
+							defaultValue = parameters.get("defaultDatetime");
+						}
+						if (defaultValue != null) {
+							valueField.setDefaultValue(
+							    Htmlform2MuzimaTransformUtil.translateDatetimeParam(defaultValue, defaultDatetimeFormat));
+						}
+						
+					}
 				}
-				//		context.registerField(valueField);
-				//		context.registerErrorField(valueField, errorField);
-				//		
-				//		if (parameters.get("showUnits") != null) {
-				//			if ("true".equalsIgnoreCase(parameters.get("showUnits"))) {
-				//				showUnits = true;
-				//			} else if (!"false".equalsIgnoreCase(parameters.get("showUnits"))) {
-				//				showUnits = true;
-				//				unitsCode = parameters.get("showUnits");
-				//			}
-				//		}
-				//		
-				//		if (parameters.get("unitsCssClass") != null) {
-				//			unitsCssClass = parameters.get("unitsCssClass");
-				//		}
-				//		
-				//		// if a date is requested, do that too
-				//		if ("true".equals(parameters.get("showDate")) || parameters.containsKey("dateLabel")) {
-				//			if (parameters.containsKey("dateLabel")) {
-				//				dateLabel = parameters.get("dateLabel");
-				//			}
-				//			dateField = new DateField();
-				//			context.registerField(dateField);
-				//			context.registerErrorField(dateField, errorField);
-				//			if (existingObs != null) {
-				//				dateField.setDefaultValue(existingObs.getObsDatetime());
-				//			} else if (parameters.get("defaultObsDatetime") != null) {
-				//				// Make sure this format continues to match
-				//				// the <obs> attribute defaultObsDatetime documentation at
-				//				// https://wiki.openmrs.org/display/docs/HTML+Form+Entry+Module+HTML+Reference#HTMLFormEntryModuleHTMLReference-%3Cobs%3E
-				//				String supportedDateFormat = "yyyy-MM-dd-HH-mm";
-				//				dateField.setDefaultValue(
-				//				    tmlform2MuzimaTransformUtil.translateDatetimeParam(parameters.get("defaultObsDatetime"), supportedDateFormat));
-				//			}
-				//		}
 				
-				//		// if an accessionNumber is requested, do that too
-				//		if ("true".equals(parameters.get("showAccessionNumber")) || parameters.containsKey("accessionNumberLabel")) {
-				//			if (parameters.containsKey("accessionNumberLabel")) {
-				//				accessionNumberLabel = parameters.get("accessionNumberLabel");
-				//			}
-				//			accessionNumberField = new TextFieldField();
-				//			context.registerField(accessionNumberField);
-				//			context.registerErrorField(accessionNumberField, errorField);
-				//			if (existingObs != null) {
-				//				accessionNumberField.setDefaultValue(existingObs.getAccessionNumber());
-				//			}
-				//		}
+				//TODO NOTE Fields registered to context here
 				
-				// if a comment is requested, do that too
-				//		if ("true".equals(parameters.get("showCommentField")) || parameters.containsKey("commentFieldLabel")
-				//		        || parameters.containsKey("commentFieldCode")) {
-				//			if (parameters.containsKey("commentFieldLabel")) {
-				//				commentFieldLabel = parameters.get("commentFieldLabel");
-				//			} else if (parameters.containsKey("commentFieldCode")) {
-				//				commentFieldLabel = context.getTranslator().translate(userLocaleStr, parameters.get("commentFieldCode"));
-				//			}
-				//			commentFieldField = new TextFieldField();
-				//			context.registerField(commentFieldField);
-				//			context.registerErrorField(commentFieldField, errorField);
-				//			if (existingObs != null) {
-				//				commentFieldField.setDefaultValue(existingObs.getComment());
-				//			}
-				//		}
-				//		
-				//		ObsField field = instatiateObsField();
-				
-				// add the field to active obsgroup if there is one, other to the active section
-				//		if (concept != null && context.getActiveObsGroup() != null) {
-				//			context.addFieldToActiveObsGroup(field);
-				//		} else {
-				//			context.addFieldToActiveSection(field);
-				//		}
+				// if a date is requested, do that too
+				if ("true".equals(parameters.get("showDate")) || parameters.containsKey("dateLabel")) {
+					if (parameters.containsKey("dateLabel")) {
+						dateLabel = parameters.get("dateLabel");
+					}
+					dateField = new DateField(concept, locale, valueLabel);
+					if (parameters.get("defaultObsDatetime") != null) {
+						// Make sure this format continues to match
+						// the <obs> attribute defaultObsDatetime documentation at
+						// https://wiki.openmrs.org/display/docs/HTML+Form+Entry+Module+HTML+Reference#HTMLFormEntryModuleHTMLReference-%3Cobs%3E
+						String supportedDateFormat = "yyyy-MM-dd-HH-mm";
+						dateField.setDefaultValue(Htmlform2MuzimaTransformUtil
+						        .translateDatetimeParam(parameters.get("defaultObsDatetime"), supportedDateFormat));
+					}
+				}
 			}
 		}
 		
@@ -1036,15 +932,133 @@ public class ObsElement implements HtmlGeneratorElement {
 		return dropdownField;
 	}
 	
+	private ToggleCheckbox createToggleCheckbox(Concept concept, Concept ansConcept, String ansValue, Locale locale,
+	        String fieldLabel, String ansLabel, String toggleParameter) {
+		if (toggleParameter != null) {
+			ToggleField toggleField = new ToggleField(toggleParameter);
+			if (ansConcept != null) {
+				return new ToggleCheckbox(concept, ansConcept, locale, fieldLabel, ansLabel, toggleField.getTargetId(),
+				        toggleField.isToggleDim());
+			} else {
+				return new ToggleCheckbox(concept, ansValue, locale, fieldLabel, ansLabel, toggleField.getTargetId(),
+				        toggleField.isToggleDim());
+			}
+		} else {
+			if (ansConcept != null) {
+				return new ToggleCheckbox(concept, ansConcept, locale, fieldLabel, ansLabel, null);
+			} else {
+				return new ToggleCheckbox(concept, ansValue, locale, fieldLabel, ansLabel, null);
+			}
+		}
+		
+	}
+	
 	@Override
 	public String generateHtml() {
+		StringBuilder ret = new StringBuilder();
+		ret.append(valueField.generateHtml());
+		if (dateField != null) {
+			ret.append(" ");
+			ret.append(dateField.generateHtml());
+		}
+		this.jsString = valueField.getJs();
+		return ret.toString();
+	}
+	
+	private Comparator<Concept> conceptNameComparator = new Comparator<Concept>() {
 		
-		// TODO Auto-generated method stub
-		return null;
-		
+		@Override
+		public int compare(Concept c1, Concept c2) {
+			String n1 = c1.getName(locale, false).getName();
+			String n2 = c2.getName(locale, false).getName();
+			return n1.compareTo(n2);
+		}
+	};
+	
+	/**
+	 * Returns the concept associated with this Observation
+	 */
+	public Concept getConcept() {
+		return concept;
+	}
+	
+	/**
+	 * Returns the concept associated with the answer to this Observation
+	 */
+	public Concept getAnswerConcept() {
+		return answerConcept;
+	}
+	
+	/**
+	 * Returns the concepts that are potential answers to this Observation
+	 */
+	public List<Concept> getConceptAnswers() {
+		return conceptAnswers;
+	}
+	
+	/**
+	 * Returns the Numbers that are potential answers for this Observation
+	 */
+	public List<Number> getNumericAnswers() {
+		return numericAnswers;
+	}
+	
+	/**
+	 * Returns the potential text answers for this Observation
+	 */
+	public List<String> getTextAnswers() {
+		return textAnswers;
+	}
+	
+	/**
+	 * Returns the labels to use for the answers to this Observation
+	 */
+	public List<String> getAnswerLabels() {
+		return answerLabels;
+	}
+	
+	/**
+	 * Returns the label to use for the answer to this Observation
+	 */
+	public String getAnswerLabel() {
+		return answerLabel;
 	}
 	
 	public String getValueLabel() {
 		return valueLabel;
 	}
+	
+	public void whenValueThenDisplaySection(Object value, String thenSection) {
+		whenValueThenDisplaySection.put(value, thenSection);
+	}
+	
+	public Map<Object, String> getWhenValueThenDisplaySection() {
+		return whenValueThenDisplaySection;
+	}
+	
+	public void whenValueThenJavaScript(Object value, String thenJavaScript) {
+		whenValueThenJavascript.put(value, thenJavaScript);
+	}
+	
+	public Map<Object, String> getWhenValueThenJavascript() {
+		return whenValueThenJavascript;
+	}
+	
+	public void whenValueElseJavaScript(Object value, String elseJavaScript) {
+		whenValueElseJavascript.put(value, elseJavaScript);
+	}
+	
+	public Map<Object, String> getWhenValueElseJavascript() {
+		return whenValueElseJavascript;
+	}
+	
+	public boolean hasWhenValueThen() {
+		return whenValueThenDisplaySection.size() > 0 || whenValueThenJavascript.size() > 0
+		        || whenValueElseJavascript.size() > 0;
+	}
+	
+	public String getJsString() {
+		return jsString;
+	}
+	
 }
