@@ -65,11 +65,25 @@ public class DateTimeField implements FormField {
 			sb.append("required=\"required\"");
 		}
 		sb.append(">\r\n" + "</div>\r\n");
+		setJs();
 		return sb.toString();
 	}
 	
 	@Override
 	public void setDefaultValue(Object defaultValue) {
+	}
+	
+	private void setJs() {
+		this.js = " \r\n <link href=\"css/bootstrap-datetimepicker.min.css\" rel=\"stylesheet\"> \r\n <script src=\"js/bootstrap-datetimepicker.min.js\"></script>\r\n";
+		
+	}
+	
+	@Override
+	public String getJs() {
+		if (this.js != null) {
+			return this.js;
+		}
+		return "";
 	}
 	
 	public String getFieldLabel() {
@@ -110,14 +124,6 @@ public class DateTimeField implements FormField {
 	
 	public void setAllowFutureDates(boolean allowFutureDates) {
 		this.allowFutureDates = allowFutureDates;
-	}
-	
-	@Override
-	public String getJs() {
-		if (this.js != null) {
-			return this.js;
-		}
-		return "";
 	}
 	
 }
