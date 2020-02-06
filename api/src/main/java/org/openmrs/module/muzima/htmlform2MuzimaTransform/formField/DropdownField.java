@@ -36,6 +36,12 @@ public class DropdownField extends SingleOptionField {
 		this.fieldLabel = label;
 	}
 	
+	public DropdownField(Concept concept, Locale locale, String label) {
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
+		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+		this.fieldLabel = label;
+	}
+	
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
