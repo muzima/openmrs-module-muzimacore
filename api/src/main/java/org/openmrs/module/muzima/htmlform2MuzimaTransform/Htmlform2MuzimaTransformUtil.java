@@ -845,4 +845,8 @@ public class Htmlform2MuzimaTransformUtil {
 		return HtmlFormEntryUtil.format(md, locale);
 	}
 	
+	public static MuzimaFormService getMuzimaFormService() {
+		return Context.getService(MuzimaFormService.class);
+	}
+	
 }
