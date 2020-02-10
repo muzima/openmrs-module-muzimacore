@@ -1,5 +1,3 @@
-package org.openmrs.module.muzima.htmlform2MuzimaTransform.element;
-
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
@@ -65,6 +63,7 @@ import java.util.Vector;
 
 public class ObsElement implements HtmlGeneratorElement {
 	
+	
 	private Locale locale = Context.getLocale();
 	
 	private Concept concept;
@@ -123,6 +122,8 @@ public class ObsElement implements HtmlGeneratorElement {
 	private Double absoluteMinimum;
 	
 	public ObsElement(Map<String, String> parameters) {
+
+		
 		if (parameters.get("locale") != null) {
 			this.locale = LocaleUtility.fromSpecification(parameters.get("locale"));
 		}
@@ -193,7 +194,7 @@ public class ObsElement implements HtmlGeneratorElement {
 		if (StringUtils.isNotEmpty(parameters.get("absoluteMinimum"))) {
 			absoluteMinimum = Double.parseDouble(parameters.get("absoluteMinimum"));
 		}
-		//TODO prepareFormField(parameters);
+		prepareFields(parameters);
 		
 	}
 	
@@ -955,6 +956,7 @@ public class ObsElement implements HtmlGeneratorElement {
 	
 	@Override
 	public String generateHtml() {
+		
 		StringBuilder ret = new StringBuilder();
 		ret.append(valueField.generateHtml());
 		if (dateField != null) {
