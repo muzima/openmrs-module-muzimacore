@@ -59,7 +59,6 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 
-
 /**
  * Holds the field used to represent a specific Observation
  */
@@ -224,23 +223,22 @@ public class ObsElement implements HtmlGeneratorElement {
 		String answerConceptSetIds = parameters.get("answerConceptSetIds");
 		boolean isAutocomplete = "autocomplete".equals(parameters.get("style"));
 		
-		if (concept != null) {
-			
-			//below is for boolean checkbox
-			//			if (concept.getDatatype().isBoolean() && "checkbox".equals(parameters.get("style"))) {
-			//				// since a checkbox has one value we need to look for an exact
-			//				// match for that value
-			//				if ("false".equals(parameters.get("value"))) {
-			//					answerConcept = Context.getConceptService().getConcept(1066);					
-			//										
-			//				} else {
-			//					// if not 'false' we treat as 'true'
-			//					answerConcept = Context.getConceptService().getConcept(1065);					
-			//				}
-			//				Option booleanCheckBoxOption = new Option(answerConcept, locale);
-			//				valueField = new CheckboxField(answerConcept, locale, valueLabel);
-			//				((CheckboxField) valueField).addOption(booleanCheckBoxOption);
-			//				
+		//		if (concept != null) {
+		//			
+		//			//below is for boolean checkbox
+		//			if (concept.getDatatype().isBoolean() && "checkbox".equals(parameters.get("style"))) {
+		//				// since a checkbox has one value we need to look for an exact
+		//				// match for that value
+		//				if ("false".equals(parameters.get("value"))) {
+		//					answerConcept = Context.getConceptService().getConcept(1066);
+		//					
+		//				} else {
+		//					// if not 'false' we treat as 'true'
+		//					answerConcept = Context.getConceptService().getConcept(1065);
+		//				}
+		//				Option booleanCheckBoxOption = new Option(answerConcept, locale);
+		//				valueField = new CheckboxField(answerConcept, locale, valueLabel);
+		//				((CheckboxField) valueField).addOption(booleanCheckBoxOption);
 			
 			/**
 			 * Handles creation of ValueLabel for
@@ -267,7 +265,7 @@ public class ObsElement implements HtmlGeneratorElement {
 				if (concepts != null)
 					valueLabel = answerConcept.getName(locale, false).getName();
 				else
-					valueLabel = "";
+				valueLabel = concept.getName(locale, false).getName();
 			}
 			if (parameters.get("answerLabels") != null) {
 				answerLabels = Arrays.asList(parameters.get("answerLabels").split(","));
@@ -915,9 +913,9 @@ public class ObsElement implements HtmlGeneratorElement {
 				}
 			}
 		}
-		
-	}
 	
+	
+
 	private FormField buildDropdownField(Integer size) {
 		FormField dropdownField = new DropdownField(size);
 		if (size == 1 || !required) {
