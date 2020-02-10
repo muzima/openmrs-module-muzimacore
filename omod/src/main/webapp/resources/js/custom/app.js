@@ -233,18 +233,9 @@ muzimaCoreModule.factory('HtmlFormEntryService', function ($http) {
         return $http.get('htmlFormEntry.form');
     };
 
-    var convert = function (id, form) {
-    	//TODO REMOVE THIS
-       $http.post('htmlFormEntry.form', {"id": id, "form": form}).then(function (response) {
-
-    	console.log(response.data);
-
-    	}, function (response) {
-
-    	console.log("error converting" + "response.status\r\n" + response.status + "response.statusText\r\n"+response.statusText);
-
-    	});
-        return $http.post('htmlFormEntry.form', {"id": id, "form": form});
+    var convert = function (id) {
+        
+        return $http.post(`htmlFormEntry.form?id=${id}`);
     };
 
     var getDiscriminatorTypes = function () {
