@@ -1,56 +1,91 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Htmlform2MuzimaTransform {
 	
-	private HtmlGenerator htmlGenerator;
+	private static final Logger log = LoggerFactory.getLogger(Htmlform2MuzimaTransform.class);
 	
-	private String htmlformXml;
-	
-	private String muzimaHtml;
+	private HtmlGenerator htmlGenerator = new HtmlGenerator();
 	
 	public Htmlform2MuzimaTransform() {
 	}
 	
-	/**
-	 * Creates the HTML for a mUzima Form given the xml of an HtmlForm. This method uses the
-	 * HtmlFormGenerator to process any HTML Form Entry-specific tags and returns pure HTML as used
-	 * in mUzima forms
-	 *
-	 * @param xml the xml string of the htmlform we want to convert
-	 * @return mUzima formatted html5 form
-	 * @throws Exception
-	 */
-	private String createForm(String xml) throws Exception {
+	public String convertHtml2muzima(String htmlformXml) {
 		
-		xml = htmlGenerator.substituteCharacterCodesWithAsciiCodes(this.htmlformXml);
-		xml = htmlGenerator.stripComments(xml);
-		xml = htmlGenerator.convertSpecialCharactersWithinLogicAndVelocityTests(xml);
-		xml = htmlGenerator.applyRepeats(xml);
-		xml = htmlGenerator.applyTranslations(xml);
-		xml = htmlGenerator.applyTags(xml);
-		xml = htmlGenerator.wrapInDiv(xml);
-		return xml;
-	}
-	
-	public void transformHtmlToMuzima() {
+		String xml = htmlformXml;
 		try {
-			this.muzimaHtml = createForm(this.htmlformXml);
+			htmlformXml = htmlGenerator.applyMacros(htmlformXml);
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Error during conversion");
+			log.debug("exception during apply macros {}", e);
+			throw new RuntimeException("exception during apply macros {}", e);
+			
 		}
+		try {
+			htmlformXml = htmlGenerator.applyRepeats(htmlformXml);
+		}
+		catch (Exception e) {
+			log.debug("exception during applyRepeats(}", e);
+			throw new RuntimeException("exception during applyRepeats {}", e);
+		}
+		try {
+			htmlformXml = htmlGenerator.applyTranslations(htmlformXml);
+		}
+		catch (Exception e) {
+			log.debug("exception during applyTranslations( {}", e);
+			throw new RuntimeException("exception during applyTranslations {}", e);
+		}
+		try {
+			htmlformXml = htmlGenerator.stripComments(htmlformXml);
+		}
+		catch (Exception e) {
+			log.debug("exception during stripComments{}", e);
+			throw new RuntimeException("exception during stripComments{}", e);
+		}
+		try {
+			htmlformXml = htmlGenerator.convertSpecialCharactersWithinLogicAndVelocityTests(htmlformXml);
+		}
+		catch (Exception e) {
+			log.debug("exception during convertSpecialCharactersWithinLogicAndVelocityTests{}", e);
+			throw new RuntimeException("exception during convertSpecialCharactersWithinLogicAndVelocityTests");
+		}
+		try {
+			htmlformXml = htmlGenerator.substituteCharacterCodesWithAsciiCodes(htmlformXml);
+		}
+		catch (Exception e) {
+			log.debug("exception during substituteCharacterCodesWithAsciiCodes{}", e);
+			throw new RuntimeException("exception during substituteCharacterCodesWithAsciiCodes{}");
+		}
+		try {
+			htmlformXml = htmlGenerator.applyTags(htmlformXml);
+		}
+		catch (Exception e) {
+			log.debug("exception during applyTags", e);
+			throw new RuntimeException("exception during applyTags", e);
+		}
+		return htmlformXml;
+		
 	}
 	
-	public String getMuzimaHtml() {
-		return this.muzimaHtml;
-	}
-	
-	public void setHtmlformXml(String htmlformXmlString) {
-		this.htmlformXml = htmlformXmlString;
-	}
+	/**
+	 * Transforms the HTML for a mUzima Form given the xml of an HtmlForm. This method uses the
+	 * HtmlFormGenerator to process any HTML Form Entry-specific tags and returns pure HTML as used
+	 * in mUzima forms
+	 * 
+	 * @sets this.muzimaHtml as mUzima formatted html5 form
+	 * @throws Exception
+	 */
+	//	public String transformHtmlToMuzima(String htmlformXml) {
+	//		try {
+	//			String muzimaHtml = applyAllFormating(htmlformXml);
+	//			return muzimaHtml;
+	//		}
+	//		catch (Exception e) {
+	//			log.debug("exception during formatting {}", e);
+	//			throw new RuntimeException("Error during conversion");
+	//		}
+	//	}
+
 }

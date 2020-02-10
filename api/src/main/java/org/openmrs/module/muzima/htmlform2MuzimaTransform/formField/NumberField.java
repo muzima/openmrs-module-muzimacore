@@ -1,14 +1,10 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform.formField;
 
+import java.util.Locale;
+
 import org.openmrs.ConceptNumeric;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.htmlformentry.compatibility.ConceptCompatibility;
-import org.openmrs.module.muzima.htmlform2MuzimaTransform.Htmlform2MuzimaTransformUtil;
-import org.openmrs.util.OpenmrsUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * implements <input type="number"/>
@@ -96,7 +92,7 @@ public class NumberField implements FormField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<div class=\"form-group freetext\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 		
 		if (required) {
 			sb.append("<span class=\"required error-message\">*</span>");
@@ -118,7 +114,7 @@ public class NumberField implements FormField {
 		if (required) {
 			sb.append(" required=\"required\"");
 		}
-		sb.append("/>");
+		sb.append("/>\r\n </div>");
 		//creates scripts that contain javascript to use for client side validation
 		setJS();
 		return sb.toString();

@@ -45,10 +45,9 @@ import org.openmrs.web.WebConstants;
 
 import ca.uhn.hl7v2.conf.spec.message.Field;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -59,11 +58,14 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+
+
 /**
  * Holds the field used to represent a specific Observation
  */
 
 public class ObsElement implements HtmlGeneratorElement {
+	
 	
 	private Locale locale = Context.getLocale();
 	
@@ -123,6 +125,8 @@ public class ObsElement implements HtmlGeneratorElement {
 	private Double absoluteMinimum;
 	
 	public ObsElement(Map<String, String> parameters) {
+
+		
 		if (parameters.get("locale") != null) {
 			this.locale = LocaleUtility.fromSpecification(parameters.get("locale"));
 		}
@@ -193,7 +197,7 @@ public class ObsElement implements HtmlGeneratorElement {
 		if (StringUtils.isNotEmpty(parameters.get("absoluteMinimum"))) {
 			absoluteMinimum = Double.parseDouble(parameters.get("absoluteMinimum"));
 		}
-		//TODO prepareFormField(parameters);
+		prepareFields(parameters);
 		
 	}
 	
@@ -955,6 +959,7 @@ public class ObsElement implements HtmlGeneratorElement {
 	
 	@Override
 	public String generateHtml() {
+		
 		StringBuilder ret = new StringBuilder();
 		ret.append(valueField.generateHtml());
 		if (dateField != null) {
