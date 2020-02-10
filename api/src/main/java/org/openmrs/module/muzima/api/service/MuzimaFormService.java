@@ -1,17 +1,15 @@
 package org.openmrs.module.muzima.api.service;
 
-import org.javarosa.xform.parse.ValidationMessages;
-import org.openmrs.api.OpenmrsService;
-import org.openmrs.Concept;
-import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.TagHandler;
-import org.openmrs.module.muzima.model.MuzimaForm;
-import org.openmrs.module.muzima.model.MuzimaXForm;
-import org.openmrs.module.muzima.htmlform2MuzimaTransform.MuzimaHtmlform;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.javarosa.xform.parse.ValidationMessages;
+import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.TagHandler;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaXForm;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface MuzimaFormService extends OpenmrsService {
 	
@@ -21,21 +19,14 @@ public interface MuzimaFormService extends OpenmrsService {
 	@Transactional(readOnly = true)
 	List<MuzimaXForm> getXForms();
 	
-	//	@Transactional(readOnly = true)
-	//	List<MuzimaHtmlform> getHtmlForms();
-	
+
 	@Transactional(readOnly = true)
 	Number countXForms(String search);
 	
-	//	@Transactional(readOnly = true)
-	//	Number countHtmlForms(String search);
 	
 	@Transactional(readOnly = true)
 	List<MuzimaXForm> getPagedXForms(final String search, final Integer pageNumber, final Integer pageSize);
 	
-	//	@Transactional(readOnly = true)
-	//	List<MuzimaXForm> getPagedHtmlForms(final String search, final Integer pageNumber, final Integer pageSize);
-	//	
 	MuzimaForm getFormById(Integer id);
 	
 	MuzimaForm getFormByUuid(String uuid);

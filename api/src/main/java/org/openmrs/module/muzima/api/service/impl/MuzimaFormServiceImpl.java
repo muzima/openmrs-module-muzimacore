@@ -1,5 +1,11 @@
 package org.openmrs.module.muzima.api.service.impl;
 
+import java.io.StringReader;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.dom4j.DocumentException;
 import org.javarosa.xform.parse.ValidationMessages;
 import org.javarosa.xform.parse.XFormParser;
@@ -7,6 +13,8 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+//import org.openmrs.module.muzima.htmlform2MuzimaTransform.MuzimaHtmlform;
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.Htmlform2MuzimaTransform;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.TagHandler;
 import org.openmrs.module.muzima.model.CompositeEnketoResult;
 import org.openmrs.module.muzima.model.MuzimaForm;
@@ -16,17 +24,12 @@ import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer;
 import org.openmrs.module.muzima.xForm2MuzimaTransform.XForm2Html5Transformer;
-//import org.openmrs.module.muzima.htmlform2MuzimaTransform.MuzimaHtmlform;
-import org.openmrs.module.muzima.htmlform2MuzimaTransform.Htmlform2MuzimaTransform;
-
-import java.io.StringReader;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaFormService {
+	
+	private static final Logger log = LoggerFactory.getLogger(MuzimaFormServiceImpl.class);
 	
 	private XForm2Html5Transformer html5Transformer;
 	
@@ -220,49 +223,9 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
 	
 	@Override
 	public String convertHtmlformToMuzima(String htmlformXml) {
-		htmlform2MuzimaTransform.setHtmlformXml(htmlformXml);
-		htmlform2MuzimaTransform.transformHtmlToMuzima();
-		String muzimaHtml = htmlform2MuzimaTransform.getMuzimaHtml();
+		String muzimaHtml = htmlform2MuzimaTransform.convertHtml2muzima(htmlformXml);
 		return muzimaHtml;
 	}
 	
-	//	@Override
-	//	public List<MuzimaHtmlform> getHtmlForms() {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
-	//	
-	//	@Override
-	//	public Number countHtmlForms(String search) {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
-	//	
-	//	@Override
-	//	public List<MuzimaXForm> getPagedHtmlForms(String search, Integer pageNumber, Integer pageSize) {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
-	
-	//	@Override
-	//	public MuzimaForm importHtmlForm(String htmlformXml, String form, String discriminator) throws Exception {
-	//		if (!isFormDefinitionExists(form)) {
-	//			htmlform2MuzimaTransform = new Htmlform2MuzimaTransform(htmlformXml);
-	//			htmlform2MuzimaTransform.transformHtmlToMuzima();
-	//			String muzimaHtml = htmlform2MuzimaTransform.getMuzimaHtml();
-	//			//			CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer
-	//			//			        .transform(odk2HTML5Transformer.transform(xformXml).getResult());
-	//			//			return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(),
-	//			//			        null, Context.getFormService().getFormByUuid(form)));
-	//			
-	//			//			if (!isFormDefinitionExists(form)) {
-	//			//				HTMLConceptParser parser = new HTMLConceptParser();
-	//			//				String metaJson = parser.createConceptMetadata(parser.parse(html));
-	//			//				return save(new MuzimaForm(form, discriminator, html, null, null, metaJson,
-	//			//				        Context.getFormService().getFormByUuid(form)));
-	//			//			}
-	//		}
-	//		throw new DocumentException("The file name already Exists !");
-	//	}
 	
 }
