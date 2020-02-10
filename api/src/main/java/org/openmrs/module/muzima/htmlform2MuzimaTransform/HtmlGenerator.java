@@ -9,19 +9,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.openmrs.Role;
-import org.openmrs.User;
-import org.openmrs.api.context.Context;
-import org.openmrs.util.LocaleUtility;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.AttributeDescriptor;
-import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.TagHandler;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.IteratingTagHandler;
-
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.TagHandler;
 //import org.openmrs.module.htmlformentry.handler.IteratingTagHandler;
 //import org.openmrs.module.htmlformentry.matching.ObsGroupEntity;
 import org.w3c.dom.Document;
@@ -212,7 +206,7 @@ public class HtmlGenerator implements TagHandler {
 	 * @throws Exception
 	 * @should return correct xml after filtering out comments
 	 */
-	public String stripComments(String xml) throws Exception {
+	public String stripComments(String xml) {
 		
 		String regex = "<!\\s*--.*?--\\s*>"; // this is the regEx for html comment tag <!-- .* -->
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
@@ -233,7 +227,7 @@ public class HtmlGenerator implements TagHandler {
 	 * @throws Exception
 	 * @should return correct xml after replacing special characters with their ascii code
 	 */
-	public String substituteCharacterCodesWithAsciiCodes(String xml) throws Exception {
+	public String substituteCharacterCodesWithAsciiCodes(String xml) {
 		HashMap<String, String> encodings = new HashMap<String, String>();
 		encodings.put("&nbsp;", "&#160;");
 		for (String key : encodings.keySet()) {
@@ -498,7 +492,8 @@ public class HtmlGenerator implements TagHandler {
 		StringWriter outHtmlStringWriter = new StringWriter();
 		StringWriter outJsStringWriter = new StringWriter();
 		outHtmlStringWriter
-		        .write("<html>\r\n" + "<head>\r\n" + "    <link href=\"css/bootstrap.min.css\" rel=\"stylesheet\">\r\n"
+		        .write("<html>\r\n" + "<head>\r\n" + "\r\n"
+		                + "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> \r\n <link href=\"css/bootstrap.min.css\" rel=\"stylesheet\">\r\n"
 		                + "    <link href=\"css/muzima.css\" rel=\"stylesheet\">   \r\n"
 		                + "    <link href=\"css/bootstrap-datetimepicker.min.css\" rel=\"stylesheet\">\r\n"
 		                + "    <link href=\"css/ui-darkness/jquery-ui-1.10.4.custom.min.css\" rel=\"stylesheet\">\r\n"
@@ -509,13 +504,49 @@ public class HtmlGenerator implements TagHandler {
 		                + "    <script src=\"js/muzima.js\"></script>\r\n"
 		                + "    <script src=\"js/bootstrap-datetimepicker.min.js\"></script>\r\n"
 		                + "    <title>Basic Encounter Form Template</title>\r\n" + "</head>\r\n"
-		                + "<body class=\"col-md-8 col-md-offset-2\">\r\n" + "<div id=\"pre_populate_data\"></div>");
-		
-		outJsStringWriter.write("\r\n <script type=\"text/javascript\">\r\n" + "$(document).ready(function () {");
+		                + "<body class=\"col-md-8 col-md-offset-2\">\r\n" + "<div id=\"pre_populate_data\"></div>\r\n"
+		                + "<form id=\"basic_encounter_form_with_validation_for_numeric_range\" name=\"basic_encounter_form_with_validation_for_numeric_range\"> \r\n"
+		                + "<div class=\"section\">\r\n" + "    <h3>Demographics</h3>\r\n"
+		                + "    <div class=\"form-group\">\r\n"
+		                + "        <input class=\"form-control\" id=\"patient.uuid\"\r\n"
+		                + "               name=\"patient.uuid\" type=\"hidden\" readonly=\"readonly\">\r\n"
+		                + "    </div>\r\n" + "    <div class=\"form-group\">\r\n"
+		                + "        <label for=\"patient.medical_record_number\">AMRS ID Number:</label>\r\n"
+		                + "        <input class=\"form-control\" id=\"patient.medical_record_number\"\r\n"
+		                + "               name=\"patient.medical_record_number\" type=\"text\" readonly=\"readonly\">\r\n"
+		                + "    </div>\r\n" + "    <div class=\"form-group\">\r\n"
+		                + "        <label for=\"patient.family_name\">Family Name:</label>\r\n"
+		                + "        <input class=\"form-control\" id=\"patient.family_name\" name=\"patient.family_name\" type=\"text\"\r\n"
+		                + "               readonly=\"readonly\">\r\n" + "    </div>\r\n"
+		                + "    <div class=\"form-group\">\r\n"
+		                + "        <label for=\"patient.given_name\">Given Name:</label>\r\n"
+		                + "        <input class=\"form-control\" id=\"patient.given_name\" name=\"patient.given_name\" type=\"text\"\r\n"
+		                + "               readonly=\"readonly\">\r\n" + "    </div>\r\n"
+		                + "    <div class=\"form-group\">\r\n"
+		                + "        <label for=\"patient.middle_name\">Middle Name:</label>\r\n"
+		                + "        <input class=\"form-control\" id=\"patient.middle_name\" name=\"patient.middle_name\" type=\"text\"\r\n"
+		                + "               readonly=\"readonly\">\r\n" + "    </div>\r\n"
+		                + "    <div class=\"form-group\">\r\n" + "        <label for=\"patient.sex\">Gender:</label>\r\n"
+		                + "        <select class=\"form-control\" id=\"patient.sex\" name=\"patient.sex\" disabled=\"disabled\">\r\n"
+		                + "            <option value=\"\">...</option>\r\n"
+		                + "            <option value=\"M\">Male</option>\r\n"
+		                + "            <option value=\"F\">Female</option>\r\n" + "        </select>\r\n" + "    </div>\r\n"
+		                + "    <div class=\"form-group\">\r\n"
+		                + "        <label for=\"patient.birth_date\">Date Of Birth:</label>\r\n"
+		                + "        <input class=\"form-control\" id=\"patient.birth_date\" name=\"patient.birth_date\" type=\"text\"\r\n"
+		                + "               readonly=\"readonly\" value=\"\">\r\n" + "    </div>\r\n" + "</div>\r\n"
+		                + "<div class=\"section\">\r\n" + "    <h3>Encounter Details</h3>");
+		//TODO handle the getting and setting of form name
+		outJsStringWriter.write("\r\n <script type=\"text/javascript\">\r\n" + "$(document).ready(function () {\r\n"
+		        + "    document.setupAutoCompleteDataForProvider('encounter\\\\.provider_id_select');\r\n"
+		        + "    document.setupAutoCompleteData('encounter\\\\.location_id');\r\n"
+		        + "    document.setupValidationForProvider($('#encounter\\\\.provider_id_select').val(),$(\"#encounter\\\\.provider_id\"));\r\n"
+		        + "    document.setupValidationForLocation($('#encounter\\\\.location_id').val(),$(\"encounter\\\\.location_id\"));\r\n"
+		        + "\r\n" + "\r\n" + "    const formId = `#basic_encounter_form_with_validation_for_numeric_range`;");
 		
 		applyTagsHelper(new PrintWriter(outHtmlStringWriter), new PrintWriter(outJsStringWriter), null, content, null);
-		
-		outJsStringWriter.write("\r\n" + "});\r\n" + "</script>");
+		outHtmlStringWriter.write("</div>\r\n</form>\r\n" + "</body>");
+		outJsStringWriter.write("\r\n" + "});\r\n" + "</script> \r\n </html>");
 		outHtmlStringWriter.write(outJsStringWriter.toString());
 		
 		return outHtmlStringWriter.toString();
