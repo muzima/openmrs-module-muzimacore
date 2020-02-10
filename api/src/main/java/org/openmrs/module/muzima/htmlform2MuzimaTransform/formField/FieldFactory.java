@@ -63,10 +63,11 @@ public class FieldFactory {
 				units = asConceptNumeric.getUnits();
 			}
 			
-			l = concept.getName(locale, false).getName() + " " + units;
+			//l = concept.getName(locale, false).getName() + " " + units;
+			l = "obs." + concept.getName(locale, false).getName();
 			
 		} else {
-			l = concept.getName(locale, false).getName();
+			l = "obs." + concept.getName(locale, false).getName();
 			
 		}
 		name = addUnderScoreBetweenWord(l);
