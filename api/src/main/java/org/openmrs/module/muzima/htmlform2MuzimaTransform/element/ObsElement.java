@@ -1,3 +1,5 @@
+package org.openmrs.module.muzima.htmlform2MuzimaTransform.element;
+
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
@@ -43,10 +45,9 @@ import org.openmrs.web.WebConstants;
 
 import ca.uhn.hl7v2.conf.spec.message.Field;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -56,6 +57,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+
 
 /**
  * Holds the field used to represent a specific Observation
