@@ -67,7 +67,7 @@ public class MuzimaHtmlFormEntryController {
 			//seems the problem is getting the htmlForm.getXmlData() method
 			//String htmlFormXmlString = htmlForm.getXmlData();
 			MuzimaFormService formService = Context.getService(MuzimaFormService.class);
-			String inputXml = "<htmlform> <obs conceptId=\"5090\" />  <obs conceptId=\"5090\" LabelText=\"Weight\" /> </htmlform>";
+			String inputXml = "<htmlform> <obs conceptId=\"5090\" labelText=\"Weight\" />  <obs conceptId=\"5089\" labelText=\"Weight\" /> </htmlform>";
 			html = formService.convertHtmlformToMuzima(inputXml);
 			
             response.put("html", html);
