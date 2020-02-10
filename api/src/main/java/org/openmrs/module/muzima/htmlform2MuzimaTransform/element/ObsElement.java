@@ -25,11 +25,9 @@ import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.ConceptSearc
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.DateTimeField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.DateField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.DropdownField;
-import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.DynamicAutocompleteField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.NumberField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.Option;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.RadioButtonsField;
-import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.RemoteJsonAutoCompleteField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.SingleOptionField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.TextField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.TimeField;
