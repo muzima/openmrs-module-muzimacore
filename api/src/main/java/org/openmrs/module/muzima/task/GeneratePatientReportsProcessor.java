@@ -67,6 +67,7 @@ public class GeneratePatientReportsProcessor {
             PatientService patientService = Context.getService(PatientService.class);
             MuzimaPatientReportService muzimaPatientReportService = Context.getService(MuzimaPatientReportService.class);
             RenderingMode selectedRenderingMode = null;
+            List<ReportRequest> reportRequestsToRun = new ArrayList<ReportRequest>();
 
             for (ReportConfiguration configuration : reportConfigurations ) {
                 Cohort cohort = Context.getCohortService().getCohortByUuid(configuration.getCohortUuid());
@@ -98,19 +99,27 @@ public class GeneratePatientReportsProcessor {
                             if (!"COMPLETED".equals(latestPatientReport.getStatus())) {
                                 ReportRequest reportRequest = reportService.getReportRequestByUuid(latestPatientReport.getReportRequestUuid());
 
-                                if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
-                                    byte[] byteData = reportService.loadRenderedOutput(reportRequest);
-                                    if (byteData != null) {
-                                        latestPatientReport.setReportJson(byteData);
-                                        latestPatientReport.setStatus("COMPLETED");
-                                        muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
-                                    } else {
+                                if (reportRequest == null) {
+                                    // we have an incomplete report whose request has been deleted
+                                    // we also delete the patient report to be generated in the next cycle
+                                    muzimaPatientReportService.deleteMuzimaPatientReport(latestPatientReport);
+                                } else {
+                                    if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
+                                        byte[] byteData = reportService.loadRenderedOutput(reportRequest);
+                                        if (byteData != null) {
+                                            latestPatientReport.setReportJson(byteData);
+                                            latestPatientReport.setStatus("COMPLETED");
+                                            muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                        } else {
+                                            latestPatientReport.setStatus("FAILED");
+                                            muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                        }
+                                    } else if ("FAILED".equals(reportRequest.getStatus().toString())) {
                                         latestPatientReport.setStatus("FAILED");
                                         muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                    } else {
+                                        reportRequestsToRun.add(reportRequest);
                                     }
-                                } else if ("FAILED".equals(reportRequest.getStatus().toString())) {
-                                    latestPatientReport.setStatus("FAILED");
-                                    muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
                                 }
                             } else {
                                 // for a completed report, check and regenerate if we have changes in observations
@@ -135,6 +144,7 @@ public class GeneratePatientReportsProcessor {
                                         reportRequest.setRenderingMode(selectedRenderingMode);
                                         reportRequest.setPriority(ReportRequest.Priority.LOW);
                                         reportRequest = reportService.queueReport(reportRequest);
+                                        reportRequestsToRun.add(reportRequest);
 
                                         latestPatientReport.setName(design.getName());
                                         latestPatientReport.setReportRequestUuid(reportRequest.getUuid());
@@ -159,6 +169,7 @@ public class GeneratePatientReportsProcessor {
                                     reportRequest.setRenderingMode(selectedRenderingMode);
                                     reportRequest.setPriority(ReportRequest.Priority.LOW);
                                     reportRequest = reportService.queueReport(reportRequest);
+                                    reportRequestsToRun.add(reportRequest);
 
                                     muzimaPatientReport = new MuzimaPatientReport();
                                     muzimaPatientReport.setName(design.getName());
@@ -178,7 +189,35 @@ public class GeneratePatientReportsProcessor {
                     }
                 }
             }
-            reportService.processNextQueuedReports();
+
+            if (reportRequestsToRun.size() > 0) {
+                for (ReportRequest reportRequest : reportRequestsToRun) {
+                    try {
+                        reportService.runReport(reportRequest);
+
+                        MuzimaPatientReport muzimaPatientReport = muzimaPatientReportService
+                                .getMuzimaPatientReportByReportRequestUuid(reportRequest.getUuid());
+                        if (muzimaPatientReport != null) {
+
+                            if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
+                                byte[] byteData = reportService.loadRenderedOutput(reportRequest);
+                                if (byteData != null) {
+                                    muzimaPatientReport.setReportJson(byteData);
+                                    muzimaPatientReport.setStatus("COMPLETED");
+                                } else {
+                                    muzimaPatientReport.setStatus("FAILED");
+                                }
+                                muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
+                            } else if ("FAILED".equals(reportRequest.getStatus().toString())) {
+                                muzimaPatientReport.setStatus("FAILED");
+                                muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         } finally {
             isRunning = false;
         }

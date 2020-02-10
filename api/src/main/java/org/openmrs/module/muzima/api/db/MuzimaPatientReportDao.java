@@ -43,4 +43,6 @@ public interface MuzimaPatientReportDao {
     void deleteMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
 
     MuzimaPatientReport getMuzimaPatientReportByName(final Integer patientId, String reportName);
+
+    MuzimaPatientReport getMuzimaPatientReportByReportRequestUuid(String uuid);
 }

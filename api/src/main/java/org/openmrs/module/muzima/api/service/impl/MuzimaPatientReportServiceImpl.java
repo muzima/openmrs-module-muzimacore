@@ -84,6 +84,11 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     }
 
     @Override
+    public MuzimaPatientReport getMuzimaPatientReportByReportRequestUuid(String uuid) {
+        return dao.getMuzimaPatientReportByReportRequestUuid(uuid);
+    }
+
+    @Override
     public Number countMuzimaPatientReports(){
         return dao.countMuzimaPatientReports();
     }
