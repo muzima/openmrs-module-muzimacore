@@ -24,7 +24,7 @@ public interface MuzimaPatientReportService extends OpenmrsService {
 
     MuzimaPatientReport getMuzimaPatientReportById(final Integer id);
 
-    MuzimaPatientReport getMuzimaPatientReportByName(final String reportName);
+    MuzimaPatientReport getMuzimaPatientReportByName(final Integer patientId, final String reportName);
 
     List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(final Integer patientId);
 
@@ -37,6 +37,8 @@ public interface MuzimaPatientReportService extends OpenmrsService {
     void deleteMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
 
     List<MuzimaPatientReport> getAllMuzimaPatientReports();
+
+    MuzimaPatientReport getMuzimaPatientReportByReportRequestUuid(final String uuid);
 
     Number countMuzimaPatientReports();
 

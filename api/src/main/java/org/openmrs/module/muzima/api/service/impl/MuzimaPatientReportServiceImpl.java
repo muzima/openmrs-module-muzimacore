@@ -59,8 +59,8 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     }
 
     @Override
-    public MuzimaPatientReport getMuzimaPatientReportByName(String reportName) {
-        return dao.getMuzimaPatientReportByName(reportName);
+    public MuzimaPatientReport getMuzimaPatientReportByName(final Integer patientId, final String reportName) {
+        return dao.getMuzimaPatientReportByName(patientId, reportName);
     }
 
     @Override
@@ -81,6 +81,11 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     @Override
     public List<MuzimaPatientReport> getAllMuzimaPatientReports(){
         return dao.getAllMuzimaPatientReports();
+    }
+
+    @Override
+    public MuzimaPatientReport getMuzimaPatientReportByReportRequestUuid(String uuid) {
+        return dao.getMuzimaPatientReportByReportRequestUuid(uuid);
     }
 
     @Override

@@ -35,7 +35,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     @Override
-    @Transactional
     public List<MuzimaPatientReport> getAllMuzimaPatientReports() {
         Criteria criteria = session().createCriteria(MuzimaPatientReport.class);
         criteria.add(Restrictions.eq("retired", false));
@@ -77,7 +76,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
      * @return total number of patient reports in the database for the specified patient.
      */
     @Override
-    @Transactional
     public Number countMuzimaPatientReports(final Integer patientId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         Disjunction disjunction = Restrictions.disjunction();
@@ -90,7 +88,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     @Override
-    @Transactional
     public Number countMuzimaPatientReports(){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
@@ -119,7 +116,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
     
     @Override
-    @Transactional
     public List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(Integer patientId){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("patientId", patientId));
@@ -129,7 +125,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     @Override
-    @Transactional
     public MuzimaPatientReport getMuzimaPatientReportByUuid(String uuid){
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("uuid", uuid));
@@ -138,7 +133,6 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     @Override
-    @Transactional
     public MuzimaPatientReport getLatestPatientReportByPatientIdAndConfigId(Integer patientId, Integer configId) {
         Criteria criteria = session().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("cohortReportConfigId", configId));
@@ -162,10 +156,19 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     @Override
-    public MuzimaPatientReport getMuzimaPatientReportByName(String reportName) {
+    public MuzimaPatientReport getMuzimaPatientReportByName(final Integer patientId, final String reportName) {
         Criteria criteria = session().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("patientId", patientId));
         criteria.add(Restrictions.eq("name", reportName));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.setMaxResults(1);
+        return (MuzimaPatientReport)criteria.uniqueResult();
+    }
+
+    @Override
+    public MuzimaPatientReport getMuzimaPatientReportByReportRequestUuid(String uuid) {
+        Criteria criteria = session().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("reportRequestUuid", uuid));
         criteria.setMaxResults(1);
         return (MuzimaPatientReport)criteria.uniqueResult();
     }
