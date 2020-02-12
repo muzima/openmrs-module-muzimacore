@@ -143,7 +143,6 @@ public class GeneratePatientReportsProcessor {
                                         reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
                                         reportRequest.setRenderingMode(selectedRenderingMode);
                                         reportRequest.setPriority(ReportRequest.Priority.LOW);
-                                        reportRequest = reportService.queueReport(reportRequest);
                                         reportRequestsToRun.add(reportRequest);
 
                                         latestPatientReport.setName(design.getName());
@@ -168,7 +167,7 @@ public class GeneratePatientReportsProcessor {
                                     reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
                                     reportRequest.setRenderingMode(selectedRenderingMode);
                                     reportRequest.setPriority(ReportRequest.Priority.LOW);
-                                    reportRequest = reportService.queueReport(reportRequest);
+
                                     reportRequestsToRun.add(reportRequest);
 
                                     muzimaPatientReport = new MuzimaPatientReport();
