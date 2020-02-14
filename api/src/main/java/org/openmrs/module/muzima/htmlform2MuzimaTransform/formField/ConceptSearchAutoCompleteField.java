@@ -1,6 +1,5 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform.formField;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,15 +51,14 @@ public class ConceptSearchAutoCompleteField implements FormField {
 		autoCompleteSource.append("var " + this.sourceVariableName + " = [ \r\n");
 		//only 1 of them is used to specify the filter
 		if (allowedconceptclasses == null || allowedconceptclasses.size() == 0) {
-			//StringBuilder sb = new StringBuilder();
-			
 			if (conceptList != null) {
 				for (Concept conc : conceptList) {
 					Option option = new Option(conc, locale);
 					autoCompleteSource
 					        .append("{\"label\": \"" + option.getLabel() + "\", \" val\": \"" + option.getValue() + "\"},");
 				}
-			} else {
+			}
+		} else {
 				
 				for (ConceptClass conceptClass : allowedconceptclasses) {
 					try {
@@ -78,7 +76,7 @@ public class ConceptSearchAutoCompleteField implements FormField {
 				}
 				
 			}
-		}
+		
 		autoCompleteSource.append("];\r\n");
 		this.autoCompleteSourceArray = autoCompleteSource.toString();
 	}
