@@ -805,7 +805,7 @@ else {
 				} else if ("yes_no".equals(parameters.get("style"))) {
 					valueField = new RadioButtonsField(concept, locale, valueLabel);
 					((RadioButtonsField) valueField).addOption(new Option(yesConcept, yesStr, locale, false));
-					((RadioButtonsField) valueField).addOption(new Option(noConcept, yesStr, locale, false));
+					((RadioButtonsField) valueField).addOption(new Option(noConcept, noStr, locale, false));
 				} else if ("no_yes_dropdown".equals(parameters.get("style"))) {
 					valueField = new DropdownField(concept, locale, valueLabel);
 					((DropdownField) valueField).addOption(new Option());
@@ -932,7 +932,8 @@ else {
 			} else {
 				CheckboxField cbf = new CheckboxField(concept, locale, fieldLabel);
 				cbf.addOption(new Option(ansLabel, ansValue, false));
-				return cbf;			}
+				return cbf;	
+				}
 		}
 		
 	}
