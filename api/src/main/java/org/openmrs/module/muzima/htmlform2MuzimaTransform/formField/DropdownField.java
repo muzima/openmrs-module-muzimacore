@@ -78,7 +78,7 @@ public class DropdownField extends SingleOptionField {
 		}
 		sb.append("</select>");
 		
-		return null;
+		return sb.toString();
 	}
 	
 	@Override
