@@ -32,18 +32,6 @@ public class ToggleCheckbox implements FormField {
 	
 	private String js = null;
 	
-	//	public ToggleCheckbox() {
-	//	}
-	//	
-	//	public ToggleCheckbox(String value) {
-	//		this.value = value;
-	//	}
-	//	
-	//	public ToggleCheckbox(String label, String value) {
-	//		this.fieldLabel = label;
-	//		this.value = value;
-	//	}
-	
 	public ToggleCheckbox(Concept concept, Concept ansConcept, Locale locale, String fieldLabel, String ansLabel,
 	    String toggleTarget) {
 		this.fieldLabel = fieldLabel;
@@ -120,7 +108,8 @@ public class ToggleCheckbox implements FormField {
 		sb.append(
 		    "<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel + "</label>\r\n"
 		            + "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\"\r\n"
-		            + "           type=\"checkbox\" data-concept=\"" + this.dataConcept + "\">\r\n" + "			value=\"");
+		            + "           type=\"checkbox\" data-concept=\"" + this.dataConcept + "\">\r\n" + "			value=\""
+		            + this.value + "\"");
 		
 		if (defaultValue != null && !"".equals(defaultValue))
 			sb.append(" checked=\"true\"");
