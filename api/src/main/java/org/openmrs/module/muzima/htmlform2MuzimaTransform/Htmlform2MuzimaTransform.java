@@ -51,13 +51,7 @@ public class Htmlform2MuzimaTransform {
 			log.debug("exception during convertSpecialCharactersWithinLogicAndVelocityTests{}", e);
 			throw new RuntimeException("exception during convertSpecialCharactersWithinLogicAndVelocityTests");
 		}
-		try {
-			htmlformXml = htmlGenerator.substituteCharacterCodesWithAsciiCodes(htmlformXml);
-		}
-		catch (Exception e) {
-			log.debug("exception during substituteCharacterCodesWithAsciiCodes{}", e);
-			throw new RuntimeException("exception during substituteCharacterCodesWithAsciiCodes{}");
-		}
+		
 		try {
 			htmlformXml = htmlGenerator.applyTags(htmlformXml);
 		}
