@@ -1,7 +1,6 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform.formField;
 
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import org.openmrs.Concept;
@@ -65,17 +64,12 @@ public class DateTimeField implements FormField {
 			sb.append("required=\"required\"");
 		}
 		sb.append(">\r\n" + "</div>\r\n");
-		setJs();
+		
 		return sb.toString();
 	}
 	
 	@Override
 	public void setDefaultValue(Object defaultValue) {
-	}
-	
-	private void setJs() {
-		this.js = " \r\n <link href=\"css/bootstrap-datetimepicker.min.css\" rel=\"stylesheet\"> \r\n <script src=\"js/bootstrap-datetimepicker.min.js\"></script>\r\n";
-		
 	}
 	
 	@Override
