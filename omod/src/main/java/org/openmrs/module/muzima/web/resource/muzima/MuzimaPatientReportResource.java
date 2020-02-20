@@ -56,7 +56,7 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
             muzimaPatientReports = service.getPagedMuzimaPatientReports(patientUuids, startIndex, limit, syncDate);
         }
         if(reportUuids != null){
-            muzimaPatientReports = service.getMuzimaPatientReportByUuids(reportUuids);
+            muzimaPatientReports = service.getMuzimaPatientReportByUuids(reportUuids,syncDate);
         }
         return new NeedsPaging<MuzimaPatientReport>(muzimaPatientReports, context);
     }

@@ -40,7 +40,7 @@ public interface MuzimaPatientReportDao {
     
     MuzimaPatientReport getMuzimaPatientReportByUuid(String Uuid);
 
-    List<MuzimaPatientReport> getMuzimaPatientReportByUuids(String reportUuids);
+    List<MuzimaPatientReport> getMuzimaPatientReportByUuids(String reportUuids, final Date syncDate);
 
     MuzimaPatientReport getLatestPatientReportByPatientIdAndConfigId(Integer patientId, Integer configId);
     

@@ -83,8 +83,12 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.add(Restrictions.eq("status", "completed"));
         if(syncDate != null) {
-            criteria.add(Restrictions.and(
-                    Restrictions.isNotNull("DateChanged"),Restrictions.ge("dateChanged", syncDate)));
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.and(Restrictions.isNotNull("dateChanged"),Restrictions.ge("dateChanged", syncDate)),
+                            Restrictions.and(Restrictions.isNotNull("dateCreated"),Restrictions.ge("dateCreated", syncDate))
+                    )
+            );
         }
         if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
@@ -160,11 +164,23 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
     }
 
     @Override
-    public List<MuzimaPatientReport> getMuzimaPatientReportByUuids(String reportUuids){
+    public List<MuzimaPatientReport> getMuzimaPatientReportByUuids(final String reportUuids, final Date syncDate){
         Criteria criteria = session().createCriteria(mappedClass);
-
+        String sql = "select id from muzima_cohort_report_config where priority=:reportPriority";
+        SQLQuery sqlquery = session().createSQLQuery(sql);
+        sqlquery.setInteger("reportPriority", 1);
         criteria.add(Restrictions.in("uuid",reportUuids.split(",")));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        if(sqlquery.list().size()>0) {
+            criteria.add(Restrictions.in("cohortReportConfigId", sqlquery.list()));
+        }else{
+            criteria.add(Restrictions.eq("cohortReportConfigId", 0));
+        }
+        if(syncDate != null) {
+            criteria.add(
+                    Restrictions.and(Restrictions.isNotNull("dateChanged"),Restrictions.ge("dateChanged", syncDate))
+            );
+        }
         return criteria.list();
     }
 

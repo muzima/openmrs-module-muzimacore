@@ -70,8 +70,8 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     }
 
     @Override
-    public List<MuzimaPatientReport> getMuzimaPatientReportByUuids(final String reportUuids){
-        return dao.getMuzimaPatientReportByUuids(reportUuids);
+    public List<MuzimaPatientReport> getMuzimaPatientReportByUuids(final String reportUuids, final Date syncDate){
+        return dao.getMuzimaPatientReportByUuids(reportUuids, syncDate);
     }
 
     @Override
