@@ -20,6 +20,7 @@ import org.openmrs.module.muzima.api.db.MuzimaPatientReportDao;
 import org.openmrs.module.muzima.api.service.MuzimaPatientReportService;
 import org.openmrs.module.muzima.model.MuzimaPatientReport;
 
+import java.util.Date;
 import java.util.List;
 
 public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implements MuzimaPatientReportService {
@@ -66,6 +67,11 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     @Override
     public MuzimaPatientReport getMuzimaPatientReportByUuid(final String uuid){
         return dao.getMuzimaPatientReportByUuid(uuid);
+    }
+
+    @Override
+    public List<MuzimaPatientReport> getMuzimaPatientReportByUuids(final String reportUuids){
+        return dao.getMuzimaPatientReportByUuids(reportUuids);
     }
 
     @Override
@@ -116,5 +122,10 @@ public class MuzimaPatientReportServiceImpl extends BaseOpenmrsService implement
     @Override
     public List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber, final Integer pageSize) {
         return dao.getPagedMuzimaPatientReports(patientId, pageNumber, pageSize);
+    }
+
+    @Override
+    public List<MuzimaPatientReport> getPagedMuzimaPatientReports(final String patientUuids, final Integer pageNumber, final Integer pageSize, final Date syncDate) {
+        return dao.getPagedMuzimaPatientReports(patientUuids, pageNumber, pageSize, syncDate);
     }
 }

@@ -15,6 +15,7 @@ package org.openmrs.module.muzima.api.db;
 
 import org.openmrs.module.muzima.model.MuzimaPatientReport;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MuzimaPatientReportDao {
@@ -23,6 +24,9 @@ public interface MuzimaPatientReportDao {
 
     List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber,
                                                            final Integer pageSize);
+
+    List<MuzimaPatientReport> getPagedMuzimaPatientReports(final String patientUuids, final Integer pageNumber,
+                                                           final Integer pageSize,final Date syncDate);
 
     Number countMuzimaPatientReports(final Integer patientId);
 
@@ -35,7 +39,9 @@ public interface MuzimaPatientReportDao {
     List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(Integer patientId);
     
     MuzimaPatientReport getMuzimaPatientReportByUuid(String Uuid);
-    
+
+    List<MuzimaPatientReport> getMuzimaPatientReportByUuids(String reportUuids);
+
     MuzimaPatientReport getLatestPatientReportByPatientIdAndConfigId(Integer patientId, Integer configId);
     
     MuzimaPatientReport saveOrUpdateMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);

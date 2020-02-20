@@ -14,6 +14,7 @@
 package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -24,6 +25,7 @@ import org.openmrs.module.muzima.api.db.MuzimaPatientReportDao;
 import org.openmrs.module.muzima.model.MuzimaPatientReport;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
@@ -59,6 +61,31 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
       
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         criteria.add(Restrictions.eq("status", "completed"));
+        if (pageNumber != null) {
+            criteria.setFirstResult((pageNumber - 1) * pageSize);
+        }
+        if (pageSize != null) {
+            criteria.setMaxResults(pageSize);
+        }
+        criteria.addOrder(Order.desc("dateCreated"));
+        return criteria.list();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<MuzimaPatientReport> getPagedMuzimaPatientReports(final String patientUuids, final Integer pageNumber, final Integer pageSize,final Date syncDate) {
+        Criteria criteria = session().createCriteria(mappedClass);
+
+        String sql = "select person_id from person where uuid in(:patientUuids)";
+        SQLQuery sqlquery = session().createSQLQuery(sql);
+        sqlquery.setParameterList("patientUuids", patientUuids.split(","));
+        criteria.add(Restrictions.in("patientId",sqlquery.list()));
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        criteria.add(Restrictions.eq("status", "completed"));
+        if(syncDate != null) {
+            criteria.add(Restrictions.and(
+                    Restrictions.isNotNull("DateChanged"),Restrictions.ge("dateChanged", syncDate)));
+        }
         if (pageNumber != null) {
             criteria.setFirstResult((pageNumber - 1) * pageSize);
         }
@@ -130,6 +157,15 @@ public class HibernateMuzimaPatientReportDao implements MuzimaPatientReportDao {
         criteria.add(Restrictions.eq("uuid", uuid));
         criteria.add(Restrictions.eq("retired", Boolean.FALSE));
         return (MuzimaPatientReport)criteria.uniqueResult();
+    }
+
+    @Override
+    public List<MuzimaPatientReport> getMuzimaPatientReportByUuids(String reportUuids){
+        Criteria criteria = session().createCriteria(mappedClass);
+
+        criteria.add(Restrictions.in("uuid",reportUuids.split(",")));
+        criteria.add(Restrictions.eq("retired", Boolean.FALSE));
+        return criteria.list();
     }
 
     @Override
