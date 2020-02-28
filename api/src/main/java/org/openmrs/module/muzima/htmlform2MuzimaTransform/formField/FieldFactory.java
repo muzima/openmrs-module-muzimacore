@@ -64,10 +64,10 @@ public class FieldFactory {
 			}
 			
 			//l = concept.getName(locale, false).getName() + " " + units;
-			l = "obs." + concept.getName(locale, false).getName();
+			l = concept.getName(locale, false).getName();
 			
 		} else {
-			l = "obs." + concept.getName(locale, false).getName();
+			l = concept.getName(locale, false).getName();
 			
 		}
 		name = addUnderScoreBetweenWord(l);
