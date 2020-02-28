@@ -76,7 +76,7 @@ public class DropdownField extends SingleOptionField {
 			sb.append(option.getLabel());
 			sb.append("</option>");
 		}
-		sb.append("</select>");
+		sb.append("</select>\r\n</div>");
 		
 		return sb.toString();
 	}
@@ -87,6 +87,16 @@ public class DropdownField extends SingleOptionField {
 			return this.js;
 		}
 		return "";
+	}
+	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
 	}
 	
 }
