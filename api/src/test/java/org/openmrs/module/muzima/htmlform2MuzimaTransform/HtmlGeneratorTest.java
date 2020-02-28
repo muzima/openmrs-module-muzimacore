@@ -3,6 +3,7 @@ package org.openmrs.module.muzima.htmlform2MuzimaTransform;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.HtmlGenerator;
 import org.w3c.dom.Document;
 
 public class HtmlGeneratorTest {
@@ -34,7 +35,7 @@ public class HtmlGeneratorTest {
 		xml = htmlGenerator.applyTranslations(xml);
 		xml = htmlGenerator.stripComments(xml);
 		xml = htmlGenerator.convertSpecialCharactersWithinLogicAndVelocityTests(xml);
-		xml = htmlGenerator.substituteCharacterCodesWithAsciiCodes(xml);
+		xml = htmlGenerator.substituteAsciiCodesWithCharacterCodes(xml);
 		
 		assertEquals(removeWhiteSpaces(expectedXml), removeWhiteSpaces(xml));
 		
