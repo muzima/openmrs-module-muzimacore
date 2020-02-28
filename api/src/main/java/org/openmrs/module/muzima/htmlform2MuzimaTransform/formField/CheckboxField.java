@@ -72,12 +72,14 @@ public class CheckboxField extends SingleOptionField {
 		this.dataConcept = dataConcept;
 	}
 	
-	public boolean isRequired() {
-		return required;
-	}
-	
+	@Override
 	public void setRequired(boolean required) {
 		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
 	}
 	
 	@Override
