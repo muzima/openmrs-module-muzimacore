@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.HtmlGenerator;
 
 public class HtmlGeneratorMethodsTest {
 	
@@ -119,7 +120,7 @@ public class HtmlGeneratorMethodsTest {
 	@Test
 	public void substituteCharacterCodesWithAsciiCodesTest() throws Exception {
 		String htmlForm = "<htmlform>this contains non&nbsp;breaking&nbsp;space</htmlform>";
-		htmlForm = htmlGenerator.substituteCharacterCodesWithAsciiCodes(htmlForm);
+		htmlForm = htmlGenerator.substituteAsciiCodesWithCharacterCodes(htmlForm);
 		String expected = "<htmlform>this contains non&#160;breaking&#160;space</htmlform>";
 		assertEquals(removeWhiteSpaces(expected), removeWhiteSpaces(htmlForm));
 	}
