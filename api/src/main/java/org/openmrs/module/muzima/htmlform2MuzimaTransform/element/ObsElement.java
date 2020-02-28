@@ -25,6 +25,7 @@ import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.DateField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.DropdownField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.NumberField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.Option;
+import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.OptionComparator;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.RadioButtonsField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.SingleOptionField;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.formField.TextField;
@@ -106,13 +107,6 @@ public class ObsElement implements HtmlGeneratorElement {
 	// these are for location and provider options
 	
 	private List<Option> locationOptions = new ArrayList<Option>();
-	
-	private Map<Object, String> whenValueThenDisplaySection = new LinkedHashMap<Object, String>();
-	
-	private Map<Object, String> whenValueThenJavascript = new LinkedHashMap<Object, String>();
-	
-	private Map<Object, String> whenValueElseJavascript = new LinkedHashMap<Object, String>();
-	
 	private Boolean isLocationObs; // determines whether the valueText for this obs should be a location_id;
 	
 	private Double absoluteMaximum;
@@ -294,7 +288,7 @@ public class ObsElement implements HtmlGeneratorElement {
 			} else {
 				label = c.getName(locale, false).getName();
 			}
-			((SingleOptionField) valueField).addOption(new Option(answerConcept, valueLabel, locale, false));
+			((SingleOptionField) valueField).addOption(new Option(c, label, locale, false));
 		}
 		if (defaultValue != null) {
 			Concept initialValue = Htmlform2MuzimaTransformUtil.getConcept(defaultValue);
@@ -471,7 +465,7 @@ else {
 				//					String personsParam = parameters.get("persons");
 				//					if (personsParam != null) {
 				//						for (String s : personsParam.split(",")) {
-				//							Person p = tmlform2MuzimaTransformUtil.getPerson(s);
+				//							Person p = Htmlform2MuzimaTransformUtil.getPerson(s);
 				//							if (p == null) {
 				//								throw new RuntimeException("Cannot find Person: " + s);
 				//							}
@@ -700,35 +694,13 @@ else {
 							        "style \"autocomplete\" but there are no possible answers. Looked for answerConcepts and "
 							                + "answerClasses attributes, answerConceptSetIds, and answers for concept "
 							                + concept.getConceptId());
-						}
-						//TODO handle dynamic autocomplete, ask if it even needed because it is not in the htmlform specification
-						//								if ("true".equals(parameters.get("selectMulti"))) {
-						//									DynamicAutocompleteField dacw = new DynamicAutocompleteField(conceptAnswers, cptClasses);
-						//									dacw.setAllowedConceptSetIds(answerConceptSetIds);
-						//									valueField = dacw;
-						//								} else 
+						}					
 						
 						ConceptSearchAutoCompleteField csaw = new ConceptSearchAutoCompleteField(concept, locale,
 						        valueLabel, conceptAnswers, cptClasses);
 						csaw.setAllowedConceptSetIds(answerConceptSetIds);
 						valueField = csaw;
-						//TODO handle drugs autocomplete		
-						//							} else if (parameters.get("answerDrugs") != null) {
-						//								// we support searching through all drugs via AJAX
-						//								RemoteJsonAutocompleteField widget = new RemoteJsonAutocompleteField(
-						//								        "/" + WebConstants.WEBAPP_NAME + "/module/htmlformentry/drugSearch.form");
-						//								widget.setValueTemplate("Drug:{{id}}");
-						//								if (parameters.get("displayTemplate") != null) {
-						//									widget.setDisplayTemplate(parameters.get("displayTemplate"));
-						//								} else {
-						//									widget.setDisplayTemplate("{{name}}");
-						//								}
-						//								if (existingObs != null && existingObs.getValueDrug() != null) {
-						//									widget.setDefaultValue(new Option(existingObs.getValueDrug().getName(),
-						//									        existingObs.getValueDrug().getDrugId().toString(), true));
-						//								}
-						//								valueField = widget;
-						
+
 					} else if (parameters.get("answerDrugId") != null) {
 						String answerDrugId = parameters.get("answerDrugId");
 						if (StringUtils.isNotBlank(answerDrugId)) {
@@ -783,8 +755,9 @@ else {
 				}
 			}  else if (concept.getDatatype().isBoolean()) {
 				String noStr = parameters.get("noLabel");
-				Concept yesConcept = Htmlform2MuzimaTransformUtil.getConcept("1065");
-				Concept noConcept = Htmlform2MuzimaTransformUtil.getConcept("1066");
+				Concept yesConcept = Context.getConceptService().getTrueConcept();
+				Concept noConcept = Context.getConceptService().getFalseConcept();										
+				
 				if (StringUtils.isEmpty(noStr)) {
 					noStr = noConcept.getName(locale, false).getName();
 				}
@@ -866,11 +839,15 @@ else {
 				} else if (defaultValue == null) {
 					defaultValue = parameters.get("defaultDatetime");
 				}
+				
 				if (defaultValue != null) {
 					valueField.setDefaultValue(
 					    Htmlform2MuzimaTransformUtil.translateDatetimeParam(defaultValue, defaultDatetimeFormat));
 				}
 				
+				if(allowFutureDates) {
+					((DateField) valueField).setAllowFutureDates(allowFutureDates);
+				}
 			}
 			
 		//leave over	
@@ -881,7 +858,7 @@ else {
 		if (parameters.containsKey("dateLabel")) {
 			dateLabel = parameters.get("dateLabel");
 		}
-		dateField = new DateField(concept, locale, valueLabel);
+		dateField = new DateField(concept, locale, dateLabel);
 		if (parameters.get("defaultObsDatetime") != null) {
 			// Make sure this format continues to match
 			// the <obs> attribute defaultObsDatetime documentation at
@@ -941,11 +918,14 @@ else {
 	@Override
 	public String generateHtml() {
 		StringBuilder ret = new StringBuilder();
+		if(required) {
+			valueField.setRequired(true);
+		}
 		ret.append(valueField.generateHtml());
 		if (dateField != null) {
 			ret.append(" ");
 			ret.append(dateField.generateHtml());
-		}
+		}		
 		this.jsString = valueField.getJs();
 		return ret.toString();
 	}
@@ -1011,35 +991,6 @@ else {
 	
 	public String getValueLabel() {
 		return valueLabel;
-	}
-	
-	public void whenValueThenDisplaySection(Object value, String thenSection) {
-		whenValueThenDisplaySection.put(value, thenSection);
-	}
-	
-	public Map<Object, String> getWhenValueThenDisplaySection() {
-		return whenValueThenDisplaySection;
-	}
-	
-	public void whenValueThenJavaScript(Object value, String thenJavaScript) {
-		whenValueThenJavascript.put(value, thenJavaScript);
-	}
-	
-	public Map<Object, String> getWhenValueThenJavascript() {
-		return whenValueThenJavascript;
-	}
-	
-	public void whenValueElseJavaScript(Object value, String elseJavaScript) {
-		whenValueElseJavascript.put(value, elseJavaScript);
-	}
-	
-	public Map<Object, String> getWhenValueElseJavascript() {
-		return whenValueElseJavascript;
-	}
-	
-	public boolean hasWhenValueThen() {
-		return whenValueThenDisplaySection.size() > 0 || whenValueThenJavascript.size() > 0
-		        || whenValueElseJavascript.size() > 0;
 	}
 	
 	public String getJsString() {
