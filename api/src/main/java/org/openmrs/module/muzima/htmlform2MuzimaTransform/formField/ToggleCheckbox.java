@@ -108,7 +108,7 @@ public class ToggleCheckbox implements FormField {
 		sb.append(
 		    "<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel + "</label>\r\n"
 		            + "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\"\r\n"
-		            + "           type=\"checkbox\" data-concept=\"" + this.dataConcept + "\">\r\n" + "			value=\""
+		            + "           type=\"checkbox\" data-concept=\"" + this.dataConcept + "			value=\""
 		            + this.value + "\"");
 		
 		if (defaultValue != null && !"".equals(defaultValue))
@@ -137,6 +137,16 @@ public class ToggleCheckbox implements FormField {
 			return this.js;
 		}
 		return "";
+	}
+	
+	@Override
+	public void setRequired(boolean required) {
+		return;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return false;
 	}
 	
 	/**
