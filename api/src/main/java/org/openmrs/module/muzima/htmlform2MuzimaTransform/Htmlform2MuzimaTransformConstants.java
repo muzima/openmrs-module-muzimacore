@@ -18,7 +18,6 @@ public class Htmlform2MuzimaTransformConstants {
 	/** Constant used by {@see Htmlform2MuzimaTransformUtil#documentToString(Document)} */
 	public final static String ERROR_TRANSFORMER_2 = "Transformer.transform error:";
 	
-	//TODO below needed?
 	public final static String[] ENCOUNTER_TAGS = { "encounterDate", "encounterLocation", "encounterProvider" };
 	
 	public final static String[] PATIENT_TAGS = { "patient" };
