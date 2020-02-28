@@ -147,4 +147,14 @@ public class ConceptSearchAutoCompleteField implements FormField {
 	public void setAllowedConceptSetIds(String allowedConceptSetIds) {
 		this.allowedConceptSetIds = allowedConceptSetIds;
 	}
+	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
+	}
 }
