@@ -16,4 +16,9 @@ public interface FormField {
 	public void setDefaultValue(Object defaultValue);
 	
 	public String getJs();
+	
+	public void setRequired(boolean required);
+	
+	public boolean isRequired();
+	
 }

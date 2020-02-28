@@ -10,7 +10,6 @@ import org.openmrs.Obs;
  * {@code <input type="file"/>}. The attribute conceptId mentioned in the obs tag has to be the id
  * of a concept with datatype 'complex'.
  */
-//TODO handle defaultValue
 public class UploadField implements FormField {
 	
 	private String fieldLabel;
@@ -56,6 +55,16 @@ public class UploadField implements FormField {
 		return "";
 	}
 	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
+	}
+	
 	public String getFieldLabel() {
 		return fieldLabel;
 	}
@@ -82,14 +91,6 @@ public class UploadField implements FormField {
 	
 	public Obs getDefaultValue() {
 		return defaultValue;
-	}
-	
-	public boolean isRequired() {
-		return required;
-	}
-	
-	public void setRequired(boolean required) {
-		this.required = required;
 	}
 	
 }

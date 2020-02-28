@@ -113,6 +113,16 @@ public class TimeField implements FormField {
 		
 	}
 	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
+	}
+	
 	public String getFieldLabel() {
 		return fieldLabel;
 	}
@@ -135,14 +145,6 @@ public class TimeField implements FormField {
 	
 	public void setDataConcept(String dataConcept) {
 		this.dataConcept = dataConcept;
-	}
-	
-	public boolean isRequired() {
-		return required;
-	}
-	
-	public void setRequired(boolean required) {
-		this.required = required;
 	}
 	
 	public Date getDefaultValue() {
