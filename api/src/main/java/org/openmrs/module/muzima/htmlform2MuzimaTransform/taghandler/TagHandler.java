@@ -27,15 +27,4 @@ public interface TagHandler {
 	 * @return true/false whether to handle the body
 	 */
 	public boolean doStartTag(PrintWriter outHtmlPrintWriter, PrintWriter outJsPrintWriter, Node parent, Node node);
-	//	
-	//	/**
-	//	 * Handles the end tag for a specific tag type. Generates the appropriate HTML and adds it to
-	//	 * the associated PrintWriter.
-	//	 * 
-	//	 * @param out the PrintWriter to append generated HTML to
-	//	 * @param parent the parent node of the node in the XML associated with this tag
-	//	 * @param node the node in the XML associated with this tag
-	//	 */
-	//	public void doEndTag(PrintWriter out, Node parent, Node node);
-	//	
 }
