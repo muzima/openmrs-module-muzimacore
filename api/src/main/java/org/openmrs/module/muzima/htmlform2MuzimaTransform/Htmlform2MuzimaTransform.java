@@ -14,15 +14,20 @@ public class Htmlform2MuzimaTransform {
 	 * uses the HtmlFormGenerator to process any HTML Form Entry-specific tags and returns pure HTML
 	 * as used in mUzima forms.
 	 */
-	public String convertHtml2muzima(String htmlformXml) {
+	public String convertHtml2muzima(String htmlformXml, String formName) {
 		
-		String xml = htmlformXml;
 		try {
 			htmlformXml = htmlGenerator.applyMacros(htmlformXml);
 		}
 		catch (Exception e) {
 			throw new RuntimeException("exception during applyMacros ", e);
 			
+		}
+		try {
+			htmlformXml = htmlGenerator.removeUnusedNodes(htmlformXml);
+		}
+		catch (Exception e) {
+			throw new RuntimeException("exception during removeUnusedNodes() ", e);
 		}
 		try {
 			htmlformXml = htmlGenerator.applyRepeats(htmlformXml);
@@ -57,7 +62,7 @@ public class Htmlform2MuzimaTransform {
 		}
 		
 		try {
-			htmlformXml = htmlGenerator.applyTags(htmlformXml);
+			htmlformXml = htmlGenerator.applyTags(htmlformXml, formName);
 		}
 		catch (Exception e) {
 			throw new RuntimeException("exception during applyTags()", e);

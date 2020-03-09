@@ -80,6 +80,9 @@ public interface MuzimaFormService extends OpenmrsService {
 	void addHtmlformTagHandler(String tagName, TagHandler handler);
 	
 	@Transactional
-	String convertHtmlformToMuzima(String htmlformXml);
+	String convertHtmlformToMuzima(String htmlformXml, String formName);
+	
+	@Transactional
+	MuzimaForm saveConvertedForm(String html, String formUUID, String discriminator) throws Exception;
 	
 }

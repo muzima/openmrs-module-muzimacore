@@ -13,7 +13,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
-//import org.openmrs.module.muzima.htmlform2MuzimaTransform.MuzimaHtmlform;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.Htmlform2MuzimaTransform;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.TagHandler;
 import org.openmrs.module.muzima.model.CompositeEnketoResult;
@@ -222,9 +221,19 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
 	}
 	
 	@Override
-	public String convertHtmlformToMuzima(String htmlformXml) {
-		String muzimaHtml = htmlform2MuzimaTransform.convertHtml2muzima(htmlformXml);
+	public String convertHtmlformToMuzima(String htmlformXml, String formName) {
+		String muzimaHtml = htmlform2MuzimaTransform.convertHtml2muzima(htmlformXml, formName);
 		return muzimaHtml;
+	}
+	
+	@Override
+	public MuzimaForm saveConvertedForm(String html, String formUUID, String discriminator) throws Exception {
+		if (!isFormDefinitionExists(formUUID)) {
+			return save(
+			    new MuzimaForm(formUUID, discriminator, html, "", "", "", Context.getFormService().getFormByUuid(formUUID)));
+		} else {
+			throw new DocumentException("The file name already Exists !");
+		}
 	}
 	
 	
