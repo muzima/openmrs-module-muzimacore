@@ -172,12 +172,14 @@ public class NumberField implements FormField {
 		this.numberFieldSize = numberFieldSize;
 	}
 	
-	public boolean isRequired() {
-		return required;
-	}
-	
+	@Override
 	public void setRequired(boolean required) {
 		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
 	}
 	
 	//handles client side validation using jQuery validate plugin 

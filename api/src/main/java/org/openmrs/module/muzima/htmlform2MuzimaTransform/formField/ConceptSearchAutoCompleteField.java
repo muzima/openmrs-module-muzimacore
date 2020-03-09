@@ -1,6 +1,5 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform.formField;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,18 +48,17 @@ public class ConceptSearchAutoCompleteField implements FormField {
 		
 		StringBuilder autoCompleteSource = new StringBuilder();
 		
-		autoCompleteSource.append("var" + this.sourceVariableName + " = [ \r\n");
+		autoCompleteSource.append("var " + this.sourceVariableName + " = [ \r\n");
 		//only 1 of them is used to specify the filter
 		if (allowedconceptclasses == null || allowedconceptclasses.size() == 0) {
-			//StringBuilder sb = new StringBuilder();
-			
 			if (conceptList != null) {
 				for (Concept conc : conceptList) {
 					Option option = new Option(conc, locale);
 					autoCompleteSource
-					        .append("{\"label\": \"" + option.getLabel() + "\", \"val\": \"" + option.getValue() + "\"},");
+					        .append("{\"label\": \"" + option.getLabel() + "\", \" val\": \"" + option.getValue() + "\"},");
 				}
-			} else {
+			}
+		} else {
 				
 				for (ConceptClass conceptClass : allowedconceptclasses) {
 					try {
@@ -68,7 +66,7 @@ public class ConceptSearchAutoCompleteField implements FormField {
 						for (Concept conc : cncptList) {
 							Option option = new Option(conc, locale);
 							autoCompleteSource.append(
-							    "{\"label\": \"" + option.getLabel() + "\", \"val\": \"" + option.getValue() + "\"},");
+							    "{\"label\": \"" + option.getLabel() + "\", \" val\": \"" + option.getValue() + "\"},");
 						}
 					}
 					catch (Exception e) {
@@ -78,7 +76,7 @@ public class ConceptSearchAutoCompleteField implements FormField {
 				}
 				
 			}
-		}
+		
 		autoCompleteSource.append("];\r\n");
 		this.autoCompleteSourceArray = autoCompleteSource.toString();
 	}
@@ -93,11 +91,11 @@ public class ConceptSearchAutoCompleteField implements FormField {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 		if (this.required) {
 			sb.append(" <span class=\"required\">*</span>");
 		}
-		sb.append(" </label>\r\n" + "    <input class=\"form-control\" id=\"" + this.name + "type=\"text\" data-concept=\""
+		sb.append(" </label>\r\n" + "    <input class=\"form-control\" id=\"" + this.name + "\" type=\"text\" data-concept=\""
 		        + this.dataConcept + "\" placeholder=\"Start typing something...\"");
 		if (defaultValue != null) {
 			sb.append(" value=\"" + defaultValue.getLabel() + "\"");
@@ -148,5 +146,15 @@ public class ConceptSearchAutoCompleteField implements FormField {
 	//TODO handle AllowedConceptSetIds
 	public void setAllowedConceptSetIds(String allowedConceptSetIds) {
 		this.allowedConceptSetIds = allowedConceptSetIds;
+	}
+	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
 	}
 }

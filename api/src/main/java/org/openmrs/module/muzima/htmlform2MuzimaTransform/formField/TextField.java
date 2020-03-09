@@ -1,7 +1,6 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform.formField;
 
 import java.util.Locale;
-import org.openmrs.module.muzima.htmlform2MuzimaTransform.Htmlform2MuzimaTransformUtil;
 
 import org.openmrs.Concept;
 
@@ -107,7 +106,7 @@ public class TextField implements FormField {
 			if (required) {
 				sb.append(" required=\"required\"");
 			}
-			sb.append("</textarea>\r\n" + "</div>\r\n");
+			sb.append("> </textarea>\r\n" + "</div>\r\n");
 		} else {
 			sb.append("<div class=\"form-group freetext\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 			if (required) {
@@ -139,20 +138,22 @@ public class TextField implements FormField {
 		this.defaultValue = (String) defaultValue;
 	}
 	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
+	}
+	
 	public void setPlaceholder(String placeholder) {
 		this.placeholder = placeholder;
 	}
 	
 	public String getPlaceholder() {
 		return placeholder;
-	}
-	
-	public boolean isRequired() {
-		return required;
-	}
-	
-	public void setRequired(boolean required) {
-		this.required = required;
 	}
 	
 	private void setJs() {

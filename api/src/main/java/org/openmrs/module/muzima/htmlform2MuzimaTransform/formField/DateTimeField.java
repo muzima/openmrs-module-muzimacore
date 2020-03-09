@@ -1,7 +1,6 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform.formField;
 
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import org.openmrs.Concept;
@@ -9,7 +8,7 @@ import org.openmrs.Concept;
 /**
  * A field that allows the selection of both Date and Time. .
  */
-//TODO must include jquery.datetimepicker.css and jquery.datetimepicker.js in order for this to work
+
 public class DateTimeField implements FormField {
 	
 	private String fieldLabel;
@@ -25,7 +24,7 @@ public class DateTimeField implements FormField {
 	private String js;
 	
 	public DateTimeField(Concept concept, Locale locale, String label, boolean allowFutureDate, Date defaultDate) {
-		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale) + "_datetime";
 		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
 		this.fieldLabel = label;
 		this.setAllowFutureDates(allowFutureDate);
@@ -65,17 +64,12 @@ public class DateTimeField implements FormField {
 			sb.append("required=\"required\"");
 		}
 		sb.append(">\r\n" + "</div>\r\n");
-		setJs();
+		
 		return sb.toString();
 	}
 	
 	@Override
 	public void setDefaultValue(Object defaultValue) {
-	}
-	
-	private void setJs() {
-		this.js = " \r\n <link href=\"css/bootstrap-datetimepicker.min.css\" rel=\"stylesheet\"> \r\n <script src=\"js/bootstrap-datetimepicker.min.js\"></script>\r\n";
-		
 	}
 	
 	@Override
@@ -84,6 +78,16 @@ public class DateTimeField implements FormField {
 			return this.js;
 		}
 		return "";
+	}
+	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
 	}
 	
 	public String getFieldLabel() {
@@ -102,14 +106,7 @@ public class DateTimeField implements FormField {
 		this.name = name;
 	}
 	
-	public boolean isRequired() {
-		return required;
-	}
-	
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
-	
+
 	public String getDataConcept() {
 		return dataConcept;
 	}

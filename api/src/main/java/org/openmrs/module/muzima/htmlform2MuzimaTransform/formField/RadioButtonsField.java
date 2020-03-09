@@ -71,6 +71,16 @@ public class RadioButtonsField extends SingleOptionField {
 		return "";
 	}
 	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
+	}
+	
 	/**
 	 * @return the answerSeparator
 	 */
@@ -103,11 +113,5 @@ public class RadioButtonsField extends SingleOptionField {
 		this.dataConcept = dataConcept;
 	}
 	
-	public boolean isRequired() {
-		return required;
-	}
 	
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
 }

@@ -1,7 +1,7 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform.formField;
 
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import org.openmrs.Concept;
@@ -21,7 +21,7 @@ public class DateField implements FormField {
 	
 	private boolean required = false;
 	
-	private String defaultValue;
+	private String defaultValue = null;
 	
 	protected final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
@@ -30,24 +30,38 @@ public class DateField implements FormField {
 	private String js = null;
 	
 	public DateField(Concept concept, Locale locale, String label, boolean allowFutureDate, Date defaultDate) {
-		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale) + "_date";
 		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
 		this.fieldLabel = label;
 		this.setAllowFutureDates(allowFutureDate);
-		this.defaultValue = dateFormat.format(defaultDate);
-		
+		if (defaultDate != null) {
+			this.defaultValue = dateFormat.format(defaultDate);
+		}
 	}
 	
 	public DateField(Concept concept, Locale locale, String label) {
 		this(concept, locale, label, false, null);
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale) + "_date";
+		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+		this.fieldLabel = label;
+		this.setAllowFutureDates(false);
 	}
 	
 	public DateField(Concept concept, Locale locale, String label, boolean allowFutureDate) {
-		this(concept, locale, label, allowFutureDate, null);
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale) + "_date";
+		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+		this.fieldLabel = label;
+		this.setAllowFutureDates(allowFutureDate);
 	}
 	
 	public DateField(Concept concept, Locale locale, String label, Date defaultDate) {
-		this(concept, locale, label, false, defaultDate);
+		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale) + "_date";
+		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
+		this.fieldLabel = label;
+		this.setAllowFutureDates(false);
+		if (defaultDate != null) {
+			this.defaultValue = dateFormat.format(defaultDate);
+		}
 	}
 	
 	@Override
@@ -90,6 +104,16 @@ public class DateField implements FormField {
 		return "";
 	}
 	
+	@Override
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	@Override
+	public boolean isRequired() {
+		return required;
+	}
+	
 	public String getFieldLabel() {
 		return fieldLabel;
 	}
@@ -105,14 +129,7 @@ public class DateField implements FormField {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public boolean isRequired() {
-		return required;
-	}
-	
-	public void setRequired(boolean required) {
-		this.required = required;
-	}
+
 	
 	public String getDataConcept() {
 		return dataConcept;

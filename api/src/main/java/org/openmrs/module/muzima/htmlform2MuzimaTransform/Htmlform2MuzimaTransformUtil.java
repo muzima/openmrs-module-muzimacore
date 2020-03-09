@@ -11,17 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -36,7 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.criterion.MatchMode;
 import org.openmrs.Concept;
 import org.openmrs.ConceptNumeric;
 import org.openmrs.Drug;
@@ -47,11 +40,10 @@ import org.openmrs.OpenmrsMetadata;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.Person;
-import org.openmrs.PersonName;
 import org.openmrs.Program;
-import org.openmrs.Provider;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.propertyeditor.ConceptEditor;
 import org.openmrs.propertyeditor.DrugEditor;
@@ -60,8 +52,6 @@ import org.openmrs.propertyeditor.LocationEditor;
 import org.openmrs.propertyeditor.PatientEditor;
 import org.openmrs.propertyeditor.PersonEditor;
 import org.openmrs.propertyeditor.UserEditor;
-import org.openmrs.util.OpenmrsUtil;
-import org.openmrs.module.htmlformentry.HtmlFormEntryUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -334,7 +324,6 @@ public class Htmlform2MuzimaTransformUtil {
 		return cal.getTime();
 	}
 	
-	//TODO needed??
 	/***
 	 * Determines if the passed string is in valid uuid format By OpenMRS standards, a uuid must be
 	 * 36 characters in length and not contain whitespace, but we do not enforce that a uuid be in
@@ -350,94 +339,6 @@ public class Htmlform2MuzimaTransformUtil {
 		return true;
 	}
 	
-	//TODO needed??
-	/**
-	 * Evaluates the specified Java constant using reflection
-	 * 
-	 * @param fqn the fully qualified name of the constant
-	 * @return the constant value
-	 */
-	protected static String evaluateStaticConstant(String fqn) {
-		int lastPeriod = fqn.lastIndexOf(".");
-		String clazzName = fqn.substring(0, lastPeriod);
-		String constantName = fqn.substring(lastPeriod + 1);
-		
-		try {
-			Class<?> clazz = Context.loadClass(clazzName);
-			Field constantField = clazz.getField(constantName);
-			Object val = constantField.get(null);
-			return val != null ? String.valueOf(val) : null;
-		}
-		catch (Exception ex) {
-			throw new IllegalArgumentException("Unable to evaluate " + fqn, ex);
-		}
-	}
-	
-	//TODO needed??
-	/**
-	 * Utility to return a copy of an Object. Copies all properties that are referencese by getters
-	 * and setters and *are not* collection
-	 * 
-	 * @param source
-	 * @return A copy of an object
-	 * @throws Exception
-	 */
-	private static Object returnCopy(Object source) throws Exception {
-		Class<? extends Object> clazz = source.getClass();
-		Object ret = clazz.newInstance();
-		Set<String> fieldNames = new HashSet<String>();
-		List<Field> fields = new ArrayList<Field>();
-		addSuperclassFields(fields, clazz);
-		for (Field f : fields) {
-			fieldNames.add(f.getName());
-		}
-		for (String root : fieldNames) {
-			for (Method getter : clazz.getMethods()) {
-				if (getter.getName().toUpperCase().equals("GET" + root.toUpperCase())
-				        && getter.getParameterTypes().length == 0) {
-					Method setter = getSetter(clazz, getter, "SET" + root.toUpperCase());
-					//NOTE: Collection properties are not copied
-					if (setter != null && methodsSupportSameArgs(getter, setter)
-					        && !(getter.getReturnType().isInstance(Collection.class))) {
-						Object o = getter.invoke(source, Collections.EMPTY_LIST.toArray());
-						if (o != null) {
-							setter.invoke(ret, o);
-						}
-					}
-				}
-			}
-		}
-		return ret;
-	}
-	
-	/**
-	 * The Encounter.setProvider() contains the different overloaded methods and this filters the
-	 * correct setter from those
-	 * 
-	 * @param clazz
-	 * @param getter
-	 * @param methodname
-	 * @return
-	 */
-	private static Method getSetter(Class<? extends Object> clazz, Method getter, String methodname) {
-		
-		List<Method> setterMethods = getMethodCaseInsensitive(clazz, methodname);
-		if (setterMethods != null && !setterMethods.isEmpty()) {
-			if (setterMethods.size() == 1) {
-				return setterMethods.get(0);
-			} else if (setterMethods.size() > 1) {
-				for (Method m : setterMethods) {
-					Class<?>[] parameters = m.getParameterTypes();
-					for (Class<?> parameter : parameters) {
-						if (getter.getReturnType().equals(parameter)) {
-							return m;
-						}
-					}
-				}
-			}
-		}
-		return null;
-	}
 	
 	/**
 	 * Performs a case insensitive search on a class for a method by name.

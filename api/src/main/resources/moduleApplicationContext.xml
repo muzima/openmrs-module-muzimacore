@@ -212,6 +212,10 @@
                             			<key><value>obs</value></key>
                             			<bean class="org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.ObsTagHandler" />                            			
                             		</entry>
+                            		<entry>
+                            			<key><value>obsgroup</value></key>
+                            			<bean class="org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.ObsgroupTagHandler" />                            			
+                            		</entry>
                             	</map>
                             </property>
                         </bean>
