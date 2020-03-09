@@ -15,8 +15,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.Htmlform2MuzimaTransformUtil;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.Translator;
-//import org.openmrs.module.htmlformentry.handler.IteratingTagHandler;
-//import org.openmrs.module.htmlformentry.matching.ObsGroupEntity;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -196,14 +194,33 @@ public class HtmlGenerator implements TagHandler {
 		
 		String regex = "<!\\s*--.*?--\\s*>"; // this is the regEx for html comment tag <!-- .* -->
 		Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
-		
 		Matcher matcher = pattern.matcher(xml);
 		xml = matcher.replaceAll("");
-		
 		return xml;
 	}
 	
-		
+	/**
+	 * Takes an xml string and removes <style>, <encounterDate>, <encounterLocation>, <encounterProvider>, <table>, <tr.>, and <td.> tags
+	 * 
+	 * @param xml
+	 * @return
+	 * @throws Exception
+	 * @should return htmlform xml with <style>, <encounterDate>, <encounterLocation>, <encounterProvider>, <table>, <td>, <tr> tags removed
+	 */
+	public String removeUnusedNodes(String xml) throws Exception {
+		xml = xml.replaceAll(
+		    "<table[^(><)]*>|<td[^(><)]*>|<tr[^(><)]*>|<encounterDate[^(><)]*>|<encounterProvider[^(><)]*>|<encounterLocation[^(><)]*>|<section[^(><)]*>|<submit[^(><)]*>|</table>|</section>|</td>|</tr>|</encounterDate>|</encounterProvider>|</encounterLocation>|</submit>",
+		    "");
+		Document doc = Htmlform2MuzimaTransformUtil.stringToDocument(xml);
+		Node content = Htmlform2MuzimaTransformUtil.findChild(doc, "htmlform");
+		Node styleNode = Htmlform2MuzimaTransformUtil.findChild(content, "style");
+		if (styleNode != null) {
+			content.removeChild(styleNode);
+		}
+		xml = Htmlform2MuzimaTransformUtil.documentToString(doc);
+		return xml;
+	}
+	
 	/**
 	 * Replaces &&, < and > within form with their encoded values within velocity and logic
 	 * expressions (provides backwards compatibility after refactoring includeIf and excludeIf)
@@ -451,8 +468,8 @@ public class HtmlGenerator implements TagHandler {
 	 * @return the xml string (which should now be html with javascript) after tag processing
 	 * @throws Exception
 	 */
-	public String applyTags(String xml) throws Exception {
-		
+	public String applyTags(String xml, String formName) throws Exception {
+		String formId = Htmlform2MuzimaTransformUtil.addUnderScoreBetweenWord(formName);
 		Document doc = Htmlform2MuzimaTransformUtil.stringToDocument(xml);
 		Node content = Htmlform2MuzimaTransformUtil.findChild(doc, "htmlform");
 		StringWriter outHtmlStringWriter = new StringWriter();
@@ -469,9 +486,9 @@ public class HtmlGenerator implements TagHandler {
 		                + "    <script src=\"js/additional-methods.min.js\"></script>\r\n"
 		                + "    <script src=\"js/muzima.js\"></script>\r\n"
 		                + "    <script src=\"js/bootstrap-datetimepicker.min.js\"></script>\r\n"
-		                + "    <title>Basic Encounter Form Template</title>\r\n" + "</head>\r\n"
+		                + "    <title>" + formName + "</title>\r\n" + "</head>\r\n"
 		                + "<body class=\"col-md-8 col-md-offset-2\">\r\n" + "<div id=\"pre_populate_data\"></div>\r\n"
-		                + "<form id=\"basic_encounter_form_with_validation_for_numeric_range\" name=\"basic_encounter_form_with_validation_for_numeric_range\"> \r\n"
+		                + "<form id=\"" + formId + "\" name=\"" + formId + "\"> \r\n"
 		                + "<div class=\"section\">\r\n" + "    <h3>Demographics</h3>\r\n"
 		                + "    <div class=\"form-group\">\r\n"
 		                + "        <input class=\"form-control\" id=\"patient.uuid\"\r\n"
@@ -502,7 +519,7 @@ public class HtmlGenerator implements TagHandler {
 		                + "        <input class=\"form-control\" id=\"patient.birth_date\" name=\"patient.birth_date\" type=\"text\"\r\n"
 		                + "               readonly=\"readonly\" value=\"\">\r\n" + "    </div>\r\n" + "</div>\r\n"
 		                + "<div class=\"section\">\r\n" + "    <h3>Encounter Details</h3>");
-		//TODO handle the getting and setting of form name
+		
 		outJsStringWriter.write("\r\n <script type=\"text/javascript\">\r\n" + "$(document).ready(function () {\r\n"
 		        + "    document.setupAutoCompleteDataForProvider('encounter\\\\.provider_id_select');\r\n"
 		        + "    document.setupAutoCompleteData('encounter\\\\.location_id');\r\n"
@@ -512,7 +529,7 @@ public class HtmlGenerator implements TagHandler {
 		        + "        document.saveDraft(this);\r\n" + "        $(this).prop('disabled', false);\r\n" + "    });\r\n"
 		        + "\r\n" + "    $('#submit_form').click(function () {\r\n" + "        $(this).prop('disabled', true);\r\n"
 		        + "        document.submit();\r\n" + "        $(this).prop('disabled', false);\r\n" + "    });"
-		        + "\r\n" + "\r\n" + "    const formId = `#basic_encounter_form_with_validation_for_numeric_range`;");
+		        + "\r\n" + "\r\n" + "    const formId = `#" + formId + "`;");
 		
 		applyTagsHelper(new PrintWriter(outHtmlStringWriter), new PrintWriter(outJsStringWriter), null, content, null);
 		outHtmlStringWriter.write("</div>\r\n</form>\r\n" + "</body>");
@@ -593,7 +610,8 @@ public class HtmlGenerator implements TagHandler {
 	@Override
 	public boolean doStartTag(PrintWriter outHtmlPrintWriter, PrintWriter outJsPrintWriter, Node parent, Node node) {
 		if (node.getNodeType() == Node.TEXT_NODE) {
-			outHtmlPrintWriter.print(node.getNodeValue());
+			//do nothing
+			//outHtmlPrintWriter.print(node.getNodeValue());
 		} else if (node.getNodeType() == Node.COMMENT_NODE) {
 			// do nothing
 		} else {
@@ -654,7 +672,7 @@ public class HtmlGenerator implements TagHandler {
 	public String cleanHtml(String xml) {
 		xml = xml.trim();
 		xml = xml.replaceAll("(?s)<htmlform>(.*)</htmlform>", "$1");
-		xml = xml.replaceAll("(?s)</#text>", "");
+		xml = xml.replaceAll("(?s)</#text>|(?s)</#comment>", "");
 		return xml;
 	}
 	
