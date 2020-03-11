@@ -200,17 +200,31 @@ public class HtmlGenerator implements TagHandler {
 	}
 	
 	/**
-	 * Takes an xml string and removes <style>, <encounterDate>, <encounterLocation>, <encounterProvider>, <table>, <tr.>, and <td.> tags
+	 * Takes an xml string and removes <style>, <encounterDate>, <encounterLocation>,
+	 * <encounterProvider>,
+	 * <table>
+	 * , <tr.>, and <td.> <section> and
+	 * <h1>-
+	 * <h6>tags present in the htmlForm xml removed
 	 * 
 	 * @param xml
 	 * @return
 	 * @throws Exception
-	 * @should return htmlform xml with <style>, <encounterDate>, <encounterLocation>, <encounterProvider>, <table>, <td>, <tr> tags removed
+	 * @should return htmlform xml with <style>, <encounterDate>, <encounterLocation>,
+	 *         <encounterProvider>,
+	 *         <table>
+	 *         ,
+	 *         <td>,
+	 *         <tr>
+	 *         and <section> and
+	 *         <h1>-
+	 *         <h6>tags present in the htmlForm xml removed
 	 */
 	public String removeUnusedNodes(String xml) throws Exception {
 		xml = xml.replaceAll(
-		    "<table[^(><)]*>|<td[^(><)]*>|<tr[^(><)]*>|<encounterDate[^(><)]*>|<encounterProvider[^(><)]*>|<encounterLocation[^(><)]*>|<section[^(><)]*>|<submit[^(><)]*>|</table>|</section>|</td>|</tr>|</encounterDate>|</encounterProvider>|</encounterLocation>|</submit>",
+		    "<table\\b[^><]*>|<td\\b[^><]*>|<tr\\b[^><]*>|<encounterDate\\b[^><]*>|<encounterProvider\\b[^><]*>|<encounterLocation\\b[^><]*>|<section\\b[^><]*>|<submit\\b[^><]*>|<span\\b[^><]*>|<h[1-6]\\b[^><]*>|</table>|</section>|</td>|</tr>|</encounterDate>|</encounterProvider>|</encounterLocation>|</submit>|</span>|</h[1-6]>",
 		    "");
+		
 		Document doc = Htmlform2MuzimaTransformUtil.stringToDocument(xml);
 		Node content = Htmlform2MuzimaTransformUtil.findChild(doc, "htmlform");
 		Node styleNode = Htmlform2MuzimaTransformUtil.findChild(content, "style");
@@ -612,8 +626,14 @@ public class HtmlGenerator implements TagHandler {
 		if (node.getNodeType() == Node.TEXT_NODE) {
 			//do nothing
 			//outHtmlPrintWriter.print(node.getNodeValue());
+			return true;
 		} else if (node.getNodeType() == Node.COMMENT_NODE) {
 			// do nothing
+			return true;
+		} else if (node.getNodeName() == "lookup"
+		        && !(parent.getNodeName() == "obs" || parent.getNodeName() == "obsgroup")) {
+			//do nothing
+			return true;
 		} else {
 			outHtmlPrintWriter.print("<");
 			outHtmlPrintWriter.print(node.getNodeName());
@@ -663,7 +683,7 @@ public class HtmlGenerator implements TagHandler {
 	}
 	
 	/**
-	 * Removes htmlform tag and wraps the form in the div tag.
+	 * Removes htmlform tag, </#text> and </#comment>
 	 *
 	 * @param xml
 	 * @return xml
@@ -672,7 +692,7 @@ public class HtmlGenerator implements TagHandler {
 	public String cleanHtml(String xml) {
 		xml = xml.trim();
 		xml = xml.replaceAll("(?s)<htmlform>(.*)</htmlform>", "$1");
-		xml = xml.replaceAll("(?s)</#text>|(?s)</#comment>", "");
+		xml = xml.replaceAll("</#text>|</#comment>", "");
 		return xml;
 	}
 	
