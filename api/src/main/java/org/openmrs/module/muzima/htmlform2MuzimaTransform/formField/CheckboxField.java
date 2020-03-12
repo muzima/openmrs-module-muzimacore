@@ -32,7 +32,7 @@ public class CheckboxField extends SingleOptionField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<div class=\"section\">\r\n" + "<h4>" + this.fieldLabel);
+		sb.append("\r\n<div class=\"section\">\r\n" + "<h4>" + this.fieldLabel);
 		if (this.required) {
 			sb.append(" <span class=\"required\">*</span>");
 		}

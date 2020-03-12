@@ -106,7 +106,7 @@ public class ToggleCheckbox implements FormField {
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(
-		    "<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel + "</label>\r\n"
+		    "\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel + "</label>\r\n"
 		            + "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\"\r\n"
 		            + "           type=\"checkbox\" data-concept=\"" + this.dataConcept + "			value=\""
 		            + this.value + "\"");

@@ -635,7 +635,7 @@ public class HtmlGenerator implements TagHandler {
 			//do nothing
 			return true;
 		} else {
-			outHtmlPrintWriter.print("<");
+			outHtmlPrintWriter.print("\r\n<");
 			outHtmlPrintWriter.print(node.getNodeName());
 			NamedNodeMap attrs = node.getAttributes();
 			if (attrs != null) {

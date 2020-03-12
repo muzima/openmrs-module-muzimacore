@@ -41,7 +41,7 @@ public class TimeField implements FormField {
 			valAsCal.setTime(defaultValue);
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("<div class=\"form-group\">\r\n" + "    <label for=\"timeField\">" + this.fieldLabel);
+		sb.append("\r\n<div class=\"form-group\">\r\n" + "    <label for=\"timeField\">" + this.fieldLabel);
 		if (required) {
 			sb.append("<span class=\"required\">*</span>");
 		}
