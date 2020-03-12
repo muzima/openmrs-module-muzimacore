@@ -216,13 +216,13 @@ public class HtmlGenerator implements TagHandler {
 	 *         ,
 	 *         <td>,
 	 *         <tr>
-	 *         and <section> and
+	 *         , <span>, <div> and <section> and
 	 *         <h1>-
 	 *         <h6>tags present in the htmlForm xml removed
 	 */
 	public String removeUnusedNodes(String xml) throws Exception {
 		xml = xml.replaceAll(
-		    "<table\\b[^><]*>|<td\\b[^><]*>|<tr\\b[^><]*>|<encounterDate\\b[^><]*>|<encounterProvider\\b[^><]*>|<encounterLocation\\b[^><]*>|<section\\b[^><]*>|<submit\\b[^><]*>|<span\\b[^><]*>|<h[1-6]\\b[^><]*>|</table>|</section>|</td>|</tr>|</encounterDate>|</encounterProvider>|</encounterLocation>|</submit>|</span>|</h[1-6]>",
+		    "<table\\b[^><]*>|<td\\b[^><]*>|<tr\\b[^><]*>|<encounterDate\\b[^><]*>|<encounterProvider\\b[^><]*>|<encounterLocation\\b[^><]*>|<section\\b[^><]*>|<div\\b[^><]*>|<submit\\b[^><]*>|<span\\b[^><]*>|<h[1-6]\\b[^><]*>|</table>|</section>|</td>|</tr>|</encounterDate>|</encounterProvider>|</encounterLocation>|</submit>|</span>|</div>|</h[1-6]>",
 		    "");
 		
 		Document doc = Htmlform2MuzimaTransformUtil.stringToDocument(xml);
