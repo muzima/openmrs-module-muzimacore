@@ -76,7 +76,7 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
             cohortDefinition.isScheduledForExecution=false;
         }
         $cohortDefinitionService.saveCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
-            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled).
+            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled, cohortDefinition.filterQuery).
             then(function () {
                 $location.path("/cohortDefinitions");
             })
@@ -91,8 +91,8 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
              cohortDefinition.isScheduledForExecution=false;
          }
          $cohortDefinitionService.deleteCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
-            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled,
-            cohortDefinition.retireReason).
+            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled,
+            cohortDefinition.retireReason, cohortDefinition.filterQuery).
             then(function () {
                 $location.path("/cohortDefinitions");
             });

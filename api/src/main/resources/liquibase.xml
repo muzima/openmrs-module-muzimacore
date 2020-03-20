@@ -1832,4 +1832,50 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20200320140300" author="bmokaya" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="enable_filter_by_provider"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the enable_filter_by_provider column to expanded_cohort_definition
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="enable_filter_by_provider" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20200320140400" author="bmokaya" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="enable_filter_by_location"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the enable_filter_by_location column to expanded_cohort_definition
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="enable_filter_by_location" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20200320140500" author="bmokaya" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="filter_query"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the filter_query column to expanded_cohort_definition
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="filter_query" type="text" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
