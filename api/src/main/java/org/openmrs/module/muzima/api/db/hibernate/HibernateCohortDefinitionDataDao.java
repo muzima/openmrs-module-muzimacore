@@ -93,4 +93,11 @@ public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
     }
+
+    @Override
+    public CohortDefinitionData getCohortDefinitionDataByCohortId(final Integer cohortId) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("cohortId", cohortId));
+        return (CohortDefinitionData)criteria.uniqueResult();
+    }
 }
