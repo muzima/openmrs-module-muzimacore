@@ -1878,4 +1878,55 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="muzima-20200324125000" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="muzima_cohort_metadata"/></not>
+        </preConditions>
+        <comment>
+            Creating the muzima_cohort_metadata
+        </comment>
+        <createTable tableName="muzima_cohort_metadata">
+            <column name="id" type="int"  autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patient_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_id" type="int"/>
+            <column name="provider_id" type="int"/>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_creator"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_changed_by"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_cohort_id"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="cohort_id"
+                                 referencedTableName="cohort" referencedColumnNames="cohort_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_patient_id"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="patient_id"
+                                 referencedTableName="patient" referencedColumnNames="patient_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_location_id"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="location_id"
+                                 referencedTableName="location" referencedColumnNames="location_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_provider_id"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="provider_id"
+                                 referencedTableName="provider" referencedColumnNames="provider_id"/>
+
+    </changeSet>
 </databaseChangeLog>

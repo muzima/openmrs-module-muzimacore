@@ -244,7 +244,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
         SQLQuery cohortDefinitionSQLQuery  = getSessionFactory().getCurrentSession().createSQLQuery(cohortDefinitionQuery);
         cohortDefinitionSQLQuery.setParameter("uuid",cohortUuid);
 
-        String hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m, expanded_cohort_metadata ecm " +
+        String hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m, muzima_cohort_metadata ecm " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
                 " and c.voided = false and p.voided = false ";
