@@ -85,22 +85,22 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
     }
 
     @Override
-    public List<Patient> getPatients(final String cohortUuid, final Date syncDate, final int startIndex, final int size) throws APIException {
-        return getMuzimaCohortDao().getPatients(cohortUuid, syncDate, startIndex, size);
+    public List<Patient> getPatients(final String cohortUuid, final Date syncDate, final int startIndex, final int size, final String defaultLocation, final String providerId) throws APIException {
+        return getMuzimaCohortDao().getPatients(cohortUuid, syncDate, startIndex, size, defaultLocation, providerId);
     }
 
     @Override
-    public Number countPatients(final String cohortUuid, final Date syncDate) throws APIException {
-        return getMuzimaCohortDao().countPatients(cohortUuid, syncDate);
+    public Number countPatients(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException {
+        return getMuzimaCohortDao().countPatients(cohortUuid, syncDate, defaultLocation, providerId);
     }
 
     @Override
-    public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate) throws APIException {
-        return getMuzimaCohortDao().getPatientsRemovedFromCohort(cohortUuid, syncDate);
+    public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException {
+        return getMuzimaCohortDao().getPatientsRemovedFromCohort(cohortUuid, syncDate, defaultLocation, providerId);
     }
 
-    public  Number countPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate) throws APIException{
-        return getMuzimaCohortDao().countPatients(cohortUuid, syncDate);
+    public  Number countPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException{
+        return getMuzimaCohortDao().countPatients(cohortUuid, syncDate, defaultLocation, providerId);
     }
 
     public  boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate) throws APIException{

@@ -28,6 +28,7 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.MuzimaCohortDao;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -192,7 +193,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
     @Transactional(readOnly = true)
     @SuppressWarnings("unchecked")
     public List<Patient> getPatients(final String cohortUuid, final Date syncDate,
-                                     final int startIndex, final int size) throws DAOException {
+                                     final int startIndex, final int size, final String defaultLocation, final String providerId) throws DAOException {
 
         //This will take care of cohort members who were added to cohort since sync date but have not been changed themselves
         List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
@@ -238,8 +239,12 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
 
     @Override
     @Transactional(readOnly = true)
-    public Number countPatients(final String cohortUuid, final Date syncDate) throws DAOException {
-        String hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
+    public Number countPatients(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException {
+        String cohortDefinitionQuery = "select * from expanded_cohort_definition ecd, cohort c where c.cohort_id=ecd.cohort_id and c.uuid=:cohortId";
+        SQLQuery cohortDefinitionSQLQuery  = getSessionFactory().getCurrentSession().createSQLQuery(cohortDefinitionQuery);
+        cohortDefinitionSQLQuery.setParameter("uuid",cohortUuid);
+
+        String hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m, expanded_cohort_metadata ecm " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
                 " and c.voided = false and p.voided = false ";
@@ -251,6 +256,22 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
                     " and ( (p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
+        }
+
+        if(cohortDefinitionSQLQuery.list().size()>0){
+            CohortDefinitionData cohortDefinitionData = (CohortDefinitionData)cohortDefinitionSQLQuery.list().get(0);
+            if(cohortDefinitionData.getIsFilterByLocationEnabled()){
+                if(defaultLocation == null){
+                    return 0;
+                }
+                hqlQuery = hqlQuery +" and ecm.cohort_id=c.cohort_id and ecm.location_id="+defaultLocation;
+            }
+            if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(providerId == null){
+                    return 0;
+                }
+                hqlQuery = hqlQuery +" and ecm.cohort_id=c.cohort_id and ecm.provider_id="+providerId;
+            }
         }
 
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
@@ -265,7 +286,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
 
 
     @Transactional(readOnly = true)
-    public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate) throws DAOException{
+    public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException{
         List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
         List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
 
@@ -287,7 +308,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
     }
 
     public boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate) throws DAOException{
-        List<Patient> removedPatients = getPatientsRemovedFromCohort(cohortUuid,syncDate);
+        List<Patient> removedPatients = getPatientsRemovedFromCohort(cohortUuid,syncDate,null , null);
         if(removedPatients.size() > 0){
             return true;
         }
