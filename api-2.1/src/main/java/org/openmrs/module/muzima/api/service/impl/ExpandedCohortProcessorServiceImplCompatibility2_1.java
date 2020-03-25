@@ -19,15 +19,21 @@ import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CohortUpdateHistoryService;
 import org.openmrs.module.muzima.api.service.ExpandedCohortProcessorService;
+import org.openmrs.module.muzima.api.service.MuzimaCohortMetadataService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.Cohort;
 import org.openmrs.module.muzima.model.CohortUpdateHistory;
+import org.openmrs.module.muzima.model.MuzimaCohortMetadata;
 import org.openmrs.module.reportingcompatibility.service.ReportingCompatibilityService;
 import org.openmrs.util.ReportingcompatibilityUtil;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component("muzima.ExpandedCohortProcessorService")
 @OpenmrsProfile(openmrsPlatformVersion = "2.1")
@@ -45,6 +51,7 @@ public class ExpandedCohortProcessorServiceImplCompatibility2_1 implements Expan
         cohortUpdateHistory.setCohortId(savedCohort.getCohortId());
 
         //add members
+        Set<Integer> addedMembers = new HashSet<Integer>();
         String addedMemberIdsString = "";
         if(cohortDefinitionData.getIsMemberAdditionEnabled() == true) {
             for(CohortMembership newMember:newMembers){
@@ -57,6 +64,7 @@ public class ExpandedCohortProcessorServiceImplCompatibility2_1 implements Expan
 
                 if(!isAlreadyMember){
                     addedMemberIdsString += newMember.getPatientId() + ",";
+                    addedMembers.add(newMember.getPatientId());
                     savedCohort.addMembership(newMember);
                 }
             }
@@ -69,6 +77,7 @@ public class ExpandedCohortProcessorServiceImplCompatibility2_1 implements Expan
 
         //Remove members
         String removedMemberIdsString = "";
+        List<Integer> removedMembersList = new ArrayList<Integer>();
         if(cohortDefinitionData.getIsMemberRemovalEnabled() == true) {
             for(CohortMembership activeMember: savedCohort.getActiveMemberships()){
                 boolean isInNewMemberList = false;
@@ -80,6 +89,7 @@ public class ExpandedCohortProcessorServiceImplCompatibility2_1 implements Expan
 
                 if(!isInNewMemberList){
                     removedMemberIdsString += activeMember.getPatientId() + ",";
+                    removedMembersList.add(activeMember.getPatientId());
                     activeMember.setEndDate(new Date());
                 }
             }
@@ -94,6 +104,44 @@ public class ExpandedCohortProcessorServiceImplCompatibility2_1 implements Expan
             cohortUpdateHistory.setDateUpdated(new Date());
             CohortUpdateHistoryService cohortUpdateHistoryService = Context.getService(CohortUpdateHistoryService.class);
             cohortUpdateHistoryService.saveCohortUpdateHistory(cohortUpdateHistory);
+        }
+
+        MuzimaCohortMetadataService muzimaCohortMetadataService = Context.getService(MuzimaCohortMetadataService.class);
+
+        //delete records of removed members
+        if(!removedMemberIdsString.isEmpty()) {
+            List<MuzimaCohortMetadata> muzimaCohortMetadata = muzimaCohortMetadataService.getMuzimaCohortMetadata(removedMembersList, cohortDefinitionData.getCohortId());
+            muzimaCohortMetadataService.deleteMuzimaCohortMetadata(muzimaCohortMetadata);
+        }
+
+        //add records of added members
+        if(!addedMemberIdsString.isEmpty()){
+            List<Object> object = muzimaCohortMetadataService.executeFilterQuery(cohortDefinitionData.getFilterQuery());
+            List<MuzimaCohortMetadata> muzimaCohortMetadataList = new ArrayList<MuzimaCohortMetadata>();
+            for(int j=0;j<object.size();j++){
+                MuzimaCohortMetadata muzimaCohortMetadata = new MuzimaCohortMetadata();
+                Object [] obj= (Object[])object.get(j);
+                for(int i=0;i<obj.length;i++) {
+                    int value = Integer.valueOf(obj[i].toString());
+                    if(i==0) {
+                        muzimaCohortMetadata.setCohortId(value);
+                    }
+                    if(i==1) {
+                        muzimaCohortMetadata.setPatientId(value);
+                    }
+                    if(i==2) {
+                        muzimaCohortMetadata.setLocationId(value);
+                    }
+                    if(i==3) {
+                        muzimaCohortMetadata.setProviderId(value);
+                    }
+                }
+
+                if(addedMembers.contains(muzimaCohortMetadata.getPatientId())){
+                    muzimaCohortMetadataList.add(muzimaCohortMetadata);
+                }
+            }
+            muzimaCohortMetadataService.saveMuzimaCohortMetadata(muzimaCohortMetadataList);
         }
     }
 }

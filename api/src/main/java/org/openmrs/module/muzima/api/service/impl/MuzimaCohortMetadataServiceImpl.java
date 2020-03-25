@@ -24,6 +24,16 @@ public class MuzimaCohortMetadataServiceImpl extends BaseOpenmrsService implemen
     }
 
     @Override
+    public List<MuzimaCohortMetadata> getMuzimaCohortMetadata(List<Integer> patientIds, Integer cohortId) {
+        return dao.getMuzimaCohortMetadata(patientIds,cohortId);
+    }
+
+    @Override
+    public List<Object> executeFilterQuery(String filterQuery) {
+        return dao.executeFilterQuery(filterQuery);
+    }
+
+    @Override
     public void deleteMuzimaCohortMetadata(List<MuzimaCohortMetadata> muzimaCohortMetadata) {
         dao.delete(muzimaCohortMetadata);
     }

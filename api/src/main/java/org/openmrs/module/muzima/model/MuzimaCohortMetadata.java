@@ -15,13 +15,14 @@ package org.openmrs.module.muzima.model;
 
 import org.openmrs.BaseOpenmrsMetadata;
 
+import java.util.Collection;
+
 public class MuzimaCohortMetadata extends BaseOpenmrsMetadata {
     private int id;
     private int cohortId;
     private int patientId;
     private int locationId;
     private int providerId;
-
 
     @Override
     public Integer getId() {

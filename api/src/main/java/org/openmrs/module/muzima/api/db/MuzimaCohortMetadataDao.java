@@ -12,4 +12,8 @@ public interface MuzimaCohortMetadataDao {
     @Transactional
     void delete(List<MuzimaCohortMetadata> object);
 
+    List<Object> executeFilterQuery(String filterQuery);
+
+    List<MuzimaCohortMetadata> getMuzimaCohortMetadata(List<Integer> patientIds, Integer cohortId);
+
 }
