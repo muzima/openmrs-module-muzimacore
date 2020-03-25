@@ -29,6 +29,7 @@ import org.openmrs.module.idgen.service.IdentifierSourceService;
 import org.openmrs.PersonName;
 import org.openmrs.Patient;
 import org.openmrs.PersonAttribute;
+import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.MuzimaSettingService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
@@ -52,6 +53,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 /**
  * TODO: Write brief description about the class here.
@@ -78,6 +80,22 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         try {
             if (validate(queueData)) {
                 registerUnsavedPatient();
+                Object obsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['observation']");
+                if (obsObject != null) {
+                    QueueData encounterQueueData = new QueueData();
+                    encounterQueueData.setDiscriminator("json-encounter");
+                    encounterQueueData.setDataSource(queueData.getDataSource());
+                    encounterQueueData.setPayload(queueData.getPayload());
+                    encounterQueueData.setCreator(queueData.getCreator());
+                    encounterQueueData.setDateCreated(queueData.getDateCreated());
+                    encounterQueueData.setUuid(UUID.randomUUID().toString());
+                    encounterQueueData.setFormName(queueData.getFormName());
+                    encounterQueueData.setLocation(queueData.getLocation());
+                    encounterQueueData.setProvider(queueData.getProvider());
+                    encounterQueueData.setPatientUuid(queueData.getPatientUuid());
+                    encounterQueueData.setFormDataUuid(queueData.getFormDataUuid());
+                    Context.getService(DataService.class).saveQueueData(encounterQueueData);
+                }
             }
         } catch (Exception e) {
             /*Custom exception thrown by the validate function should not be added again into @queueProcessorException.
