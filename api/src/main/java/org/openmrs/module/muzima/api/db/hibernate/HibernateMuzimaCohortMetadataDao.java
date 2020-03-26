@@ -3,12 +3,14 @@ package org.openmrs.module.muzima.api.db.hibernate;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.MuzimaCohortMetadataDao;
 import org.openmrs.module.muzima.model.MuzimaCohortMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 public class HibernateMuzimaCohortMetadataDao implements MuzimaCohortMetadataDao {
@@ -36,7 +38,11 @@ public class HibernateMuzimaCohortMetadataDao implements MuzimaCohortMetadataDao
     @Override
     public void delete(List<MuzimaCohortMetadata> object) {
         for(MuzimaCohortMetadata muzimaCohortMetadata: object) {
-            sessionFactory.getCurrentSession().delete(muzimaCohortMetadata);
+            muzimaCohortMetadata.setRetired(true);
+            muzimaCohortMetadata.setRetireReason("Ceased being member");
+            muzimaCohortMetadata.setRetiredBy(Context.getAuthenticatedUser());
+            muzimaCohortMetadata.setDateRetired(new Date());
+            sessionFactory.getCurrentSession().saveOrUpdate(muzimaCohortMetadata);
         }
     }
 

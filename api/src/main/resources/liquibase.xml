@@ -1908,12 +1908,21 @@
             <column name="uuid" type="char(38)">
                 <constraints nullable="false" unique="true"/>
             </column>
+            <column name="voided" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
         </createTable>
         <addForeignKeyConstraint constraintName="muzima_cohort_metadata_creator"
                                  baseTableName="muzima_cohort_metadata" baseColumnNames="creator"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
         <addForeignKeyConstraint constraintName="muzima_cohort_metadata_changed_by"
                                  baseTableName="muzima_cohort_metadata" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_voided_by"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="voided_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
         <addForeignKeyConstraint constraintName="muzima_cohort_metadata_cohort_id"
                                  baseTableName="muzima_cohort_metadata" baseColumnNames="cohort_id"
