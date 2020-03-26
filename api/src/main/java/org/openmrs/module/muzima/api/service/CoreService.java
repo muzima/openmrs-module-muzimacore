@@ -40,9 +40,9 @@ public interface CoreService extends OpenmrsService {
     Number countEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient, final Date syncDate)throws APIException;
 
     List<Cohort> getCohorts(final String name, final Date syncDate,
-                            final int startIndex, final int size) throws APIException;
+                            final int startIndex, final int size, final String defaultLocation, final String providerId) throws APIException;
 
-    Number countCohorts(final String name, final Date syncDate) throws APIException;
+    Number countCohorts(final String name, final Date syncDate, final String defaultLocation, final String providerId) throws APIException;
 
     List<Patient> getPatients(final String cohortUuid, final Date syncDate,
                               final int startIndex, final int size,final String defaultLocation, final String providerId) throws APIException;
@@ -52,5 +52,5 @@ public interface CoreService extends OpenmrsService {
     List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException;
 
     Number countPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException;
-    boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate) throws APIException;
+    boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException;
 }

@@ -30,10 +30,10 @@ public interface MuzimaCohortDao {
 
     @Transactional(readOnly = true)
     List<Cohort> getCohorts(final String name, final Date syncDate,
-                            int startIndex, int size) throws DAOException;
+                            int startIndex, int size, final String defaultLocation, final String providerId) throws DAOException;
 
     @Transactional(readOnly = true)
-    Number countCohorts(final String name, final Date syncDate) throws DAOException;
+    Number countCohorts(final String name, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException;
 
     @Transactional(readOnly = true)
     List<Patient> getPatients(final String cohortUuid, final Date syncDate,
@@ -45,5 +45,5 @@ public interface MuzimaCohortDao {
     @Transactional(readOnly = true)
     List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException;
     @Transactional(readOnly = true)
-    boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate) throws DAOException;
+    boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException;
 }

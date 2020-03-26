@@ -27,10 +27,13 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.annotation.OpenmrsProfile;
+import org.openmrs.api.CohortService;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.CoreDao;
 import org.openmrs.module.muzima.api.db.MuzimaCohortDao;
+import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -60,27 +63,96 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     @Transactional(readOnly = true)
     @SuppressWarnings("unchecked")
     public List<Cohort> getCohorts(final String name, final Date syncDate,
-                                   final int startIndex, final int size) throws DAOException {
+                                   final int startIndex, final int size, final String defaultLocation, final String providerId) throws DAOException {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Cohort.class);
         criteria.add(Expression.ilike("name", name, MatchMode.ANYWHERE));
         criteria.addOrder(Order.asc("name"));
         if (syncDate != null) {
-
-
-            String sql = "select cohort_id from expanded_cohort_update_history where date_updated >= :syncDate";
+            String sql = "select distinct expanded_cohort_update_history.cohort_id,enable_filter_by_provider,enable_filter_by_location from expanded_cohort_update_history left join expanded_cohort_definition on expanded_cohort_update_history.cohort_id=expanded_cohort_definition.cohort_id where date_updated >= :syncDate";
             SQLQuery myquery = getSessionFactory().getCurrentSession().createSQLQuery(sql);
             myquery.setParameter("syncDate", syncDate);
 
+            List<?> cohortIdList = myquery.list();
+            List<Integer> cohortsWithoutFilter = new ArrayList<Integer>();
+            List<Integer> cohortsWithProviderFilter = new ArrayList<Integer>();
+            List<Integer> cohortsWithLocationFilter = new ArrayList<Integer>();
+            List<Integer> cohortsWithBothLocationAndProviderFilters = new ArrayList<Integer>();
+            for(int j=0;j<cohortIdList.size();j++){
+                Object [] obj= (Object[])cohortIdList.get(j);
+                boolean isfilterByLocation = false;
+                boolean isfilterByProvider = false;
+                int cohortId = 0;
+                for(int i=0;i<obj.length;i++) {
+                    int value = Integer.valueOf(obj[i].toString());
+                    if(i==0){
+                        cohortId = value;
+                    }
+                    if(i==1) {
+                        if(value==1){
+                            isfilterByProvider = true;
+                        }
+                    }
+                    if(i==2) {
+                        if(value==1){
+                            isfilterByLocation = true;
+                        }
+                    }
+                }
+                if(isfilterByLocation && isfilterByProvider){
+                    cohortsWithBothLocationAndProviderFilters.add(cohortId);
+                }else if(isfilterByLocation){
+                    cohortsWithLocationFilter.add(cohortId);
+                }else if(isfilterByProvider){
+                    cohortsWithProviderFilter.add(cohortId);
+                }else{
+                    cohortsWithoutFilter.add(cohortId);
+                }
+            }
+            List<Integer> newCohortIdList = new ArrayList<Integer>();
+            if(cohortsWithoutFilter.size()>0) {
+                newCohortIdList.addAll(cohortsWithoutFilter);
+            }
+            if(cohortsWithLocationFilter.size()>0 && StringUtils.isNotEmpty(defaultLocation)) {
+                String locationSql = "select distinct cohort_id from muzima_cohort_metadata where (date_created >= :syncDate or date_changed >= :syncDate or date_voided >= :syncDate) and location_id = :defaultLocation";
+                SQLQuery locationQuery = getSessionFactory().getCurrentSession().createSQLQuery(locationSql);
+                locationQuery.setParameter("syncDate", syncDate);
+                locationQuery.setParameter("defaultLocation", defaultLocation);
+                if (locationQuery.list().size() > 0) {
+                    newCohortIdList.addAll(locationQuery.list());
+                }
+            }
+
+            if(cohortsWithProviderFilter.size()>0 && StringUtils.isNotEmpty(providerId)) {
+                String providerSql = "select distinct cohort_id from muzima_cohort_metadata where (date_created >= :syncDate or date_changed >= :syncDate or date_voided >= :syncDate) and provider_id = :providerId";
+                SQLQuery providerQuery = getSessionFactory().getCurrentSession().createSQLQuery(providerSql);
+                providerQuery.setParameter("syncDate", syncDate);
+                providerQuery.setParameter("providerId", providerId);
+                if (providerQuery.list().size() > 0) {
+                    newCohortIdList.addAll(providerQuery.list());
+                }
+            }
+
+            if(cohortsWithBothLocationAndProviderFilters.size()>0 && StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)) {
+                String providerAndLocationSql = "select distinct cohort_id from muzima_cohort_metadata where (date_created >= :syncDate or date_changed >= :syncDate or date_voided >= :syncDate) and provider_id = :providerId and location_id = :defaultLocation";
+                SQLQuery providerAndLocationQuery = getSessionFactory().getCurrentSession().createSQLQuery(providerAndLocationSql);
+                providerAndLocationQuery.setParameter("syncDate", syncDate);
+                providerAndLocationQuery.setParameter("providerId", providerId);
+                providerAndLocationQuery.setParameter("defaultLocation", defaultLocation);
+                if (providerAndLocationQuery.list().size() > 0) {
+                    newCohortIdList.addAll(providerAndLocationQuery.list());
+                }
+            }
+
             Disjunction disjunction = Restrictions.disjunction();
-            if(myquery.list().size() > 0) {
-                disjunction.add(Restrictions.in("id", myquery.list()));
+            if(newCohortIdList.size() > 0) {
+                disjunction.add(Restrictions.in("id", newCohortIdList));
                 criteria.add(disjunction);
             }
 
 
             criteria.add(
                     Restrictions.or(
-                        Restrictions.in("id", myquery.list()),
+                        Restrictions.in("id", newCohortIdList),
                         Restrictions.or(
                             Restrictions.or(
                                 Restrictions.and(
@@ -105,20 +177,89 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
 
     @Override
     @Transactional(readOnly = true)
-    public Number countCohorts(final String name, final Date syncDate) throws DAOException {
+    public Number countCohorts(final String name, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Cohort.class);
         criteria.add(Expression.ilike("name", name, MatchMode.ANYWHERE));
         criteria.addOrder(Order.asc("name"));
         if (syncDate != null) {
-
-
-            String sql = "select cohort_id from expanded_cohort_update_history where date_updated >= :syncDate";
+            String sql = "select distinct expanded_cohort_update_history.cohort_id,enable_filter_by_provider,enable_filter_by_location from expanded_cohort_update_history left join expanded_cohort_definition on expanded_cohort_update_history.cohort_id=expanded_cohort_definition.cohort_id where date_updated >= :syncDate";
             SQLQuery myquery = getSessionFactory().getCurrentSession().createSQLQuery(sql);
             myquery.setParameter("syncDate", syncDate);
 
+            List<?> cohortIdList = myquery.list();
+            List<Integer> cohortsWithoutFilter = new ArrayList<Integer>();
+            List<Integer> cohortsWithProviderFilter = new ArrayList<Integer>();
+            List<Integer> cohortsWithLocationFilter = new ArrayList<Integer>();
+            List<Integer> cohortsWithBothLocationAndProviderFilters = new ArrayList<Integer>();
+            for(int j=0;j<cohortIdList.size();j++){
+                Object [] obj= (Object[])cohortIdList.get(j);
+                boolean isfilterByLocation = false;
+                boolean isfilterByProvider = false;
+                int cohortId = 0;
+                for(int i=0;i<obj.length;i++) {
+                    int value = Integer.valueOf(obj[i].toString());
+                    if(i==0){
+                        cohortId = value;
+                    }
+                    if(i==1) {
+                        if(value==1){
+                            isfilterByProvider = true;
+                        }
+                    }
+                    if(i==2) {
+                        if(value==1){
+                            isfilterByLocation = true;
+                        }
+                    }
+                }
+                if(isfilterByLocation && isfilterByProvider){
+                    cohortsWithBothLocationAndProviderFilters.add(cohortId);
+                }else if(isfilterByLocation){
+                    cohortsWithLocationFilter.add(cohortId);
+                }else if(isfilterByProvider){
+                    cohortsWithProviderFilter.add(cohortId);
+                }else{
+                    cohortsWithoutFilter.add(cohortId);
+                }
+            }
+            List<Integer> newCohortIdList = new ArrayList<Integer>();
+            if(cohortsWithoutFilter.size()>0) {
+                newCohortIdList.addAll(cohortsWithoutFilter);
+            }
+            if(cohortsWithLocationFilter.size()>0 && StringUtils.isNotEmpty(defaultLocation)) {
+                String locationSql = "select distinct cohort_id from muzima_cohort_metadata where (date_created >= :syncDate or date_changed >= :syncDate or date_voided >= :syncDate) and location_id = :defaultLocation";
+                SQLQuery locationQuery = getSessionFactory().getCurrentSession().createSQLQuery(locationSql);
+                locationQuery.setParameter("syncDate", syncDate);
+                locationQuery.setParameter("defaultLocation", defaultLocation);
+                if (locationQuery.list().size() > 0) {
+                    newCohortIdList.addAll(locationQuery.list());
+                }
+            }
+
+            if(cohortsWithProviderFilter.size()>0 && StringUtils.isNotEmpty(providerId)) {
+                String providerSql = "select distinct cohort_id from muzima_cohort_metadata where (date_created >= :syncDate or date_changed >= :syncDate or date_voided >= :syncDate) and provider_id = :providerId";
+                SQLQuery providerQuery = getSessionFactory().getCurrentSession().createSQLQuery(providerSql);
+                providerQuery.setParameter("syncDate", syncDate);
+                providerQuery.setParameter("providerId", providerId);
+                if (providerQuery.list().size() > 0) {
+                    newCohortIdList.addAll(providerQuery.list());
+                }
+            }
+
+            if(cohortsWithBothLocationAndProviderFilters.size()>0 && StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)) {
+                String providerAndLocationSql = "select distinct cohort_id from muzima_cohort_metadata where (date_created >= :syncDate or date_changed >= :syncDate or date_voided >= :syncDate) and provider_id = :providerId and location_id = :defaultLocation";
+                SQLQuery providerAndLocationQuery = getSessionFactory().getCurrentSession().createSQLQuery(providerAndLocationSql);
+                providerAndLocationQuery.setParameter("syncDate", syncDate);
+                providerAndLocationQuery.setParameter("providerId", providerId);
+                providerAndLocationQuery.setParameter("defaultLocation", defaultLocation);
+                if (providerAndLocationQuery.list().size() > 0) {
+                    newCohortIdList.addAll(providerAndLocationQuery.list());
+                }
+            }
+
             Disjunction disjunction = Restrictions.disjunction();
-            if(myquery.list().size() > 0) {
-                disjunction.add(Restrictions.in("id", myquery.list()));
+            if(newCohortIdList.size() > 0) {
+                disjunction.add(Restrictions.in("id", newCohortIdList));
                 criteria.add(disjunction);
             }
 
@@ -144,13 +285,49 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         return (Number) criteria.uniqueResult();
     }
 
-    private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate) throws DAOException{
-        String addedMembersSql = "select GROUP_CONCAT(e.members_added) from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
+    private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException{
+        CohortService cohortService = Context.getService(CohortService.class);
+        Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
+        CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+        CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort.getId());
+
+        String addedMembersSql = "";
+        boolean isFilterByLocationSet = false;
+        boolean isFilterByProviderSet = false;
+
+        if(cohortDefinitionData != null){
+            if(cohortDefinitionData.getIsFilterByLocationEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)) {
+                    isFilterByLocationSet = true;
+                    isFilterByProviderSet = true;
+                    addedMembersSql = "select GROUP_CONCAT(patient_id) from muzima_cohort_metadata where cohort_id = :cohortId and date_created >= :syncDate and provider_id = : providerId and location_id = :locationId";
+                }
+            }else if(cohortDefinitionData.getIsFilterByLocationEnabled()){
+                if(StringUtils.isNotEmpty(defaultLocation)) {
+                    isFilterByLocationSet = true;
+                    addedMembersSql = "select GROUP_CONCAT(patient_id) from muzima_cohort_metadata where cohort_id = :cohortId and date_created >= :syncDate and location_id = :locationId";
+                }
+            }else if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(providerId)) {
+                    isFilterByProviderSet = true;
+                    addedMembersSql = "select GROUP_CONCAT(patient_id) from muzima_cohort_metadata where cohort_id = :cohortId and date_created >= :syncDate and provider_id = : providerId";
+                }
+            }else{
+                addedMembersSql = "select GROUP_CONCAT(members_added) from expanded_cohort_update_history where date_updated >= :syncDate and cohort_id = :cohortId";
+            }
+        }else {
+            addedMembersSql = "select GROUP_CONCAT(members_added) from expanded_cohort_update_history where date_updated >= :syncDate and cohort_id = :cohortId";
+        }
         SQLQuery addedMembersQuery = getSessionFactory().getCurrentSession().createSQLQuery(addedMembersSql);
         List addedMembersList = new ArrayList();
         if (syncDate != null) {
             addedMembersQuery.setParameter("syncDate", syncDate);
-            addedMembersQuery.setParameter("cohortUuid", cohortUuid);
+            addedMembersQuery.setParameter("cohortId", cohort.getCohortId());
+            if(isFilterByLocationSet){
+                addedMembersQuery.setParameter("locationId", defaultLocation);
+            }if(isFilterByProviderSet){
+                addedMembersQuery.setParameter("providerId", providerId);
+            }
             List addedMembersQueryResult = addedMembersQuery.list();
             if(addedMembersQueryResult.size() > 0){
                 String memberIdResult = (String)addedMembersQueryResult.get(0);
@@ -168,13 +345,48 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         return addedMembersList;
     }
 
-    private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate) throws DAOException{
-        String removedMembersSql = "select GROUP_CONCAT(e.members_removed) from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
+    private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId ) throws DAOException{
+        CohortService cohortService = Context.getService(CohortService.class);
+        Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
+        CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+        CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort.getId());
+        String removedMembersSql = "";
+        boolean isFilterByLocationSet = false;
+        boolean isFilterByProviderSet = false;
+        if(cohortDefinitionData != null){
+            if(cohortDefinitionData.getIsFilterByLocationEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)) {
+                    isFilterByLocationSet = true;
+                    isFilterByProviderSet = true;
+                    removedMembersSql = "select GROUP_CONCAT(patient_id) from muzima_cohort_metadata where cohort_id = :cohortId and date_voided >= :syncDate and provider_id = : providerId and location_id = :locationId";
+                }
+            }else if(cohortDefinitionData.getIsFilterByLocationEnabled()){
+                if(StringUtils.isNotEmpty(defaultLocation)) {
+                    isFilterByLocationSet = true;
+                    removedMembersSql = "select GROUP_CONCAT(patient_id) from muzima_cohort_metadata where cohort_id = :cohortId and date_voided >= :syncDate and location_id = :locationId";
+                }
+            }else if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(providerId)) {
+                    isFilterByProviderSet = true;
+                    removedMembersSql = "select GROUP_CONCAT(patient_id) from muzima_cohort_metadata where cohort_id = :cohortId and date_voided >= :syncDate and provider_id = : providerId";
+                }
+            }else{
+                removedMembersSql = "select GROUP_CONCAT(members_removed) from expanded_cohort_update_history where date_updated >= :syncDate and cohort_id = :cohortId";
+            }
+        }else{
+            removedMembersSql = "select GROUP_CONCAT(members_removed) from expanded_cohort_update_history where date_updated >= :syncDate and cohort_id = :cohortId";
+        }
+
         SQLQuery removedMembersSqlQuery = getSessionFactory().getCurrentSession().createSQLQuery(removedMembersSql);
         List removedMembersIds = new ArrayList();
         if (syncDate != null) {
             removedMembersSqlQuery.setParameter("syncDate", syncDate);
-            removedMembersSqlQuery.setParameter("cohortUuid", cohortUuid);
+            removedMembersSqlQuery.setParameter("cohortId", cohort.getCohortId());
+            if(isFilterByLocationSet){
+                removedMembersSqlQuery.setParameter("locationId", defaultLocation);
+            }if(isFilterByProviderSet){
+                removedMembersSqlQuery.setParameter("providerId", providerId);
+            }
             List members = removedMembersSqlQuery.list();
             if(members.size() > 0){
                 String memberIdResult = (String)members.get(0);
@@ -198,14 +410,53 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                                      final int startIndex, final int size, final String defaultLocation, final String providerId) throws DAOException {
 
         //This will take care of cohort members who were added to cohort since sync date but have not been changed themselves
-        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
-        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
+        List<Integer> patientIds = new ArrayList<Integer>();
 
-        String hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
-                " where c.uuid = :uuid and p.patient_id = m.patient_id " +
-                " and c.cohort_id = m.cohort_id " +
-                " and c.voided = false and p.voided = false " +
-                " and m.end_date is null ";
+        CohortService cohortService = Context.getService(CohortService.class);
+        Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
+        CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+        CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort.getId());
+        String hqlQuery = "";
+        boolean addLocationParameter = false;
+        boolean addProviderParameter = false;
+        if(cohortDefinitionData != null ){
+            hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m, muzima_cohort_metadata mcm " +
+                    " where c.uuid = :uuid and p.patient_id = m.patient_id " +
+                    " and c.cohort_id = m.cohort_id " +
+                    " and mcm.patient_id = m.patient_id "+
+                    " and mcm.cohort_id = m.cohort_id "+
+                    " and c.voided = false and p.voided = false " +
+                    " and m.end_date is null ";
+            if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(defaultLocation)){
+                    addLocationParameter = true;
+                    hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation ";
+                }else{
+                    hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
+                }
+            }else if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(providerId)){
+                    addProviderParameter = true;
+                    hqlQuery = hqlQuery +" and mcm.provider_id = :providerId ";
+                }else{
+                    hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
+                }
+            }else{
+                hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
+                        " where c.uuid = :uuid and p.patient_id = m.patient_id " +
+                        " and c.cohort_id = m.cohort_id " +
+                        " and c.voided = false and p.voided = false " +
+                        " and m.end_date is null ";
+            }
+        }else {
+            hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
+                    " where c.uuid = :uuid and p.patient_id = m.patient_id " +
+                    " and c.cohort_id = m.cohort_id " +
+                    " and c.voided = false and p.voided = false " +
+                    " and m.end_date is null ";
+        }
         if (syncDate != null) {
             hqlQuery = hqlQuery +
                     " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
@@ -220,9 +471,15 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
         }
+        if(addLocationParameter){
+            query.setParameter("defaultLocation", defaultLocation);
+        }
+        if(addProviderParameter){
+            query.setParameter("providerId", providerId);
+        }
         query.setMaxResults(size);
         query.setFirstResult(startIndex);
-        List patientIds = query.list();
+        patientIds = query.list();
         for(int memberId:removedMembersIds) {
             int index = addedMembersIds.indexOf(memberId);
             if(index >= 0) {
@@ -243,15 +500,51 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     @Override
     @Transactional(readOnly = true)
     public Number countPatients(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException {
-        String cohortDefinitionQuery = "select * from expanded_cohort_definition ecd, cohort c where c.cohort_id=ecd.cohort_id and c.uuid=:cohortId";
-        SQLQuery cohortDefinitionSQLQuery  = getSessionFactory().getCurrentSession().createSQLQuery(cohortDefinitionQuery);
-        cohortDefinitionSQLQuery.setParameter("uuid",cohortUuid);
+        CohortService cohortService = Context.getService(CohortService.class);
+        Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
+        CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+        CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort.getId());
 
-        String hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m, muzima_cohort_metadata ecm " +
-                " where c.uuid = :uuid and p.patient_id = m.patient_id " +
-                " and c.cohort_id = m.cohort_id " +
-                " and c.voided = false and p.voided = false "+
-                " and m.end_date is null ";
+        String hqlQuery = "";
+        boolean addLocationParameter = false;
+        boolean addProviderParameter = false;
+        if(cohortDefinitionData != null ) {
+            hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m, muzima_cohort_metadata mcm " +
+                    " where c.uuid = :uuid and p.patient_id = m.patient_id " +
+                    " and c.cohort_id = m.cohort_id " +
+                    " and mcm.patient_id = m.patient_id "+
+                    " and mcm.cohort_id = m.cohort_id "+
+                    " and c.voided = false and p.voided = false " +
+                    " and m.end_date is null ";
+
+            if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(defaultLocation)){
+                    addLocationParameter = true;
+                    hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation ";
+                }else{
+                    hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
+                }
+            }else if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(providerId)){
+                    addProviderParameter = true;
+                    hqlQuery = hqlQuery +" and mcm.provider_id = :providerId ";
+                }else{
+                    hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
+                }
+            }else{
+                hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
+                        " where c.uuid = :uuid and p.patient_id = m.patient_id " +
+                        " and c.cohort_id = m.cohort_id " +
+                        " and c.voided = false and p.voided = false " +
+                        " and m.end_date is null ";
+            }
+        }else{
+            hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
+                    " where c.uuid = :uuid and p.patient_id = m.patient_id " +
+                    " and c.cohort_id = m.cohort_id " +
+                    " and c.voided = false and p.voided = false " +
+                    " and m.end_date is null ";
+        }
         if (syncDate != null) {
             hqlQuery = hqlQuery +
                     " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
@@ -262,27 +555,17 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
         }
 
-        if(cohortDefinitionSQLQuery.list().size()>0){
-            CohortDefinitionData cohortDefinitionData = (CohortDefinitionData)cohortDefinitionSQLQuery.list().get(0);
-            if(cohortDefinitionData.getIsFilterByLocationEnabled()){
-                if(defaultLocation == null){
-                    return 0;
-                }
-                hqlQuery = hqlQuery +" and ecm.cohort_id=c.cohort_id and ecm.location_id="+defaultLocation;
-            }
-            if(cohortDefinitionData.getIsFilterByProviderEnabled()){
-                if(providerId == null){
-                    return 0;
-                }
-                hqlQuery = hqlQuery +" and ecm.cohort_id=c.cohort_id and ecm.provider_id="+providerId;
-            }
-        }
-
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
         query.addScalar("total");
         query.setParameter("uuid", cohortUuid);
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
+        }
+        if(addLocationParameter){
+            query.setParameter("defaultLocation", defaultLocation);
+        }
+        if(addProviderParameter){
+            query.setParameter("providerId", providerId);
         }
         return (Number) query.uniqueResult();
     }
@@ -291,8 +574,8 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
 
     @Transactional(readOnly = true)
     public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException{
-        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
-        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
 
         if(!removedMembersIds.isEmpty()){
             for(int memberId:addedMembersIds) {
@@ -311,13 +594,13 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         return Collections.emptyList();
     }
 
-    public boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate) throws DAOException{
-        List<Patient> removedPatients = getPatientsRemovedFromCohort(cohortUuid,syncDate, null, null);
+    public boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException{
+        List<Patient> removedPatients = getPatientsRemovedFromCohort(cohortUuid,syncDate, defaultLocation, providerId);
         if(removedPatients.size() > 0){
             return true;
         }
-        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
-        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
 
         for(int memberId:removedMembersIds) {
             int index = addedMembersIds.indexOf(memberId);

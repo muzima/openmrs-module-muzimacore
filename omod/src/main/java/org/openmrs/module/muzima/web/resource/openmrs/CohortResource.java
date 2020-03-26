@@ -53,15 +53,17 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
         HttpServletRequest request = context.getRequest();
         String nameParameter = request.getParameter("q");
         String syncDateParameter = request.getParameter("syncDate");
+        String defaultLocation = request.getParameter("defaultLocation");
+        String providerId = request.getParameter("providerId");
         CoreService coreService = Context.getService(CoreService.class);
         Date syncDate = ResourceUtils.parseDate(syncDateParameter);
         if (nameParameter != null) {
-            final int cohortCount = coreService.countCohorts(nameParameter, syncDate).intValue();
-            final List<Cohort> cohorts = coreService.getCohorts(nameParameter, syncDate, context.getStartIndex(), context.getLimit());
+            final int cohortCount = coreService.countCohorts(nameParameter, syncDate, defaultLocation, providerId).intValue();
+            final List<Cohort> cohorts = coreService.getCohorts(nameParameter, syncDate, context.getStartIndex(), context.getLimit(), defaultLocation, providerId);
 
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
-                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate);
+                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate, defaultLocation, providerId);
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
                 fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);
@@ -73,7 +75,7 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
             final List<Cohort> cohorts = Context.getCohortService().getAllCohorts();
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
-                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate);
+                boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate, defaultLocation, providerId);
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
                 fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);

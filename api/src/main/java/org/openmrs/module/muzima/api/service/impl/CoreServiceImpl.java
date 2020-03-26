@@ -75,13 +75,13 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 
     @Override
     public List<Cohort> getCohorts(final String name, final Date syncDate,
-                                   final int startIndex, final int size) throws APIException {
-        return getMuzimaCohortDao().getCohorts(name, syncDate, startIndex, size);
+                                   final int startIndex, final int size, final String defaultLocation, final String providerId) throws APIException {
+        return getMuzimaCohortDao().getCohorts(name, syncDate, startIndex, size, defaultLocation, providerId);
     }
 
     @Override
-    public Number countCohorts(final String name, final Date syncDate) throws APIException {
-        return getMuzimaCohortDao().countCohorts(name, syncDate);
+    public Number countCohorts(final String name, final Date syncDate, final String defaultLocation, final String providerId) throws APIException {
+        return getMuzimaCohortDao().countCohorts(name, syncDate, defaultLocation, providerId);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
         return getMuzimaCohortDao().countPatients(cohortUuid, syncDate, defaultLocation, providerId);
     }
 
-    public  boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate) throws APIException{
-        return getMuzimaCohortDao().hasCohortChangedSinceDate(cohortUuid, syncDate);
+    public  boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException{
+        return getMuzimaCohortDao().hasCohortChangedSinceDate(cohortUuid, syncDate, defaultLocation, providerId);
     }
 }
