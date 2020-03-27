@@ -38,10 +38,10 @@ public class HibernateMuzimaCohortMetadataDao implements MuzimaCohortMetadataDao
     @Override
     public void delete(List<MuzimaCohortMetadata> object) {
         for(MuzimaCohortMetadata muzimaCohortMetadata: object) {
-            muzimaCohortMetadata.setRetired(true);
-            muzimaCohortMetadata.setRetireReason("Ceased being member");
-            muzimaCohortMetadata.setRetiredBy(Context.getAuthenticatedUser());
-            muzimaCohortMetadata.setDateRetired(new Date());
+            muzimaCohortMetadata.setVoided(true);
+            muzimaCohortMetadata.setVoidReason("Ceased being member");
+            muzimaCohortMetadata.setVoidedBy(Context.getAuthenticatedUser());
+            muzimaCohortMetadata.setDateVoided(new Date());
             sessionFactory.getCurrentSession().saveOrUpdate(muzimaCohortMetadata);
         }
     }

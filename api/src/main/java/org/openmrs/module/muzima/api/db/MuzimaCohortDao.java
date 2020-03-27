@@ -46,4 +46,8 @@ public interface MuzimaCohortDao {
     List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException;
     @Transactional(readOnly = true)
     boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException;
+
+    @Transactional(readOnly = true)
+    List<Integer> getCohortWithFilters() throws DAOException;
+
 }

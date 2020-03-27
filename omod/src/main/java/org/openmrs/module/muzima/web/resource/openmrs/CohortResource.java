@@ -36,7 +36,9 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * TODO: Write brief description about the class here.
@@ -60,11 +62,20 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
         if (nameParameter != null) {
             final int cohortCount = coreService.countCohorts(nameParameter, syncDate, defaultLocation, providerId).intValue();
             final List<Cohort> cohorts = coreService.getCohorts(nameParameter, syncDate, context.getStartIndex(), context.getLimit(), defaultLocation, providerId);
-
+            final List<Integer> cohortsWithFilters = coreService.getCohortWithFilters();
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
+            Set set = new HashSet<Integer>(cohortsWithFilters);
             for (Cohort cohort : cohorts) {
                 boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate, defaultLocation, providerId);
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
+                if(cohortsWithFilters.size()>0){
+                    if( syncDate==null ) {
+                        if (set.contains(cohort.getId())) {
+                            int patientCount = coreService.countPatients(cohort.getUuid(), syncDate, defaultLocation, providerId).intValue();
+                            fakeCohort.setSize(patientCount);
+                        }
+                    }
+                }
                 fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);
             }
@@ -73,10 +84,21 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
             return new AlreadyPaged<FakeCohort>(context,fakeCohorts,hasMoreResults);
         } else {
             final List<Cohort> cohorts = Context.getCohortService().getAllCohorts();
+            final List<Integer> cohortsWithFilters = coreService.getCohortWithFilters();
+            Set set = new HashSet<Integer>(cohortsWithFilters);
             final List<FakeCohort> fakeCohorts = new ArrayList<FakeCohort>();
             for (Cohort cohort : cohorts) {
                 boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate, defaultLocation, providerId);
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
+                if(cohortsWithFilters.size()>0){
+                    if (set.contains(cohort.getId())) {
+                        if( syncDate==null ) {
+                            int patientCount = coreService.countPatients(cohort.getUuid(), syncDate, defaultLocation, providerId).intValue();
+                            fakeCohort.setSize(patientCount);
+                        }
+                    }
+
+                }
                 fakeCohort.setIsUpdateAvailable(hasCohortChanged);
                 fakeCohorts.add(fakeCohort);
             }

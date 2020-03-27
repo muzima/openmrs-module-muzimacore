@@ -13,11 +13,11 @@
  */
 package org.openmrs.module.muzima.model;
 
-import org.openmrs.BaseOpenmrsMetadata;
+import org.openmrs.BaseOpenmrsData;
 
-import java.util.Collection;
+import java.io.Serializable;
 
-public class MuzimaCohortMetadata extends BaseOpenmrsMetadata {
+public class MuzimaCohortMetadata extends BaseOpenmrsData implements Serializable {
     private int id;
     private int cohortId;
     private int patientId;

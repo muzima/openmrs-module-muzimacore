@@ -53,4 +53,5 @@ public interface CoreService extends OpenmrsService {
 
     Number countPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException;
     boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException;
+    List<Integer> getCohortWithFilters();
 }

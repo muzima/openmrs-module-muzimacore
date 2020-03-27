@@ -106,4 +106,9 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
     public  boolean hasCohortChangedSinceDate(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws APIException{
         return getMuzimaCohortDao().hasCohortChangedSinceDate(cohortUuid, syncDate, defaultLocation, providerId);
     }
+
+    @Override
+    public List<Integer> getCohortWithFilters() throws APIException{
+        return getMuzimaCohortDao().getCohortWithFilters();
+    }
 }

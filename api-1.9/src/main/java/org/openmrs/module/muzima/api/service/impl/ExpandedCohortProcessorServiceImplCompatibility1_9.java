@@ -93,7 +93,7 @@ public class ExpandedCohortProcessorServiceImplCompatibility1_9 implements Expan
         }
 
         //Processing of post cohort membership query
-        if(!cohortDefinitionData.getFilterQuery().isEmpty()){
+        if(StringUtils.isNotEmpty(cohortDefinitionData.getFilterQuery())){
             MuzimaCohortMetadataService muzimaCohortMetadataService = Context.getService(MuzimaCohortMetadataService.class);
 
             //delete records of removed members
