@@ -528,6 +528,10 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     @Override
     @Transactional(readOnly = true)
     public Number countPatients(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException {
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
+        List<Integer> patientIds = new ArrayList<Integer>();
+
         CohortService cohortService = Context.getService(CohortService.class);
         Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
         CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
@@ -538,7 +542,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         boolean addLocationParameter = false;
         boolean addProviderParameter = false;
         if(cohortDefinitionData != null ) {
-            hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m, muzima_cohort_metadata mcm " +
+            hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m, muzima_cohort_metadata mcm " +
                     " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                     " and c.cohort_id = m.cohort_id " +
                     " and mcm.patient_id = m.patient_id "+
@@ -568,14 +572,14 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
                 }
             }else{
-                hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
+                hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                         " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                         " and c.cohort_id = m.cohort_id " +
                         " and c.voided = false and p.voided = false " +
                         " and m.end_date is null ";
             }
         }else{
-            hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
+            hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                     " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                     " and c.cohort_id = m.cohort_id " +
                     " and c.voided = false and p.voided = false " +
@@ -586,13 +590,12 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     " and (((c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
                     "       (c.date_created is not null and c.date_changed is not null and c.date_voided is null and c.date_changed >= :syncDate) or " +
                     "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate)) " +
-                    " or ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
+                    " and ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate))) ";
         }
 
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
-        query.addScalar("total");
         query.setParameter("uuid", cohortUuid);
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
@@ -607,7 +610,17 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         if(addProviderParameter){
             query.setParameter("providerId", providerId);
         }
-        return (Number) query.uniqueResult();
+
+
+        patientIds = query.list();
+        for(int memberId:removedMembersIds) {
+            int index = addedMembersIds.indexOf(memberId);
+            if(index >= 0) {
+                addedMembersIds.remove(index);
+            }
+        }
+        patientIds.addAll(addedMembersIds);
+        return  patientIds.size();
     }
 
 

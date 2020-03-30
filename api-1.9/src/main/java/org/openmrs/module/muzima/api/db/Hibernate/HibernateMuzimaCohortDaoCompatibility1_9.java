@@ -526,6 +526,10 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
     @Override
     @Transactional(readOnly = true)
     public Number countPatients(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException {
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
+        List<Integer> patientIds = new ArrayList<Integer>();
+
         CohortService cohortService = Context.getService(CohortService.class);
         Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
         CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
@@ -536,7 +540,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
         boolean addLocationParameter = false;
         boolean addProviderParameter = false;
         if(cohortDefinitionData != null ){
-            hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m, muzima_cohort_metadata mcm " +
+            hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m, muzima_cohort_metadata mcm " +
                     " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                     " and c.cohort_id = m.cohort_id " +
                     " and mcm.patient_id = m.patient_id "+
@@ -546,7 +550,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
             if(cohortDefinitionData.getIsFilterByProviderEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
                 if(StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)){
                     addLocationAndProviderParameter = true;
-                    hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation ";
+                    hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation and mcm.provider_id = :providerId ";
                 }else{
                     hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
                 }
@@ -565,13 +569,13 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
                     hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
                 }
             }else{
-                hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
+                hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                         " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                         " and c.cohort_id = m.cohort_id " +
                         " and c.voided = false and p.voided = false ";
             }
         }else {
-            hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
+            hqlQuery = " select p.patient_id as total from patient p, cohort c, cohort_member m " +
                     " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                     " and c.cohort_id = m.cohort_id " +
                     " and c.voided = false and p.voided = false ";
@@ -587,7 +591,6 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
         }
 
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
-        query.addScalar("total");
         query.setParameter("uuid", cohortUuid);
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
@@ -602,7 +605,16 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
         if(addProviderParameter){
             query.setParameter("providerId", providerId);
         }
-        return (Number) query.uniqueResult();
+
+        patientIds = query.list();
+        for(int memberId:removedMembersIds) {
+            int index = addedMembersIds.indexOf(memberId);
+            if(index >= 0) {
+                addedMembersIds.remove(index);
+            }
+        }
+        patientIds.addAll(addedMembersIds);
+        return  patientIds.size();
     }
 
 
