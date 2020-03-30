@@ -435,6 +435,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
         CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort.getId());
         String hqlQuery = "";
+        boolean addLocationAndProviderParameter = false;
         boolean addLocationParameter = false;
         boolean addProviderParameter = false;
         if(cohortDefinitionData != null ){
@@ -445,7 +446,14 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     " and mcm.cohort_id = m.cohort_id "+
                     " and c.voided = false and p.voided = false " +
                     " and m.end_date is null ";
-            if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+            if(cohortDefinitionData.getIsFilterByProviderEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)){
+                    addLocationAndProviderParameter = true;
+                    hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation and mcm.provider_id=:providerId ";
+                }else{
+                    hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
+                }
+            }else if(cohortDefinitionData.getIsFilterByProviderEnabled()){
                 if(StringUtils.isNotEmpty(defaultLocation)){
                     addLocationParameter = true;
                     hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation ";
@@ -475,17 +483,21 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         }
         if (syncDate != null) {
             hqlQuery = hqlQuery +
-                    " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
+                    " and (((c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
                     "       (c.date_created is not null and c.date_changed is not null and c.date_voided is null and c.date_changed >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate) ) " +
-                    " and ( (p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
+                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate)) " +
+                    " and ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
-                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
+                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate))) ";
         }
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
         query.setParameter("uuid", cohortUuid);
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
+        }
+        if(addLocationAndProviderParameter){
+            query.setParameter("defaultLocation", defaultLocation);
+            query.setParameter("providerId", providerId);
         }
         if(addLocationParameter){
             query.setParameter("defaultLocation", defaultLocation);
@@ -522,6 +534,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort.getId());
 
         String hqlQuery = "";
+        boolean addLocationAndProviderParameter = false;
         boolean addLocationParameter = false;
         boolean addProviderParameter = false;
         if(cohortDefinitionData != null ) {
@@ -533,7 +546,14 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     " and c.voided = false and p.voided = false " +
                     " and m.end_date is null ";
 
-            if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+            if(cohortDefinitionData.getIsFilterByProviderEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
+                if(StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)){
+                    addLocationAndProviderParameter = true;
+                    hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation and mcm.provider_id=:providerId ";
+                }else{
+                    hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
+                }
+            }else if(cohortDefinitionData.getIsFilterByProviderEnabled()){
                 if(StringUtils.isNotEmpty(defaultLocation)){
                     addLocationParameter = true;
                     hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation ";
@@ -563,12 +583,12 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         }
         if (syncDate != null) {
             hqlQuery = hqlQuery +
-                    " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
+                    " and (((c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
                     "       (c.date_created is not null and c.date_changed is not null and c.date_voided is null and c.date_changed >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate) ) " +
-                    " and ( (p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
+                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate)) " +
+                    " or ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
-                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
+                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate))) ";
         }
 
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
@@ -576,6 +596,10 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         query.setParameter("uuid", cohortUuid);
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
+        }
+        if(addLocationAndProviderParameter){
+            query.setParameter("defaultLocation", defaultLocation);
+            query.setParameter("providerId", providerId);
         }
         if(addLocationParameter){
             query.setParameter("defaultLocation", defaultLocation);

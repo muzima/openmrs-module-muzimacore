@@ -69,11 +69,9 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
                 boolean hasCohortChanged = coreService.hasCohortChangedSinceDate(cohort.getUuid(),syncDate, defaultLocation, providerId);
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
                 if(cohortsWithFilters.size()>0){
-                    if( syncDate==null ) {
-                        if (set.contains(cohort.getId())) {
-                            int patientCount = coreService.countPatients(cohort.getUuid(), syncDate, defaultLocation, providerId).intValue();
-                            fakeCohort.setSize(patientCount);
-                        }
+                    if (set.contains(cohort.getId())) {
+                        int patientCount = coreService.countPatients(cohort.getUuid(), syncDate, defaultLocation, providerId).intValue();
+                        fakeCohort.setSize(patientCount);
                     }
                 }
                 fakeCohort.setIsUpdateAvailable(hasCohortChanged);
@@ -92,10 +90,8 @@ public class CohortResource extends DataDelegatingCrudResource<FakeCohort> {
                 FakeCohort fakeCohort = FakeCohort.copyCohort(cohort);
                 if(cohortsWithFilters.size()>0){
                     if (set.contains(cohort.getId())) {
-                        if( syncDate==null ) {
-                            int patientCount = coreService.countPatients(cohort.getUuid(), syncDate, defaultLocation, providerId).intValue();
-                            fakeCohort.setSize(patientCount);
-                        }
+                        int patientCount = coreService.countPatients(cohort.getUuid(), syncDate, defaultLocation, providerId).intValue();
+                        fakeCohort.setSize(patientCount);
                     }
 
                 }
