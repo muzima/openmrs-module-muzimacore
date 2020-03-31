@@ -483,7 +483,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
             hqlQuery = hqlQuery +
                     " and (((c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
                     "       (c.date_created is not null and c.date_changed is not null and c.date_voided is null and c.date_changed >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate))) " +
+                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate)) " +
                     " and ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate))) ";
@@ -536,7 +536,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
         CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort.getId());
 
         String hqlQuery = "";
-        boolean addLocationAndProviderParameter = true;
+        boolean addLocationAndProviderParameter = false;
         boolean addLocationParameter = false;
         boolean addProviderParameter = false;
         if(cohortDefinitionData != null ){
