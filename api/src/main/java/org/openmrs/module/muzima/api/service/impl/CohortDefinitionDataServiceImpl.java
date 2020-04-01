@@ -21,6 +21,7 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.db.CohortDefinitionDataDao;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
+import org.openmrs.module.muzima.task.ExpandedCohortProcessor;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class CohortDefinitionDataServiceImpl extends BaseOpenmrsService implemen
     private final Log log = LogFactory.getLog(this.getClass());
 
     private CohortDefinitionDataDao dao;
+    private ExpandedCohortProcessor processor;
 
     public void setDao(CohortDefinitionDataDao dao) {
         this.dao = dao;
@@ -65,5 +67,9 @@ public class CohortDefinitionDataServiceImpl extends BaseOpenmrsService implemen
     }
     public Number countCohortDefinitionData(){
         return dao.count();
+    }
+    public void  processCohortDefinitionData(final String uuid){
+        this.processor=new ExpandedCohortProcessor();
+        processor.processExpandedCohort(uuid);
     }
 }

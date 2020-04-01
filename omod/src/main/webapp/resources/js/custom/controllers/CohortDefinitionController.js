@@ -123,5 +123,17 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
             return true;
         }
     };
+
+    $scope.processDefinition = function (cohortDefinition) {
+         $('#wait').show();
+         $cohortDefinitionService.processCohortDefinition(cohortDefinition.uuid).
+            then(function (response) {
+                $('#wait').hide();
+                $location.path("/cohortDefinitions");
+            },function (response) {
+                $('#wait').hide();
+                $location.path("/cohortDefinitions");
+            });
+    };
 }
 

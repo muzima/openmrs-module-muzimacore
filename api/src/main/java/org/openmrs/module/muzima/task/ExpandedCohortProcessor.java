@@ -35,6 +35,15 @@ public class ExpandedCohortProcessor {
         }
     }
 
+    public void processExpandedCohort(final String uuid) {
+        if (!isRunning) {
+            log.info("Starting up Expanded cohort processor ...");
+            process(uuid);
+        } else {
+            log.info("Expanded cohort processor aborting (another processor already running)!");
+        }
+    }
+
     private void process(){
         try {
             isRunning = true;
@@ -50,6 +59,18 @@ public class ExpandedCohortProcessor {
             }
         } finally {
             isRunning = false;
+        }
+    }
+
+    private void process(final String uuid){
+        try {
+            CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+            CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByUuid(uuid);
+            ExpandedCohortProcessorService expandedCohortProcessorService = Context.getRegisteredComponent("muzima.ExpandedCohortProcessorService",ExpandedCohortProcessorService.class);
+            if(cohortDefinitionData !=null ){
+                expandedCohortProcessorService.process(cohortDefinitionData);
+            }
+        } finally {
         }
     }
 }
