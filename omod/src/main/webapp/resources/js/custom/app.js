@@ -265,6 +265,10 @@ muzimaCoreModule.factory('$configs', function($http) {
     var searchConfigProviders = function(search) {
         return $http.get('../../ws/rest/v1/provider?v=custom:(uuid,name:(uuid,name))&q=' + (search === undefined ? '' : search));
     };
+    var searchConfigSettings = function(search) {
+        console.log("RE:"+search)
+        return $http.get('configSettings.json?search=' + (search === undefined ? '' : search));
+    };
     return {
         getConfiguration: getConfiguration,
         getConfigurations: getConfigurations,
@@ -274,7 +278,8 @@ muzimaCoreModule.factory('$configs', function($http) {
         searchConfigCohorts: searchConfigCohorts,
         searchConfigLocations: searchConfigLocations,
         searchConfigProviders: searchConfigProviders,
-        searchConfigConcepts: searchConfigConcepts
+        searchConfigConcepts: searchConfigConcepts,
+        searchConfigSettings: searchConfigSettings
     }
 });
 
