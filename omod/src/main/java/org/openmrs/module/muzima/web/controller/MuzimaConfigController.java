@@ -133,7 +133,6 @@ public class MuzimaConfigController {
     public Map<String, Object> getLocations(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
 
-        System.out.println("Searching: "+search);
         if (Context.isAuthenticated()) {
             List<Object> objects = new ArrayList<Object>();
             for (Location location : Context.getLocationService().getLocations(search)) {
@@ -148,14 +147,12 @@ public class MuzimaConfigController {
     @RequestMapping(value = "/module/muzimacore/configSettings.json", method = RequestMethod.GET)
     public Map<String, Object> getSettings(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
-        System.out.println("Searching: "+search);
 
         if (Context.isAuthenticated()) {
             List<Object> objects = new ArrayList<Object>();
             MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);
             for (MuzimaSetting setting : settingService.getSettings(search)) {
                 objects.add(WebConverter.convertMuzimaSetting(setting));
-                System.out.println("Adding: "+setting.getName());
             }
             response.put("objects", objects);
         }

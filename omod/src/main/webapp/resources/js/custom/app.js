@@ -266,7 +266,6 @@ muzimaCoreModule.factory('$configs', function($http) {
         return $http.get('../../ws/rest/v1/provider?v=custom:(uuid,name:(uuid,name))&q=' + (search === undefined ? '' : search));
     };
     var searchConfigSettings = function(search) {
-        console.log("RE:"+search)
         return $http.get('configSettings.json?search=' + (search === undefined ? '' : search));
     };
     return {

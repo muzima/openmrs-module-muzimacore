@@ -371,7 +371,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             $configs.searchConfigSettings($scope.search.settings).
             then(function (response) {
                 $scope.settings = response.data.objects;
-                console.log(response.data.objects)
             });
         }
     }, true);
@@ -406,12 +405,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $scope.dismiss = function(){
             modalInstance.close();
         }
-
-        modalInstance.result.then(function (editedSetting) {
-            console.log(JSON.stringify(editedSetting));
-        }, function () {
-            console.log('Modal dismissed at: ' + new Date());
-        });
     }
 
     $scope.addSetting = function(setting) {
@@ -441,7 +434,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.editSettingValue = function () {
         angular.forEach($scope.configSettings, function (configSetting, index) {
             if (configSetting.uuid === $scope.selected.setting) {
-                console.log(JSON.stringify($scope.selected.setting));
                 showSettingeditModal(configSetting);
             }
         });
