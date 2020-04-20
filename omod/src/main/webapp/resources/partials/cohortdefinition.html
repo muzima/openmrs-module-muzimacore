@@ -34,10 +34,16 @@
                         <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> Automatically remove members &#9432;
                     </div>
                 </div>
+                <div class="row col-lg-8" id='processingSuccessful'>
+                    <div class="alert alert-success">Cohort definition execution successful.</div>
+                </div>
+                <div class="row col-lg-8" id = "processingFailure">
+                    <div class="alert alert-success">Cohort definition execution failed.</div>
+                </div>
                 <div class="row col-lg-8">
                     <button type="submit" ng-click="edit()" class="btn">Edit</button>
                     <button type="submit" ng-click="cancel()" class="btn">Close</button>
-                    <button type="submit" ng-click="processDefinition(cohortDefinition)" ng-show="cohortDefinition.uuid" class="btn btn-primary">Process</button>
+                    <button type="submit" ng-click="processDefinition(cohortDefinition)" ng-show="cohortDefinition.uuid" class="btn btn-primary">Run now</button>
                 </div>
                 <span></span>
             </div>

@@ -1832,4 +1832,32 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20200418144400" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="expanded_cohort_update_history" columnName="members_added"/>
+            </and>
+        </preConditions>
+        <comment>
+            Alter column members_added from text to longtext
+        </comment>
+        <modifyColumn tableName="expanded_cohort_update_history">
+            <column name="members_added" type="${clob.type}"></column>
+        </modifyColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20200418144500" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists tableName="expanded_cohort_update_history" columnName="members_added"/>
+            </and>
+        </preConditions>
+        <comment>
+            Alter column members_removed from text to longtext
+        </comment>
+        <modifyColumn tableName="expanded_cohort_update_history">
+            <column name="members_removed" type="${clob.type}"></column>
+        </modifyColumn>
+    </changeSet>
+
 </databaseChangeLog>

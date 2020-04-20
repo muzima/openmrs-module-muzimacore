@@ -41,12 +41,16 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
                 var serverData = response.data;
                 $scope.cohorts = serverData.objects;
                 $('#wait').hide();
+                $('#processingFailure').hide();
+                $('#processingSuccessful').hide();
             });
     } else {
         $cohortDefinitionService.getCohortDefinition($scope.uuid).
             then(function (response) {
                 $scope.cohortDefinition = response.data;
             $('#wait').hide();
+            $('#processingFailure').hide();
+            $('#processingSuccessful').hide();
             });
         $cohortDefinitionService.getAllCohorts().
             then(function (response) {
@@ -129,10 +133,12 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
          $cohortDefinitionService.processCohortDefinition(cohortDefinition.uuid).
             then(function (response) {
                 $('#wait').hide();
-                $location.path("/cohortDefinitions");
+                $('#processingSuccessful').show();
+                console.log("success");
             },function (response) {
                 $('#wait').hide();
-                $location.path("/cohortDefinitions");
+                $('#processingFailure').show();
+                console.log("fail");
             });
     };
 }
