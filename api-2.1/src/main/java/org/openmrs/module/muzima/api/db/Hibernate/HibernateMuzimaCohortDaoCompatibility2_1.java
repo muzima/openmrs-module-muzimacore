@@ -144,7 +144,10 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     }
 
     private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate) throws DAOException{
-        String addedMembersSql = "select GROUP_CONCAT(e.members_added) from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
+        String increaseConcatLimit = "SET SESSION group_concat_max_len=1000000";
+        getSessionFactory().getCurrentSession().createSQLQuery(increaseConcatLimit).executeUpdate();
+        String addedMembersSql = "select GROUP_CONCAT(e.members_added) from expanded_cohort_update_history e, cohort c" +
+                " where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
         SQLQuery addedMembersQuery = getSessionFactory().getCurrentSession().createSQLQuery(addedMembersSql);
         List addedMembersList = new ArrayList();
         if (syncDate != null) {
@@ -168,7 +171,10 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     }
 
     private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate) throws DAOException{
-        String removedMembersSql = "select GROUP_CONCAT(e.members_removed) from expanded_cohort_update_history e, cohort c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
+        String increaseConcatLimit = "SET SESSION group_concat_max_len=1000000";
+        getSessionFactory().getCurrentSession().createSQLQuery(increaseConcatLimit).executeUpdate();
+        String removedMembersSql = "select GROUP_CONCAT(e.members_removed) from expanded_cohort_update_history e, cohort" +
+                " c where e.date_updated >= :syncDate and e.cohort_id = c.cohort_id and c.uuid = :cohortUuid";
         SQLQuery removedMembersSqlQuery = getSessionFactory().getCurrentSession().createSQLQuery(removedMembersSql);
         List removedMembersIds = new ArrayList();
         if (syncDate != null) {
@@ -207,20 +213,15 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                 " and m.end_date is null ";
         if (syncDate != null) {
             hqlQuery = hqlQuery +
-                    " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is null and c.date_changed >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate) ) " +
-                    " and ( (p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
+                    " and ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
-                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
+                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate)) ";
         }
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
         query.setParameter("uuid", cohortUuid);
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
         }
-        query.setMaxResults(size);
-        query.setFirstResult(startIndex);
         List patientIds = query.list();
         for(int memberId:removedMembersIds) {
             int index = addedMembersIds.indexOf(memberId);
@@ -229,7 +230,6 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
             }
         }
         patientIds.addAll(addedMembersIds);
-
 
         if (!patientIds.isEmpty()) {
             Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
@@ -242,28 +242,45 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     @Override
     @Transactional(readOnly = true)
     public Number countPatients(final String cohortUuid, final Date syncDate) throws DAOException {
-        String hqlQuery = " select count(p.patient_id) as total from patient p, cohort c, cohort_member m " +
+        List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
+        List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
+        List<Integer> patientIds = new ArrayList<Integer>();
+
+        String hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
                 " and c.voided = false and p.voided = false "+
                 " and m.end_date is null ";
         if (syncDate != null) {
             hqlQuery = hqlQuery +
-                    " and ( (c.date_created is not null and c.date_changed is null and c.date_voided is null and c.date_created >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is null and c.date_changed >= :syncDate) or " +
-                    "       (c.date_created is not null and c.date_changed is not null and c.date_voided is not null and c.date_voided >= :syncDate) ) " +
-                    " and ( (p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
+                    " and ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
                     "       (p.date_created is not null and p.date_changed is not null and p.date_voided is null and p.date_changed >= :syncDate) or " +
-                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate) ) ";
+                    "       (p.date_created is not null and p.date_changed is not null and p.date_voided is not null and p.date_voided >= :syncDate)) ";
         }
 
         SQLQuery query = getSessionFactory().getCurrentSession().createSQLQuery(hqlQuery);
-        query.addScalar("total");
         query.setParameter("uuid", cohortUuid);
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
         }
-        return (Number) query.uniqueResult();
+
+        patientIds = query.list();
+        List<Integer> finalPatientIds = new ArrayList<Integer>();
+        for(int memberId:removedMembersIds) {
+            int index = addedMembersIds.indexOf(memberId);
+            if(index >= 0) {
+                addedMembersIds.remove(index);
+            }
+        }
+        finalPatientIds.addAll(addedMembersIds);
+        if(patientIds.size()>0) {
+            for (Integer patientId : patientIds) {
+                if (!finalPatientIds.contains(patientId)) {
+                    finalPatientIds.add(patientId);
+                }
+            }
+        }
+        return  finalPatientIds.size();
     }
 
 
