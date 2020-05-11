@@ -76,10 +76,15 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                 criteria.add(disjunction);
             }
 
+            List<Integer> cohortUuids = new ArrayList<Integer>();
+            cohortUuids = myquery.list();
+            if(myquery.list().size() == 0) {
+                cohortUuids.add(0);
+            }
 
             criteria.add(
                     Restrictions.or(
-                        Restrictions.in("id", myquery.list()),
+                        Restrictions.in("id", cohortUuids),
                         Restrictions.or(
                             Restrictions.or(
                                 Restrictions.and(
