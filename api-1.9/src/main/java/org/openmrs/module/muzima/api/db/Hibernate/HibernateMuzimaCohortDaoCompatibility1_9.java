@@ -201,13 +201,8 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
                                      final int startIndex, final int size) throws DAOException {
 
         //This will take care of cohort members who were added to cohort since sync date but have not been changed themselves
-        System.out.println("Start of added M  "+new Date());
         List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate);
-        System.out.println("End of added M  "+new Date());
-        System.out.println("Start of removed M  "+new Date());
         List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate);
-        System.out.println("end of removed M  "+new Date());
-        System.out.println("Start of Query  "+new Date());
         String hqlQuery = " select p.patient_id from patient p, cohort c, cohort_member m " +
                 " where c.uuid = :uuid and p.patient_id = m.patient_id " +
                 " and c.cohort_id = m.cohort_id " +
@@ -224,7 +219,6 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
             query.setParameter("syncDate", syncDate);
         }
         List patientIds = query.list();
-        System.out.println("End of Query "+new Date());
         for(int memberId:removedMembersIds) {
             int index = addedMembersIds.indexOf(memberId);
             if(index >= 0) {
@@ -232,11 +226,9 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
             }
         }
         patientIds.addAll(addedMembersIds);
-        System.out.println("End of Member manipulation "+new Date());
         if (!patientIds.isEmpty()) {
             Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
             criteria.add(Restrictions.in("patientId", patientIds));
-            System.out.println("End of criteria "+new Date());
             return criteria.list();
         }
         return Collections.emptyList();
