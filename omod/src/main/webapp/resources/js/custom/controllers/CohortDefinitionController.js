@@ -41,12 +41,16 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
                 var serverData = response.data;
                 $scope.cohorts = serverData.objects;
                 $('#wait').hide();
+                $('#processingFailure').hide();
+                $('#processingSuccessful').hide();
             });
     } else {
         $cohortDefinitionService.getCohortDefinition($scope.uuid).
             then(function (response) {
                 $scope.cohortDefinition = response.data;
             $('#wait').hide();
+            $('#processingFailure').hide();
+            $('#processingSuccessful').hide();
             });
         $cohortDefinitionService.getAllCohorts().
             then(function (response) {
@@ -134,6 +138,20 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         }else{
             return true;
         }
+    };
+
+    $scope.processDefinition = function (cohortDefinition) {
+         $('#wait').show();
+         $cohortDefinitionService.processCohortDefinition(cohortDefinition.uuid).
+            then(function (response) {
+                $('#wait').hide();
+                $('#processingSuccessful').show();
+                console.log("success");
+            },function (response) {
+                $('#wait').hide();
+                $('#processingFailure').show();
+                console.log("fail");
+            });
     };
 }
 

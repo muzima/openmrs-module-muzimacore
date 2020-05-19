@@ -30,17 +30,17 @@ import java.util.Date;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/module/muzimacore/cohortDefinition.json")
 public class CohortDefinitionController {
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/cohortDefinition.json", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getCohortDefinitionData(final @RequestParam(value = "uuid") String uuid) {
         CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
         CohortDefinitionData cohortDefinitionData = expandedCohortDataService.getCohortDefinitionDataByUuid(uuid);
         return WebConverter.convertCohortDefinitionData(cohortDefinitionData);
     }
-    @RequestMapping(method = RequestMethod.POST)
+
+    @RequestMapping(value = "/module/muzimacore/cohortDefinition.json", method = RequestMethod.POST)
     public void saveCohortDefinition(final @RequestBody Map<String, Object> map){
         if (Context.isAuthenticated()) {
             String uuid = (String) map.get("uuid");
@@ -81,5 +81,15 @@ public class CohortDefinitionController {
 
         }
 
+    }
+    @RequestMapping(value = "/module/muzimacore/processCohortDefinition.json", method = RequestMethod.POST)
+    public void processCohortDefinition(final @RequestBody Map<String, Object> map){
+        if (Context.isAuthenticated()) {
+            String uuid = (String) map.get("uuid");
+            CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
+            if (StringUtils.isNotBlank(uuid)) {
+               expandedCohortDataService.processCohortDefinitionData(uuid);
+            }
+        }
     }
 }

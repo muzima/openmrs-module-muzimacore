@@ -367,6 +367,10 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
          "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled, "isFilterByProviderEnabled":isFilterByProviderEnabled, "isFilterByLocationEnabled":isFilterByLocationEnabled, "retireReason": retireReason, "filterQuery":filterQuery});
     };
 
+    var processCohortDefinition = function (uuid){
+        return $http.post("processCohortDefinition.json",{"uuid": uuid});
+    }
+
     return {
 
         getCohortDefinitions: getCohortDefinitions,
@@ -374,6 +378,7 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
         saveCohortDefinition:saveCohortDefinition,
         getAllCohorts:getAllCohorts,
         getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition,
-        deleteCohortDefinition : deleteCohortDefinition
+        deleteCohortDefinition : deleteCohortDefinition,
+        processCohortDefinition : processCohortDefinition
     }
 });
