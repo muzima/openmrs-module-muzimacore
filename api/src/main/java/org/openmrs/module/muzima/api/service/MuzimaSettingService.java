@@ -53,5 +53,6 @@ public interface MuzimaSettingService extends OpenmrsService {
      * @return list of all settings with matching search term for a particular page.
      */
     List<MuzimaSetting> getPagedSettings(final String search, final Date syncDate, final Integer pageNumber, final Integer pageSize);
+    List<MuzimaSetting> getSettings(final String search);
 
 }

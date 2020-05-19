@@ -130,7 +130,6 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
 
                     $('#wait').hide();
                 }).catch(function(err) {
-                    console.log(err);
                     $('#wait').hide();
                 });
             }
@@ -504,7 +503,6 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
                 $('#wait').hide();
                 $location.path('/duplicates');
             }).catch(function (err) {
-                console.log(err);
                 $('#wait').hide();
             });
         } else {
@@ -537,7 +535,6 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
                 $('#wait').hide();
                 $location.path('/duplicates');
             }).catch(function (err) {
-                console.log(err);
                 $('#wait').hide();
             });
         }

@@ -20,8 +20,10 @@ import org.openmrs.Location;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaConfigService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.api.service.MuzimaSettingService;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -135,6 +137,22 @@ public class MuzimaConfigController {
             List<Object> objects = new ArrayList<Object>();
             for (Location location : Context.getLocationService().getLocations(search)) {
                 objects.add(WebConverter.convertMuzimaLocation(location));
+            }
+            response.put("objects", objects);
+        }
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/module/muzimacore/configSettings.json", method = RequestMethod.GET)
+    public Map<String, Object> getSettings(final @RequestParam(value = "search") String search) {
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        if (Context.isAuthenticated()) {
+            List<Object> objects = new ArrayList<Object>();
+            MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);
+            for (MuzimaSetting setting : settingService.getSettings(search)) {
+                objects.add(WebConverter.convertMuzimaSetting(setting));
             }
             response.put("objects", objects);
         }

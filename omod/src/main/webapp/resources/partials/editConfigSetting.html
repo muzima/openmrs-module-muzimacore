@@ -1,0 +1,60 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Please specify setting value</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-lg-2">
+                <h5>Name:</h5>
+            </div>
+            <div class="col-lg-10">
+                <input class="col-lg-10 form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <h5>Property:</h5>
+            </div>
+            <div class="col-lg-10">
+                <input class="col-lg-10 form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <h5>Description:</h5>
+            </div>
+            <div class="col-lg-10">
+                        <textarea class="col-lg-8 form-control" placeholder="Setting description ..." rows="7" disabled="" ng-model="setting.description">
+                        </textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <h5>Value:</h5>
+            </div>
+            <div class="col-lg-10" ng-show="setting.datatype == 'STRING'">
+                <input class="col-lg-10 form-control" placeholder="Setting value ..." type="text" ng-model="setting.value">
+            </div>
+            <div class="col-lg-10" ng-show="setting.datatype == 'PASSWORD'">
+                <input class="col-lg-10 form-control" placeholder="Setting value ..." type="password" ng-model="setting.value">
+            </div>
+            <div class="col-lg-10" ng-show="setting.datatype == 'BOOLEAN'">
+                <div class="col-lg-3">
+                    <label class="label-input">
+                        <input type="radio" name="datatype" ng-model="setting.value" ng-value="true"/> Enabled
+                    </label>
+                </div>
+                <div class="col-lg-3">
+                    <label class="label-input">
+                        <input type="radio" name="datatype" ng-model="setting.value" ng-value="false"/>  Disabled
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <btn ng-click="dismiss()" class="btn btn-primary">Close</btn>
+    </div>
+</div>
