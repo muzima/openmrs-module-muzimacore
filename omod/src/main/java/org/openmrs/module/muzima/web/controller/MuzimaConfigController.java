@@ -147,7 +147,6 @@ public class MuzimaConfigController {
     @RequestMapping(value = "/module/muzimacore/configSettings.json", method = RequestMethod.GET)
     public Map<String, Object> getSettings(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
-
         if (Context.isAuthenticated()) {
             List<Object> objects = new ArrayList<Object>();
             MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);

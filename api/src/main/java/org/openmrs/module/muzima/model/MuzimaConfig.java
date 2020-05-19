@@ -13,10 +13,16 @@
  */
 package org.openmrs.module.muzima.model;
 
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsMetadata;
+import org.openmrs.module.muzima.utils.JsonUtils;
 
 import java.util.UUID;
+
+import static org.openmrs.module.muzima.utils.MuzimaSettingUtils.parseMuzimaSettingFromJsonObject;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MuzimaConfig extends BaseOpenmrsMetadata {
@@ -49,6 +55,27 @@ public class MuzimaConfig extends BaseOpenmrsMetadata {
 
     public void setConfigJson(String configJson) {
         this.configJson = configJson;
+    }
+
+    public MuzimaSetting getConfigMuzimaSettingByProperty(String settingProperty){
+        if(StringUtils.isNotBlank(configJson)){
+            Object settingsStub = JsonUtils.readAsObject(configJson,"$['config']['settings']");
+            if (settingsStub != null && settingsStub instanceof JSONArray) {
+                JSONArray settingsArray = (JSONArray)settingsStub;
+                for (Object setting : settingsArray) {
+                    if(setting instanceof JSONObject) {
+                        JSONObject settingJsonObject = (JSONObject)setting;
+                        if(settingJsonObject.containsKey("property")) {
+                            Object property = settingJsonObject.get("property");
+                            if (StringUtils.equals(settingProperty,(String)property)) {
+                                return parseMuzimaSettingFromJsonObject(settingJsonObject);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     @Override

@@ -389,7 +389,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
         return setting.name + ' : ' + value;
     }
-    var showSettingeditModal = function(setting) {
+    var showSettingEditModal = function(setting) {
+        console.log(showSettingEditModal);
         $scope.setting = setting;
         var modalInstance = $uibModal.open({
             animation: true,
@@ -415,7 +416,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             $scope.configSettings.push(setting);
             $scope.search.settings = '';
         }
-        showSettingeditModal(setting);
+        showSettingEditModal(setting);
     };
 
     $scope.chosenSetting = function (value) {
@@ -434,7 +435,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.editSettingValue = function () {
         angular.forEach($scope.configSettings, function (configSetting, index) {
             if (configSetting.uuid === $scope.selected.setting) {
-                showSettingeditModal(configSetting);
+                showSettingEditModal(configSetting);
             }
         });
     };
