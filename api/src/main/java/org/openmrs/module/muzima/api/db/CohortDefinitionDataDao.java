@@ -50,4 +50,7 @@ public interface CohortDefinitionDataDao {
     void delete(CohortDefinitionData object);
 
     Number count();
+
+    @Transactional
+    CohortDefinitionData getCohortDefinitionDataByCohortId(final Integer cohortId);
 }

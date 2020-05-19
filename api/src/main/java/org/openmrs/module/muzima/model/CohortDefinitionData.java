@@ -26,6 +26,9 @@ public class CohortDefinitionData  extends BaseOpenmrsData implements Serializab
     private boolean isScheduledForExecution;
     private boolean isMemberAdditionEnabled;
     private boolean isMemberRemovalEnabled;
+    private boolean isFilterByProviderEnabled;
+    private boolean isFilterByLocationEnabled;
+    private String filterQuery;
 
     public Integer getId() {
         return id;
@@ -73,5 +76,29 @@ public class CohortDefinitionData  extends BaseOpenmrsData implements Serializab
 
     public boolean getIsMemberRemovalEnabled(){
         return isMemberRemovalEnabled;
+    }
+
+    public boolean getIsFilterByProviderEnabled() {
+        return isFilterByProviderEnabled;
+    }
+
+    public void setIsFilterByProviderEnabled(boolean filterByProviderEnabled) {
+        isFilterByProviderEnabled = filterByProviderEnabled;
+    }
+
+    public boolean getIsFilterByLocationEnabled() {
+        return isFilterByLocationEnabled;
+    }
+
+    public void setIsFilterByLocationEnabled(boolean filterByLocationEnabled) {
+        isFilterByLocationEnabled = filterByLocationEnabled;
+    }
+
+    public String getFilterQuery() {
+        return filterQuery;
+    }
+
+    public void setFilterQuery(String filterQuery) {
+        this.filterQuery = filterQuery;
     }
 }
