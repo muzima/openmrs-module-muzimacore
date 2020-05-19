@@ -98,4 +98,8 @@ public class MuzimaSettingServiceImpl extends BaseOpenmrsService implements Muzi
     public List<MuzimaSetting> getPagedSettings(final String search, final Date syncDate, final Integer pageNumber, final Integer pageSize) {
         return dao.getPagedSettings(search, syncDate, pageNumber, pageSize);
     }
+    @Override
+    public List<MuzimaSetting> getSettings(final String search){
+        return dao.getSettings(search);
+    }
 }

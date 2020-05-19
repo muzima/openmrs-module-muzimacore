@@ -46,7 +46,7 @@ public class MuzimaConfigsController {
             MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
             int pages = (configService.countConfigs(search).intValue() + pageSize - 1) / pageSize;
             List<Object> objects = new ArrayList<Object>();
-            for (MuzimaConfig config : configService.getPagedConfigs(search, pageNumber, pageSize)) {
+            for (MuzimaConfig config : configService.getPagedConfigs(search, pageNumber, pageSize,null)) {
                 objects.add(WebConverter.convertMuzimaConfig(config));
             }
 

@@ -343,4 +343,10 @@ public class JsonUtils {
         }
         return returnedDate;
     }
+    public static Object getElementFromJsonObject(JSONObject jsonObject, String key){
+        if(jsonObject.containsKey(key)) {
+            return jsonObject.get(key);
+        }
+        return null;
+    }
 }
