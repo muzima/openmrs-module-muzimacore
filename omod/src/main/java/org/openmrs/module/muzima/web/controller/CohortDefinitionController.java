@@ -49,6 +49,9 @@ public class CohortDefinitionController {
             boolean isScheduled = (Boolean) map.get("isScheduledForExecution");
             boolean isMemberAdditionEnabled = (Boolean) map.get("isMemberAdditionEnabled");
             boolean isMemberRemovalEnabled = (Boolean) map.get("isMemberRemovalEnabled");
+            boolean isFilterByProviderEnabled = (Boolean) map.get("isFilterByProviderEnabled");
+            boolean isFilterByLocationEnabled = (Boolean) map.get("isFilterByLocationEnabled");
+            String filterQuery = (String) map.get("filterQuery");
             String retireReason = (String) map.get("retireReason");
 
             CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
@@ -71,6 +74,9 @@ public class CohortDefinitionController {
             cohortDefinitionData.setIsScheduledForExecution(isScheduled);
             cohortDefinitionData.setIsMemberAdditionEnabled(isMemberAdditionEnabled);
             cohortDefinitionData.setIsMemberRemovalEnabled(isMemberRemovalEnabled);
+            cohortDefinitionData.setIsFilterByProviderEnabled(isFilterByProviderEnabled);
+            cohortDefinitionData.setIsFilterByLocationEnabled(isFilterByLocationEnabled);
+            cohortDefinitionData.setFilterQuery(filterQuery);
             expandedCohortDataService.saveCohortDefinitionData(cohortDefinitionData);
 
         }

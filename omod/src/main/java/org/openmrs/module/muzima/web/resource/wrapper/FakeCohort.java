@@ -87,6 +87,10 @@ public class FakeCohort extends BaseOpenmrsData {
         return size;
     }
 
+    public void setSize(int size) {
+        this.size = size;
+    }
+
     public Set<Integer> getMemberIds() {
         return memberIds;
     }

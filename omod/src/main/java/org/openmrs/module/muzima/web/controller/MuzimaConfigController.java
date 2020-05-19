@@ -13,15 +13,20 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
+import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Form;
 import org.openmrs.Location;
+import org.openmrs.api.CohortService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.service.MuzimaConfigService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.web.resource.utils.JsonUtils;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,13 +66,42 @@ public class MuzimaConfigController {
             String configJson = (String) map.get("configJson");
             String retireReason = (String) map.get("retireReason");
 
+            List<Object> cohortObjects = JsonUtils.readAsObjectList(configJson,"$['config']['cohorts']");
+            List<Object> cohortObb = new ArrayList<Object>();
+            JSONObject configJsonObject = new JSONObject();
+            JSONObject modifiedConfigJson = new JSONObject();
+            if(cohortObjects != null){
+                for(Object cohortObject:cohortObjects){
+                    JSONObject cohort = (JSONObject)cohortObject;
+                    String cohortUuid = (String)cohort.get("uuid");
+                    CohortService cohortService = Context.getService(CohortService.class);
+                    Cohort cohort1 = cohortService.getCohortByUuid(cohortUuid);
+                    CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+                    CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort1.getCohortId());
+                    cohort.put("isFilterByLocationEnabled",cohortDefinitionData.getIsFilterByLocationEnabled());
+                    cohort.put("isFilterByProviderEnabled",cohortDefinitionData.getIsFilterByProviderEnabled());
+                    cohortObb.add(cohort);
+                }
+            }
+            configJsonObject.put("name",JsonUtils.readAsString(configJson,"$['config']['name']"));
+            configJsonObject.put("description",JsonUtils.readAsString(configJson,"$['config']['description']"));
+            configJsonObject.put("concepts",JsonUtils.readAsObjectList(configJson,"$['config']['concepts']"));
+            configJsonObject.put("forms",JsonUtils.readAsObjectList(configJson,"$['config']['forms']"));
+            configJsonObject.put("locations",JsonUtils.readAsObjectList(configJson,"$['config']['locations']"));
+            configJsonObject.put("provides",JsonUtils.readAsObjectList(configJson,"$['config']['providers']"));
+            configJsonObject.put("cohorts",cohortObb.toArray());
+
+            modifiedConfigJson.put("config",configJsonObject);
+
+            String modifiedConfigJsonString = modifiedConfigJson.toJSONString();
+
             MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
             if (StringUtils.isNotBlank(uuid)) {
                 MuzimaConfig config = configService.getConfigByUuid(uuid);
                 if (StringUtils.isNotBlank(name) || StringUtils.isNotBlank(description)) {
                     config.setName(name);
                     config.setDescription(description);
-                    config.setConfigJson(configJson);
+                    config.setConfigJson(modifiedConfigJsonString);
                 } else {
                     config.setRetired(true);
                     config.setRetireReason(retireReason);
@@ -79,7 +113,7 @@ public class MuzimaConfigController {
                 MuzimaConfig config = new MuzimaConfig();
                 config.setName(name);
                 config.setDescription(description);
-                config.setConfigJson(configJson);
+                config.setConfigJson(modifiedConfigJsonString);
                 configService.save(config);
             }
         }
