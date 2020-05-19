@@ -308,6 +308,8 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
     }
 
     private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException{
+        String increaseConcatLimit = "SET SESSION group_concat_max_len=1000000";
+        getSessionFactory().getCurrentSession().createSQLQuery(increaseConcatLimit).executeUpdate();
         CohortService cohortService = Context.getService(CohortService.class);
         Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
         CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
@@ -379,6 +381,8 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
     }
 
     private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException{
+        String increaseConcatLimit = "SET SESSION group_concat_max_len=1000000";
+        getSessionFactory().getCurrentSession().createSQLQuery(increaseConcatLimit).executeUpdate();
         CohortService cohortService = Context.getService(CohortService.class);
         Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
         CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
@@ -508,6 +512,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
                     " and c.cohort_id = m.cohort_id " +
                     " and c.voided = false and p.voided = false ";
         }
+
         if (syncDate != null) {
             hqlQuery = hqlQuery +
                     " and ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
@@ -519,6 +524,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
         }
+
         if(addLocationAndProviderParameter){
             query.setParameter("defaultLocation", defaultLocation);
             query.setParameter("providerId", providerId);
@@ -539,8 +545,6 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
             }
         }
         patientIds.addAll(addedMembersIds);
-
-
         if (!patientIds.isEmpty()) {
             Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
             criteria.add(Restrictions.in("patientId", patientIds));
@@ -606,6 +610,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
                     " and c.cohort_id = m.cohort_id " +
                     " and c.voided = false and p.voided = false ";
         }
+
         if (syncDate != null) {
             hqlQuery = hqlQuery +
                     " and ((p.date_created is not null and p.date_changed is null and p.date_voided is null and p.date_created >= :syncDate) or " +
@@ -618,6 +623,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
         }
+
         if(addLocationAndProviderParameter){
             query.setParameter("defaultLocation", defaultLocation);
             query.setParameter("providerId", providerId);
@@ -631,6 +637,7 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
 
         patientIds = query.list();
         Set<Integer> finalPatientIds = new HashSet<Integer>();
+
         for(int memberId:removedMembersIds) {
             int index = addedMembersIds.indexOf(memberId);
             if(index >= 0) {

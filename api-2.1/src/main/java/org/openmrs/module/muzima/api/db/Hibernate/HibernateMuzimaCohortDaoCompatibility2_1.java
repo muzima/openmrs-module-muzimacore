@@ -309,6 +309,8 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     }
 
     private List getAddedCohortMembersList(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException{
+        String increaseConcatLimit = "SET SESSION group_concat_max_len=1000000";
+        getSessionFactory().getCurrentSession().createSQLQuery(increaseConcatLimit).executeUpdate();
         CohortService cohortService = Context.getService(CohortService.class);
         Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
         CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
@@ -379,6 +381,8 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     }
 
     private List getRemovedCohortMembersList(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId ) throws DAOException{
+        String increaseConcatLimit = "SET SESSION group_concat_max_len=1000000";
+        getSessionFactory().getCurrentSession().createSQLQuery(increaseConcatLimit).executeUpdate();
         CohortService cohortService = Context.getService(CohortService.class);
         Cohort cohort = cohortService.getCohortByUuid(cohortUuid);
         CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
@@ -520,6 +524,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
         }
+
         if(addLocationAndProviderParameter){
             query.setParameter("defaultLocation", defaultLocation);
             query.setParameter("providerId", providerId);
@@ -540,7 +545,6 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
             }
         }
         patientIds.addAll(addedMembersIds);
-
 
         if (!patientIds.isEmpty()) {
             Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Patient.class);
@@ -622,6 +626,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
         if (syncDate != null) {
             query.setParameter("syncDate", syncDate);
         }
+
         if(addLocationAndProviderParameter){
             query.setParameter("defaultLocation", defaultLocation);
             query.setParameter("providerId", providerId);
