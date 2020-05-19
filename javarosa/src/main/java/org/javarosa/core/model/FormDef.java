@@ -700,8 +700,6 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
 							return "";
 						}
 						
-						System.out.println("here!!");
-						
 						Vector<SelectChoice> choices = q.getChoices();
 						for (SelectChoice ch : choices) {
 							if (ch.getValue().equals(value)) {

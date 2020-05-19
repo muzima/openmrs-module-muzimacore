@@ -13,10 +13,16 @@
  */
 package org.openmrs.module.muzima.handler;
 
+import com.jayway.jsonpath.InvalidPathException;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Patient;
 import org.openmrs.Person;
+import org.openmrs.PersonAddress;
+import org.openmrs.PersonAttribute;
 import org.openmrs.PersonName;
 import org.openmrs.Relationship;
 import org.openmrs.RelationshipType;
@@ -24,21 +30,28 @@ import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
 import org.openmrs.module.muzima.model.QueueData;
+import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
+import java.util.TreeSet;
+
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAdttributeFromJsonObject;
 
 /**
  *  This Handler processes relationships received from {@link org.openmrs.module.muzima.model.DataSource} = "mobile"
  *  The handler will:
- *      <b>Create a new relationship between to persons based on their uuid</b>
+ *      <b>Create a new relationship between two persons based on their uuid</b>
  *      <b>Update a relationship between to persons based on their uuid</b>
- *      <b>Delete a relationship between to persons based on their uuid</b>
+ *      <b>Delete a relationship between twwo persons based on their uuid</b>
  *      <b>Throw an error to the {@link org.openmrs.module.muzima.model.ErrorData} where any of this fails</b>
  *
  * @author sthaiya
@@ -71,7 +84,7 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
              It should add the runtime dao Exception while saving the data into @queueProcessorException collection */
             if (!e.getClass().equals(QueueProcessorException.class)) {
                 queueProcessorException.addException(new Exception("Exception while processing relationship payload ",e));
-                e.printStackTrace();
+                log.error(e);
             }
         } finally {
             if (queueProcessorException.anyExceptions()) {
@@ -85,8 +98,19 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
         log.info("Processing relationship form data: " + queueData.getUuid());
         queueProcessorException = new QueueProcessorException();
         try {
+            personService = Context.getPersonService();
             payload = queueData.getPayload();
-            if (personService.getPersonByUuid(queueData.getPatientUuid()) == null)
+            String temporaryUuid = queueData.getPatientUuid();
+            Person patient = personService.getPersonByUuid(temporaryUuid);
+            if (patient == null){
+                    RegistrationDataService dataService = Context.getService(RegistrationDataService.class);
+                    RegistrationData registrationData = dataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
+                    if(registrationData!=null) {
+                        patient = Context.getPatientService().getPatientByUuid(registrationData.getAssignedUuid());
+                    }
+            }
+
+            if(patient == null)
                 queueProcessorException.addException(new Exception("Unable to validate a relationship patient"));
 
             if (personService.getRelationshipTypeByUuid(getRelationshipTypeUuidFromPayload()) == null)
@@ -94,6 +118,7 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
 
             return true;
         } catch (Exception e) {
+            log.error("Exception while validating payload ",e);
             queueProcessorException.addException(new Exception("Exception while validating payload ",e));
             return false;
         } finally {
@@ -130,6 +155,8 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
                 person.setBirthdateEstimated(getPersonBirthDateEstimatedFromPayload(root));
                 person.setGender(getPersonGenderFromPayload(root));
                 person.setCreator(getCreatorFromPayload());
+                person.setAddresses(getPersonAddressesFromPayload(root));
+                person.setAttributes(getPersonAttributesFromPayload(root));
 
                 // We reuse the person uuid created on the mobile device
                 person.setUuid(personUuid);
@@ -205,6 +232,61 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
         } else {
             return  user;
         }
+    }
+    private Set<PersonAddress> getPersonAddressesFromPayload(String root) {
+        Set<PersonAddress> addresses = new TreeSet<PersonAddress>();
+        try {
+            Object patientAddressObject = JsonUtils.readAsObject(payload, root + "['addresses']");
+            if (JsonUtils.isJSONArrayObject(patientAddressObject)) {
+                for (Object personAddressJSONObject:(JSONArray) patientAddressObject) {
+                    PersonAddress patientAddress = getPersonAddressFromJsonObject((JSONObject) personAddressJSONObject);
+                    if(patientAddress != null){
+                        addresses.add(patientAddress);
+                    }
+                }
+            } else {
+                PersonAddress patientAddress = getPersonAddressFromJsonObject((JSONObject) patientAddressObject);
+                if(patientAddress != null){
+                    addresses.add(patientAddress);
+                }
+            }
+        } catch (InvalidPathException e) {
+            log.error("Error while parsing person address", e);
+        }
+        return addresses;
+    }
+
+    private Set<PersonAttribute> getPersonAttributesFromPayload(String root) {
+        Set<PersonAttribute> attributes = new TreeSet<PersonAttribute>();
+        try {
+            Object patientAttributeObject = JsonUtils.readAsObject(payload, root + "['attributes']");
+            if (JsonUtils.isJSONArrayObject(patientAttributeObject)) {
+                for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
+                    try {
+                        PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
+                        if (personAttribute != null) {
+                            attributes.add(personAttribute);
+                        }
+                    } catch (Exception e){
+                        queueProcessorException.addException(e);
+                        log.error(e);
+                    }
+                }
+            } else {
+                try {
+                    PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) patientAttributeObject);
+                    if (personAttribute != null) {
+                        attributes.add(personAttribute);
+                    }
+                } catch (Exception e){
+                    queueProcessorException.addException(e);
+                    log.error(e);
+                }
+            }
+        } catch (InvalidPathException ex) {
+            log.error("Error while parsing person attribute", ex);
+        }
+        return attributes;
     }
 
     @Override

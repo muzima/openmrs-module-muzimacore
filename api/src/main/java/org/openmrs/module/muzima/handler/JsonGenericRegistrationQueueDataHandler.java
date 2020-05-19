@@ -18,6 +18,7 @@ import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.User;
 import org.openmrs.annotation.Handler;
@@ -55,6 +56,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAdttributeFromJsonObject;
+
 /**
  * TODO: Write brief description about the class here.
  */
@@ -80,6 +85,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         try {
             if (validate(queueData)) {
                 registerUnsavedPatient();
+
                 Object obsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['observation']");
                 if (obsObject != null) {
                     QueueData encounterQueueData = new QueueData();
@@ -154,6 +160,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         setPatientBirthDateFromPayload();
         setPatientBirthDateEstimatedFromPayload();
         setPatientGenderFromPayload();
+        setPatientDeadFromPayload();
         setPatientNameFromPayload();
         setPatientAddressesFromPayload();
         setPersonAttributesFromPayload();
@@ -303,10 +310,12 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
                     new Exception("Cannot create identifier. Supplied identifier value is blank for identifier type name:'"
                             + identifierTypeName + "', uuid:'" + identifierTypeUuid + "'"));
         }
-
-        PatientIdentifierType identifierType = Context.getPatientService()
-                .getPatientIdentifierTypeByUuid(identifierTypeUuid);
-        if (identifierType == null) {
+        PatientIdentifierType identifierType = null;
+        if (StringUtils.isNotBlank(identifierTypeUuid)) {
+            identifierType = Context.getPatientService()
+                    .getPatientIdentifierTypeByUuid(identifierTypeUuid);
+        }
+        if (identifierType == null && StringUtils.isNotBlank(identifierTypeName)) {
             identifierType = Context.getPatientService()
                     .getPatientIdentifierTypeByName(identifierTypeName);
         }
@@ -360,6 +369,11 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         unsavedPatient.setGender(gender);
     }
 
+    private void setPatientDeadFromPayload() {
+        Boolean isDead = JsonUtils.readAsBoolean(payload, "$['patient']['patient.persondead']");
+        unsavedPatient.setDead(isDead);
+    }
+
     private void setPatientNameFromPayload() {
         String givenName = JsonUtils.readAsString(payload, "$['patient']['patient.given_name']");
         String familyName = JsonUtils.readAsString(payload, "$['patient']['patient.family_name']");
@@ -369,7 +383,6 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         } catch (Exception e) {
             log.error(e);
         }
-
         PersonName personName = new PersonName();
         personName.setGivenName(givenName);
         personName.setMiddleName(middleName);
@@ -402,13 +415,13 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
             Object patientAddressObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personaddress']");
             if (JsonUtils.isJSONArrayObject(patientAddressObject)) {
                 for (Object personAddressJSONObject:(JSONArray) patientAddressObject) {
-                    PersonAddress patientAddress = getPatientAddressFromJsonObject((JSONObject) personAddressJSONObject);
+                    PersonAddress patientAddress = getPersonAddressFromJsonObject((JSONObject) personAddressJSONObject);
                     if(patientAddress != null){
                         addresses.add(patientAddress);
                     }
                 }
             } else {
-                PersonAddress patientAddress = getPatientAddressFromJsonObject((JSONObject) patientAddressObject);
+                PersonAddress patientAddress = getPersonAddressFromJsonObject((JSONObject) patientAddressObject);
                 if(patientAddress != null){
                     addresses.add(patientAddress);
                 }
@@ -418,7 +431,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
             Set keys = patientObject.keySet();
             for(Object key:keys){
                 if(((String)key).startsWith("patient.personaddress^")){
-                    PersonAddress patientAddress = getPatientAddressFromJsonObject((JSONObject) patientObject.get(key));
+                    PersonAddress patientAddress = getPersonAddressFromJsonObject((JSONObject) patientObject.get(key));
                     if(patientAddress != null){
                         addresses.add(patientAddress);
                     }
@@ -434,50 +447,31 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
 
     }
 
-    private PersonAddress getPatientAddressFromJsonObject(JSONObject addressJsonObject){
-        if(addressJsonObject == null){
-            return null;
-        }
-        PersonAddress patientAddress = new PersonAddress();
-        patientAddress.setAddress1((String)getElementFromJsonObject(addressJsonObject,"address1"));
-        patientAddress.setAddress2((String)getElementFromJsonObject(addressJsonObject,"address2"));
-        patientAddress.setAddress3((String)getElementFromJsonObject(addressJsonObject,"address3"));
-        patientAddress.setAddress4((String)getElementFromJsonObject(addressJsonObject,"address4"));
-        patientAddress.setAddress5((String)getElementFromJsonObject(addressJsonObject,"address5"));
-        patientAddress.setAddress6((String)getElementFromJsonObject(addressJsonObject,"address6"));
-        patientAddress.setCityVillage((String)getElementFromJsonObject(addressJsonObject,"cityVillage"));
-        patientAddress.setCountyDistrict((String)getElementFromJsonObject(addressJsonObject,"countyDistrict"));
-        patientAddress.setStateProvince((String)getElementFromJsonObject(addressJsonObject,"stateProvince"));
-        patientAddress.setCountry((String)getElementFromJsonObject(addressJsonObject,"country"));
-        patientAddress.setPostalCode((String)getElementFromJsonObject(addressJsonObject,"postalCode"));
-        patientAddress.setLatitude((String)getElementFromJsonObject(addressJsonObject,"latitude"));
-        patientAddress.setLongitude((String)getElementFromJsonObject(addressJsonObject,"longitude"));
-        patientAddress.setStartDate((Date) getElementFromJsonObject(addressJsonObject,"startDate"));
-        patientAddress.setEndDate((Date) getElementFromJsonObject(addressJsonObject,"endDate"));
-        patientAddress.setPreferred((Boolean) getElementFromJsonObject(addressJsonObject,"preferred"));
-
-        if(patientAddress.isBlank()){
-            return null;
-        } else {
-            return patientAddress;
-        }
-    }
-
     private void setPersonAttributesFromPayload() {
         Set<PersonAttribute> attributes = new TreeSet<PersonAttribute>();
         try {
             Object patientAttributeObject = JsonUtils.readAsObject(payload, "$['patient']['patient.personattribute']");
             if (JsonUtils.isJSONArrayObject(patientAttributeObject)) {
                 for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
-                    PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
-                    if(personAttribute != null){
-                        attributes.add(personAttribute);
+                    try {
+                        PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
+                        if (personAttribute != null) {
+                            attributes.add(personAttribute);
+                        }
+                    } catch (Exception e){
+                        queueProcessorException.addException(e);
+                        log.error(e);
                     }
                 }
             } else {
-                PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) patientAttributeObject);
-                if(personAttribute != null){
-                    attributes.add(personAttribute);
+                try {
+                    PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) patientAttributeObject);
+                    if (personAttribute != null) {
+                        attributes.add(personAttribute);
+                    }
+                } catch (Exception e){
+                    queueProcessorException.addException(e);
+                    log.error(e);
                 }
             }
 
@@ -485,9 +479,14 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
             Set keys = patientObject.keySet();
             for(Object key:keys){
                 if(((String)key).startsWith("patient.personattribute^")){
-                    PersonAttribute personAttribute = getPatientAdttributeFromJsonObject((JSONObject) patientObject.get(key));
-                    if(personAttribute != null){
-                        attributes.add(personAttribute);
+                    try {
+                        PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) patientObject.get(key));
+                        if (personAttribute != null) {
+                            attributes.add(personAttribute);
+                        }
+                    } catch (Exception e){
+                        queueProcessorException.addException(e);
+                        log.error(e);
                     }
                 }
             }
@@ -498,39 +497,6 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         if(!attributes.isEmpty()) {
             unsavedPatient.setAttributes(attributes);
         }
-    }
-
-    private PersonAttribute getPatientAdttributeFromJsonObject(JSONObject attributeJsonObject){
-        if(attributeJsonObject == null){
-            return null;
-        }
-
-        String attributeValue = (String) getElementFromJsonObject(attributeJsonObject,"attribute_value");
-        if(StringUtils.isBlank(attributeValue)){
-            return null;
-        }
-
-        String attributeTypeName = (String) getElementFromJsonObject(attributeJsonObject,"attribute_type_name");
-        String attributeTypeUuid = (String) getElementFromJsonObject(attributeJsonObject,"attribute_type_uuid");
-
-        PersonService personService = Context.getPersonService();
-        PersonAttributeType attributeType = personService.getPersonAttributeTypeByUuid(attributeTypeUuid);
-
-        if(attributeType == null){
-            attributeType = personService.getPersonAttributeTypeByName(attributeTypeName);
-        }
-
-        if (attributeType == null) {
-            queueProcessorException.addException(
-                    new Exception("Unable to find Person Attribute Type by name: '" + attributeTypeName
-                            + "' , uuid: '" +attributeTypeUuid + "'")
-            );
-        }
-
-        PersonAttribute personAttribute = new PersonAttribute();
-        personAttribute.setAttributeType(attributeType);
-        personAttribute.setValue(attributeValue);
-        return personAttribute;
     }
 
     private  void setUnsavedPatientCreatorFromPayload(){
@@ -565,12 +531,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
         return savedPatient;
     }
 
-    private Object getElementFromJsonObject(JSONObject jsonObject, String key){
-        if(jsonObject.containsKey(key)) {
-            return jsonObject.get(key);
-        }
-        return null;
-    }
+
 
     @Override
     public boolean accept(final QueueData queueData) {
