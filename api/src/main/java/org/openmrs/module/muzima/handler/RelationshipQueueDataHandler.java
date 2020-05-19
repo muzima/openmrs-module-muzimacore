@@ -19,7 +19,6 @@ import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
@@ -44,14 +43,14 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
-import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAdttributeFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAttributeFromJsonObject;
 
 /**
  *  This Handler processes relationships received from {@link org.openmrs.module.muzima.model.DataSource} = "mobile"
  *  The handler will:
  *      <b>Create a new relationship between two persons based on their uuid</b>
  *      <b>Update a relationship between to persons based on their uuid</b>
- *      <b>Delete a relationship between twwo persons based on their uuid</b>
+ *      <b>Delete a relationship between two persons based on their uuid</b>
  *      <b>Throw an error to the {@link org.openmrs.module.muzima.model.ErrorData} where any of this fails</b>
  *
  * @author sthaiya
@@ -261,9 +260,9 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
         try {
             Object patientAttributeObject = JsonUtils.readAsObject(payload, root + "['attributes']");
             if (JsonUtils.isJSONArrayObject(patientAttributeObject)) {
-                for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
+                for (Object personAttributeJSONObject:(JSONArray) patientAttributeObject) {
                     try {
-                        PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
+                        PersonAttribute personAttribute = getPersonAttributeFromJsonObject((JSONObject) personAttributeJSONObject);
                         if (personAttribute != null) {
                             attributes.add(personAttribute);
                         }
@@ -274,7 +273,7 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
                 }
             } else {
                 try {
-                    PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) patientAttributeObject);
+                    PersonAttribute personAttribute = getPersonAttributeFromJsonObject((JSONObject) patientAttributeObject);
                     if (personAttribute != null) {
                         attributes.add(personAttribute);
                     }

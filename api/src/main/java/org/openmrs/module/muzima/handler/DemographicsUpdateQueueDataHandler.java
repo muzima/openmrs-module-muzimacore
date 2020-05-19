@@ -50,7 +50,7 @@ import java.util.TreeSet;
 
 import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
-import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAdttributeFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAttributeFromJsonObject;
 
 /**
  */
@@ -553,7 +553,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
             if (JsonUtils.isJSONArrayObject(patientAttributeObject)) {
                 for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
                     try {
-                        PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
+                        PersonAttribute personAttribute = getPersonAttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
                         if (personAttribute != null) {
                             attributes.add(personAttribute);
                         }
@@ -563,7 +563,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
                 }
             } else {
                 try {
-                    PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) patientAttributeObject);
+                    PersonAttribute personAttribute = getPersonAttributeFromJsonObject((JSONObject) patientAttributeObject);
                     if (personAttribute != null) {
                         attributes.add(personAttribute);
                     }
@@ -577,7 +577,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
             for(Object key:keys){
                 if(((String)key).startsWith("demographicsupdate.personattribute^")){
                     try {
-                        PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) patientObject.get(key));
+                        PersonAttribute personAttribute = getPersonAttributeFromJsonObject((JSONObject) patientObject.get(key));
                         if (personAttribute != null) {
                             attributes.add(personAttribute);
                         }

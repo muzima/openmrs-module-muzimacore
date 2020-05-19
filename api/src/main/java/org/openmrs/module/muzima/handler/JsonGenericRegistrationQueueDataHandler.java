@@ -58,7 +58,7 @@ import java.util.UUID;
 import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.PATIENT_IDENTIFIER_AUTOGENERATTION_SETTING_PROPERTY;
 import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
-import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAdttributeFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAttributeFromJsonObject;
 
 /**
  * TODO: Write brief description about the class here.
@@ -465,7 +465,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
             if (JsonUtils.isJSONArrayObject(patientAttributeObject)) {
                 for (Object personAdttributeJSONObject:(JSONArray) patientAttributeObject) {
                     try {
-                        PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
+                        PersonAttribute personAttribute = getPersonAttributeFromJsonObject((JSONObject) personAdttributeJSONObject);
                         if (personAttribute != null) {
                             attributes.add(personAttribute);
                         }
@@ -476,7 +476,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
                 }
             } else {
                 try {
-                    PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) patientAttributeObject);
+                    PersonAttribute personAttribute = getPersonAttributeFromJsonObject((JSONObject) patientAttributeObject);
                     if (personAttribute != null) {
                         attributes.add(personAttribute);
                     }
@@ -491,7 +491,7 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
             for(Object key:keys){
                 if(((String)key).startsWith("patient.personattribute^")){
                     try {
-                        PersonAttribute personAttribute = getPersonAdttributeFromJsonObject((JSONObject) patientObject.get(key));
+                        PersonAttribute personAttribute = getPersonAttributeFromJsonObject((JSONObject) patientObject.get(key));
                         if (personAttribute != null) {
                             attributes.add(personAttribute);
                         }

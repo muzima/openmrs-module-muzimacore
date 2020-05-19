@@ -13,7 +13,7 @@ import java.util.Date;
 import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
 
 public class PersonCreationUtils {
-    public static PersonAttribute getPersonAdttributeFromJsonObject(JSONObject attributeJsonObject) throws Exception{
+    public static PersonAttribute getPersonAttributeFromJsonObject(JSONObject attributeJsonObject) throws Exception{
         if(attributeJsonObject == null){
             return null;
         }
