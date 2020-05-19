@@ -68,8 +68,13 @@ public class CohortDefinitionDataServiceImpl extends BaseOpenmrsService implemen
     public Number countCohortDefinitionData(){
         return dao.count();
     }
-    public void  processCohortDefinitionData(final String uuid){
-        this.processor=new ExpandedCohortProcessor();
+
+    public void  processCohortDefinitionData(final String uuid) {
+        this.processor = new ExpandedCohortProcessor();
         processor.processExpandedCohort(uuid);
+    }
+
+    public CohortDefinitionData getCohortDefinitionDataByCohortId(final Integer cohortId){
+        return dao.getCohortDefinitionDataByCohortId(cohortId);
     }
 }

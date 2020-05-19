@@ -19,10 +19,13 @@
                         <th>Cohort Name</th>
                         <th>Description</th>
                         <th>Criteria</th>
+                        <th>Filter Query</th>
                         <th title="Whether this cohort definition shall be executed when scheduler task runs next.">Scheduled</th>
                         <th title="Whether new members who meet criteria can be added to the cohort.">Add members</th>
                         <th title="Whether members who no longer meet criteria should be removed from the cohort
                         (or should be marked as inactive members for OpenMRS versions 2.1.0 and above.)">Remove members</th>
+                        <th>Filter by Provider</th>
+                        <th>Filter by Location</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -34,9 +37,12 @@
                         <td>{{cohortDefinition.name}}</td>
                         <td>{{cohortDefinition.description}}</td>
                         <td><pre>{{cohortDefinition.definition}}</pre></td>
+                        <td><pre>{{cohortDefinition.filterQuery}}</pre></td>
                         <td align="center">{{cohortDefinition.isScheduledForExecution}}</td>
                         <td align="center">{{cohortDefinition.isMemberAdditionEnabled}}</td>
                         <td align="center">{{cohortDefinition.isMemberRemovalEnabled}}</td>
+                        <td align="center">{{cohortDefinition.isFilterByProviderEnabled}}</td>
+                        <td align="center">{{cohortDefinition.isFilterByLocationEnabled}}</td>
                     </tr>
                     </tbody>
                 </table>

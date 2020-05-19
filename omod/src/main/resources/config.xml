@@ -53,6 +53,7 @@
         MuzimaSetting.hbm.xml
         ReportConfiguration.hbm.xml
         MuzimaPatientReport.hbm.xml
+        MuzimaCohortMetadata.hbm.xml
     </mappingFiles>
 
     <!-- Internationalization -->

@@ -63,14 +63,11 @@ public class ExpandedCohortProcessor {
     }
 
     private void process(final String uuid){
-        try {
-            CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
-            CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByUuid(uuid);
-            ExpandedCohortProcessorService expandedCohortProcessorService = Context.getRegisteredComponent("muzima.ExpandedCohortProcessorService",ExpandedCohortProcessorService.class);
-            if(cohortDefinitionData !=null ){
-                expandedCohortProcessorService.process(cohortDefinitionData);
-            }
-        } finally {
+        CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+        CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByUuid(uuid);
+        ExpandedCohortProcessorService expandedCohortProcessorService = Context.getRegisteredComponent("muzima.ExpandedCohortProcessorService",ExpandedCohortProcessorService.class);
+        if(cohortDefinitionData !=null ){
+            expandedCohortProcessorService.process(cohortDefinitionData);
         }
     }
 }

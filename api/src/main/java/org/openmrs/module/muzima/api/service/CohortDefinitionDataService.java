@@ -28,4 +28,5 @@ public interface CohortDefinitionDataService  extends OpenmrsService {
     List<CohortDefinitionData> getAllScheduledCohortDefinitionData();
     Number countCohortDefinitionData();
     void processCohortDefinitionData(final String uuid);
+    CohortDefinitionData getCohortDefinitionDataByCohortId(final Integer id);
 }
