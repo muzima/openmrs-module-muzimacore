@@ -75,8 +75,20 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         if(cohortDefinition.isScheduledForExecution===undefined){
             cohortDefinition.isScheduledForExecution=false;
         }
+        if(cohortDefinition.isMemberAdditionEnabled===undefined){
+            cohortDefinition.isMemberAdditionEnabled=false;
+        }
+        if(cohortDefinition.isMemberRemovalEnabled===undefined){
+            cohortDefinition.isMemberRemovalEnabled=false;
+        }
+        if(cohortDefinition.isFilterByProviderEnabled===undefined){
+            cohortDefinition.isFilterByProviderEnabled=false;
+        }
+        if(cohortDefinition.isFilterByLocationEnabled===undefined){
+            cohortDefinition.isFilterByLocationEnabled=false;
+        }
         $cohortDefinitionService.saveCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
-            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled).
+            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled, cohortDefinition.filterQuery).
             then(function () {
                 $location.path("/cohortDefinitions");
             })
@@ -91,8 +103,8 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
              cohortDefinition.isScheduledForExecution=false;
          }
          $cohortDefinitionService.deleteCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
-            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled,
-            cohortDefinition.retireReason).
+            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled,
+            cohortDefinition.retireReason, cohortDefinition.filterQuery).
             then(function () {
                 $location.path("/cohortDefinitions");
             });

@@ -58,21 +58,23 @@ public class CohortMemberResource extends DelegatingCrudResource<FakeCohortMembe
         String uuidParameter = request.getParameter("uuid");
         String membersRemovedOption = request.getParameter("members_removed");
         String syncDateParameter = request.getParameter("syncDate");
+        String defaultLocation = request.getParameter("defaultLocation");
+        String providerId = request.getParameter("providerId");
         List<FakeCohortMember> members = new ArrayList<FakeCohortMember>();
         if (uuidParameter != null) {
             Date syncDate = ResourceUtils.parseDate(syncDateParameter);
             CoreService coreService = Context.getService(CoreService.class);
-            final int patientCount = coreService.countPatients(uuidParameter, syncDate).intValue();
+            final int patientCount = coreService.countPatients(uuidParameter, syncDate, defaultLocation, providerId).intValue();
             final List<Patient> patients = new ArrayList<Patient>();
             boolean needsPaging = false;
 
             if(StringUtils.isNotEmpty(membersRemovedOption)){
-                List<Patient> removedMembers = coreService.getPatientsRemovedFromCohort(uuidParameter, syncDate);
+                List<Patient> removedMembers = coreService.getPatientsRemovedFromCohort(uuidParameter, syncDate, defaultLocation, providerId);
                 patients.addAll(removedMembers);
                 needsPaging = true;
             } else {
                 List<Patient> addedMembers = coreService.getPatients(uuidParameter, syncDate,
-                        context.getStartIndex(), context.getLimit());
+                        context.getStartIndex(), context.getLimit(), defaultLocation, providerId);
                 patients.addAll(addedMembers);
             }
 

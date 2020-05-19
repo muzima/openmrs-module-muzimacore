@@ -1832,4 +1832,110 @@
         </insert>
     </changeSet>
 
+    <changeSet id="muzima-20200320140300" author="bmokaya" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="enable_filter_by_provider"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the enable_filter_by_provider column to expanded_cohort_definition
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="enable_filter_by_provider" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20200320140400" author="bmokaya" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="enable_filter_by_location"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the enable_filter_by_location column to expanded_cohort_definition
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="enable_filter_by_location" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20200320140500" author="bmokaya" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists tableName="expanded_cohort_definition" columnName="filter_query"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding the filter_query column to expanded_cohort_definition
+        </comment>
+        <addColumn tableName="expanded_cohort_definition">
+            <column name="filter_query" type="text" />
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="muzima-20200324125000" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="muzima_cohort_metadata"/></not>
+        </preConditions>
+        <comment>
+            Creating the muzima_cohort_metadata
+        </comment>
+        <createTable tableName="muzima_cohort_metadata">
+            <column name="id" type="int"  autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patient_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_id" type="int"/>
+            <column name="provider_id" type="int"/>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="voided" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_creator"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_changed_by"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_voided_by"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="voided_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_cohort_id"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="cohort_id"
+                                 referencedTableName="cohort" referencedColumnNames="cohort_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_patient_id"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="patient_id"
+                                 referencedTableName="patient" referencedColumnNames="patient_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_location_id"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="location_id"
+                                 referencedTableName="location" referencedColumnNames="location_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_metadata_provider_id"
+                                 baseTableName="muzima_cohort_metadata" baseColumnNames="provider_id"
+                                 referencedTableName="provider" referencedColumnNames="provider_id"/>
+
+    </changeSet>
 </databaseChangeLog>
