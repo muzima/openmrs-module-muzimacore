@@ -1,4 +1,4 @@
-function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
+function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormService) {
 
     // initialize control objects
     $scope.search = {forms: '', cohorts: '', locations: '', providers: '', concepts: ''};
@@ -14,6 +14,7 @@ function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
     $scope.extractedConcepts = [];
     $scope.extractedNotUsedConcepts = [];
     $scope.configConcepts = [];
+    $scope.configSettings = [];
     $scope.retire_config = false;
     $scope.retire_reason = false;
 
@@ -38,6 +39,8 @@ function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
                     $scope.configProviders = configString.config["providers"];
                 if (configString.config["concepts"] != undefined)
                     $scope.configConcepts = configString.config["concepts"];
+                if (configString.config["settings"] != undefined)
+                    $scope.configSettings = configString.config["settings"];
             }
         }).then(function () {
             $scope.bindData();
@@ -79,6 +82,7 @@ function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
         configJsonString.config["locations"] = $scope.configLocations;
         configJsonString.config["providers"] = $scope.configProviders;
         configJsonString.config["concepts"] = $scope.configConcepts;
+        configJsonString.config["settings"] = $scope.configSettings;
         return angular.toJson(configJsonString);
     };
 
@@ -356,6 +360,84 @@ function ConfigCtrl($scope, $routeParams, $location, $configs, FormService) {
             });
             $scope.selected.concepts = [];
         }
+    };
+
+
+    /****************************************************************************************
+     ***** Group of methods to manipulate settings
+     *****************************************************************************************/
+    $scope.$watch('search.settings', function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            $configs.searchConfigSettings($scope.search.settings).
+            then(function (response) {
+                $scope.settings = response.data.objects;
+            });
+        }
+    }, true);
+
+    $scope.formatSettingDisplay = function (setting) {
+        var value = '';
+        if (setting.datatype == 'BOOLEAN'){
+            value = setting.value == true? 'Enabled':'Disabled';
+        } else if(setting.datatype == 'PASSWORD'){
+            for(i=0;i<setting.value.length;i++)
+            {
+                value=value+"*";
+            }
+        } else {
+            value = setting.value
+        }
+        return setting.name + ' : ' + value;
+    }
+    var showSettingEditModal = function(setting) {
+        console.log(showSettingEditModal);
+        $scope.setting = setting;
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: '../../moduleResources/muzimacore/partials/editConfigSetting.html',
+            size: 'md',
+            scope: $scope,
+            resolve: {
+                items: function () {
+                    return $scope.setting;
+                }
+            }
+        });
+        $scope.dismiss = function(){
+            modalInstance.close();
+        }
+    }
+
+    $scope.addSetting = function(setting) {
+        var settingExists = _.find($scope.configSettings, function (configSetting) {
+            return configSetting.uuid == setting.uuid
+        });
+        if (!settingExists) {
+            $scope.configSettings.push(setting);
+            $scope.search.settings = '';
+        }
+        showSettingEditModal(setting);
+    };
+
+    $scope.chosenSetting = function (value) {
+        $scope.selected.setting = value;
+    };
+
+    $scope.removeSetting = function () {
+        angular.forEach($scope.configSettings, function (configSetting, index) {
+            if (configSetting.uuid === $scope.selected.setting) {
+                $scope.configSettings.splice(index, 1);
+                $scope.selected.setting = '';
+            }
+        });
+    };
+
+    $scope.editSettingValue = function () {
+        angular.forEach($scope.configSettings, function (configSetting, index) {
+            if (configSetting.uuid === $scope.selected.setting) {
+                showSettingEditModal(configSetting);
+            }
+        });
     };
 
     /****************************************************************************************

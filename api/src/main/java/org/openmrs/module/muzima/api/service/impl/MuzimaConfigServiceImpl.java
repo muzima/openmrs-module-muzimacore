@@ -5,6 +5,7 @@ import org.openmrs.module.muzima.api.db.MuzimaConfigDAO;
 import org.openmrs.module.muzima.api.service.MuzimaConfigService;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 
+import java.util.Date;
 import java.util.List;
 
 public class MuzimaConfigServiceImpl extends BaseOpenmrsService implements MuzimaConfigService {
@@ -46,8 +47,8 @@ public class MuzimaConfigServiceImpl extends BaseOpenmrsService implements Muzim
     }
 
     @Override
-    public List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize) {
-        return dao.getPagedConfigs(search, pageNumber, pageSize);
+    public List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize, Date syncDate) {
+        return dao.getPagedConfigs(search, pageNumber, pageSize, syncDate);
     }
 
     @Override

@@ -98,6 +98,26 @@ public class HibernateMuzimaSettingDao implements MuzimaSettingDao{
     }
 
     /**
+     * Get settings with matching search term.
+     *
+     * @param search     the search term.
+     * @return list of settings for the page.
+     */
+    public List<MuzimaSetting> getSettings(final String search) {
+        Criteria criteria = session().createCriteria(mappedClass);
+        if (StringUtils.isNotEmpty(search)) {
+            Disjunction disjunction = Restrictions.disjunction();
+            disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("property", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.ilike("description", search, MatchMode.ANYWHERE));
+            criteria.add(disjunction);
+        }
+
+        criteria.addOrder(Order.desc("dateCreated"));
+        return criteria.list();
+    }
+
+    /**
      * Get the total number of settings with matching search term.
      *
      *
