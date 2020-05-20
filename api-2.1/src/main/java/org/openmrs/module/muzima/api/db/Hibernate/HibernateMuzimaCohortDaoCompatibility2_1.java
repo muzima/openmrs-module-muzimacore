@@ -155,14 +155,14 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                 }
             }
 
-            if(newCohortIdList.size()==0){
-                newCohortIdList.add(0);
-            }
-
             Disjunction disjunction = Restrictions.disjunction();
             if(newCohortIdList.size() > 0) {
                 disjunction.add(Restrictions.in("id", newCohortIdList));
                 criteria.add(disjunction);
+            }
+
+            if(newCohortIdList.size()==0){
+                newCohortIdList.add(0);
             }
 
             criteria.add(
