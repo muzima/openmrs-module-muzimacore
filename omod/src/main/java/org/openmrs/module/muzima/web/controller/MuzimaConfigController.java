@@ -80,9 +80,11 @@ public class MuzimaConfigController {
                     Cohort cohort1 = cohortService.getCohortByUuid(cohortUuid);
                     CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
                     CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort1.getCohortId());
-                    cohort.put("isFilterByLocationEnabled",cohortDefinitionData.getIsFilterByLocationEnabled());
-                    cohort.put("isFilterByProviderEnabled",cohortDefinitionData.getIsFilterByProviderEnabled());
-                    cohortObb.add(cohort);
+                    if(cohortDefinitionData != null) {
+                        cohort.put("isFilterByLocationEnabled", cohortDefinitionData.getIsFilterByLocationEnabled());
+                        cohort.put("isFilterByProviderEnabled", cohortDefinitionData.getIsFilterByProviderEnabled());
+                        cohortObb.add(cohort);
+                    }
                 }
             }
             configJsonObject.put("name",JsonUtils.readAsString(configJson,"$['config']['name']"));
