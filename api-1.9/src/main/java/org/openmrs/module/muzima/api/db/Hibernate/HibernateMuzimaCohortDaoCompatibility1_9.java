@@ -535,8 +535,8 @@ public class HibernateMuzimaCohortDaoCompatibility1_9 implements MuzimaCohortDao
         if(addProviderParameter){
             query.setParameter("providerId", providerId);
         }
-        query.setMaxResults(size);
-        query.setFirstResult(startIndex);
+        //query.setMaxResults(size);
+        //query.setFirstResult(startIndex);
         patientIds = query.list();
         for(int memberId:removedMembersIds) {
             int index = addedMembersIds.indexOf(memberId);
