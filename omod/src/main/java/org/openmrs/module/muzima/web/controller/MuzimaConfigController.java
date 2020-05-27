@@ -83,8 +83,8 @@ public class MuzimaConfigController {
                     if(cohortDefinitionData != null) {
                         cohort.put("isFilterByLocationEnabled", cohortDefinitionData.getIsFilterByLocationEnabled());
                         cohort.put("isFilterByProviderEnabled", cohortDefinitionData.getIsFilterByProviderEnabled());
-                        cohortObb.add(cohort);
                     }
+                    cohortObb.add(cohort);
                 }
             }
             configJsonObject.put("name",JsonUtils.readAsString(configJson,"$['config']['name']"));
