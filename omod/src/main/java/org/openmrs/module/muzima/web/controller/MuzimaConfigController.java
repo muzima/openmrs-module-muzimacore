@@ -80,8 +80,10 @@ public class MuzimaConfigController {
                     Cohort cohort1 = cohortService.getCohortByUuid(cohortUuid);
                     CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
                     CohortDefinitionData cohortDefinitionData = cohortDefinitionDataService.getCohortDefinitionDataByCohortId(cohort1.getCohortId());
-                    cohort.put("isFilterByLocationEnabled",cohortDefinitionData.getIsFilterByLocationEnabled());
-                    cohort.put("isFilterByProviderEnabled",cohortDefinitionData.getIsFilterByProviderEnabled());
+                    if(cohortDefinitionData != null) {
+                        cohort.put("isFilterByLocationEnabled", cohortDefinitionData.getIsFilterByLocationEnabled());
+                        cohort.put("isFilterByProviderEnabled", cohortDefinitionData.getIsFilterByProviderEnabled());
+                    }
                     cohortObb.add(cohort);
                 }
             }
@@ -90,7 +92,8 @@ public class MuzimaConfigController {
             configJsonObject.put("concepts",JsonUtils.readAsObjectList(configJson,"$['config']['concepts']"));
             configJsonObject.put("forms",JsonUtils.readAsObjectList(configJson,"$['config']['forms']"));
             configJsonObject.put("locations",JsonUtils.readAsObjectList(configJson,"$['config']['locations']"));
-            configJsonObject.put("provides",JsonUtils.readAsObjectList(configJson,"$['config']['providers']"));
+            configJsonObject.put("providers",JsonUtils.readAsObjectList(configJson,"$['config']['providers']"));
+            configJsonObject.put("settings",JsonUtils.readAsObjectList(configJson,"$['config']['settings']"));
             configJsonObject.put("cohorts",cohortObb.toArray());
 
             modifiedConfigJson.put("config",configJsonObject);
