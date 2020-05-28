@@ -92,7 +92,8 @@ public class MuzimaConfigController {
             configJsonObject.put("concepts",JsonUtils.readAsObjectList(configJson,"$['config']['concepts']"));
             configJsonObject.put("forms",JsonUtils.readAsObjectList(configJson,"$['config']['forms']"));
             configJsonObject.put("locations",JsonUtils.readAsObjectList(configJson,"$['config']['locations']"));
-            configJsonObject.put("provides",JsonUtils.readAsObjectList(configJson,"$['config']['providers']"));
+            configJsonObject.put("providers",JsonUtils.readAsObjectList(configJson,"$['config']['providers']"));
+            configJsonObject.put("settings",JsonUtils.readAsObjectList(configJson,"$['config']['settings']"));
             configJsonObject.put("cohorts",cohortObb.toArray());
 
             modifiedConfigJson.put("config",configJsonObject);
