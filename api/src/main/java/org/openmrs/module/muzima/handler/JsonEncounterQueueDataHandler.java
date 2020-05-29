@@ -68,6 +68,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY;
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MUZIMA_VISIT_GENERATION_SETTING_PROPERTY;
 
 /**
  * TODO brief class description.
@@ -465,72 +466,79 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         Date encounterDatetime = JsonUtils.readAsDateTime(encounterPayload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat,jsonPayloadTimezone);
         encounter.setEncounterDatetime(encounterDatetime);
 
-        VisitService visitService = Context.getService(VisitService.class);
-        List<Visit> patientVisit =  visitService.getVisitsByPatient(encounter.getPatient(),true,false);
-        Visit encounterVisit = null;
-        Collections.sort(patientVisit, visitDateTimeComparator);
-        for(Visit visit:patientVisit){
-            if(visit.getStopDatetime() == null){
-                if(encounterDatetime.compareTo(visit.getStartDatetime())>=0){
+        MuzimaSetting muzimaVisitSetting = getMuzimaSetting(encounterPayload,MUZIMA_VISIT_GENERATION_SETTING_PROPERTY);
+        boolean isVisitGenerationEnabled = false;
+        if(muzimaVisitSetting != null){
+            isVisitGenerationEnabled = muzimaVisitSetting.getValueBoolean();
+        }
+        if(isVisitGenerationEnabled) {
+            VisitService visitService = Context.getService(VisitService.class);
+            List<Visit> patientVisit = visitService.getVisitsByPatient(encounter.getPatient(), true, false);
+            Visit encounterVisit = null;
+            Collections.sort(patientVisit, visitDateTimeComparator);
+            for (Visit visit : patientVisit) {
+                if (visit.getStopDatetime() == null) {
+                    if (encounterDatetime.compareTo(visit.getStartDatetime()) >= 0) {
+                        encounterVisit = visit;
+                        break;
+                    }
+                } else if (encounterDatetime.compareTo(visit.getStartDatetime()) >= 0 && (encounterDatetime.compareTo(visit.getStopDatetime()) <= 0)) {
                     encounterVisit = visit;
                     break;
                 }
-            } else if (encounterDatetime.compareTo(visit.getStartDatetime())>=0 && (encounterDatetime.compareTo(visit.getStopDatetime())<=0)){
-                encounterVisit = visit;
-                break;
             }
-        }
 
-        if(encounterVisit == null) {
-            MuzimaSetting defaultMuzimaVisitTypeSetting = getDefaultMuzimaVisitType(encounterPayload);
-            String defaultMuzimaVisitTypeUuid = "";
-            if (defaultMuzimaVisitTypeSetting != null) {
-                defaultMuzimaVisitTypeUuid = defaultMuzimaVisitTypeSetting.getValueString();
-                if (!defaultMuzimaVisitTypeUuid.isEmpty()) {
-                    VisitType visitType = visitService.getVisitTypeByUuid(defaultMuzimaVisitTypeUuid);
-                    if (visitType != null) {
-                        String uuid = UUID.randomUUID().toString();
-                        Calendar encounterDate = Calendar.getInstance();
-                        encounterDate.setTime(encounterDatetime);
-                        Calendar startTime = Calendar.getInstance();
-                        startTime.set(Calendar.YEAR,encounterDate.get(Calendar.YEAR));
-                        startTime.set(Calendar.MONDAY,encounterDate.get(Calendar.MONTH));
-                        startTime.set(Calendar.DATE,encounterDate.get(Calendar.DATE));
-                        startTime.set(Calendar.HOUR_OF_DAY,0);
-                        startTime.set(Calendar.MINUTE,0);
-                        startTime.set(Calendar.SECOND,0);
+            if (encounterVisit == null) {
+                MuzimaSetting defaultMuzimaVisitTypeSetting = getMuzimaSetting(encounterPayload, DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY);
+                String defaultMuzimaVisitTypeUuid = "";
+                if (defaultMuzimaVisitTypeSetting != null) {
+                    defaultMuzimaVisitTypeUuid = defaultMuzimaVisitTypeSetting.getValueString();
+                    if (!defaultMuzimaVisitTypeUuid.isEmpty()) {
+                        VisitType visitType = visitService.getVisitTypeByUuid(defaultMuzimaVisitTypeUuid);
+                        if (visitType != null) {
+                            String uuid = UUID.randomUUID().toString();
+                            Calendar encounterDate = Calendar.getInstance();
+                            encounterDate.setTime(encounterDatetime);
+                            Calendar startTime = Calendar.getInstance();
+                            startTime.set(Calendar.YEAR, encounterDate.get(Calendar.YEAR));
+                            startTime.set(Calendar.MONDAY, encounterDate.get(Calendar.MONTH));
+                            startTime.set(Calendar.DATE, encounterDate.get(Calendar.DATE));
+                            startTime.set(Calendar.HOUR_OF_DAY, 0);
+                            startTime.set(Calendar.MINUTE, 0);
+                            startTime.set(Calendar.SECOND, 0);
 
-                        Calendar endTime = Calendar.getInstance();
-                        endTime.set(Calendar.YEAR,encounterDate.get(Calendar.YEAR));
-                        endTime.set(Calendar.MONDAY,encounterDate.get(Calendar.MONTH));
-                        endTime.set(Calendar.DATE,encounterDate.get(Calendar.DATE));
-                        endTime.set(Calendar.HOUR_OF_DAY,23);
-                        endTime.set(Calendar.MINUTE,59);
-                        endTime.set(Calendar.SECOND,59);
+                            Calendar endTime = Calendar.getInstance();
+                            endTime.set(Calendar.YEAR, encounterDate.get(Calendar.YEAR));
+                            endTime.set(Calendar.MONDAY, encounterDate.get(Calendar.MONTH));
+                            endTime.set(Calendar.DATE, encounterDate.get(Calendar.DATE));
+                            endTime.set(Calendar.HOUR_OF_DAY, 23);
+                            endTime.set(Calendar.MINUTE, 59);
+                            endTime.set(Calendar.SECOND, 59);
 
-                        Visit visit = new Visit();
-                        visit.setPatient(encounter.getPatient());
-                        visit.setVisitType(visitType);
-                        visit.setStartDatetime(startTime.getTime());
-                        visit.setStopDatetime(endTime.getTime());
-                        visit.setCreator(user);
-                        visit.setDateCreated(new Date());
-                        visit.setUuid(uuid);
-                        visitService.saveVisit(visit);
-                        encounterVisit = visitService.getVisitByUuid(uuid);
+                            Visit visit = new Visit();
+                            visit.setPatient(encounter.getPatient());
+                            visit.setVisitType(visitType);
+                            visit.setStartDatetime(startTime.getTime());
+                            visit.setStopDatetime(endTime.getTime());
+                            visit.setCreator(user);
+                            visit.setDateCreated(new Date());
+                            visit.setUuid(uuid);
+                            visitService.saveVisit(visit);
+                            encounterVisit = visitService.getVisitByUuid(uuid);
+                        } else {
+                            queueProcessorException.addException(new Exception("Unable to find default visit type with uuid " + defaultMuzimaVisitTypeUuid));
+                        }
                     } else {
-                        queueProcessorException.addException(new Exception("Unable to find default visit type with uuid " + defaultMuzimaVisitTypeUuid));
+                        queueProcessorException.addException(new Exception("Unable to find default visit type. Default visit type setting not set. "));
                     }
+
                 } else {
                     queueProcessorException.addException(new Exception("Unable to find default visit type. Default visit type setting not set. "));
                 }
-
-            } else {
-                queueProcessorException.addException(new Exception("Unable to find default visit type. Default visit type setting not set. "));
             }
-        }
 
-        encounter.setVisit(encounterVisit);
+            encounter.setVisit(encounterVisit);
+        }
     }
 
     private final Comparator<Visit> visitDateTimeComparator = new Comparator<Visit>() {
@@ -575,7 +583,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         return (obs.getConcept().getDatatype().isBoolean() || obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText() || (obs.getConcept().isSet() && obs.isObsGrouping()));
     }
 
-    public MuzimaSetting getDefaultMuzimaVisitType(String encounterPayload){
+    public MuzimaSetting getMuzimaSetting(String encounterPayload,String setting){
         MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);
         MuzimaSetting defaultMuzimaVisitTypeSetting = null;
         String activeSetupConfigUuid = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.setup_config_uuid']");
@@ -583,15 +591,15 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
             MuzimaConfig config = configService.getConfigByUuid(activeSetupConfigUuid);
             if(config != null){
-                defaultMuzimaVisitTypeSetting = config.getConfigMuzimaSettingByProperty(DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY);
+                defaultMuzimaVisitTypeSetting = config.getConfigMuzimaSettingByProperty(setting);
                 if(defaultMuzimaVisitTypeSetting == null){
-                    defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY);
+                    defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(setting);
                 }
             } else {
-                defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY);
+                defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(setting);
             }
         }else{
-            defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY);
+            defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(setting);
         }
 
         return defaultMuzimaVisitTypeSetting;
