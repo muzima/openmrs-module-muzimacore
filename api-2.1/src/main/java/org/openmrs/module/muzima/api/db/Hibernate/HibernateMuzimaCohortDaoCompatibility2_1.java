@@ -452,7 +452,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     @SuppressWarnings("unchecked")
     public List<Patient> getPatients(final String cohortUuid, final Date syncDate,
                                      final int startIndex, final int size, final String defaultLocation, final String providerId) throws DAOException {
@@ -553,7 +553,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public Number countPatients(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException {
         List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
         List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
@@ -657,7 +657,7 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
 
 
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public List<Patient> getPatientsRemovedFromCohort(final String cohortUuid, final Date syncDate, final String defaultLocation, final String providerId) throws DAOException{
         List<Integer> addedMembersIds = getAddedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
         List<Integer> removedMembersIds = getRemovedCohortMembersList(cohortUuid, syncDate, defaultLocation, providerId);
