@@ -76,9 +76,11 @@ public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter>
             } else {
                 encountersDownloadableSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
             }
+        }else{
+            encountersDownloadableSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
         }
 
-        int maxEncounterResultsPerPatient = encountersDownloadableSetting!= null && StringUtils.isNumeric(encountersDownloadableSetting.getValueString()) ?
+        int maxEncounterResultsPerPatient = encountersDownloadableSetting != null && StringUtils.isNumeric(encountersDownloadableSetting.getValueString()) ?
                 Integer.parseInt(encountersDownloadableSetting.getValueString()) : 3; //Setting 3 as default results size
         if(maxEncounterResultsPerPatient == 0){
             return new AlreadyPaged<FakeEncounter>(context, new ArrayList<FakeEncounter>(), false);
