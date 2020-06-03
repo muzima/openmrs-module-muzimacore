@@ -1966,4 +1966,59 @@
                                  referencedTableName="provider" referencedColumnNames="provider_id"/>
 
     </changeSet>
+
+    <changeSet id="muzima-20200527124000" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM visit_type where uuid = '1d697d92-a000-11ea-b1a0-d0577bb73cd4';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add a mUzima default visit type</comment>
+        <insert tableName="visit_type">
+            <column name="name" value="mUzima Visit" />
+            <column name="description" value="Default mUzima Visit" />
+            <column name="date_created" valueDate="2020-05-27T12:40:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="1d697d92-a000-11ea-b1a0-d0577bb73cd4" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20200527124500" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = '4ad0a034-a001-11ea-b1a0-d0577bb73cd4';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add a mUzima default visit type setting</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="mUzima.DefaultVisitType" />
+            <column name="name" value="Default mUzima visit type" />
+            <column name="description" value="Defines the default visit type that will be used while processing mUzima forms. Value is the uuid of the visit type" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_string" value="1d697d92-a000-11ea-b1a0-d0577bb73cd4" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2020-05-27T12:45:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="4ad0a034-a001-11ea-b1a0-d0577bb73cd4" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="muzima-20200528133000" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = '457f8262-a0ce-11ea-b1a0-d0577bb73cd4';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add a mUzima encounter-visit mapping status</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="VisitCreation.isEnabled" />
+            <column name="name" value="mUzima encounter-visit creation status" />
+            <column name="description" value="Defines whether visit should be created if not existing or mapped to encounter while processing mUzima form data." />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="true" />
+            <column name="date_created" valueDate="2020-05-28T13:30:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="457f8262-a0ce-11ea-b1a0-d0577bb73cd4" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>
