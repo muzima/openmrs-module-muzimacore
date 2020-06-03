@@ -52,4 +52,6 @@ public interface MuzimaFormService extends OpenmrsService {
     ValidationMessages validateJavaRosa(String xml);
 
     ValidationMessages validateODK(String xml) throws Exception;
+
+    List<MuzimaForm> getFormByDiscriminator(String discriminator);
 }

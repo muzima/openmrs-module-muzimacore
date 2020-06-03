@@ -24,5 +24,7 @@ public interface MuzimaFormDAO {
 
     List<MuzimaForm> getFormByName(final String name, final Date syncDate);
 
+    List<MuzimaForm> getFormByDiscriminator(final String name);
+
     List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired);
 }

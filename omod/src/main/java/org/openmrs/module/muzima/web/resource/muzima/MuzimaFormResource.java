@@ -68,6 +68,10 @@ public class MuzimaFormResource extends MetadataDelegatingCrudResource<MuzimaFor
             Date syncDate = parseDate(syncDateParameter);
             muzimaForms = Context.getService(MuzimaFormService.class).getFormByName(nameParameter, syncDate);
         }
+
+        if (muzimaForms.isEmpty()){
+            muzimaForms = Context.getService(MuzimaFormService.class).getFormByDiscriminator(nameParameter);
+        }
         return new NeedsPaging<MuzimaForm>(muzimaForms, context);
     }
 

@@ -157,6 +157,10 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         return dao.getFormByName(name, syncDate);
     }
 
+    public List<MuzimaForm> getFormByDiscriminator(final String discriminator) {
+        return dao.getFormByDiscriminator(discriminator);
+    }
+
     public List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired){
         return dao.getMuzimaFormByForm(form, includeRetired);
     }

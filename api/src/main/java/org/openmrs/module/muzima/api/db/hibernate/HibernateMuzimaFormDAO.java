@@ -132,4 +132,12 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
         Criteria criteria  = criteriaform.createCriteria("formDefinition").add(Restrictions.ilike("name", name, MatchMode.ANYWHERE));
         return criteria.list();
     }
+
+    public List<MuzimaForm> getFormByDiscriminator(final String discriminator) {
+        Criteria criteriaform = session().createCriteria(MuzimaForm.class);
+        criteriaform
+                .add(Restrictions.ilike("discriminator", discriminator, MatchMode.ANYWHERE));
+        List<MuzimaForm> list = criteriaform.list();
+        return list;
+    }
 }

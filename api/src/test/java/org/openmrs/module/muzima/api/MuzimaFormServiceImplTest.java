@@ -219,6 +219,12 @@ public class MuzimaFormServiceImplTest extends BaseModuleContextSensitiveTest {
     }
 
     @Test
+    public void findByDiscriminator_shouldFindFormByDiscriminator() {
+        service.getFormByDiscriminator("sample-discriminator-foo");
+        verify(dao, times(1)).getFormByDiscriminator("foo");
+    }
+
+    @Test
     public void validateJavaRosa() throws Exception {
         ValidationMessages messages = service.validateJavaRosa("xml");
         assertThat(messages.getList().get(0).getMessage(), is("Document has no root element!"));
