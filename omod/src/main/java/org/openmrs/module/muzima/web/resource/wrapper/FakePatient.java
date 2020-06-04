@@ -32,7 +32,7 @@ public class FakePatient extends BaseOpenmrsData {
 
     private static final String[] properties = new String[]{
             "uuid", "gender", "birthdate", "birthdateEstimated",
-            "names", "identifier", "attributes", "addresses"
+            "names", "identifiers", "attributes", "addresses"
     };
 
     private Integer id;
