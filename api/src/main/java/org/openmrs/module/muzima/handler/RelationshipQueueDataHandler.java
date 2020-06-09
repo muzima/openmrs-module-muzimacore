@@ -147,25 +147,30 @@ public class RelationshipQueueDataHandler implements QueueDataHandler {
     private Person validateOrCreate(String personUuid, String root){
         Person p = personService.getPersonByUuid(personUuid);
         if (p == null) {
-            Person person = new Person();
-            try {
-                person.addName(getPersonNameFromPayload(root));
-                person.setBirthdate(getPersonBirthDateFromPayload(root));
-                person.setBirthdateEstimated(getPersonBirthDateEstimatedFromPayload(root));
-                person.setGender(getPersonGenderFromPayload(root));
-                person.setCreator(getCreatorFromPayload());
-                person.setAddresses(getPersonAddressesFromPayload(root));
-                person.setAttributes(getPersonAttributesFromPayload(root));
+            RegistrationDataService registrationDataService = Context.getService(RegistrationDataService.class);
+            RegistrationData registrationData = registrationDataService.getRegistrationDataByTemporaryUuid(personUuid);
+            if(registrationData != null){
+                p = personService.getPersonByUuid(registrationData.getAssignedUuid());
+            }else {
+                Person person = new Person();
+                try {
+                    person.addName(getPersonNameFromPayload(root));
+                    person.setBirthdate(getPersonBirthDateFromPayload(root));
+                    person.setBirthdateEstimated(getPersonBirthDateEstimatedFromPayload(root));
+                    person.setGender(getPersonGenderFromPayload(root));
+                    person.setCreator(getCreatorFromPayload());
+                    person.setAddresses(getPersonAddressesFromPayload(root));
+                    person.setAttributes(getPersonAttributesFromPayload(root));
 
-                // We reuse the person uuid created on the mobile device
-                person.setUuid(personUuid);
+                    // We reuse the person uuid created on the mobile device
+                    person.setUuid(personUuid);
 
-                p = personService.savePerson(person);
-            } catch (Exception e) {
-                log.error(e);
+                    p = personService.savePerson(person);
+                } catch (Exception e) {
+                    log.error(e);
+                }
             }
         }
-
         return p;
     }
 
