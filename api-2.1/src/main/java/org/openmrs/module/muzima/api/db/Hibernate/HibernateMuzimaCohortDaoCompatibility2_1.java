@@ -478,14 +478,14 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     " and mcm.cohort_id = m.cohort_id "+
                     " and c.voided = false and p.voided = false " +
                     " and m.end_date is null ";
-            if(cohortDefinitionData.getIsFilterByProviderEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
+            if(cohortDefinitionData.getIsFilterByLocationEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
                 if(StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)){
                     addLocationAndProviderParameter = true;
                     hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation and mcm.provider_id=:providerId ";
                 }else{
                     hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
                 }
-            }else if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+            }else if(cohortDefinitionData.getIsFilterByLocationEnabled()){
                 if(StringUtils.isNotEmpty(defaultLocation)){
                     addLocationParameter = true;
                     hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation ";
@@ -577,14 +577,14 @@ public class HibernateMuzimaCohortDaoCompatibility2_1 implements MuzimaCohortDao
                     " and c.voided = false and p.voided = false " +
                     " and m.end_date is null ";
 
-            if(cohortDefinitionData.getIsFilterByProviderEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
+            if(cohortDefinitionData.getIsFilterByLocationEnabled() && cohortDefinitionData.getIsFilterByProviderEnabled()){
                 if(StringUtils.isNotEmpty(defaultLocation) && StringUtils.isNotEmpty(providerId)){
                     addLocationAndProviderParameter = true;
                     hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation and mcm.provider_id=:providerId ";
                 }else{
                     hqlQuery = hqlQuery +" and mcm.patient_id = 0 ";
                 }
-            }else if(cohortDefinitionData.getIsFilterByProviderEnabled()){
+            }else if(cohortDefinitionData.getIsFilterByLocationEnabled()){
                 if(StringUtils.isNotEmpty(defaultLocation)){
                     addLocationParameter = true;
                     hqlQuery = hqlQuery +" and mcm.location_id = :defaultLocation ";
