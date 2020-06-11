@@ -128,7 +128,32 @@
             <version>1.16.0</version>
             <scope>provided</scope>
         </dependency>
-    </dependencies>
+	<!-- Added -->
+	<dependency>
+             <groupId>org.openmrs.module</groupId>
+             <artifactId>serialization.xstream-api</artifactId>
+	     <version>0.2.7</version>
+	     <type>jar</type>
+             <scope>provided</scope>
+        </dependency>
+           
+        <dependency>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>calculation-api</artifactId>
+            <version>1.2</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+       
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>1.8.7</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+
+</dependencies>
 
     <!-- end spring boot test dependencies -->
 
