@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
+
     private DbSessionFactory factory;
 
     public HibernateMuzimaFormDAO(DbSessionFactory factory) {

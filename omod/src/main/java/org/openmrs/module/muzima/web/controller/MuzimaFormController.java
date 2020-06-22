@@ -28,6 +28,7 @@ public class MuzimaFormController {
             MuzimaFormService service = Context.getService(MuzimaFormService.class);
             service.save(form);
         }
+
     }
 
     @ResponseBody
