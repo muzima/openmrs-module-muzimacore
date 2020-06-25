@@ -108,7 +108,7 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
          }
          $cohortDefinitionService.deleteCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
             cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled,
-            cohortDefinition.retireReason, cohortDefinition.filterQuery).
+            cohortDefinition.filterQuery, cohortDefinition.retireReason).
             then(function () {
                 $location.path("/cohortDefinitions");
             });
