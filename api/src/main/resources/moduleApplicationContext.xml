@@ -61,7 +61,10 @@
     <bean id="muzimaPatientReportDAO" class="org.openmrs.module.muzima.api.db.hibernate.HibernateMuzimaPatientReportDao">
         <constructor-arg ref="dbSessionFactory"/>
     </bean>
-
+    
+    <bean id="htmlform2MuzimaTransform" class="org.openmrs.module.muzima.htmlform2MuzimaTransform.Htmlform2MuzimaTransform">
+    </bean>
+   
     <!-- Services accessible via Context.getService() -->
     <bean parent="serviceContext">
         <property name="moduleService">
@@ -201,9 +204,23 @@
                             <constructor-arg name="html5Transformer" ref="xform2HtmlTransformer"/>
                             <constructor-arg name="modelXml2JsonTransformer" ref="modelXml2JsonTransformer"/>
                             <constructor-arg name="odk2JavarosaTransformer" ref="odk2JavarosaTransformer"/>
-                            <constructor-arg name="odk2HTML5Transformer" ref="odk2HTML5Transformer"/>
+                            <constructor-arg name="odk2HTML5Transformer" ref="odk2HTML5Transformer"/>  
+                            <constructor-arg name="htmlform2MuzimaTransform" ref="htmlform2MuzimaTransform"/>                          
+                        <property name="handlers">
+                            	<map>
+                            		<entry>
+                            			<key><value>obs</value></key>
+                            			<bean class="org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.ObsTagHandler" />                            			
+                            		</entry>
+                            		<entry>
+                            			<key><value>obsgroup</value></key>
+                            			<bean class="org.openmrs.module.muzima.htmlform2MuzimaTransform.taghandler.ObsgroupTagHandler" />                            			
+                            		</entry>
+                            	</map>
+                            </property>
                         </bean>
                     </property>
+                    
                     <property name="preInterceptors">
                         <ref bean="serviceInterceptors"/>
                     </property>

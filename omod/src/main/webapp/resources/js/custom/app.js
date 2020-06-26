@@ -242,11 +242,17 @@ muzimaCoreModule.factory('HtmlFormEntryService', function ($http) {
         return $http.get('../../module/muzimacore/discriminator.json', { cache: false });
     };
 
+    var saveConvertedForm = function (uuid, discriminator, html) {
+       return $http.post("htmlFormEntrySaveConvertedForm.form", {"uuid": uuid, "discriminator":discriminator, "html":html});      
+   };
+
+
     return {
         moduleState: moduleState,
         getHtmlForms: getHtmlForms,
         convert: convert,
-        getDiscriminatorTypes: getDiscriminatorTypes
+        getDiscriminatorTypes: getDiscriminatorTypes,        
+        saveConvertedForm : saveConvertedForm
     };
 });
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <htmlform>
+ 
+	You can count like 1, 2, 3
+	
+	<obs conceptId="1234" labelCode="night sweats"/> 
+
+		<obsgroup groupingConceptId="1295">
+		    <tr>
+		        <td><obs answerConceptId="6355" answerLabel="Nausées/vomissements" conceptId="1297" labelText=""/></td>
+		        <td><obs conceptId="3063"/>
+		       </td>
+		    </tr>
+		</obsgroup>
+	
+	<obsgroup groupingConceptId="1295">
+	    <tr>
+	        <td>
+	          <obs answerConceptId="16" answerLabel="Diarrhée" conceptId="1297" labelText=""/>
+	       </td>
+	        <td>
+	          <obs conceptId="3063"/>
+	       </td>
+	    </tr>
+	</obsgroup>
+	
+	
+	<obs conceptId="1069" answerConceptId="664" answerLabel="No Complaints" style="checkbox" /><br/>
+	<obs conceptId="1069" answerConceptId="832" answerLabel="fever" style="checkbox" /><br/>
+
+	 
+	 <includeIf velocityTest="!(($patient.gender == 'F') || ($patient.gender == 'M')) || (! $patient.age)">
+  <b><font color='darkorange' size='+2'>ERROR: Unknown gender or date of birth.  Please update patient demographics before filling out this form.</font></b>
+</includeIf>
+<excludeIf velocityTest="!(($patient.gender == 'F') || ($patient.gender == 'M')) || (! $patient.age)">
+  
+</excludeIf>
+
+	 
+	 
+ </htmlform>
+
+ 
+ 

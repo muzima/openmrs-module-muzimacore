@@ -157,12 +157,11 @@ angular.module('muzimaCoreModule').controller('ModalFormReviewCtrl', function ($
     };
 });
 
-angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', function ($uibModalInstance, form, htmlFormEntryService, formService) {
+angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', function ($uibModalInstance, form, htmlFormEntryService) {
     var $ctrl = this;
     $ctrl.form = form;
     $ctrl.converting = true;
     $ctrl.convertedForm = {};
-
     
     htmlFormEntryService.convert($ctrl.form.id)
     .then(function (res) {
@@ -185,11 +184,21 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
         return;
     }
 
-    $ctrl.save = function () {
-        formService.save($ctrl.convertedForm)
-        alertFunc(1, 'Form Saved Successfully');
-        $ctrl.form.converted = true;
-        $uibModalInstance.close($ctrl.convertedForm);
+    $ctrl.save = function () {        
+        htmlFormEntryService.saveConvertedForm($ctrl.convertedForm.uuid, $ctrl.convertedForm.discriminator, $ctrl.convertedForm.html)
+        .then(function (res){
+            alertFunc(1, 'Form Saved Successfully');
+            $ctrl.form.converted = true;
+           
+            setTimeout(function () {
+                $uibModalInstance.close($ctrl.convertedForm);
+            }, 3000)
+           
+        }).catch(function (error) {
+            $ctrl.form.converted = false;
+            alertFunc(0, 'Saving converted form Failed');
+            $uibModalInstance.dismiss('cancel');
+        });
     };
 
     $ctrl.cancel = function () {
