@@ -48,7 +48,7 @@ public class DateTimeField implements FormField {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 		if (required) {
 			sb.append("<span class=\"required\">*</span>");
 		}

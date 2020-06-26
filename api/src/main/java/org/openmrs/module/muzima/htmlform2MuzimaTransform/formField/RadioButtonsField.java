@@ -38,7 +38,7 @@ public class RadioButtonsField extends SingleOptionField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<div class=\"form-group\">\r\n <div class=\"form-group\">\r\n <span><strong>" + this.fieldLabel);
+		sb.append("\r\n<div class=\"form-group\">\r\n <div class=\"form-group\">\r\n <span><strong>" + this.fieldLabel);
 		if (this.required) {
 			sb.append(" <span class=\"required\">*</span>");
 		}
@@ -50,7 +50,8 @@ public class RadioButtonsField extends SingleOptionField {
 			if (!selected)
 				selected = getDefaultValue() == null ? option.getValue().equals("")
 				        : getDefaultValue().equals(option.getValue());
-			sb.append("<div class=\"radio\">\r\n" + "            <label>\r\n" + "                <input name=\"" + this.name
+			sb.append("\r\n<div class=\"radio\">\r\n" + "            <label>\r\n" + "                <input name=\""
+			        + this.name
 			        + "\" type=\"radio\"\r\n" + "                       data-concept=\"" + this.dataConcept + "\"\r\n"
 			        + "                       value=\"" + option.getValue() + "\">\r\n" + option.getLabel() + "\r\n"
 			        + "            </label>\r\n" + "        </div>");
