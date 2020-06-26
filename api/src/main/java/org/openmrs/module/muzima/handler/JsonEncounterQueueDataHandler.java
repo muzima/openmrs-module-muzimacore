@@ -32,14 +32,21 @@ import org.openmrs.PatientIdentifierType;
 import org.openmrs.PersonName;
 import org.openmrs.Provider;
 import org.openmrs.User;
+import org.openmrs.Visit;
+import org.openmrs.VisitType;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
+import org.openmrs.api.VisitService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.MuzimaConfigService;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.api.service.MuzimaSettingService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
+import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
@@ -50,11 +57,18 @@ import org.springframework.stereotype.Component;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY;
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MUZIMA_VISIT_GENERATION_SETTING_PROPERTY;
 
 /**
  * TODO brief class description.
@@ -90,11 +104,11 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             encounter = new Encounter();
             String payload = queueData.getPayload();
 
-            //Object encounterObject = JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']");
-            processEncounter(encounter, payload);
-
             //Object patientObject = JsonUtils.readAsObject(queueData.getPayload(), "$['patient']");
             processPatient(encounter, payload);
+
+            //Object encounterObject = JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']");
+            processEncounter(encounter, payload);
 
             Object obsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['observation']");
             processObs(encounter, null, obsObject);
@@ -451,7 +465,88 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         String jsonPayloadTimezone = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.device_time_zone']");
         Date encounterDatetime = JsonUtils.readAsDateTime(encounterPayload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat,jsonPayloadTimezone);
         encounter.setEncounterDatetime(encounterDatetime);
+
+        MuzimaSetting muzimaVisitSetting = getMuzimaSetting(encounterPayload,MUZIMA_VISIT_GENERATION_SETTING_PROPERTY);
+        boolean isVisitGenerationEnabled = false;
+        if(muzimaVisitSetting != null){
+            isVisitGenerationEnabled = muzimaVisitSetting.getValueBoolean();
+        }
+        if(isVisitGenerationEnabled) {
+            VisitService visitService = Context.getService(VisitService.class);
+            List<Visit> patientVisit = visitService.getVisitsByPatient(encounter.getPatient(), true, false);
+            Visit encounterVisit = null;
+            Collections.sort(patientVisit, visitDateTimeComparator);
+            for (Visit visit : patientVisit) {
+                if (visit.getStopDatetime() == null) {
+                    if (encounterDatetime.compareTo(visit.getStartDatetime()) >= 0) {
+                        encounterVisit = visit;
+                        break;
+                    }
+                } else if (encounterDatetime.compareTo(visit.getStartDatetime()) >= 0 && (encounterDatetime.compareTo(visit.getStopDatetime()) <= 0)) {
+                    encounterVisit = visit;
+                    break;
+                }
+            }
+
+            if (encounterVisit == null) {
+                MuzimaSetting defaultMuzimaVisitTypeSetting = getMuzimaSetting(encounterPayload, DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY);
+                String defaultMuzimaVisitTypeUuid = "";
+                if (defaultMuzimaVisitTypeSetting != null) {
+                    defaultMuzimaVisitTypeUuid = defaultMuzimaVisitTypeSetting.getValueString();
+                    if (!defaultMuzimaVisitTypeUuid.isEmpty()) {
+                        VisitType visitType = visitService.getVisitTypeByUuid(defaultMuzimaVisitTypeUuid);
+                        if (visitType != null) {
+                            String uuid = UUID.randomUUID().toString();
+                            Calendar encounterDate = Calendar.getInstance();
+                            encounterDate.setTime(encounterDatetime);
+                            Calendar startTime = Calendar.getInstance();
+                            startTime.set(Calendar.YEAR, encounterDate.get(Calendar.YEAR));
+                            startTime.set(Calendar.MONDAY, encounterDate.get(Calendar.MONTH));
+                            startTime.set(Calendar.DATE, encounterDate.get(Calendar.DATE));
+                            startTime.set(Calendar.HOUR_OF_DAY, 0);
+                            startTime.set(Calendar.MINUTE, 0);
+                            startTime.set(Calendar.SECOND, 0);
+
+                            Calendar endTime = Calendar.getInstance();
+                            endTime.set(Calendar.YEAR, encounterDate.get(Calendar.YEAR));
+                            endTime.set(Calendar.MONDAY, encounterDate.get(Calendar.MONTH));
+                            endTime.set(Calendar.DATE, encounterDate.get(Calendar.DATE));
+                            endTime.set(Calendar.HOUR_OF_DAY, 23);
+                            endTime.set(Calendar.MINUTE, 59);
+                            endTime.set(Calendar.SECOND, 59);
+
+                            Visit visit = new Visit();
+                            visit.setPatient(encounter.getPatient());
+                            visit.setVisitType(visitType);
+                            visit.setStartDatetime(startTime.getTime());
+                            visit.setStopDatetime(endTime.getTime());
+                            visit.setCreator(user);
+                            visit.setDateCreated(new Date());
+                            visit.setUuid(uuid);
+                            visitService.saveVisit(visit);
+                            encounterVisit = visitService.getVisitByUuid(uuid);
+                        } else {
+                            queueProcessorException.addException(new Exception("Unable to find default visit type with uuid " + defaultMuzimaVisitTypeUuid));
+                        }
+                    } else {
+                        queueProcessorException.addException(new Exception("Unable to find default visit type. Default visit type setting not set. "));
+                    }
+
+                } else {
+                    queueProcessorException.addException(new Exception("Unable to find default visit type. Default visit type setting not set. "));
+                }
+            }
+
+            encounter.setVisit(encounterVisit);
+        }
     }
+
+    private final Comparator<Visit> visitDateTimeComparator = new Comparator<Visit>() {
+        @Override
+        public int compare(Visit lhs, Visit rhs) {
+            return -lhs.getStartDatetime().compareTo(rhs.getStartDatetime());
+        }
+    };
 
     /**
      * 
@@ -486,5 +581,27 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      */
     public boolean isValidObs(Obs obs){
         return (obs.getConcept().getDatatype().isBoolean() || obs.getConcept().getDatatype().isNumeric() || obs.getConcept().getDatatype().isDate() || obs.getConcept().getDatatype().isTime() || obs.getConcept().getDatatype().isDateTime() || obs.getConcept().getDatatype().isCoded() || obs.getConcept().getDatatype().isText() || (obs.getConcept().isSet() && obs.isObsGrouping()));
+    }
+
+    public MuzimaSetting getMuzimaSetting(String encounterPayload,String setting){
+        MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);
+        MuzimaSetting defaultMuzimaVisitTypeSetting = null;
+        String activeSetupConfigUuid = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.setup_config_uuid']");
+        if(StringUtils.isNotBlank(activeSetupConfigUuid)){
+            MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
+            MuzimaConfig config = configService.getConfigByUuid(activeSetupConfigUuid);
+            if(config != null){
+                defaultMuzimaVisitTypeSetting = config.getConfigMuzimaSettingByProperty(setting);
+                if(defaultMuzimaVisitTypeSetting == null){
+                    defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(setting);
+                }
+            } else {
+                defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(setting);
+            }
+        }else{
+            defaultMuzimaVisitTypeSetting = settingService.getMuzimaSettingByProperty(setting);
+        }
+
+        return defaultMuzimaVisitTypeSetting;
     }
 }

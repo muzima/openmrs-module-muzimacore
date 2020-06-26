@@ -1,6 +1,8 @@
 package org.openmrs.module.muzima.api.db;
 
 import org.openmrs.module.muzima.model.MuzimaConfig;
+
+import java.util.Date;
 import java.util.List;
 
 public interface MuzimaConfigDAO {
@@ -17,7 +19,7 @@ public interface MuzimaConfigDAO {
 
     Number countConfigs(String search);
 
-    List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize);
+    List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize, Date syncDate);
 
     List<MuzimaConfig> getConfigByName(String configName, boolean includeRetired);
 }

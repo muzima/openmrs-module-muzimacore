@@ -63,7 +63,7 @@ public class FakeConcept extends BaseOpenmrsMetadata {
         if (concept.isNumeric()) {
             ConceptNumeric numeric = Context.getConceptService().getConceptNumeric(concept.getConceptId());
             fakeConcept.setUnits(numeric.getUnits());
-            fakeConcept.setPrecise(numeric.getPrecise());
+            fakeConcept.setPrecise(false);
             fakeConcept.setNumeric(concept.isNumeric());
         }
 

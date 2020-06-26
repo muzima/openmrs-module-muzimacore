@@ -26,6 +26,7 @@ import org.openmrs.module.muzima.api.db.MuzimaConfigDAO;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 public class HibernateMuzimaConfigDAO implements MuzimaConfigDAO {
@@ -92,14 +93,31 @@ public class HibernateMuzimaConfigDAO implements MuzimaConfigDAO {
     }
 
     @Override
-    public List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize) {
+    public List<MuzimaConfig> getPagedConfigs(String search, Integer pageNumber, Integer pageSize, Date syncDate) {
         Criteria criteria = session().createCriteria(MuzimaConfig.class);
         criteria.add(Restrictions.eq("retired", false));
+        if(syncDate != null) {
+            criteria.add(
+                    Restrictions.or(
+                            Restrictions.or(
+                                    Restrictions.and(
+                                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                            Restrictions.and(Restrictions.isNull("dateChanged"), Restrictions.isNull("dateRetired"))),
+                                    Restrictions.and(
+                                            Restrictions.and(Restrictions.isNotNull("dateChanged"), Restrictions.ge("dateChanged", syncDate)),
+                                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNull("dateRetired")))),
+                            Restrictions.and(
+                                    Restrictions.and(Restrictions.isNotNull("dateRetired"), Restrictions.ge("dateRetired", syncDate)),
+                                    Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.isNotNull("dateChanged")))
+                    )
+            );
+        }
 
         if (StringUtils.isNotEmpty(search)) {
             Disjunction disjunction = Restrictions.disjunction();
             disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
             disjunction.add(Restrictions.ilike("description", search, MatchMode.ANYWHERE));
+            disjunction.add(Restrictions.eq("uuid", search));
             if (StringUtils.isNumeric(search)) {
                 disjunction.add(Restrictions.eq("id", Integer.parseInt(search)));
             }

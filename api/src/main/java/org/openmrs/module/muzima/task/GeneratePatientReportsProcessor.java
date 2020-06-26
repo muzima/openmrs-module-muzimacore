@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.PersonService;
@@ -66,7 +67,7 @@ public class GeneratePatientReportsProcessor {
             PatientService patientService = Context.getService(PatientService.class);
             MuzimaPatientReportService muzimaPatientReportService = Context.getService(MuzimaPatientReportService.class);
             RenderingMode selectedRenderingMode = null;
-            List<ReportRequest> reportsToQueue = new ArrayList<ReportRequest>();
+            List<ReportRequest> reportRequestsToRun = new ArrayList<ReportRequest>();
 
             for (ReportConfiguration configuration : reportConfigurations ) {
                 Cohort cohort = Context.getCohortService().getCohortByUuid(configuration.getCohortUuid());
@@ -98,52 +99,64 @@ public class GeneratePatientReportsProcessor {
                             if (!"COMPLETED".equals(latestPatientReport.getStatus())) {
                                 ReportRequest reportRequest = reportService.getReportRequestByUuid(latestPatientReport.getReportRequestUuid());
 
-                                if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
-                                    byte[] byteData = reportService.loadRenderedOutput(reportRequest);
-                                    if (byteData != null) {
-                                        latestPatientReport.setReportJson(byteData);
-                                        latestPatientReport.setStatus("COMPLETED");
-                                        muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
-                                    } else {
+                                if (reportRequest == null) {
+                                    // we have an incomplete report whose request has been deleted
+                                    // we also delete the patient report to be generated in the next cycle
+                                    muzimaPatientReportService.deleteMuzimaPatientReport(latestPatientReport);
+                                } else {
+                                    if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
+                                        byte[] byteData = reportService.loadRenderedOutput(reportRequest);
+                                        if (byteData != null) {
+                                            latestPatientReport.setReportJson(byteData);
+                                            latestPatientReport.setStatus("COMPLETED");
+                                            muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                        } else {
+                                            latestPatientReport.setStatus("FAILED");
+                                            muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                        }
+                                    } else if ("FAILED".equals(reportRequest.getStatus().toString())) {
                                         latestPatientReport.setStatus("FAILED");
                                         muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                    } else {
+                                        reportRequestsToRun.add(reportRequest);
                                     }
-                                } else if ("FAILED".equals(reportRequest.getStatus().toString())) {
-                                    latestPatientReport.setStatus("FAILED");
-                                    muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
                                 }
-                            }
+                            } else {
+                                // for a completed report, check and regenerate if we have changes in observations
+                                //TODO: THIS NEEDS TO BE AN ADVICE IN FUTURE
+                                Patient patient = patientService.getPatient(patientId);
+                                List<Person> patList = new ArrayList<Person>();
+                                patList.add(patient);
 
-                            Patient patient = patientService.getPatient(patientId);
-                            List<Obs> obsList = obsService.getObservationsByPerson(patient);
-                            if (0 != obsList.size()) {
-                                Obs obs = obsList.get(obsList.size() - 1);
-                                final Calendar cal = Calendar.getInstance();
-                                cal.add(Calendar.DATE, -1);
-                                Date yesterday = cal.getTime();
-                                if (obs.getObsDatetime().after(yesterday)) {
-                                    ReportRequest reportRequest = new ReportRequest();
-                                    Map<String, Object> params = new LinkedHashMap<String, Object>();
+                                List<String> sortList = new ArrayList<String>();
+                                sortList.add("dateCreated desc");
 
-                                    params.put("person", personService.getPerson(patientId));
-                                    reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
-                                    reportRequest.setRenderingMode(selectedRenderingMode);
-                                    reportRequest.setPriority(ReportRequest.Priority.LOW);
-                                    reportsToQueue.add(reportRequest);
+                                List<Obs> obsList = obsService.getObservations(patList, null, null, null,
+                                        null, null,sortList,1,null, null,null,false);
+                                if (0 != obsList.size()) {
+                                    Obs obs = obsList.get(0);
+                                    if (obs.getDateCreated().after(latestPatientReport.getDateChanged())) {
+                                        ReportRequest reportRequest = new ReportRequest();
+                                        Map<String, Object> params = new LinkedHashMap<String, Object>();
 
-                                    latestPatientReport.setName(design.getName() + " [" + cohort.getName() + "]");
-                                    latestPatientReport.setReportRequestUuid(reportRequest.getUuid());
-                                    latestPatientReport.setCohortReportConfigId(configuration.getId());
-                                    latestPatientReport.setPatientId(patientId);
-                                    latestPatientReport.setPriority(configuration.getPriority());
-                                    latestPatientReport.setStatus("PROGRESS");
+                                        params.put("person", personService.getPerson(patientId));
+                                        reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
+                                        reportRequest.setRenderingMode(selectedRenderingMode);
+                                        reportRequest.setPriority(ReportRequest.Priority.LOW);
+                                        reportRequestsToRun.add(reportRequest);
 
-                                    muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                        latestPatientReport.setName(design.getName());
+                                        latestPatientReport.setReportRequestUuid(reportRequest.getUuid());
+                                        latestPatientReport.setCohortReportConfigId(configuration.getId());
+                                        latestPatientReport.setPriority(configuration.getPriority());
+                                        latestPatientReport.setStatus("PROGRESS");
+                                        muzimaPatientReportService.saveMuzimaPatientReport(latestPatientReport);
+                                    }
                                 }
                             }
                         } else {
                             try {
-                                MuzimaPatientReport muzimaPatientReport = muzimaPatientReportService.getMuzimaPatientReportByName(design.getName());
+                                MuzimaPatientReport muzimaPatientReport = muzimaPatientReportService.getMuzimaPatientReportByName(patientId, design.getName());
 
                                 if (muzimaPatientReport == null) {
                                     // this is a new instance of this report so save it
@@ -154,7 +167,8 @@ public class GeneratePatientReportsProcessor {
                                     reportRequest.setReportDefinition(new Mapped<ReportDefinition>(design.getReportDefinition(), params));
                                     reportRequest.setRenderingMode(selectedRenderingMode);
                                     reportRequest.setPriority(ReportRequest.Priority.LOW);
-                                    reportRequest = reportService.queueReport(reportRequest);
+
+                                    reportRequestsToRun.add(reportRequest);
 
                                     muzimaPatientReport = new MuzimaPatientReport();
                                     muzimaPatientReport.setName(design.getName());
@@ -164,9 +178,9 @@ public class GeneratePatientReportsProcessor {
                                     muzimaPatientReport.setPriority(configuration.getPriority());
                                     muzimaPatientReport.setStatus("PROGRESS");
                                     muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
-                                } else
+                                } else {
                                     log.info("We have similar report in different Cohorts!");
-
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -174,10 +188,35 @@ public class GeneratePatientReportsProcessor {
                     }
                 }
             }
-            for (ReportRequest reportRequest : reportsToQueue) {
-                reportService.queueReport(reportRequest);
+
+            if (reportRequestsToRun.size() > 0) {
+                for (ReportRequest reportRequest : reportRequestsToRun) {
+                    try {
+                        reportService.runReport(reportRequest);
+
+                        MuzimaPatientReport muzimaPatientReport = muzimaPatientReportService
+                                .getMuzimaPatientReportByReportRequestUuid(reportRequest.getUuid());
+                        if (muzimaPatientReport != null) {
+
+                            if ("COMPLETED".equals(reportRequest.getStatus().toString())) {
+                                byte[] byteData = reportService.loadRenderedOutput(reportRequest);
+                                if (byteData != null) {
+                                    muzimaPatientReport.setReportJson(byteData);
+                                    muzimaPatientReport.setStatus("COMPLETED");
+                                } else {
+                                    muzimaPatientReport.setStatus("FAILED");
+                                }
+                                muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
+                            } else if ("FAILED".equals(reportRequest.getStatus().toString())) {
+                                muzimaPatientReport.setStatus("FAILED");
+                                muzimaPatientReportService.saveMuzimaPatientReport(muzimaPatientReport);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-            reportService.processNextQueuedReports();
         } finally {
             isRunning = false;
         }

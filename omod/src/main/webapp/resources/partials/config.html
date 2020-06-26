@@ -168,6 +168,26 @@
                                             </table>
                                         </div>
                                     </uib-tab>
+                                    <uib-tab index="5" heading="Settings">
+                                        <div class="row col-lg-12">
+                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
+                                                <strong>Add Setting</strong>
+                                            </div>
+                                            <div class="col-md-5" style="margin-top: 8px">
+                                                <input type="text" class="form-control" ng-model="search.settings" placeholder="Search settings by name ..." autocomplete="off"
+                                                       uib-typeahead="setting as setting.name for setting in settings | filter:$viewValue | limitTo:8"
+                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addSetting($item)" uib-typeahead-editable="false"/>
+                                            </div>
+                                        </div>
+                                        <div class="row col-lg-12">
+                                            <select class="col-lg-10 selectClass" size="8">
+                                                <option ng-click="chosenSetting(setting.uuid)" ng-repeat="setting in configSettings">{{formatSettingDisplay(setting)}}</option>
+                                            </select>
+                                            <button type="submit" ng-disabled="!selected.setting" ng-click="removeSetting()" class="btn btn-sm">Remove Setting</button>
+                                            <br/>
+                                            <button type="submit" ng-disabled="!selected.setting" ng-click="editSettingValue()" class="btn btn-sm">Edit Setting Value</button>
+                                        </div>
+                                    </uib-tab>
                                 </uib-tabset>
                             </div>
                         </td>

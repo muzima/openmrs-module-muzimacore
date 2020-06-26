@@ -296,6 +296,9 @@ public class WebConverter {
             map.put("isScheduledForExecution",cohortDefinitionData.getIsScheduledForExecution());
             map.put("isMemberAdditionEnabled",cohortDefinitionData.getIsMemberAdditionEnabled());
             map.put("isMemberRemovalEnabled",cohortDefinitionData.getIsMemberRemovalEnabled());
+            map.put("isFilterByProviderEnabled",cohortDefinitionData.getIsFilterByProviderEnabled());
+            map.put("isFilterByLocationEnabled",cohortDefinitionData.getIsFilterByLocationEnabled());
+            map.put("filterQuery",cohortDefinitionData.getFilterQuery());
             map.put("uuid",cohortDefinitionData.getUuid());
         }
         return map;

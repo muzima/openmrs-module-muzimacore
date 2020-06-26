@@ -70,6 +70,7 @@ public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao
     public List<CohortDefinitionData> getByScheduled(Boolean scheduled){
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("isScheduledForExecution", scheduled));
+        criteria.add(Restrictions.eq("voided", Boolean.FALSE));
         return (List<CohortDefinitionData>) criteria.list();
     }
 
@@ -92,5 +93,13 @@ public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
         criteria.setProjection(Projections.rowCount());
         return (Number) criteria.uniqueResult();
+    }
+
+    @Override
+    public CohortDefinitionData getCohortDefinitionDataByCohortId(final Integer cohortId) {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
+        criteria.add(Restrictions.eq("cohortId", cohortId));
+        criteria.add(Restrictions.eq("voided", Boolean.FALSE));
+        return (CohortDefinitionData)criteria.uniqueResult();
     }
 }

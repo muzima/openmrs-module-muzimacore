@@ -16,4 +16,15 @@ public enum MuzimaSettingDataType {
     public void setName(String name) {
         this.name = name;
     }
+
+    static public MuzimaSettingDataType getSettingDataTypeForString(String value) {
+        if (value!= null) {
+            try {
+                return valueOf(value);
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
+        }
+        return null;
+    }
 }

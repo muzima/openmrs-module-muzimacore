@@ -301,6 +301,9 @@ muzimaCoreModule.factory('$configs', function($http) {
     var searchConfigProviders = function(search) {
         return $http.get('../../ws/rest/v1/provider?v=custom:(uuid,name:(uuid,name))&q=' + (search === undefined ? '' : search));
     };
+    var searchConfigSettings = function(search) {
+        return $http.get('configSettings.json?search=' + (search === undefined ? '' : search));
+    };
     return {
         getConfiguration: getConfiguration,
         getConfigurations: getConfigurations,
@@ -310,7 +313,8 @@ muzimaCoreModule.factory('$configs', function($http) {
         searchConfigCohorts: searchConfigCohorts,
         searchConfigLocations: searchConfigLocations,
         searchConfigProviders: searchConfigProviders,
-        searchConfigConcepts: searchConfigConcepts
+        searchConfigConcepts: searchConfigConcepts,
+        searchConfigSettings: searchConfigSettings
     }
 });
 
@@ -393,15 +397,19 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
     var getAllCohortsWithoutDefinition=function(){
             return $http.get("cohortswithoutdefinition.json");
          };
-    var saveCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled) {
+    var saveCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled, isFilterByProviderEnabled, isFilterByLocationEnabled, filterQuery) {
             return $http.post("cohortDefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition,
-                "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled});
+                "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled,"isFilterByProviderEnabled":isFilterByProviderEnabled, "isFilterByLocationEnabled":isFilterByLocationEnabled, "filterQuery": filterQuery});
         };
 
-    var deleteCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled, retireReason) {
+    var deleteCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled, isFilterByProviderEnabled, isFilterByLocationEnabled, filterQuery, retireReason) {
         return $http.post("cohortDefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition, "isScheduledForExecution": isScheduledForExecution,
-         "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled, "retireReason": retireReason});
+         "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled, "isFilterByProviderEnabled":isFilterByProviderEnabled, "isFilterByLocationEnabled":isFilterByLocationEnabled, "retireReason": retireReason, "filterQuery":filterQuery});
     };
+
+    var processCohortDefinition = function (uuid){
+        return $http.post("processCohortDefinition.json",{"uuid": uuid});
+    }
 
     return {
 
@@ -410,6 +418,7 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
         saveCohortDefinition:saveCohortDefinition,
         getAllCohorts:getAllCohorts,
         getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition,
-        deleteCohortDefinition : deleteCohortDefinition
+        deleteCohortDefinition : deleteCohortDefinition,
+        processCohortDefinition : processCohortDefinition
     }
 });

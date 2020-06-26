@@ -301,7 +301,6 @@ function PotentialDuplicatesErrorsCtrl($scope, $data) {
         $scope.totalItems = serverData.totalItems;
         $('#wait').hide();
     }).catch(function(err) {
-        console.log(err);
         $('#wait').hide();
     });
 

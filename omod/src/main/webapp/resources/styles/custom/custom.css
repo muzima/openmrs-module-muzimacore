@@ -261,3 +261,11 @@
     color: #004f47 !important;
     text-decoration: none !important;
 }
+
+.modal-dialog {
+    margin: 0;
+    top: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%,-50%)!important;
+}
