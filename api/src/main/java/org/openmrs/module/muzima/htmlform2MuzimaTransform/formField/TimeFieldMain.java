@@ -36,24 +36,25 @@ public class TimeFieldMain {
 			valAsCal.setTime(defaultValue);
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("<div class=\"form-group\">\r\n" + "    <label for=\"timeField\">" + this.fieldLabel);
+		sb.append("<div class=\"form-group\">\n" + "    <label for=\"timeField\">" + this.fieldLabel);
 		if (required) {
 			sb.append("<span class=\"required\">*</span>");
 		}
-		sb.append("</label>\r\n"
-		        + "<div name=\"timeField\" class=form-control onblur=\"timeChange()\" onmouseout=\"timeChange()\" onmouseup=\"timeChange()\" onchange=\"timeChange()\">\r\n");
+		sb.append("</label>\n"
+		        + "<div name=\"timeField\" class=form-control onblur=\"timeChange()\" onmouseout=\"timeChange()\" "
+				+ " onmouseup=\"timeChange()\" onchange=\"timeChange()\">\n");
 		
 		if (hidden) {
 			sb.append("<input type=\"hidden\" name=\"").append(this.name).append("hours")
-			        .append("\" value=\"" + new SimpleDateFormat("HH").format(defaultValue) + "\"/>\r\n");
+			        .append("\" value=\"" + new SimpleDateFormat("HH").format(defaultValue) + "\"/>\n");
 			sb.append("<input type=\"hidden\" name=\"").append(this.name).append("minutes")
-			        .append("\" value=\"" + new SimpleDateFormat("mm").format(defaultValue) + "\"/>\r\n");
+			        .append("\" value=\"" + new SimpleDateFormat("mm").format(defaultValue) + "\"/>\n");
 			if (!hideSeconds) {
 				sb.append("<input type=\"hidden\" name=\"").append(this.name).append("seconds")
-				        .append("\" value=\"" + new SimpleDateFormat("ss").format(defaultValue) + "\"/>\r\n");
+				        .append("\" value=\"" + new SimpleDateFormat("ss").format(defaultValue) + "\"/>\n");
 			}
 		} else {
-			sb.append("<select  id=\"").append(this.name).append(".hours").append("\">\r\n");
+			sb.append("<select  id=\"").append(this.name).append(".hours").append("\">\n");
 			for (int i = 0; i <= 23; ++i) {
 				String label = "" + i;
 				if (label.length() == 1)
@@ -63,11 +64,11 @@ public class TimeFieldMain {
 					if (valAsCal.get(Calendar.HOUR_OF_DAY) == i)
 						sb.append(" selected=\"true\"");
 				}
-				sb.append(">" + label + "</option>\r\n");
+				sb.append(">" + label + "</option>\n");
 			}
-			sb.append("</select>\r\n");
+			sb.append("</select>\n");
 			sb.append(":");
-			sb.append("<select  id=\"").append(this.name).append(".minutes").append("\">\r\n");
+			sb.append("<select  id=\"").append(this.name).append(".minutes").append("\">\n");
 			for (int i = 0; i <= 59; ++i) {
 				String label = "" + i;
 				if (label.length() == 1)
@@ -77,11 +78,11 @@ public class TimeFieldMain {
 					if (valAsCal.get(Calendar.MINUTE) == i)
 						sb.append(" selected=\"true\"");
 				}
-				sb.append(">" + label + "</option>\r\n");
+				sb.append(">" + label + "</option>\n");
 			}
-			sb.append("</select>\r\n");
+			sb.append("</select>\n");
 			if (!hideSeconds) {
-				sb.append("<select  id=\"").append(this.name).append(".seconds").append("\">\r\n");
+				sb.append("<select  id=\"").append(this.name).append(".seconds").append("\">\n");
 				for (int i = 0; i <= 59; ++i) {
 					String label = "" + i;
 					if (label.length() == 1)
@@ -91,13 +92,13 @@ public class TimeFieldMain {
 						if (valAsCal.get(Calendar.SECOND) == i)
 							sb.append(" selected=\"true\"");
 					}
-					sb.append(">" + label + "</option>\r\n");
+					sb.append(">" + label + "</option>\n");
 				}
-				sb.append("</select>\r\n");
+				sb.append("</select>\n");
 			}
 		}
-		sb.append("<input hidden type=\"text\" id=\"" + this.name + "\" name=\"" + this.name + "\"/>\r\n");
-		sb.append("</div>\r\n</div>\r\n");
+		sb.append("<input hidden type=\"text\" id=\"" + this.name + "\" name=\"" + this.name + "\"/>\n");
+		sb.append("</div>\n</div>\n");
 		sb.append("<script>");
 		sb.append(this.js);
 		sb.append("</script>");
@@ -108,17 +109,17 @@ public class TimeFieldMain {
 	
 	protected String setJs() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("    \r\n" + "    let hour = document.getElementById(\"" + this.name + ".hours\");\r\n"
-		        + "    let min = document.getElementById(\"" + this.name + ".minutes\");\r\n");
+		sb.append("    \n" + "    let hour = document.getElementById(\"" + this.name + ".hours\");\n"
+		        + "    let min = document.getElementById(\"" + this.name + ".minutes\");\n");
 		if (!hideSeconds) {
-			sb.append("    let sec = document.getElementById(\"" + this.name + ".seconds\");\r\n");
+			sb.append("    let sec = document.getElementById(\"" + this.name + ".seconds\");\n");
 		}
-		sb.append("    let times = document.getElementById(\"" + this.name + "\");\r\n" + "    \r\n"
-		        + "    let timeChange = function() {\r\n" + "        times.value = hour.value+\":\"+min.value");
+		sb.append("    let times = document.getElementById(\"" + this.name + "\");\n" + "    \n"
+		        + "    let timeChange = function() {\n" + "        times.value = hour.value+\":\"+min.value");
 		if (!hideSeconds) {
-			sb.append("+\":\"+sec.value; \r\n");
+			sb.append("+\":\"+sec.value; \n");
 		}
-		sb.append("    }\r\n");
+		sb.append("    }\n");
 		return sb.toString();
 	}
 	

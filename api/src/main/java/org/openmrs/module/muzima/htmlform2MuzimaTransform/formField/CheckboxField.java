@@ -32,11 +32,11 @@ public class CheckboxField extends SingleOptionField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\r\n<div class=\"section\">\r\n" + "<h4>" + this.fieldLabel);
+		sb.append("\n<div class=\"section\">\n" + "<h4>" + this.fieldLabel);
 		if (this.required) {
 			sb.append(" <span class=\"required\">*</span>");
 		}
-		sb.append(" </h4> \r\n");
+		sb.append(" </h4> \n");
 		
 		for (int i = 0; i < getOptions().size(); ++i) {
 			Option option = getOptions().get(i);
@@ -44,11 +44,13 @@ public class CheckboxField extends SingleOptionField {
 			if (!selected)
 				selected = getDefaultValue() == null ? option.getValue().equals("")
 				        : getDefaultValue().equals(option.getValue());
-			sb.append("<div class=\"form-group\">\r\n" + "            <label  class=\"font-normal\">\r\n"
-			        + "                <input id=\"" + option.getLabel() + "_" + this.name + "\" type=\"checkbox\"\r\n"
-			        + "                       data-concept=\"" + this.dataConcept + "\"\r\n"
-			        + "                       value=\"" + option.getValue() + "\">\r\n" + option.getLabel() + "\r\n"
-			        + "            </label>\r\n" + "        </div>");
+			sb.append("    <div class=\"form-group\">\n"
+					+ "    		<label for=\"" + option.getLabel() + "_" + this.name + "\" class=\"font-normal\">\n"
+			        + "         <input id=\"" + option.getLabel() + "_" + this.name + "\" name=\"" + this.name + "\" type=\"checkbox\"\n"
+			        + "                       data-concept=\"" + this.dataConcept + "\"\n"
+			        + "                       value=\"" + option.getValue() + "\">" + option.getLabel() + "\n"
+			        + "         </label>\n"
+					+ "    </div>");
 			
 		}
 		

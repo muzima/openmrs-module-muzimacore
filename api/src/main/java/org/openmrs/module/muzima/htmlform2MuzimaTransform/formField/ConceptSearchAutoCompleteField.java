@@ -48,7 +48,7 @@ public class ConceptSearchAutoCompleteField implements FormField {
 		
 		StringBuilder autoCompleteSource = new StringBuilder();
 		
-		autoCompleteSource.append("var " + this.sourceVariableName + " = [ \r\n");
+		autoCompleteSource.append("var " + this.sourceVariableName + " = [ \n");
 		//only 1 of them is used to specify the filter
 		if (allowedconceptclasses == null || allowedconceptclasses.size() == 0) {
 			if (conceptList != null) {
@@ -91,21 +91,23 @@ public class ConceptSearchAutoCompleteField implements FormField {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("\n<div class=\"form-group\">\n"
+				+ "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 		if (this.required) {
 			sb.append(" <span class=\"required\">*</span>");
 		}
-		sb.append(" </label>\r\n" + "    <input class=\"form-control\" id=\"" + this.name + "\" type=\"text\" data-concept=\""
+		sb.append(" </label>\n"
+				+ "    <input class=\"form-control\" id=\"" + this.name + "\" type=\"text\" data-concept=\""
 		        + this.dataConcept + "\" placeholder=\"Start typing something...\"");
 		if (defaultValue != null) {
 			sb.append(" value=\"" + defaultValue.getLabel() + "\"");
 		}
-		sb.append("/>\r\n");
+		sb.append("/>\n");
 		sb.append("<input class=\"form-control\" name=\"" + this.name + "\" type=\"hidden\"");
 		if (defaultValue != null) {
 			sb.append(" value=\"" + defaultValue.getValue() + "\"");
 		}
-		sb.append(">\r\n </div>");
+		sb.append(">\n </div>");
 		setJs();
 		return sb.toString();
 		
@@ -123,15 +125,25 @@ public class ConceptSearchAutoCompleteField implements FormField {
 	public void setJs() {
 		String elementName = FieldFactory.escapeJs(this.name);
 		String valueName = this.name.replaceAll("\\.", "_");
-		String js = "\r\n" + autoCompleteSourceArray + "\r\n    $('#" + elementName + "').autocomplete({\r\n"
-		        + "        source: " + sourceVariableName + ",\r\n" + "        create: function (event, ui) {\r\n"
-		        + "            var " + valueName + "_val = $('input[name=\"" + elementName + "\"]').val();\r\n"
-		        + "            $.each(" + sourceVariableName + ", function (i, elem) {\r\n"
-		        + "                if (elem.val == " + valueName + "_val" + ") {\r\n" + "                    $('#"
-		        + elementName + "').val(elem.label)\r\n" + "                }\r\n" + "                ;\r\n"
-		        + "            });\r\n" + "        },\r\n" + "        select: function (event, ui) {\r\n"
-		        + "            $('input[name=\"" + elementName + "\"]').val(ui.item.val);\r\n" + "            $('#"
-		        + elementName + "').val(ui.item.label);\r\n" + "            return false;\r\n" + "        }\r\n" + "    });";
+		String js = "\n"
+				+ autoCompleteSourceArray
+				+ "\n    $('#" + elementName + "').autocomplete({\n"
+		        + "        source: " + sourceVariableName + ",\n"
+				+ "        create: function (event, ui) {\n"
+		        + "            var " + valueName + "_val = $('input[name=\"" + elementName + "\"]').val();\n"
+		        + "            $.each(" + sourceVariableName + ", function (i, elem) {\n"
+		        + "                if (elem.val == " + valueName + "_val" + ") {\n"
+				+ "                    $('#" + elementName + "').val(elem.label)\n"
+				+ "                }\n"
+				+ "                ;\n"
+		        + "            });\n"
+				+ "        },\n"
+				+ "        select: function (event, ui) {\n"
+		        + "            $('input[name=\"" + elementName + "\"]').val(ui.item.val);\n"
+				+ "            $('#" + elementName + "').val(ui.item.label);\n"
+				+ "            return false;\n"
+				+ "        }\n"
+				+ "    });";
 		this.js = js;
 	}
 	

@@ -83,12 +83,12 @@ public class TextField implements FormField {
 		StringBuilder sb = new StringBuilder();
 		
 		if (textArea) {
-			sb.append("\r\n<div class=\"form-group freetext\">\r\n" + "<label for=\"" + this.name + "\">" + this.fieldLabel);
+			sb.append("\n<div class=\"form-group freetext\">\n" + "<label for=\"" + this.name + "\">" + this.fieldLabel);
 			
 			if (required) {
 				sb.append("<span class=\"required error-message\">*</span>");
 			}
-			sb.append(" </label>\r\n" + "<textarea name=\"" + this.name + "\" id=\"" + this.name + "\"");
+			sb.append(" </label>\n" + "<textarea name=\"" + this.name + "\" id=\"" + this.name + "\"");
 			
 			if (textAreaRows != null)
 				sb.append(" rows=\"" + textAreaRows + "\"");
@@ -106,14 +106,17 @@ public class TextField implements FormField {
 			if (required) {
 				sb.append(" required=\"required\"");
 			}
-			sb.append("> </textarea>\r\n" + "</div>\r\n");
+			sb.append("> </textarea>\n"
+					+ "</div>\n");
 		} else {
-			sb.append("<div class=\"form-group freetext\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+			sb.append("<div class=\"form-group freetext\">\n"
+					+ "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 			if (required) {
 				sb.append("<span class=\"required\">*</span>");
 			}
-			sb.append("</label>\r\n" + "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name
-			        + "\"\r\n" + "           type=\"text\" data-concept=\"" + this.dataConcept + "\"");
+			sb.append("</label>\n"
+					+ "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name
+			        + "\" type=\"text\" data-concept=\"" + this.dataConcept + "\"");
 			if (textFieldSize != null)
 				sb.append(" size=\"" + textFieldSize + "\"");
 			if (textFieldMaxLength != null && textFieldMaxLength.intValue() > 0) {
@@ -127,7 +130,8 @@ public class TextField implements FormField {
 			if (required) {
 				sb.append(" required=\"required\"");
 			}
-			sb.append("\">\r\n" + "</div>\r\n");
+			sb.append("\">\n"
+					+ "</div>\n");
 		}
 		setJs();
 		return sb.toString();
@@ -159,9 +163,14 @@ public class TextField implements FormField {
 	private void setJs() {
 		String jsString = null;
 		if (!(textFieldMaxLength == null)) {
-			jsString = "\r\n$(formId).validate({\r\n" + "  rules: {\r\n" + FieldFactory.escapeJs(this.name) + ": {\r\n"
-			        + "      required: true,\r\n" + "      maxlength: " + this.textFieldMaxLength + "\r\n" + "    }\r\n"
-			        + "  }\r\n" + "});\r\n";
+			jsString = "\r\n$(formId).validate({\n"
+					+ " 		 rules: {\n"
+					+ 				FieldFactory.escapeJs(this.name) + ": {\n"
+			        + "     			required: true,\n"
+					+ "      			maxlength: " + this.textFieldMaxLength + "\n"
+					+ "		    	}\n"
+			        + "  		}\n"
+					+ "		});\n";
 			this.js = jsString;
 		}
 		

@@ -22,8 +22,9 @@ public class TextFieldMain {
 		StringBuilder sb = new StringBuilder();
 		
 		if (textArea) {
-			sb.append("<div class=\"form-group freetext\">\r\n" + "    <label for=\"" + name + "\">" + fieldLabel
-			        + "</label>\r\n" + "<textarea name=\"" + name + "\" id=\"" + name + "\"");
+			sb.append("<div class=\"form-group freetext\">\n"
+					+ "    <label for=\"" + name + "\">" + fieldLabel + "</label>\n"
+					+ "	   <textarea name=\"" + name + "\" id=\"" + name + "\"");
 			
 			if (textAreaRows != null)
 				sb.append(" rows=\"" + textAreaRows + "\"");
@@ -39,14 +40,12 @@ public class TextFieldMain {
 			sb.append(">");
 			if (initialValue != null)
 				sb.append(initialValue);
-			sb.append("</textarea>\r\n" + "</div>\r\n");
-			
-			System.out.println(sb);
-			System.out.println("now its text");
-			
-			System.out.println("textarea is false");
-			sb.append("<div class=\"form-group freetext\">\r\n" + "    <label for=\"" + name + "\">" + fieldLabel
-			        + "</label>\r\n" + "    <input class=\"form-control\" id=\"" + name + "\" name=\"" + name + "\"\r\n"
+			sb.append("</textarea>\n"
+					+ "</div>\n");
+
+			sb.append("<div class=\"form-group freetext\">\n"
+					+ "    <label for=\"" + name + "\">" + fieldLabel + "</label>\n"
+					+ "    <input class=\"form-control\" id=\"" + name + "\" name=\"" + name + "\""
 			        + "           type=\"text\" data-concept=\"" + dataConcept + "\"");
 			if (textFieldSize != null)
 				sb.append(" size=\"" + textFieldSize + "\"");
@@ -59,7 +58,8 @@ public class TextFieldMain {
 				// TODO escape
 				sb.append(" placeholder=\"").append(placeholder).append("\"");
 			}
-			sb.append("\">\r\n" + "</div>\r\n");
+			sb.append("\">\n"
+					+ "</div>\n");
 		}
 		System.out.println(sb);
 		

@@ -92,12 +92,14 @@ public class NumberField implements FormField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("\n<div class=\"form-group\">\n"
+				+ "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 		
 		if (required) {
 			sb.append("<span class=\"required error-message\">*</span>");
 		}
-		sb.append("</label>\r\n" + "<input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\"\r\n"
+		sb.append("</label>\n"
+				+ "<input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\""
 		        + " type=\"number\" data-concept=\"" + this.dataConcept + "\"");
 		if (defaultValue != null) {
 			sb.append(" value=\"" + userFriendlyDisplay(defaultValue) + "\"");
@@ -114,7 +116,8 @@ public class NumberField implements FormField {
 		if (required) {
 			sb.append(" required=\"required\"");
 		}
-		sb.append("/>\r\n </div>");
+		sb.append("/>\n " +
+				"</div>");
 		//creates scripts that contain javascript to use for client side validation
 		setJS();
 		return sb.toString();
@@ -186,27 +189,27 @@ public class NumberField implements FormField {
 	private void setJS() {
 		StringBuilder jsSb = new StringBuilder();
 		if (absoluteMinimum != null && absoluteMaximum != null) {
-			jsSb.append("\r\n $(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
-			        + "': {\r\n number: true, \r\n range: [" + absoluteMinimum + "," + absoluteMaximum + "]");
+			jsSb.append("\r\n $(formId).validate({\n" + "        rules: {\n '" + FieldFactory.escapeJs(this.name)
+			        + "': {\n number: true, \n range: [" + absoluteMinimum + "," + absoluteMaximum + "]");
 			if (this.required) {
-				jsSb.append(" \r\n required : true");
+				jsSb.append(" \n required : true");
 			}
-			jsSb.append("\r\n  } } });");
+			jsSb.append("\n  } } });");
 		} else if (absoluteMaximum != null && absoluteMinimum == null) {
-			jsSb.append(" $(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
-			        + "': {\r\n number: true, \r\n max: " + absoluteMaximum);
+			jsSb.append(" $(formId).validate({\n" + "        rules: {\n '" + FieldFactory.escapeJs(this.name)
+			        + "': {\n number: true, \n max: " + absoluteMaximum);
 			if (this.required) {
-				jsSb.append(" \r\n required : true");
+				jsSb.append(" \n required : true");
 			}
-			jsSb.append("\r\n  } } });");
+			jsSb.append("\n  } } });");
 			
 		} else if (absoluteMinimum != null && absoluteMaximum == null) {
-			jsSb.append("$(formId).validate({\r\n" + "        rules: {\r\n '" + FieldFactory.escapeJs(this.name)
-			        + "': {\r\n number: true, \r\n min: " + absoluteMinimum);
+			jsSb.append("$(formId).validate({\n" + "        rules: {\n '" + FieldFactory.escapeJs(this.name)
+			        + "': {\n number: true, \n min: " + absoluteMinimum);
 			if (this.required) {
-				jsSb.append(" \r\n required : true");
+				jsSb.append(" \n required : true");
 			}
-			jsSb.append("\r\n  } } });");
+			jsSb.append("\n  } } });");
 		}
 		
 		this.js = jsSb.toString();

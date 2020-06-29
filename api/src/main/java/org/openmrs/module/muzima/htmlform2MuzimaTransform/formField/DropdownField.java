@@ -45,16 +45,17 @@ public class DropdownField extends SingleOptionField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\r\n<div class=\"form-group\">\r\n" + "            <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("\n<div class=\"form-group\">\n"
+				+ "    		<label for=\"" + this.name + "\">" + this.fieldLabel);
 		if (this.required) {
-			sb.append(" <span class=\"required\">*</span>");
+			sb.append(" 	<span class=\"required\">*</span>");
 		}
-		sb.append("</label>");
-		sb.append("<select id=\"" + this.name + "\" name=\"" + this.name + "\"");
+		sb.append("		    </label>");
+		sb.append("\n		<select class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\"");
 		if (this.required) {
 			sb.append(" required =\"required \" ");
 		}
-		sb.append(" data-concept=" + this.dataConcept);
+		sb.append(" data-concept=\"" + this.dataConcept + "\"");
 		if (size != null) {
 			if (size == 999) {
 				size = getOptions().size() + 1; // Add one to make sure all elements show up without scrollbar
@@ -69,14 +70,14 @@ public class DropdownField extends SingleOptionField {
 			if (!selected)
 				selected = getDefaultValue() == null ? option.getValue().equals("")
 				        : getDefaultValue().equals(option.getValue());
-			sb.append("<option value=\"").append(option.getValue()).append("\"");
+			sb.append("\n			<option value=\"").append(option.getValue()).append("\"");
 			if (selected)
 				sb.append(" selected=\"true\"");
 			sb.append(">");
 			sb.append(option.getLabel());
 			sb.append("</option>");
 		}
-		sb.append("</select>\r\n</div>");
+		sb.append("\n		</select>\n</div>");
 		
 		return sb.toString();
 	}

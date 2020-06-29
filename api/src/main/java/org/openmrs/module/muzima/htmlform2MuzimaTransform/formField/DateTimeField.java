@@ -48,11 +48,12 @@ public class DateTimeField implements FormField {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("\n<div class=\"form-group\">\n"
+				+ "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 		if (required) {
 			sb.append("<span class=\"required\">*</span>");
 		}
-		sb.append("</label>\r\n" + "    <input class=\"form-control datetimepicker");
+		sb.append("</label>\n" + "    <input class=\"form-control datetimepicker");
 		if (allowFutureDates) {
 			sb.append(" future-date");
 		} else {
@@ -63,7 +64,8 @@ public class DateTimeField implements FormField {
 		if (required) {
 			sb.append("required=\"required\"");
 		}
-		sb.append(">\r\n" + "</div>\r\n");
+		sb.append(">\n"
+				+ "</div>\n");
 		
 		return sb.toString();
 	}
