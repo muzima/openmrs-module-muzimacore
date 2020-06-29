@@ -32,7 +32,7 @@ public class CheckboxField extends SingleOptionField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\n<div class=\"section\">\n" + "<h4>" + this.fieldLabel);
+		sb.append("\n<div class=\"form-group\">\n" + "<h4>" + this.fieldLabel);
 		if (this.required) {
 			sb.append(" <span class=\"required\">*</span>");
 		}
@@ -48,7 +48,7 @@ public class CheckboxField extends SingleOptionField {
 					+ "    		<label for=\"" + option.getLabel() + "_" + this.name + "\" class=\"font-normal\">\n"
 			        + "         <input id=\"" + option.getLabel() + "_" + this.name + "\" name=\"" + this.name + "\" type=\"checkbox\"\n"
 			        + "                       data-concept=\"" + this.dataConcept + "\"\n"
-			        + "                       value=\"" + option.getValue() + "\">" + option.getLabel() + "\n"
+			        + "                       value=\"" + option.getValue() + "\">  " + option.getLabel() + "\n"
 			        + "         </label>\n"
 					+ "    </div>");
 			

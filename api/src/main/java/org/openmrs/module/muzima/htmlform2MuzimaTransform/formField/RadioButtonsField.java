@@ -52,10 +52,10 @@ public class RadioButtonsField extends SingleOptionField {
 			if (!selected)
 				selected = getDefaultValue() == null ? option.getValue().equals("")
 				        : getDefaultValue().equals(option.getValue());
-			sb.append("\n		<div class=\"radio\">\n"
+			sb.append(" 		<div class=\"radio\">\n"
 					+ "            <label for=\""+this.name.concat(String.valueOf(i))+"\" style=\"font-weight: normal;\">\n"
 					+ "                <input name=\"" + this.name + "\" id=\""+this.name.concat(String.valueOf(i))+"\" type=\"radio\" data-concept=\"" + this.dataConcept + "\"\n"
-			        + "                       value=\"" + option.getValue() + "\">" + option.getLabel() + "\n"
+			        + "                       value=\"" + option.getValue() + "\">\n" + option.getLabel() + "\n"
 			        + "            </label>\n"
 					+ "         </div>");
 			if (i < getOptions().size() - 1) {
@@ -63,7 +63,7 @@ public class RadioButtonsField extends SingleOptionField {
 			}
 		}
 		
-		sb.append(" </div>\n"
+		sb.append(" </div>\r\n"
 				+ "</div>");
 		return sb.toString();
 	}

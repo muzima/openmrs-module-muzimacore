@@ -626,7 +626,11 @@ public class HtmlGenerator implements TagHandler {
 		
 		if (handler == null)
 			handler = this; // do default actions
-			
+
+		if(node.getNodeName() == "tr"){
+			String substituteString = "\n<div class=\"section\">";
+			outHtmlPrintWriter.print(substituteString);
+		}
 		boolean handleContents = handler.doStartTag(outHtmlPrintWriter, outJsPrintWriter, parent, node);
 		
 		// Unless the handler told us to skip them, then iterate over any children
@@ -655,6 +659,11 @@ public class HtmlGenerator implements TagHandler {
 		if (node.getNodeName() == "obsgroup") {
 			outHtmlPrintWriter.write("</div>");
 		}
+
+		if (node.getNodeName() == "tr") {
+			outHtmlPrintWriter.write("</div>");
+		}
+
 	}
 	
 	/**

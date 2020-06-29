@@ -230,7 +230,7 @@ public class ObsElement implements HtmlGeneratorElement {
 		}
 		else
 			throw new IllegalArgumentException("Name tags other than 'default' not yet implemented");
-	} else if (parameters.containsKey("labelText")) {
+	} else if (parameters.containsKey("labelText") && StringUtils.isNotEmpty(parameters.get("labelText"))) {
 		valueLabel = parameters.get("labelText");
 	} else if (parameters.containsKey("labelCode")) {
 		//translations have been done already with applyTranslations()

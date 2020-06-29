@@ -88,7 +88,7 @@ public class TextField implements FormField {
 			if (required) {
 				sb.append("<span class=\"required error-message\">*</span>");
 			}
-			sb.append(" </label>\n" + "<textarea name=\"" + this.name + "\" id=\"" + this.name + "\"");
+			sb.append(" </label>\n" + "<textarea class=\"form-group\" name=\"" + this.name + "\" id=\"" + this.name + "\"");
 			
 			if (textAreaRows != null)
 				sb.append(" rows=\"" + textAreaRows + "\"");
