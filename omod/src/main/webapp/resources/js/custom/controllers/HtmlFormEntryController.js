@@ -170,7 +170,7 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
         alertFunc(1, 'Conversion Succeeded');
     }).catch(function (error) {
         $ctrl.converting = false;
-        alertFunc(0, 'Conversion Failed');
+        alertFunc(1, 'Conversion Failed');
         $uibModalInstance.dismiss('cancel');
     });
 

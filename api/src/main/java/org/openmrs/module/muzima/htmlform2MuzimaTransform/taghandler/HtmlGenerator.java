@@ -222,9 +222,9 @@ public class HtmlGenerator implements TagHandler {
 	 */
 	public String removeUnusedNodes(String xml) throws Exception {
 		xml = xml.replaceAll(
-		    "<table\\b[^><]*>|<td\\b[^><]*>|<tr\\b[^><]*>|<encounterDate\\b[^><]*>|<encounterProvider\\b[^><]*>|<encounterLocation\\b[^><]*>|<section\\b[^><]*>|<div\\b[^><]*>|<submit\\b[^><]*>|<span\\b[^><]*>|<h[1-6]\\b[^><]*>|</table>|</section>|</td>|</tr>|</encounterDate>|</encounterProvider>|</encounterLocation>|</submit>|</span>|</div>|</h[1-6]>|<br */?>|<style\\b[^><]*>|</style>|<head\\b[^><]*>|</head>|<html\\b[^><]*>|</html>|<meta\\b[^><]*>|</meta>|<title\\b[^><]*>|</title>|<tbody\\b[^><]*>|</tbody>|<body\\b[^><]*>|</body>|<strong\\b[^><]*>|</strong>",
+		    "<td\\b[^><]*>|<tr\\b[^><]*>|<encounterDate\\b[^><]*>|<encounterProvider\\b[^><]*>|<encounterLocation\\b[^><]*>|<section\\b[^><]*>|<div\\b[^><]*>|<submit\\b[^><]*>|<span\\b[^><]*>|<h[1-6]\\b[^><]*>|</section>|</td>|</tr>|</encounterDate>|</encounterProvider>|</encounterLocation>|</submit>|</span>|</div>|</h[1-6]>|<br */?>|<style\\b[^><]*>|</style>|<head\\b[^><]*>|</head>|<html\\b[^><]*>|</html>|<meta\\b[^><]*>|</meta>|<title\\b[^><]*>|</title>|<table\\b[^><]*>|</table>|<body\\b[^><]*>|</body>|<strong\\b[^><]*>|</strong>",
 		    "");
-		
+
 		Document doc = Htmlform2MuzimaTransformUtil.stringToDocument(xml);
 		Node content = Htmlform2MuzimaTransformUtil.findChild(doc, "htmlform");
 		Node styleNode = Htmlform2MuzimaTransformUtil.findChild(content, "style");
@@ -627,9 +627,10 @@ public class HtmlGenerator implements TagHandler {
 		if (handler == null)
 			handler = this; // do default actions
 
-		if(node.getNodeName() == "tr"){
-			String substituteString = "\n<div class=\"section\">";
+		if(node.getNodeName() == "tbody"){
+			String substituteString = "<sectionDiv>";
 			outHtmlPrintWriter.print(substituteString);
+
 		}
 		boolean handleContents = handler.doStartTag(outHtmlPrintWriter, outJsPrintWriter, parent, node);
 		
@@ -660,8 +661,8 @@ public class HtmlGenerator implements TagHandler {
 			outHtmlPrintWriter.write("</div>");
 		}
 
-		if (node.getNodeName() == "tr") {
-			outHtmlPrintWriter.write("</div>");
+		if (node.getNodeName() == "tbody") {
+			outHtmlPrintWriter.write("</sectionDiv>");
 		}
 
 	}
@@ -754,6 +755,10 @@ public class HtmlGenerator implements TagHandler {
 		xml = xml.trim();
 		xml = xml.replaceAll("(?s)<htmlform>(.*)</htmlform>", "$1");
 		xml = xml.replaceAll("</#text>|</#comment>", "");
+		xml = xml.replaceAll("<sectionDiv>", "\n<div class=\"section\">");
+		xml = xml.replaceAll("</sectionDiv>", "</div>");
+		xml = xml.replaceAll("<tbody\\b[^><]*>", "");
+		xml = xml.replaceAll("</tbody>", "");
 		return xml;
 	}
 	
