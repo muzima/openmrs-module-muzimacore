@@ -11,25 +11,15 @@ import org.openmrs.Concept;
 public class ToggleCheckbox implements FormField {
 	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private Concept answerConcept;
-	
 	private String answerLabel;
-	
 	private Object defaultValue;
-	
 	private String value;
-	
 	private boolean toggleDimInd = false;
-	
 	private String toggleTarget;
-	
 	private boolean disabled = false;
-	
 	private String js = null;
 	
 	public ToggleCheckbox(Concept concept, Concept ansConcept, Locale locale, String fieldLabel, String ansLabel,

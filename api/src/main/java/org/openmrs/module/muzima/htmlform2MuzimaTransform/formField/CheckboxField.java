@@ -8,15 +8,10 @@ import org.openmrs.Concept;
  * A checkbox field, like {@code <input type="checkbox"/>}
  */
 public class CheckboxField extends SingleOptionField {
-	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private String js = null;
 	
 	public CheckboxField() {

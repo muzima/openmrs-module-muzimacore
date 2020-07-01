@@ -11,15 +11,10 @@ import org.openmrs.Concept;
 public class RadioButtonsField extends SingleOptionField {
 	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private String answerSeparator = null;
-	
 	private String js = null;
 	
 	/**

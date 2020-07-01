@@ -18,7 +18,6 @@ public class TextFieldMain {
 		textFieldMaxLength = 3;
 		
 		textArea = true;
-		System.out.println("textarea is true");
 		StringBuilder sb = new StringBuilder();
 		
 		if (textArea) {
@@ -61,7 +60,5 @@ public class TextFieldMain {
 			sb.append("\">\n"
 					+ "</div>\n");
 		}
-		System.out.println(sb);
-		
 	}
 }

@@ -9,43 +9,27 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.htmlform2MuzimaTransform.Htmlform2MuzimaTransformUtil;
 
 public class ConceptSearchAutoCompleteField implements FormField {
-	
 	private Option defaultValue;
-	
 	private String allowedConceptIds;
-	
 	private String allowedConceptClassNames;
-	
 	private String allowedConceptSetIds;
-	
 	private String src;
-	
 	private static String defaultSrc = "conceptSearch.form";
-	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private String js = null;
-	
 	private String sourceVariableName;
-	
 	private String autoCompleteSourceArray;
 	
 	public ConceptSearchAutoCompleteField(Concept concept, Locale locale, String label, List<Concept> conceptList,
 	    List<ConceptClass> allowedconceptclasses, String src) {
-		
 		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
 		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
 		this.fieldLabel = label;
 		this.src = src;
-		
 		this.sourceVariableName = Htmlform2MuzimaTransformUtil.toCamelCase(this.fieldLabel) + "Source";
-		
 		StringBuilder autoCompleteSource = new StringBuilder();
 		
 		autoCompleteSource.append("var " + this.sourceVariableName + " = [ \n");
@@ -59,23 +43,22 @@ public class ConceptSearchAutoCompleteField implements FormField {
 				}
 			}
 		} else {
-				
-				for (ConceptClass conceptClass : allowedconceptclasses) {
-					try {
-						List<Concept> cncptList = Context.getConceptService().getConceptsByClass(conceptClass);
-						for (Concept conc : cncptList) {
-							Option option = new Option(conc, locale);
-							autoCompleteSource.append(
-							    "{\"label\": \"" + option.getLabel() + "\", \" val\": \"" + option.getValue() + "\"},");
-						}
-					}
-					catch (Exception e) {
-						throw new RuntimeException(
-						        "Error in answer class list for concept class: " + conceptClass + " (" + e.toString());
+			for (ConceptClass conceptClass : allowedconceptclasses) {
+				try {
+					List<Concept> cncptList = Context.getConceptService().getConceptsByClass(conceptClass);
+					for (Concept conc : cncptList) {
+						Option option = new Option(conc, locale);
+						autoCompleteSource.append(
+							"{\"label\": \"" + option.getLabel() + "\", \" val\": \"" + option.getValue() + "\"},");
 					}
 				}
-				
+				catch (Exception e) {
+					throw new RuntimeException(
+							"Error in answer class list for concept class: " + conceptClass + " (" + e.toString());
+				}
 			}
+
+		}
 		
 		autoCompleteSource.append("];\r\n");
 		this.autoCompleteSourceArray = autoCompleteSource.toString();
@@ -88,7 +71,6 @@ public class ConceptSearchAutoCompleteField implements FormField {
 	
 	@Override
 	public String generateHtml() {
-		
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("\n<div class=\"form-group\">\n"

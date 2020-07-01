@@ -12,7 +12,6 @@ import org.openmrs.OpenmrsObject;
 public abstract class SingleOptionField implements FormField {
 	
 	private String defaultValue;
-	
 	private List<Option> options;
 	
 	/**

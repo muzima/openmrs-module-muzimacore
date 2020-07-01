@@ -10,23 +10,13 @@ import org.openmrs.Concept;
 public class TimeFieldMain {
 	
 	private String fieldLabel = "observation time";
-	
 	private String name = "sureshtime";
-	
 	private String dataConcept = "1915^DATE OF OBS^99DCT";
-	
 	private boolean required = true;
-	
 	protected final SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm");
-	
-	//private String initialValue = timeFormat.format(new Date());
-	
 	private Date defaultValue = new Date();
-	
 	private boolean hidden;
-	
 	private boolean hideSeconds = true;
-	
 	protected String js = setJs();
 	
 	public String generateHtml() {
@@ -125,6 +115,5 @@ public class TimeFieldMain {
 	
 	public static void main(String[] args) {
 		TimeFieldMain tf = new TimeFieldMain();
-		System.out.print(tf.generateHtml());
 	}
 }

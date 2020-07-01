@@ -10,17 +10,11 @@ import org.openmrs.Concept;
  */
 
 public class DateTimeField implements FormField {
-	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private boolean allowFutureDates = false;
-	
 	private String js;
 	
 	public DateTimeField(Concept concept, Locale locale, String label, boolean allowFutureDate, Date defaultDate) {

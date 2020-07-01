@@ -14,7 +14,7 @@ public class FieldFactory {
 	/**
 	 * Formats a value for display as HTML.
 	 * 
-	 * @param the value to display
+	 * @param value to display
 	 * @return the HTML to display the value
 	 */
 	public static String displayValue(String value) {

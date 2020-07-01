@@ -10,19 +10,12 @@ import org.openmrs.Concept;
 public class TimeField implements FormField {
 	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private Date defaultValue;
-	
 	private boolean hidden;
-	
 	private boolean hideSeconds = false;
-	
 	private String js = null;
 	
 	public TimeField(Concept concept, Locale locale, String label, Date defaultTime) {

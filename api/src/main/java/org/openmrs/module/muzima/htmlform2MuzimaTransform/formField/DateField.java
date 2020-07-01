@@ -12,21 +12,13 @@ import org.openmrs.Concept;
  */
 
 public class DateField implements FormField {
-	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private String defaultValue = null;
-	
 	protected final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	
 	private boolean allowFutureDates = false;
-	
 	private String js = null;
 	
 	public DateField(Concept concept, Locale locale, String label, boolean allowFutureDate, Date defaultDate) {

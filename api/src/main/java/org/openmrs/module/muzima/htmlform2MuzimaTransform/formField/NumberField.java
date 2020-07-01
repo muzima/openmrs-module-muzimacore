@@ -10,25 +10,15 @@ import org.openmrs.module.htmlformentry.compatibility.ConceptCompatibility;
  * implements <input type="number"/>
  */
 public class NumberField implements FormField {
-	
 	private Number defaultValue;
-	
 	private boolean floatingPoint = true;
-	
 	private Double absoluteMinimum;
-	
 	private Double absoluteMaximum;
-	
 	private Integer numberFieldSize = 5;
-	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private String js = null;
 	
 	/**
@@ -65,7 +55,6 @@ public class NumberField implements FormField {
 	 */
 	public NumberField(ConceptNumeric concept, Locale locale, String label, String size, Double absoluteMinimum,
 	    Double absoluteMaximum) {
-		
 		this.name = FieldFactory.createNameAttributeFromConcept(concept, locale);
 		this.dataConcept = FieldFactory.createDataConceptAttributeFromConcept(concept, locale);
 		this.fieldLabel = label;

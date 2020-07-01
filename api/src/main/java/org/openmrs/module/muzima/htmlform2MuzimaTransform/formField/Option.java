@@ -10,9 +10,7 @@ import org.openmrs.Concept;
 public class Option {
 	
 	private String label;
-	
 	private String value;
-	
 	private boolean selected = false;
 	
 	public Option() {

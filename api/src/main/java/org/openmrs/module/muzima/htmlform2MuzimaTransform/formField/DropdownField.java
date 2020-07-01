@@ -9,17 +9,11 @@ import org.openmrs.Concept;
  * {@code <select name="..."><option value="...">...</option></select>}
  */
 public class DropdownField extends SingleOptionField {
-	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private Integer size;
-	
 	private String js = null;
 	
 	public DropdownField() {

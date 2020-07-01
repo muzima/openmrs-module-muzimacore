@@ -31,15 +31,10 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
 	private static final Logger log = LoggerFactory.getLogger(MuzimaFormServiceImpl.class);
 	
 	private XForm2Html5Transformer html5Transformer;
-	
 	private ModelXml2JsonTransformer modelXml2JsonTransformer;
-	
 	private ODK2JavarosaTransformer odk2JavarosaTransformer;
-	
 	private ODK2HTML5Transformer odk2HTML5Transformer;
-	
 	private MuzimaFormDAO dao;
-	
 	private Htmlform2MuzimaTransform htmlform2MuzimaTransform;
 	
 	private static Map<String, TagHandler> handlers = new LinkedHashMap<String, TagHandler>();

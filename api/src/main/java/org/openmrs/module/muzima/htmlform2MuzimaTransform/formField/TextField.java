@@ -11,27 +11,16 @@ import org.openmrs.Concept;
 public class TextField implements FormField {
 	
 	private Boolean textArea = false;
-	
 	private Integer textFieldSize;
-	
 	private Integer textAreaRows;
-	
 	private Integer textAreaColumns;
-	
 	private String defaultValue;
-	
 	private Integer textFieldMaxLength;
-	
 	private String placeholder;
-	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private String js = null;
 	
 	/**
