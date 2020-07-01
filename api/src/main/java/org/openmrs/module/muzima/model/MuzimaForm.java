@@ -21,7 +21,6 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
     private String form; ///uuid to form table
     private Set<MuzimaFormTag> tags = new HashSet<MuzimaFormTag>();
     private Form formDefinition;
-    private EncounterType encounterType;
 
     public MuzimaForm() {
     }    // used by hibernate
@@ -51,8 +50,6 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
     }
 
     public EncounterType getEncounterType() { return formDefinition.getEncounterType(); }
-
-    public void setEncounterType(EncounterType encounterType){  this.encounterType = formDefinition.getEncounterType(); }
 
     public String getName() {
         return formDefinition.getName() == null ? "" : formDefinition.getName();
@@ -151,8 +148,8 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
         result = 31 * result + (getForm() != null ? getForm().hashCode() : 0);
         result = 31 * result + (getDiscriminator() != null ? getDiscriminator().hashCode() : 0);
         result = 31 * result + (getFormDefinition().getDescription() != null ? getFormDefinition().getDescription().hashCode() : 0);
-        result = 31 * result + (tags != null ? tags.hashCode() : 0);
         result = 31 * result + (getFormDefinition().getEncounterType() != null ? getFormDefinition().getEncounterType().hashCode() : 0);
+	result = 31 * result + (tags != null ? tags.hashCode() : 0);
         return result;
     }
 
@@ -164,7 +161,6 @@ public class MuzimaForm extends BaseOpenmrsMetadata {
                 ", form='" + getForm() + '\'' +
                 ", discriminator='" + getDiscriminator() + '\'' +
                 ", tags=" + tags +
-                ", encounterType"+getFormDefinition().getEncounterType()+
                 '}';
     }
 
