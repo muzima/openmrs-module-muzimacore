@@ -200,13 +200,13 @@
                                 <div class="form-preview">
                                     <div ng-show="$ctrl.converting" class="wait-convert"></div>
                                     <uib-tabset active="active" ng-show="!$ctrl.converting">
-                                        <uib-tab index="0" heading="HTML Review" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
+                                        <uib-tab index="0" heading="HTML Preview" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
                                             <div bind-unsafe-html="$ctrl.convertedForm.html? $ctrl.getBody($ctrl.convertedForm.html) : ''"></div>
                                         </uib-tab>
                                         <uib-tab index="1" heading="HTML Code" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
                                           <div>
                                             <pre>
-                                              <code>
+                                              <code contentEditable="{{$ctrl.editHTML}}">
                                                   {{$ctrl.convertedForm.html? $ctrl.convertedForm.html : ''}}
                                               </code>
                                             </pre>
@@ -259,9 +259,6 @@
                         Convert
                     </button>
                 </div>
-                
-                <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize"
-                    items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
             </div>
 
         </div>

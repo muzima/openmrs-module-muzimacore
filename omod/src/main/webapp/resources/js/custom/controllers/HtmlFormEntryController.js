@@ -3,10 +3,10 @@
 function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService, _) {
 
     // initialize the paging structure
-    $scope.maxSize = 5;
-    $scope.pageSize = 5;
-    $scope.currentPage = 1;
-    $scope.totalItems = 0;
+    //$scope.maxSize = 5;
+   // $scope.pageSize = 5;
+    //$scope.currentPage = 1;
+   // $scope.totalItems = 0;
     $scope.showConvertedForms = true;
     $scope.showColor = '#004f47';
 
@@ -162,6 +162,7 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
     $ctrl.form = form;
     $ctrl.converting = true;
     $ctrl.convertedForm = {};
+    $ctrl.editHTML = false;
     
     htmlFormEntryService.convert($ctrl.form.id)
     .then(function (res) {
@@ -170,8 +171,11 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
         alertFunc(1, 'Conversion Succeeded');
     }).catch(function (error) {
         $ctrl.converting = false;
-        alertFunc(1, 'Conversion Failed');
-        $uibModalInstance.dismiss('cancel');
+        alertFunc(0, 'Conversion Failed');
+        console.log(error);
+        setTimeout(function () {
+             $uibModalInstance.close($ctrl.convertedForm);
+        }, 3000)
     });
 
     // prevent routing while converting
@@ -210,6 +214,7 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
 
     $ctrl.edit = function () {
         alertFunc(1, 'In progress...');
+        $ctrl.editHTML = true;
     };
 
     $ctrl.getBody = function (html) {

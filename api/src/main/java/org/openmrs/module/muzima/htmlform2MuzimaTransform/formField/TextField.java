@@ -72,12 +72,14 @@ public class TextField implements FormField {
 		StringBuilder sb = new StringBuilder();
 		
 		if (textArea) {
-			sb.append("\n<div class=\"form-group freetext\">\n" + "<label for=\"" + this.name + "\">" + this.fieldLabel);
+			sb.append("\n<div class=\"form-group freetext\">\n"
+					+ "<label for=\"" + this.name + "\">" + this.fieldLabel);
 			
 			if (required) {
 				sb.append("<span class=\"required error-message\">*</span>");
 			}
-			sb.append(" </label>\n" + "<textarea class=\"form-group\" name=\"" + this.name + "\" id=\"" + this.name + "\"");
+			sb.append(" </label>\n"
+					+ "<textarea class=\"form-control\" name=\"" + this.name + "\" id=\"" + this.name + "\" data-concept=\"" + this.dataConcept + "\"");
 			
 			if (textAreaRows != null)
 				sb.append(" rows=\"" + textAreaRows + "\"");
