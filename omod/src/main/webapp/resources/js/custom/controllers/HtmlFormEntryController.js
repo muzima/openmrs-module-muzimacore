@@ -3,10 +3,10 @@
 function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService, _) {
 
     // initialize the paging structure
-    //$scope.maxSize = 5;
-   // $scope.pageSize = 5;
-    //$scope.currentPage = 1;
-   // $scope.totalItems = 0;
+    $scope.maxSize = 5;
+    $scope.pageSize = 5;
+    $scope.currentPage = 1;
+    $scope.totalItems = 0;
     $scope.showConvertedForms = true;
     $scope.showColor = '#004f47';
 
@@ -14,6 +14,7 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
         $scope.selectedHtmlFormId = -1;
         $scope.htmlFormEntryModuleStarted = true;
         $scope.htmlForms = [];
+        $scope.htmlFormss = [];
         $scope.htmlFormEntryService = HtmlFormEntryService;
         $scope.formService = FormService;
         $scope.fetch();
@@ -31,9 +32,14 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
         HtmlFormEntryService.getHtmlForms($scope.search, $scope.currentPage, $scope.pageSize)
             .then(function (response) {
                 var serverData = response.data;
-                $scope.htmlForms = serverData.objects;
+                $scope.htmlFormss = serverData.objects;
                 $scope.markConvertedForms();
                 $scope.totalItems = serverData.objects.length;
+                $scope.numOfPages = Math.ceil(serverData.objects.length / $scope.pageSize);
+
+                var begin = (($scope.currentPage - 1) * $scope.pageSize),
+                end = begin + $scope.pageSize;
+                $scope.htmlForms = $scope.htmlFormss.slice(begin, end);
             }).catch(function (error) {
                 showErrorMessage("There was an error connecting the server");
                 console.info(error);
@@ -69,8 +75,13 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
             HtmlFormEntryService.getHtmlForms($scope.search, $scope.currentPage, $scope.pageSize).
                 then(function (response) {
                     var serverData = response.data;
-                    $scope.htmlForms = serverData.objects;
-                    $scope.totalItems = serverData.totalItems;
+                    $scope.htmlFormss = serverData.objects;
+                    $scope.totalItems = serverData.objects.length;
+                    $scope.numOfPages = Math.ceil(serverData.objects.length / $scope.pageSize);
+
+                    var begin = (($scope.currentPage - 1) * $scope.pageSize),
+                    end = begin + $scope.pageSize;
+                    $scope.htmlForms = $scope.htmlFormss.slice(begin, end);
                 }).catch(function (error) {
                     showErrorMessage("There was an error connecting the server");
                     console.info(error);
@@ -85,7 +96,11 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
                 then(function (response) {
                     var serverData = response.data;
                     $scope.htmlForms = serverData.objects;
-                    $scope.totalItems = serverData.totalItems;
+                    $scope.totalItems = serverData.objects.length;
+                    $scope.numOfPages = Math.ceil(serverData.objects.length / $scope.pageSize);
+                    var begin = (($scope.currentPage - 1) * $scope.pageSize),
+                    end = begin + $scope.pageSize;
+                    $scope.htmlForms = $scope.htmlFormss.slice(begin, end);
                 }).catch(function (error) {
                     showErrorMessage("There was an error connecting the server");
                     console.info(error);
