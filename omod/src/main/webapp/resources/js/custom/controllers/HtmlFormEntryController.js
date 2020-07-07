@@ -8,6 +8,7 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
     $scope.currentPage = 1;
     $scope.totalItems = 0;
     $scope.showConvertedForms = true;
+    $scope.fetching = false;
     $scope.showColor = '#004f47';
 
     $scope.init = function () {
@@ -28,7 +29,8 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
                 showErrorMessage("There was an error connecting the server");
                 console.info(error);
             });
-
+        $('#wait').show();
+        $scope.fetching = true;
         HtmlFormEntryService.getHtmlForms($scope.search, $scope.currentPage, $scope.pageSize)
             .then(function (response) {
                 var serverData = response.data;
@@ -40,9 +42,13 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
                 var begin = (($scope.currentPage - 1) * $scope.pageSize),
                 end = begin + $scope.pageSize;
                 $scope.htmlForms = $scope.htmlFormss.slice(begin, end);
+                $('#wait').hide();
+                $scope.fetching = false;
             }).catch(function (error) {
                 showErrorMessage("There was an error connecting the server");
                 console.info(error);
+                $('#wait').hide();
+                $scope.fetching = false;
             });
 
     };
@@ -71,6 +77,7 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
     };
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
+        $('#wait').show();
         if (newValue != oldValue) {
             HtmlFormEntryService.getHtmlForms($scope.search, $scope.currentPage, $scope.pageSize).
                 then(function (response) {
@@ -82,9 +89,11 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
                     var begin = (($scope.currentPage - 1) * $scope.pageSize),
                     end = begin + $scope.pageSize;
                     $scope.htmlForms = $scope.htmlFormss.slice(begin, end);
+                    $('#wait').hide();
                 }).catch(function (error) {
                     showErrorMessage("There was an error connecting the server");
                     console.info(error);
+                    $('#wait').hide();
                 });
         }
     }, true);
