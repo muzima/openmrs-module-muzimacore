@@ -229,6 +229,27 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
         });
     };
 
+     $ctrl.update = function () {
+        if(confirm("Are you sure you want to update the form")) {
+            htmlFormEntryService.updateConvertedForm($ctrl.convertedForm.uuid, $ctrl.convertedForm.discriminator, $ctrl.convertedForm.html)
+            .then(function (res){
+                alertFunc(1, 'Form Updated Successfully');
+                $ctrl.form.converted = true;
+
+                setTimeout(function () {
+                    $uibModalInstance.close($ctrl.convertedForm);
+                }, 3000)
+
+            }).catch(function (error) {
+                $ctrl.form.converted = true;
+                alertFunc(0, 'Updating converted form Failed');
+                $uibModalInstance.dismiss('cancel');
+            });
+        }else{
+            $uibModalInstance.dismiss('cancel');
+        }
+     };
+
     $ctrl.cancel = function () {
         let reply = confirm('Do you want to cancel the conversion?');
         if (reply) {

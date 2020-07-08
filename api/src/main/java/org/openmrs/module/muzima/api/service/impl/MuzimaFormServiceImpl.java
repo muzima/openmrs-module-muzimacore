@@ -230,6 +230,22 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
 			throw new DocumentException("The file name already Exists !");
 		}
 	}
-	
+
+	@Override
+	public MuzimaForm updateConvertedForm(String html, String formUUID, String discriminator) throws Exception {
+		List<MuzimaForm> formsWithUUID = getMuzimaFormByForm(formUUID, false);
+		String formUuid = null;
+		for (MuzimaForm form : formsWithUUID) {
+			if (form.getForm().equals(formUUID)) {
+				formUuid = form.getUuid();
+			}
+		}
+		if (formUuid != null) {
+			return updateHTMLForm(html, formUuid);
+		} else {
+			throw new DocumentException("Form does not exist !");
+		}
+	}
+
 	
 }

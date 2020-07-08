@@ -244,7 +244,11 @@ muzimaCoreModule.factory('HtmlFormEntryService', function ($http) {
 
     var saveConvertedForm = function (uuid, discriminator, html) {
        return $http.post("htmlFormEntrySaveConvertedForm.form", {"uuid": uuid, "discriminator":discriminator, "html":html});      
-   };
+    };
+
+    var updateConvertedForm = function (uuid, discriminator, html) {
+       return $http.post("htmlFormEntryUpdateConvertedForm.form", {"uuid": uuid, "discriminator":discriminator, "html":html});
+    };
 
 
     return {
@@ -252,7 +256,8 @@ muzimaCoreModule.factory('HtmlFormEntryService', function ($http) {
         getHtmlForms: getHtmlForms,
         convert: convert,
         getDiscriminatorTypes: getDiscriminatorTypes,        
-        saveConvertedForm : saveConvertedForm
+        saveConvertedForm : saveConvertedForm,
+        updateConvertedForm : updateConvertedForm
     };
 });
 

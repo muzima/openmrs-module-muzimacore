@@ -82,5 +82,8 @@ public interface MuzimaFormService extends OpenmrsService {
 	
 	@Transactional
 	MuzimaForm saveConvertedForm(String html, String formUUID, String discriminator) throws Exception;
-	
+
+	@Transactional
+	MuzimaForm updateConvertedForm(String html, String formUUID, String discriminator) throws Exception;
+
 }
