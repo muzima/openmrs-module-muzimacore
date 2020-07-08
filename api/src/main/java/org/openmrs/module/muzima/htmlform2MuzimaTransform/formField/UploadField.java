@@ -13,15 +13,10 @@ import org.openmrs.Obs;
 public class UploadField implements FormField {
 	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private Obs defaultValue;
-	
 	private boolean required;
-	
 	private String js = null;
 	
 	public UploadField(Concept concept, Locale locale, String label) {
@@ -33,12 +28,13 @@ public class UploadField implements FormField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("\n<div class=\"form-group\">\n"
+				+ "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 		if (required) {
 			sb.append("<span class=\"required\">*</span>");
 		}
-		sb.append("</label>\r\n" + "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name
-		        + "\"\r\n" + "           type=\"file\" data-concept=\"" + this.dataConcept + "\" />");
+		sb.append("</label>\n"
+				+ "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\" type=\"file\" data-concept=\"" + this.dataConcept + "\" />");
 		return sb.toString();
 	}
 	

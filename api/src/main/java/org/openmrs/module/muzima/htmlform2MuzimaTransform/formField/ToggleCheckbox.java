@@ -11,25 +11,15 @@ import org.openmrs.Concept;
 public class ToggleCheckbox implements FormField {
 	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private Concept answerConcept;
-	
 	private String answerLabel;
-	
 	private Object defaultValue;
-	
 	private String value;
-	
 	private boolean toggleDimInd = false;
-	
 	private String toggleTarget;
-	
 	private boolean disabled = false;
-	
 	private String js = null;
 	
 	public ToggleCheckbox(Concept concept, Concept ansConcept, Locale locale, String fieldLabel, String ansLabel,
@@ -106,9 +96,10 @@ public class ToggleCheckbox implements FormField {
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(
-		    "\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel + "</label>\r\n"
-		            + "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\"\r\n"
-		            + "           type=\"checkbox\" data-concept=\"" + this.dataConcept + "			value=\""
+		    "\n<div class=\"form-group\">\n"
+					+ "    <label for=\"" + this.name + "\">" + this.fieldLabel + "</label>\n"
+		            + "    <input class=\"form-control\" id=\"" + this.name + "\" name=\"" + this.name + "\"\n"
+		            + "           type=\"checkbox\" data-concept=\"" + this.dataConcept + "	value=\""
 		            + this.value + "\"");
 		
 		if (defaultValue != null && !"".equals(defaultValue))
@@ -118,16 +109,21 @@ public class ToggleCheckbox implements FormField {
 		if (disabled) {
 			sb.append(" disabled=\"disabled\"");
 		}
-		sb.append("/>\r\n" + "</div>");
+		sb.append("/>\n"
+				+ "</div>");
 		setJs();
 		return sb.toString();
 	}
 	
 	public void setJs() {
-		this.js = "function() {\r\n" + "  var target = $(this).attr(\"toggleHide\");\r\n"
-		        + "  if ($(this).is(\":checked\")) {\r\n" + "    $(\"#\" + target + \", .\" + target).fadeIn();\r\n"
-		        + "  } else {\r\n" + "    $(\"#\" + target + \", .\" + target).hide();\r\n"
-		        + "    clearContainerInputs($(\"#\" + target + \", .\" + target));\r\n" + "  }\r\n" + "}";
+		this.js = "function() {\n" + "  var target = $(this).attr(\"toggleHide\");\n"
+		        + "  if ($(this).is(\":checked\")) {\n"
+				+ "    $(\"#\" + target + \", .\" + target).fadeIn();\n"
+		        + "  } else {\n"
+				+ "    $(\"#\" + target + \", .\" + target).hide();\n"
+		        + "    clearContainerInputs($(\"#\" + target + \", .\" + target));\n"
+				+ "  }\n"
+				+ "}";
 		
 	}
 	

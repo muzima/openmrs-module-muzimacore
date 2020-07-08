@@ -27,7 +27,7 @@ public class ObsgroupTagHandler extends AbstractTagHandler {
 			Concept concept = Htmlform2MuzimaTransformUtil.getConcept(groupingConceptId);
 			Locale locale = Context.getLocale();
 			String dataConcept = Htmlform2MuzimaTransformUtil.createDataConceptAttributeFromConcept(concept, locale);
-			String substituteString = "\r\n<div class=\"section\" data-concept=\"" + dataConcept + "\">";
+			String substituteString = "\n<div class=\"section\" data-concept=\"" + dataConcept + "\">";
 			outHtmlPrintWriter.print(substituteString);
 		}
 		return true;

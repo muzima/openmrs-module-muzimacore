@@ -1,6 +1,6 @@
 package org.openmrs.module.muzima.htmlform2MuzimaTransform;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -119,9 +119,9 @@ public class HtmlGeneratorMethodsTest {
 	
 	@Test
 	public void substituteCharacterCodesWithAsciiCodesTest() throws Exception {
-		String htmlForm = "<htmlform>this contains non&nbsp;breaking&nbsp;space</htmlform>";
+		String htmlForm = "<htmlform>this contains non&#160;breaking&#160;space</htmlform>";
+		String expected = "<htmlform>this contains non&nbsp;breaking&nbsp;space</htmlform>";
 		htmlForm = htmlGenerator.substituteAsciiCodesWithCharacterCodes(htmlForm);
-		String expected = "<htmlform>this contains non&#160;breaking&#160;space</htmlform>";
 		assertEquals(removeWhiteSpaces(expected), removeWhiteSpaces(htmlForm));
 	}
 }

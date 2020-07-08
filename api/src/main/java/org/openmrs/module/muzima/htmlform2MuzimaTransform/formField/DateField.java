@@ -12,21 +12,13 @@ import org.openmrs.Concept;
  */
 
 public class DateField implements FormField {
-	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private String defaultValue = null;
-	
 	protected final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	
 	private boolean allowFutureDates = false;
-	
 	private String js = null;
 	
 	public DateField(Concept concept, Locale locale, String label, boolean allowFutureDate, Date defaultDate) {
@@ -69,11 +61,13 @@ public class DateField implements FormField {
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("\r\n<div class=\"form-group\">\r\n" + "    <label for=\"" + this.name + "\">" + this.fieldLabel);
+		sb.append("\n<div class=\"form-group\">\n"
+				+ "    <label for=\"" + this.name + "\">" + this.fieldLabel);
 		if (required) {
 			sb.append("<span class=\"required\">*</span>");
 		}
-		sb.append("</label>\r\n" + "    <input class=\"form-control datepicker");
+		sb.append("</label>\n"
+				+ "    <input class=\"form-control datepicker");
 		if (allowFutureDates) {
 			sb.append(" future-date");
 		} else {
@@ -86,7 +80,8 @@ public class DateField implements FormField {
 		if (required) {
 			sb.append("required=\"required\"");
 		}
-		sb.append(">\r\n" + "</div>\r\n");
+		sb.append(">\n"
+				+ "</div>\n");
 		return sb.toString();
 	}
 	

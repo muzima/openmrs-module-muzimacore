@@ -9,6 +9,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaPatientReportService;
 import org.openmrs.module.muzima.model.MuzimaPatientReport;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
+import org.openmrs.module.muzima.web.resource.utils.ResourceUtils;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
@@ -23,10 +24,11 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/patientreport",
-        supportedClass = MuzimaPatientReport.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedClass = MuzimaPatientReport.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 @Handler(supports = MuzimaPatientReport.class)
 public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<MuzimaPatientReport> {
     private static final Log log = LogFactory.getLog(MuzimaPatientReportResource.class);
@@ -44,14 +46,17 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
         Integer startIndex = context.getStartIndex();
         Integer limit =  context.getLimit();;
 
-        String uuid = request.getParameter("patientUuid");
+        String patientUuids = request.getParameter("patientUuids");
+        String reportUuids = request.getParameter("reportUuids");
+        String syncDateParam = request.getParameter("syncDate");
+        Date syncDate = ResourceUtils.parseDate(syncDateParam);
         List<MuzimaPatientReport> muzimaPatientReports = new ArrayList<MuzimaPatientReport>();
-
-        if (uuid != null) {
-            PatientService patientService = Context.getService(PatientService.class);
-            Patient patient = patientService.getPatientByUuid(uuid);
-            MuzimaPatientReportService service = Context.getService(MuzimaPatientReportService.class);
-            muzimaPatientReports = service.getPagedMuzimaPatientReports(patient.getId(), startIndex, limit);
+        MuzimaPatientReportService service = Context.getService(MuzimaPatientReportService.class);
+        if (patientUuids != null) {
+            muzimaPatientReports = service.getPagedMuzimaPatientReports(patientUuids, null, null, syncDate);
+        }
+        if(reportUuids != null){
+            muzimaPatientReports = service.getMuzimaPatientReportByUuids(reportUuids,syncDate);
         }
         return new NeedsPaging<MuzimaPatientReport>(muzimaPatientReports, context);
     }
@@ -68,6 +73,7 @@ public class MuzimaPatientReportResource extends MetadataDelegatingCrudResource<
     public Object retrieve(String uuid, RequestContext context) throws ResponseException {
         MuzimaPatientReportService service = Context.getService(MuzimaPatientReportService.class);
         return asRepresentation(service.getMuzimaPatientReportByUuid(uuid), context.getRepresentation());
+
     }
     
     @Override

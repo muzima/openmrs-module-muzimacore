@@ -7,9 +7,7 @@ package org.openmrs.module.muzima.htmlform2MuzimaTransform.formField;
 public class ToggleField {
 	
 	private String targetId;
-	
 	private String targetClass;
-	
 	private String style;
 	
 	public ToggleField() {

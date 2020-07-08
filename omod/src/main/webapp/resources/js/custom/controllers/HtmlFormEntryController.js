@@ -8,12 +8,14 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
     $scope.currentPage = 1;
     $scope.totalItems = 0;
     $scope.showConvertedForms = true;
+    $scope.fetching = false;
     $scope.showColor = '#004f47';
 
     $scope.init = function () {
         $scope.selectedHtmlFormId = -1;
         $scope.htmlFormEntryModuleStarted = true;
         $scope.htmlForms = [];
+        $scope.htmlFormss = [];
         $scope.htmlFormEntryService = HtmlFormEntryService;
         $scope.formService = FormService;
         $scope.fetch();
@@ -27,16 +29,26 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
                 showErrorMessage("There was an error connecting the server");
                 console.info(error);
             });
-
+        $('#wait').show();
+        $scope.fetching = true;
         HtmlFormEntryService.getHtmlForms($scope.search, $scope.currentPage, $scope.pageSize)
             .then(function (response) {
                 var serverData = response.data;
-                $scope.htmlForms = serverData.objects;
+                $scope.htmlFormss = serverData.objects;
                 $scope.markConvertedForms();
                 $scope.totalItems = serverData.objects.length;
+                $scope.numOfPages = Math.ceil(serverData.objects.length / $scope.pageSize);
+
+                var begin = (($scope.currentPage - 1) * $scope.pageSize),
+                end = begin + $scope.pageSize;
+                $scope.htmlForms = $scope.htmlFormss.slice(begin, end);
+                $('#wait').hide();
+                $scope.fetching = false;
             }).catch(function (error) {
                 showErrorMessage("There was an error connecting the server");
                 console.info(error);
+                $('#wait').hide();
+                $scope.fetching = false;
             });
 
     };
@@ -65,15 +77,23 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
     };
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
+        $('#wait').show();
         if (newValue != oldValue) {
             HtmlFormEntryService.getHtmlForms($scope.search, $scope.currentPage, $scope.pageSize).
                 then(function (response) {
                     var serverData = response.data;
-                    $scope.htmlForms = serverData.objects;
-                    $scope.totalItems = serverData.totalItems;
+                    $scope.htmlFormss = serverData.objects;
+                    $scope.totalItems = serverData.objects.length;
+                    $scope.numOfPages = Math.ceil(serverData.objects.length / $scope.pageSize);
+
+                    var begin = (($scope.currentPage - 1) * $scope.pageSize),
+                    end = begin + $scope.pageSize;
+                    $scope.htmlForms = $scope.htmlFormss.slice(begin, end);
+                    $('#wait').hide();
                 }).catch(function (error) {
                     showErrorMessage("There was an error connecting the server");
                     console.info(error);
+                    $('#wait').hide();
                 });
         }
     }, true);
@@ -85,7 +105,11 @@ function HtmlFormEntryCtrl($scope, $location, HtmlFormEntryService, FormService,
                 then(function (response) {
                     var serverData = response.data;
                     $scope.htmlForms = serverData.objects;
-                    $scope.totalItems = serverData.totalItems;
+                    $scope.totalItems = serverData.objects.length;
+                    $scope.numOfPages = Math.ceil(serverData.objects.length / $scope.pageSize);
+                    var begin = (($scope.currentPage - 1) * $scope.pageSize),
+                    end = begin + $scope.pageSize;
+                    $scope.htmlForms = $scope.htmlFormss.slice(begin, end);
                 }).catch(function (error) {
                     showErrorMessage("There was an error connecting the server");
                     console.info(error);
@@ -162,6 +186,7 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
     $ctrl.form = form;
     $ctrl.converting = true;
     $ctrl.convertedForm = {};
+    $ctrl.editHTML = false;
     
     htmlFormEntryService.convert($ctrl.form.id)
     .then(function (res) {
@@ -171,7 +196,10 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
     }).catch(function (error) {
         $ctrl.converting = false;
         alertFunc(0, 'Conversion Failed');
-        $uibModalInstance.dismiss('cancel');
+        console.log(error);
+        setTimeout(function () {
+             $uibModalInstance.close($ctrl.convertedForm);
+        }, 3000)
     });
 
     // prevent routing while converting
@@ -201,6 +229,27 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
         });
     };
 
+     $ctrl.update = function () {
+        if(confirm("Are you sure you want to update the form")) {
+            htmlFormEntryService.updateConvertedForm($ctrl.convertedForm.uuid, $ctrl.convertedForm.discriminator, $ctrl.convertedForm.html)
+            .then(function (res){
+                alertFunc(1, 'Form Updated Successfully');
+                $ctrl.form.converted = true;
+
+                setTimeout(function () {
+                    $uibModalInstance.close($ctrl.convertedForm);
+                }, 3000)
+
+            }).catch(function (error) {
+                $ctrl.form.converted = true;
+                alertFunc(0, 'Updating converted form Failed');
+                $uibModalInstance.dismiss('cancel');
+            });
+        }else{
+            $uibModalInstance.dismiss('cancel');
+        }
+     };
+
     $ctrl.cancel = function () {
         let reply = confirm('Do you want to cancel the conversion?');
         if (reply) {
@@ -210,6 +259,7 @@ angular.module('muzimaCoreModule').controller('FormReviewModalInstanceCtrl', fun
 
     $ctrl.edit = function () {
         alertFunc(1, 'In progress...');
+        $ctrl.editHTML = true;
     };
 
     $ctrl.getBody = function (html) {

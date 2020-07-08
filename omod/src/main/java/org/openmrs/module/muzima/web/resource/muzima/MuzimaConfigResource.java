@@ -7,6 +7,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaConfigService;
 import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
+import org.openmrs.module.muzima.web.resource.utils.ResourceUtils;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
@@ -21,10 +22,11 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/config",
-        supportedClass = MuzimaConfig.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedClass = MuzimaConfig.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 @Handler(supports = MuzimaConfig.class)
 public class MuzimaConfigResource extends MetadataDelegatingCrudResource<MuzimaConfig> {
     private static final Log log = LogFactory.getLog(MuzimaConfigResource.class);
@@ -43,10 +45,16 @@ public class MuzimaConfigResource extends MetadataDelegatingCrudResource<MuzimaC
         Integer limit =  context.getLimit();;
 
         String nameParameter = request.getParameter("q");
+
+        String syncDateString = context.getRequest().getParameter("syncDate");
+        Date syncDate = null;
+        if(syncDateString!=null){
+            syncDate = ResourceUtils.parseDate(syncDateString);
+        }
         List<MuzimaConfig> muzimaConfigs = new ArrayList<MuzimaConfig>();
 
         if (nameParameter != null) {
-            muzimaConfigs = Context.getService(MuzimaConfigService.class).getPagedConfigs(nameParameter, startIndex, limit);
+            muzimaConfigs = Context.getService(MuzimaConfigService.class).getPagedConfigs(nameParameter, startIndex, limit, syncDate);
         }
         return new NeedsPaging<MuzimaConfig>(muzimaConfigs, context);
     }

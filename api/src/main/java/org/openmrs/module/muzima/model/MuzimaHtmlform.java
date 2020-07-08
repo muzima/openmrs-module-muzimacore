@@ -1,5 +1,4 @@
-//TODO move this to the org.openmrs.module.muzima.model
-package org.openmrs.module.muzima.htmlform2MuzimaTransform;
+package org.openmrs.module.muzima.model;
 
 import org.openmrs.Form;
 import org.codehaus.jackson.annotate.JsonIgnore;

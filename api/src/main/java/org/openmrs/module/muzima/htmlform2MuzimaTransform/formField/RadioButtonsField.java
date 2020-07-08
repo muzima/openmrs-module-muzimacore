@@ -11,15 +11,10 @@ import org.openmrs.Concept;
 public class RadioButtonsField extends SingleOptionField {
 	
 	private String fieldLabel;
-	
 	private String name;
-	
 	private String dataConcept;
-	
 	private boolean required = false;
-	
 	private String answerSeparator = null;
-	
 	private String js = null;
 	
 	/**
@@ -38,11 +33,13 @@ public class RadioButtonsField extends SingleOptionField {
 	@Override
 	public String generateHtml() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\r\n<div class=\"form-group\">\r\n <div class=\"form-group\">\r\n <span><strong>" + this.fieldLabel);
+		sb.append("\n<div class=\"form-group\">\n"
+				+"			<div class=\"form-group\">\n"
+				+"				<span><strong>" + this.fieldLabel);
 		if (this.required) {
 			sb.append(" <span class=\"required\">*</span>");
 		}
-		sb.append(" </strong></span> \r\n");
+		sb.append(" </strong></span> \n");
 		
 		for (int i = 0; i < getOptions().size(); ++i) {
 			Option option = getOptions().get(i);
@@ -50,17 +47,19 @@ public class RadioButtonsField extends SingleOptionField {
 			if (!selected)
 				selected = getDefaultValue() == null ? option.getValue().equals("")
 				        : getDefaultValue().equals(option.getValue());
-			sb.append("\r\n<div class=\"radio\">\r\n" + "            <label>\r\n" + "                <input name=\""
-			        + this.name
-			        + "\" type=\"radio\"\r\n" + "                       data-concept=\"" + this.dataConcept + "\"\r\n"
-			        + "                       value=\"" + option.getValue() + "\">\r\n" + option.getLabel() + "\r\n"
-			        + "            </label>\r\n" + "        </div>");
+			sb.append(" 		<div class=\"radio\">\n"
+					+ "            <label for=\""+this.name.concat(String.valueOf(i))+"\" style=\"font-weight: normal;\">\n"
+					+ "                <input name=\"" + this.name + "\" id=\""+this.name.concat(String.valueOf(i))+"\" type=\"radio\" data-concept=\"" + this.dataConcept + "\"\n"
+			        + "                       value=\"" + option.getValue() + "\">\n" + option.getLabel() + "\n"
+			        + "            </label>\n"
+					+ "         </div>");
 			if (i < getOptions().size() - 1) {
 				sb.append(getAnswerSeparator());
 			}
 		}
 		
-		sb.append(" </div>\r\n" + "</div>");
+		sb.append(" </div>\r\n"
+				+ "</div>");
 		return sb.toString();
 	}
 	

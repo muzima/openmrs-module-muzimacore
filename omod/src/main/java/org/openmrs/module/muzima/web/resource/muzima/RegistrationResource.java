@@ -36,7 +36,7 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/registration",
         supportedClass = FakePatient.class,
-        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 public class RegistrationResource extends DataDelegatingCrudResource<FakePatient> {
     /**
      * Gets the delegate object with the given unique id. Implementations may decide whether
@@ -118,8 +118,13 @@ public class RegistrationResource extends DataDelegatingCrudResource<FakePatient
         if (rep instanceof DefaultRepresentation) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("uuid");
+            description.addProperty("gender");
+            description.addProperty("birthdate");
+            description.addProperty("birthdateEstimated");
+            description.addProperty("names", Representation.REF);
             description.addProperty("identifiers", Representation.REF);
-            description.addProperty("person", Representation.DEFAULT);
+            description.addProperty("attributes", Representation.REF);
+            description.addProperty("addresses", Representation.REF);
             description.addProperty("voided");
             description.addSelfLink();
             description.addLink("full", ".?v=" + RestConstants.REPRESENTATION_FULL);
@@ -127,8 +132,13 @@ public class RegistrationResource extends DataDelegatingCrudResource<FakePatient
         } else if (rep instanceof FullRepresentation) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("uuid");
+            description.addProperty("gender");
+            description.addProperty("birthdate");
+            description.addProperty("birthdateEstimated");
+            description.addProperty("names", Representation.DEFAULT);
             description.addProperty("identifiers", Representation.DEFAULT);
-            description.addProperty("person", Representation.FULL);
+            description.addProperty("attributes", Representation.DEFAULT);
+            description.addProperty("addresses", Representation.DEFAULT);
             description.addProperty("voided");
             description.addProperty("auditInfo", findMethod("getAuditInfo"));
             description.addSelfLink();

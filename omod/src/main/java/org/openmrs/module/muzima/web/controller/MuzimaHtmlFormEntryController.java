@@ -93,8 +93,18 @@ public class MuzimaHtmlFormEntryController {
 			muzimaFormService.saveConvertedForm(html, formUUID, discriminator);
 		}
 	}
-	
-	
+
+	@ResponseBody
+	@RequestMapping(value = "module/muzimacore/htmlFormEntryUpdateConvertedForm.form", method = RequestMethod.POST)
+	public void updateConvertedForm(final @RequestBody Map<String, Object> data) throws Exception {
+		if (Context.isAuthenticated()) {
+			String formUUID = (String) data.get("uuid");
+			String discriminator = (String) data.get("discriminator");
+			String html = (String) data.get("html");
+			MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
+			muzimaFormService.updateConvertedForm(html, formUUID, discriminator);
+		}
+	}
 
 	@ResponseBody
     @RequestMapping(value = "module/muzimacore/htmlFormEntryModuleStatus.form", method = RequestMethod.GET)

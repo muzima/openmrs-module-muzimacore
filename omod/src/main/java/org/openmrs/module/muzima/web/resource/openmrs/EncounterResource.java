@@ -18,7 +18,9 @@ import org.openmrs.Encounter;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CoreService;
+import org.openmrs.module.muzima.api.service.MuzimaConfigService;
 import org.openmrs.module.muzima.api.service.MuzimaSettingService;
+import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.muzima.web.resource.utils.ResourceUtils;
@@ -51,7 +53,7 @@ import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MAXIMUM_E
  */
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/encounter",
         supportedClass = FakeEncounter.class,
-        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.0.*","2.1.*"})
+        supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
 public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter> {
 
     /**
@@ -59,18 +61,31 @@ public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter>
      */
     @Override
     protected PageableResult doSearch(final RequestContext context) {
+        HttpServletRequest request = context.getRequest();
+        String patientParameter = request.getParameter("patient");
+        String syncDateParameter = request.getParameter("syncDate");
+        String activeSetupConfigUuid = request.getParameter("activeSetupConfig");
 
         MuzimaSettingService muzimaSettingService = Context.getService(MuzimaSettingService.class);
-        MuzimaSetting muzimaSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
-        int maxEncounterResultsPerPatient = muzimaSetting!= null && StringUtils.isNumeric(muzimaSetting.getValueString()) ?
-                Integer.parseInt(muzimaSetting.getValueString()) : 3; //Setting 3 as default results size
+        MuzimaSetting encountersDownloadableSetting = null;
+        if(StringUtils.isNotBlank(activeSetupConfigUuid)){
+            MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
+            MuzimaConfig config = configService.getConfigByUuid(activeSetupConfigUuid);
+            if(config != null){
+                encountersDownloadableSetting = config.getConfigMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
+            } else {
+                encountersDownloadableSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
+            }
+        }else{
+            encountersDownloadableSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
+        }
+
+        int maxEncounterResultsPerPatient = encountersDownloadableSetting != null && StringUtils.isNumeric(encountersDownloadableSetting.getValueString()) ?
+                Integer.parseInt(encountersDownloadableSetting.getValueString()) : 3; //Setting 3 as default results size
         if(maxEncounterResultsPerPatient == 0){
             return new AlreadyPaged<FakeEncounter>(context, new ArrayList<FakeEncounter>(), false);
         }
 
-        HttpServletRequest request = context.getRequest();
-        String patientParameter = request.getParameter("patient");
-        String syncDateParameter = request.getParameter("syncDate");
         if (patientParameter != null) {
             CoreService coreService = Context.getService(CoreService.class);
             String[] patientUuids = StringUtils.split(patientParameter, ",");

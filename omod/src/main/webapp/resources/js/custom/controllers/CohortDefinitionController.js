@@ -41,12 +41,16 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
                 var serverData = response.data;
                 $scope.cohorts = serverData.objects;
                 $('#wait').hide();
+                $('#processingFailure').hide();
+                $('#processingSuccessful').hide();
             });
     } else {
         $cohortDefinitionService.getCohortDefinition($scope.uuid).
             then(function (response) {
                 $scope.cohortDefinition = response.data;
             $('#wait').hide();
+            $('#processingFailure').hide();
+            $('#processingSuccessful').hide();
             });
         $cohortDefinitionService.getAllCohorts().
             then(function (response) {
@@ -75,8 +79,20 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         if(cohortDefinition.isScheduledForExecution===undefined){
             cohortDefinition.isScheduledForExecution=false;
         }
+        if(cohortDefinition.isMemberAdditionEnabled===undefined){
+            cohortDefinition.isMemberAdditionEnabled=false;
+        }
+        if(cohortDefinition.isMemberRemovalEnabled===undefined){
+            cohortDefinition.isMemberRemovalEnabled=false;
+        }
+        if(cohortDefinition.isFilterByProviderEnabled===undefined){
+            cohortDefinition.isFilterByProviderEnabled=false;
+        }
+        if(cohortDefinition.isFilterByLocationEnabled===undefined){
+            cohortDefinition.isFilterByLocationEnabled=false;
+        }
         $cohortDefinitionService.saveCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
-            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled).
+            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled, cohortDefinition.filterQuery).
             then(function () {
                 $location.path("/cohortDefinitions");
             })
@@ -91,8 +107,8 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
              cohortDefinition.isScheduledForExecution=false;
          }
          $cohortDefinitionService.deleteCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
-            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled,
-            cohortDefinition.retireReason).
+            cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled,
+            cohortDefinition.filterQuery, cohortDefinition.retireReason).
             then(function () {
                 $location.path("/cohortDefinitions");
             });
@@ -122,6 +138,20 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         }else{
             return true;
         }
+    };
+
+    $scope.processDefinition = function (cohortDefinition) {
+         $('#wait').show();
+         $cohortDefinitionService.processCohortDefinition(cohortDefinition.uuid).
+            then(function (response) {
+                $('#wait').hide();
+                $('#processingSuccessful').show();
+                console.log("success");
+            },function (response) {
+                $('#wait').hide();
+                $('#processingFailure').show();
+                console.log("fail");
+            });
     };
 }
 

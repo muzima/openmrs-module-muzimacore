@@ -21,9 +21,9 @@ public class HtmlGeneratorTest {
 	@Before
 	public void initialise() throws Exception {
 		this.expectedXml = Htmlform2MuzimaTransformUtil.documentToString(
-		    Htmlform2MuzimaTransformUtil.loadXML("src\\test\\resources\\htmlForm\\ExpectedOutputForm.xml"));
+		    Htmlform2MuzimaTransformUtil.loadXML("src/test/resources/htmlForm/ExpectedOutputForm.xml"));
 		
-		this.htmlForm = Htmlform2MuzimaTransformUtil.loadXML("src\\test\\resources\\htmlForm\\sampleForm.xml");
+		this.htmlForm = Htmlform2MuzimaTransformUtil.loadXML("src/test/resources/htmlForm/sampleForm.xml");
 		this.htmlGenerator = new HtmlGenerator();
 	}
 	
@@ -36,9 +36,8 @@ public class HtmlGeneratorTest {
 		xml = htmlGenerator.stripComments(xml);
 		xml = htmlGenerator.convertSpecialCharactersWithinLogicAndVelocityTests(xml);
 		xml = htmlGenerator.substituteAsciiCodesWithCharacterCodes(xml);
-		
+
 		assertEquals(removeWhiteSpaces(expectedXml), removeWhiteSpaces(xml));
-		
 	}
 	
 }

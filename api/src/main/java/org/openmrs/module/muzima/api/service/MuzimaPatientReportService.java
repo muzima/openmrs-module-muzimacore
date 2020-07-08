@@ -16,15 +16,18 @@ package org.openmrs.module.muzima.api.service;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.muzima.model.MuzimaPatientReport;
 
+import java.util.Date;
 import java.util.List;
 
 public interface MuzimaPatientReportService extends OpenmrsService {
 
     MuzimaPatientReport getMuzimaPatientReportByUuid(final String uuid);
 
+    List<MuzimaPatientReport> getMuzimaPatientReportByUuids(final String reportUuids, final Date syncDate);
+
     MuzimaPatientReport getMuzimaPatientReportById(final Integer id);
 
-    MuzimaPatientReport getMuzimaPatientReportByName(final String reportName);
+    MuzimaPatientReport getMuzimaPatientReportByName(final Integer patientId, final String reportName);
 
     List<MuzimaPatientReport> getMuzimaPatientReportsByPatientId(final Integer patientId);
 
@@ -37,6 +40,8 @@ public interface MuzimaPatientReportService extends OpenmrsService {
     void deleteMuzimaPatientReport(MuzimaPatientReport muzimaPatientReport);
 
     List<MuzimaPatientReport> getAllMuzimaPatientReports();
+
+    MuzimaPatientReport getMuzimaPatientReportByReportRequestUuid(final String uuid);
 
     Number countMuzimaPatientReports();
 
@@ -57,5 +62,7 @@ public interface MuzimaPatientReportService extends OpenmrsService {
      * @return list of all patient reports for the specific patient for a particular page.
      */
     List<MuzimaPatientReport> getPagedMuzimaPatientReports(final Integer patientId, final Integer pageNumber, final Integer pageSize);
+    List<MuzimaPatientReport> getPagedMuzimaPatientReports(final String patientUuids, final Integer pageNumber, final Integer pageSize, final Date syncDate);
+
 
 }
