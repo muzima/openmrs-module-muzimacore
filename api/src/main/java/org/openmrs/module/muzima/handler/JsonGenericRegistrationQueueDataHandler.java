@@ -18,6 +18,7 @@ import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.User;
 import org.openmrs.annotation.Handler;
@@ -409,21 +410,41 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
     }
 
     private void registerUnsavedPatient() {
-        RegistrationDataService registrationDataService = Context.getService(RegistrationDataService.class);
+        String isPersonConversion = isPersonConversion();
         String temporaryUuid = getPatientUuidFromPayload();
-        RegistrationData registrationData = registrationDataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
-        if (registrationData == null) {
-            registrationData = new RegistrationData();
-            registrationData.setTemporaryUuid(temporaryUuid);
-            Context.getPatientService().savePatient(unsavedPatient);
-            String assignedUuid = unsavedPatient.getUuid();
-            registrationData.setAssignedUuid(assignedUuid);
-            registrationDataService.saveRegistrationData(registrationData);
+        if(isPersonConversion == null){
+            isPersonConversion = "false";
+        }
+        if("true".equals(isPersonConversion)){
+            Person existingPerson = Context.getPersonService().getPersonByUuid(temporaryUuid);
+            Patient patient = new Patient(existingPerson);
+            patient.addName(unsavedPatient.getPersonName());
+            patient.setAttributes(unsavedPatient.getAttributes());
+            patient.setAddresses(unsavedPatient.getAddresses());
+            patient.setIdentifiers(unsavedPatient.getIdentifiers());
+            patient.setBirthdate(unsavedPatient.getBirthdate());
+            patient.setBirthdateEstimated(unsavedPatient.getBirthdateEstimated());
+            Context.getPatientService().savePatient(patient);
+        } else {
+            RegistrationDataService registrationDataService = Context.getService(RegistrationDataService.class);
+            RegistrationData registrationData = registrationDataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
+            if (registrationData == null) {
+                registrationData = new RegistrationData();
+                registrationData.setTemporaryUuid(temporaryUuid);
+                Context.getPatientService().savePatient(unsavedPatient);
+                String assignedUuid = unsavedPatient.getUuid();
+                registrationData.setAssignedUuid(assignedUuid);
+                registrationDataService.saveRegistrationData(registrationData);
+            }
         }
     }
 
     private String getPatientUuidFromPayload() {
         return JsonUtils.readAsString(payload, "$['patient']['patient.uuid']");
+    }
+
+    private String isPersonConversion() {
+        return JsonUtils.readAsString(payload, "$['patient']['patient.person_conversion']");
     }
 
     private void setPatientAddressesFromPayload() {

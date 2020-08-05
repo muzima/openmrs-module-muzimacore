@@ -24,6 +24,7 @@ import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.PatientIdentifierType;
+import org.openmrs.Person;
 import org.openmrs.PersonName;
 import org.openmrs.User;
 import org.openmrs.annotation.Handler;
@@ -51,7 +52,7 @@ import java.util.Map;
 /**
  */
 @Component
-@Handler(supports = QueueData.class, order = 3)
+@Handler(supports = QueueData.class, order = 9)
 public class ObsQueueDataHandler implements QueueDataHandler {
 
     public static final String DISCRIMINATOR_VALUE = "json-individual-obs";
@@ -308,6 +309,7 @@ public class ObsQueueDataHandler implements QueueDataHandler {
         unsavedPatient.addIdentifier(patientIdentifier);
 
         Patient candidatePatient;
+        Person candidatePerson;
         if (StringUtils.isNotEmpty(unsavedPatient.getUuid())) {
             candidatePatient = Context.getPatientService().getPatientByUuid(unsavedPatient.getUuid());
             if (candidatePatient == null) {
@@ -316,6 +318,22 @@ public class ObsQueueDataHandler implements QueueDataHandler {
                 RegistrationData registrationData = dataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
                 if(registrationData!=null) {
                     candidatePatient = Context.getPatientService().getPatientByUuid(registrationData.getAssignedUuid());
+                }
+            }
+
+            if(candidatePatient == null) {
+                candidatePerson = Context.getPersonService().getPersonByUuid(unsavedPatient.getUuid());
+                if (candidatePerson == null) {
+                    String temporaryUuid = unsavedPatient.getUuid();
+                    RegistrationDataService dataService = Context.getService(RegistrationDataService.class);
+                    RegistrationData registrationData = dataService.getRegistrationDataByTemporaryUuid(temporaryUuid);
+                    if (registrationData != null) {
+                        candidatePerson = Context.getPersonService().getPersonByUuid(registrationData.getAssignedUuid());
+                    }
+                }
+                if (candidatePerson != null) {
+                    candidatePatient = new Patient();
+                    candidatePatient.setId(candidatePerson.getId());
                 }
             }
         } else if (!StringUtils.isBlank(patientIdentifier.getIdentifier())) {
