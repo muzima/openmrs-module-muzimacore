@@ -2,6 +2,7 @@ package org.openmrs.module.muzima.utils;
 
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
 import org.openmrs.PersonAttributeType;
@@ -71,5 +72,33 @@ public class PersonCreationUtils {
         } else {
             return personAddress;
         }
+    }
+
+    public static JSONObject createPersonPayloadStubForPerson(Person person){
+        JSONObject personPayloadStub = new JSONObject();
+        JsonUtils.writeAsString(personPayloadStub,"patient.uuid",person.getUuid());
+        JsonUtils.writeAsString(personPayloadStub,"patient.given_name",person.getGivenName());
+        JsonUtils.writeAsString(personPayloadStub,"patient.family_name",person.getFamilyName());
+        JsonUtils.writeAsString(personPayloadStub,"patient.middle_name",person.getMiddleName());
+        JsonUtils.writeAsString(personPayloadStub,"patient.sex",person.getGender());
+        JsonUtils.writeAsDate(personPayloadStub,"patient.birth_date",person.getBirthdate());
+        return personPayloadStub;
+    }
+
+    public static JSONObject createPersonPayloadStubFromIndexPatientStub(String payload){
+        JSONObject personPayloadStub = new JSONObject();
+        JsonUtils.writeAsString(personPayloadStub,"patient.uuid",
+                JsonUtils.readAsString(payload,"$['index_patient']['index_patient.uuid']"));
+        JsonUtils.writeAsString(personPayloadStub,"patient.given_name",
+                JsonUtils.readAsString(payload,"$['index_patient']['index_patient.given_name']"));
+        JsonUtils.writeAsString(personPayloadStub,"patient.family_name",
+                JsonUtils.readAsString(payload,"$['index_patient']['index_patient.family_name']"));
+        JsonUtils.writeAsString(personPayloadStub,"patient.middle_name",
+                JsonUtils.readAsString(payload,"$['index_patient']['index_patient.middle_name']"));
+        JsonUtils.writeAsString(personPayloadStub,"patient.sex",
+                JsonUtils.readAsString(payload,"$['index_patient']['index_patient.sex']"));
+        JsonUtils.writeAsDate(personPayloadStub,"patient.birth_date",
+                JsonUtils.readAsDate(payload,"$['index_patient']['index_patient.birth_date']"));
+        return personPayloadStub;
     }
 }

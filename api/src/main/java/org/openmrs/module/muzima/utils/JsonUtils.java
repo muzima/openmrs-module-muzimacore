@@ -16,6 +16,7 @@ package org.openmrs.module.muzima.utils;
 import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,6 +139,16 @@ public class JsonUtils {
             logger.error("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
         }
         return returnedString;
+    }
+
+    public static boolean containsKey(final String jsonObject, final String path) {
+        try {
+            Object object = JsonPath.read(jsonObject, path);
+            return object != null;
+        } catch (Exception e) {
+            logger.error("Unable to read string value with path: " + path + " from: ",e);
+            return false;
+        }
     }
 
     /**
