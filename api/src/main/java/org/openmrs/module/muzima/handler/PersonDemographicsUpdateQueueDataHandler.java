@@ -30,10 +30,12 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.copyPersonAddress;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubForPerson;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubFromIndexPatientStub;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAttributeFromJsonObject;
+
 
 @Handler(supports = QueueData.class, order = 8)
 public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandler {
@@ -50,6 +52,59 @@ public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandl
     private Person unsavedPerson;
     private Person savedPerson;
 
+    private void requeIndexPatientObsAsEncounterIfDefined(final QueueData queueData){
+        Object indexObsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['index_obs']");
+        Object indexPatientObject = JsonUtils.readAsObject(queueData.getPayload(), "$['index_patient']");
+        if (indexObsObject != null && indexPatientObject != null) {
+            JSONObject indexPatientPayload = new JSONObject();
+            JSONObject patientObject = createPersonPayloadStubFromIndexPatientStub(queueData.getPayload());
+            indexPatientPayload.put("patient",patientObject);
+            indexPatientPayload.put("observation",indexObsObject);
+            indexPatientPayload.put("encounter",JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']"));
+
+            QueueData encounterQueueData = new QueueData();
+            encounterQueueData.setPayload(indexPatientPayload.toJSONString());
+            encounterQueueData.setDiscriminator("json-encounter");
+            encounterQueueData.setDataSource(queueData.getDataSource());
+            encounterQueueData.setCreator(queueData.getCreator());
+            encounterQueueData.setDateCreated(queueData.getDateCreated());
+            encounterQueueData.setUuid(UUID.randomUUID().toString());
+            encounterQueueData.setFormName(queueData.getFormName());
+            encounterQueueData.setLocation(queueData.getLocation());
+            encounterQueueData.setProvider(queueData.getProvider());
+            encounterQueueData.setPatientUuid(queueData.getPatientUuid());
+            encounterQueueData.setFormDataUuid(queueData.getFormDataUuid());
+            Context.getService(DataService.class).saveQueueData(encounterQueueData);
+        }
+    }
+
+    private void requePersonObsAsIndividualObsIfDefined(final QueueData queueData){
+        Object obsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['observation']");
+        if (obsObject != null) {
+            QueueData encounterQueueData = new QueueData();
+
+            //Recreate payload to reflect updated person demographics and eliminate index_patient obs, if any
+            JSONObject payload = new JSONObject();
+            payload.put("patient",createPersonPayloadStubForPerson(savedPerson));
+            payload.put("observation",obsObject);
+            payload.put("encounter",JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']"));
+
+            encounterQueueData.setPayload(payload.toJSONString());
+
+            encounterQueueData.setDiscriminator("json-individual-obs");
+            encounterQueueData.setDataSource(queueData.getDataSource());
+            encounterQueueData.setCreator(queueData.getCreator());
+            encounterQueueData.setDateCreated(queueData.getDateCreated());
+            encounterQueueData.setUuid(UUID.randomUUID().toString());
+            encounterQueueData.setFormName(queueData.getFormName());
+            encounterQueueData.setLocation(queueData.getLocation());
+            encounterQueueData.setProvider(queueData.getProvider());
+            encounterQueueData.setPatientUuid(queueData.getPatientUuid());
+            encounterQueueData.setFormDataUuid(queueData.getFormDataUuid());
+            Context.getService(DataService.class).saveQueueData(encounterQueueData);
+        }
+    }
+
     @Override
     public void process(final QueueData queueData) throws QueueProcessorException {
         log.info("Processing demographics update form data: " + queueData.getUuid());
@@ -60,54 +115,8 @@ public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandl
                     Context.getPersonService().savePerson(savedPerson);
                 }
 
-                Object indexObsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['index_obs']");
-                Object indexPatientObject = JsonUtils.readAsObject(queueData.getPayload(), "$['index_patient']");
-                if (indexObsObject != null && indexPatientObject != null) {
-                    JSONObject indexPatientPayload = new JSONObject();
-                    JSONObject patientObject = createPersonPayloadStubFromIndexPatientStub(queueData.getPayload());
-                    indexPatientPayload.put("patient",patientObject);
-                    indexPatientPayload.put("observation",indexObsObject);
-                    indexPatientPayload.put("encounter",JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']"));
-
-                    QueueData encounterQueueData = new QueueData();
-                    encounterQueueData.setPayload(indexPatientPayload.toJSONString());
-                    encounterQueueData.setDiscriminator("json-encounter");
-                    encounterQueueData.setDataSource(queueData.getDataSource());
-                    encounterQueueData.setCreator(queueData.getCreator());
-                    encounterQueueData.setDateCreated(queueData.getDateCreated());
-                    encounterQueueData.setUuid(UUID.randomUUID().toString());
-                    encounterQueueData.setFormName(queueData.getFormName());
-                    encounterQueueData.setLocation(queueData.getLocation());
-                    encounterQueueData.setProvider(queueData.getProvider());
-                    encounterQueueData.setPatientUuid(queueData.getPatientUuid());
-                    encounterQueueData.setFormDataUuid(queueData.getFormDataUuid());
-                    Context.getService(DataService.class).saveQueueData(encounterQueueData);
-                }
-
-                Object obsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['observation']");
-                if (obsObject != null) {
-                    QueueData encounterQueueData = new QueueData();
-
-                    //Recreate payload to reflect updated person demographics and eliminate index_patient obs, if any
-                    JSONObject payload = new JSONObject();
-                    payload.put("patient",createPersonPayloadStubForPerson(savedPerson));
-                    payload.put("observation",obsObject);
-                    payload.put("encounter",JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']"));
-
-                    encounterQueueData.setPayload(payload.toJSONString());
-
-                    encounterQueueData.setDiscriminator("json-individual-obs");
-                    encounterQueueData.setDataSource(queueData.getDataSource());
-                    encounterQueueData.setCreator(queueData.getCreator());
-                    encounterQueueData.setDateCreated(queueData.getDateCreated());
-                    encounterQueueData.setUuid(UUID.randomUUID().toString());
-                    encounterQueueData.setFormName(queueData.getFormName());
-                    encounterQueueData.setLocation(queueData.getLocation());
-                    encounterQueueData.setProvider(queueData.getProvider());
-                    encounterQueueData.setPatientUuid(queueData.getPatientUuid());
-                    encounterQueueData.setFormDataUuid(queueData.getFormDataUuid());
-                    Context.getService(DataService.class).saveQueueData(encounterQueueData);
-                }
+                requePersonObsAsIndividualObsIfDefined(queueData);
+                requeIndexPatientObsAsEncounterIfDefined(queueData);
             }
         } catch (Exception e) {
             if (!e.getClass().equals(QueueProcessorException.class)) {
@@ -131,8 +140,23 @@ public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandl
             savedPerson.setBirthdate(unsavedPerson.getBirthdate());
             savedPerson.setBirthdateEstimated(unsavedPerson.getBirthdateEstimated());
         }
-        if(unsavedPerson.getPersonAddress() != null) {
-            savedPerson.addAddress(unsavedPerson.getPersonAddress());
+        if(unsavedPerson.getAddresses() != null) {
+            for(PersonAddress unsavedAddress:unsavedPerson.getAddresses()) {
+                boolean savedAddressFound = false;
+
+                if(StringUtils.isNotBlank(unsavedAddress.getUuid())) {
+                    for (PersonAddress savedAddress : savedPerson.getAddresses()) {
+                        if (StringUtils.equals(unsavedAddress.getUuid(), savedAddress.getUuid())) {
+                            savedAddressFound = true;
+                            copyPersonAddress(unsavedAddress, savedAddress);
+                            break;
+                        }
+                    }
+                }
+                if(!savedAddressFound){
+                    savedPerson.getAddresses().add(unsavedAddress);
+                }
+            }
         }
         if(unsavedPerson.getAttributes() != null) {
             Set<PersonAttribute> attributes = unsavedPerson.getAttributes();

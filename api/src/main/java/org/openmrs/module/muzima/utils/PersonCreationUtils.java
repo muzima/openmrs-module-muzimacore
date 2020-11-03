@@ -45,11 +45,34 @@ public class PersonCreationUtils {
         return personAttribute;
     }
 
+    public static void copyPersonAddress(PersonAddress copyFrom, PersonAddress copyTo){
+        if(copyFrom == null || copyTo == null){
+
+        }
+        copyTo.setAddress1(copyFrom.getAddress1());
+        copyTo.setAddress2(copyFrom.getAddress2());
+        copyTo.setAddress3(copyFrom.getAddress3());
+        copyTo.setAddress4(copyFrom.getAddress4());
+        copyTo.setAddress5(copyFrom.getAddress5());
+        copyTo.setAddress6(copyFrom.getAddress6());
+        copyTo.setCityVillage(copyFrom.getCityVillage());
+        copyTo.setCountyDistrict(copyFrom.getCountyDistrict());
+        copyTo.setStateProvince(copyFrom.getStateProvince());
+        copyTo.setCountry(copyFrom.getCountry());
+        copyTo.setPostalCode(copyFrom.getPostalCode());
+        copyTo.setLatitude(copyFrom.getLatitude());
+        copyTo.setLongitude(copyFrom.getLongitude());
+        copyTo.setStartDate(copyFrom.getStartDate());
+        copyTo.setEndDate(copyFrom.getEndDate());
+        copyTo.setPreferred(copyFrom.getPreferred());
+    }
+
     public static PersonAddress getPersonAddressFromJsonObject(JSONObject addressJsonObject){
         if(addressJsonObject == null){
             return null;
         }
         PersonAddress personAddress = new PersonAddress();
+        personAddress.setUuid((String)getElementFromJsonObject(addressJsonObject,"uuid"));
         personAddress.setAddress1((String)getElementFromJsonObject(addressJsonObject,"address1"));
         personAddress.setAddress2((String)getElementFromJsonObject(addressJsonObject,"address2"));
         personAddress.setAddress3((String)getElementFromJsonObject(addressJsonObject,"address3"));

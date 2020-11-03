@@ -51,9 +51,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
-import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubForPerson;
-import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
-import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAttributeFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.*;
 
 /**
  */
@@ -160,8 +158,24 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
             savedPatient.setBirthdate(unsavedPatient.getBirthdate());
             savedPatient.setBirthdateEstimated(unsavedPatient.getBirthdateEstimated());
         }
-        if(unsavedPatient.getPersonAddress() != null) {
-            savedPatient.addAddress(unsavedPatient.getPersonAddress());
+
+        if(unsavedPatient.getAddresses() != null) {
+            for(PersonAddress unsavedAddress:unsavedPatient.getAddresses()) {
+                boolean savedAddressFound = false;
+
+                if(StringUtils.isNotBlank(unsavedAddress.getUuid())) {
+                    for (PersonAddress savedAddress : savedPatient.getAddresses()) {
+                        if (StringUtils.equals(unsavedAddress.getUuid(), savedAddress.getUuid())) {
+                            savedAddressFound = true;
+                            copyPersonAddress(unsavedAddress, savedAddress);
+                            break;
+                        }
+                    }
+                }
+                if(!savedAddressFound){
+                    savedPatient.getAddresses().add(unsavedAddress);
+                }
+            }
         }
         if(unsavedPatient.getAttributes() != null) {
             Set<PersonAttribute> attributes = unsavedPatient.getAttributes();
