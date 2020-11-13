@@ -101,17 +101,35 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         try {
             queueProcessorException = new QueueProcessorException();
             log.info("Processing encounter form data: " + queueData.getUuid());
+
             encounter = new Encounter();
             String payload = queueData.getPayload();
 
             //Object patientObject = JsonUtils.readAsObject(queueData.getPayload(), "$['patient']");
             processPatient(encounter, payload);
 
+
+            //if is supposed to edit encounters, search existing, else create new
+            List<Encounter> savedEncounters = Context.getEncounterService().getEncounters(encounter.getPatient());
+            String encounterFormUuidToAddObs = getEncounterFormForEncounterToAddobs(queueData.getPayload());
+            boolean foundEncounterToEdit = false;
+            for(Encounter savedEncounter:savedEncounters){
+                if(StringUtils.equals(savedEncounter.getForm().getUuid(),encounterFormUuidToAddObs)){
+                    if(encounter != null) {
+                        encounter = savedEncounter;
+                        foundEncounterToEdit = true;
+                        break;
+                    }
+                }
+            }
+
             //Object encounterObject = JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']");
-            processEncounter(encounter, payload);
+            if(!foundEncounterToEdit){
+                processEncounter(encounter, payload, encounterFormUuidToAddObs);
+            }
 
             Object obsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['observation']");
-            processObs(encounter, null, obsObject);
+            processObs(encounter, null, obsObject,foundEncounterToEdit);
 
             return true;
 
@@ -123,6 +141,10 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                 throw queueProcessorException;
             }
         }
+    }
+
+    private String getEncounterFormForEncounterToAddobs(String encounterPayload){
+        return JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.form_uuid_to_add_obs']");
     }
 
     @Override
@@ -242,7 +264,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      * @param parentObs - Obs
      * @param obsObject - Object
      */
-    private void processObs(final Encounter encounter, final Obs parentObs, final Object obsObject) {
+    private void processObs(final Encounter encounter, final Obs parentObs, final Object obsObject, boolean editObs) {
         if (obsObject instanceof JSONObject) {
             JSONObject obsJsonObject = (JSONObject) obsObject;
             for (String conceptQuestion : obsJsonObject.keySet()) {
@@ -256,8 +278,21 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                     if (concept.isSet()) {
                         Obs obsGroup = new Obs();
                         obsGroup.setConcept(concept);
+
+                        //find obs group in existing encounter
+                        boolean foundObsGp = false;
+                        if(editObs) {
+                            Set<Obs> allObs = encounter.getAllObs(false);
+                            for (Obs existingObs : allObs) {
+                                if (StringUtils.equals(existingObs.getConcept().getUuid(), concept.getUuid())) {
+                                    obsGroup = existingObs;
+                                    foundObsGp = true;
+                                }
+                            }
+                        }
+
                         Object childObsObject = obsJsonObject.get(conceptQuestion);
-                        processObsObject(encounter, obsGroup, childObsObject);
+                        processObsObject(encounter, obsGroup, childObsObject,editObs);
                         if (parentObs != null) {
                             parentObs.addGroupMember(obsGroup);
                         }
@@ -276,7 +311,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             }
         }else if(obsObject instanceof LinkedHashMap){
             Object obsAsJsonObject = new JSONObject((Map<String,?>)obsObject);
-            processObs(encounter, parentObs, obsAsJsonObject);
+            processObs(encounter, parentObs, obsAsJsonObject,editObs);
         }
     }
 
@@ -365,22 +400,22 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      * @param parentObs Obs
      * @param childObsObject - java.lang.Object
      */
-    private void processObsObject(final Encounter encounter, final Obs parentObs, final Object childObsObject) {
+    private void processObsObject(final Encounter encounter, final Obs parentObs, final Object childObsObject, boolean editEncounter) {
         //Object o = JsonUtils.readAsObject(childObsObject.toString(), "$");
         if (childObsObject instanceof JSONArray) {
             JSONArray jsonArray = (JSONArray) childObsObject;
             for (Object arrayElement : jsonArray) {
                 Obs obsGroup = new Obs();
                 obsGroup.setConcept(parentObs.getConcept());
-                processObs(encounter, obsGroup, arrayElement);
+                processObs(encounter, obsGroup, arrayElement,editEncounter);
                 encounter.addObs(obsGroup);
             }
         } else if (childObsObject instanceof JSONObject) {
-            processObs(encounter, parentObs, childObsObject);
+            processObs(encounter, parentObs, childObsObject,editEncounter);
             encounter.addObs(parentObs);
         }else if (childObsObject instanceof LinkedHashMap) {
             Object childObsAsJsonObject = new JSONObject((Map<String,?>)childObsObject);
-            processObs(encounter, parentObs, childObsAsJsonObject);
+            processObs(encounter, parentObs, childObsAsJsonObject,editEncounter);
             encounter.addObs(parentObs);
         }
     }
@@ -391,10 +426,12 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
      * @param encounterObject - java.lang.Object
      * @throws QueueProcessorException
      */
-    private void processEncounter(final Encounter encounter, final Object encounterObject) throws QueueProcessorException {
+    private void processEncounter(final Encounter encounter, final Object encounterObject, String formUuid) throws QueueProcessorException {
         String encounterPayload = encounterObject.toString();
 
-        String formUuid = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.form_uuid']");
+        if(StringUtils.isEmpty(formUuid)) {
+            formUuid = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.form_uuid']");
+        }
         Form form = Context.getFormService().getFormByUuid(formUuid);
         if (form == null) {
             MuzimaFormService muzimaFormService = Context.getService(MuzimaFormService.class);
