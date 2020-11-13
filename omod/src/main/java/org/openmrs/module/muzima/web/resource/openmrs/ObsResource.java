@@ -17,6 +17,10 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CoreService;
+import org.openmrs.module.muzima.api.service.MuzimaConfigService;
+import org.openmrs.module.muzima.api.service.MuzimaSettingService;
+import org.openmrs.module.muzima.model.MuzimaConfig;
+import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.web.controller.MuzimaConstants;
 import org.openmrs.module.muzima.web.resource.utils.ResourceUtils;
 import org.openmrs.module.muzima.web.resource.wrapper.FakeObs;
@@ -38,6 +42,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY;
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MAXIMUM_OBS_DOWNLOAD_SETTING_PROPERTY;
 
 /**
  * TODO: Write brief description about the class here.
@@ -181,6 +188,32 @@ public class ObsResource extends DataDelegatingCrudResource<FakeObs> {
         String personParameter = request.getParameter("person");
         String conceptParameter = request.getParameter("concept");
         String syncDateParameter = request.getParameter("syncDate");
+        String activeSetupConfigUuid = request.getParameter("activeSetupConfig");
+
+        MuzimaSettingService muzimaSettingService = Context.getService(MuzimaSettingService.class);
+        MuzimaSetting maxObsDownloadSetting = null;
+        if(StringUtils.isNotBlank(activeSetupConfigUuid)){
+            MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
+            MuzimaConfig config = configService.getConfigByUuid(activeSetupConfigUuid);
+            if(config != null){
+                maxObsDownloadSetting = config.getConfigMuzimaSettingByProperty(MAXIMUM_OBS_DOWNLOAD_SETTING_PROPERTY);
+                if(maxObsDownloadSetting==null){
+                    maxObsDownloadSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_OBS_DOWNLOAD_SETTING_PROPERTY);
+                }
+            } else {
+                maxObsDownloadSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_OBS_DOWNLOAD_SETTING_PROPERTY);
+            }
+        }else{
+            maxObsDownloadSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_OBS_DOWNLOAD_SETTING_PROPERTY);
+        }
+
+        int maxObsPerPatientPerConcept = maxObsDownloadSetting != null && StringUtils.isNumeric(maxObsDownloadSetting.getValueString()) ?
+                Integer.parseInt(maxObsDownloadSetting.getValueString()) : 3; //Setting 3 as default results size
+
+        if(maxObsPerPatientPerConcept == 0){
+            return new AlreadyPaged<FakeObs>(context, new ArrayList<FakeObs>(), false);
+        }
+
         if (personParameter != null && conceptParameter != null) {
             String[] personUuids = StringUtils.split(personParameter, ",");
             String[] conceptUuids = StringUtils.split(conceptParameter, ",");
@@ -188,18 +221,21 @@ public class ObsResource extends DataDelegatingCrudResource<FakeObs> {
 
             CoreService coreService = Context.getService(CoreService.class);
             int obsCount = coreService.countObservations(Arrays.asList(personUuids),
-                    Arrays.asList(conceptUuids), syncDate).intValue();
+                    Arrays.asList(conceptUuids), syncDate, maxObsPerPatientPerConcept).intValue();
             List<Obs> observations = coreService.getObservations(Arrays.asList(personUuids),
                     Arrays.asList(conceptUuids), syncDate,
-                    context.getStartIndex(), context.getLimit());
+                    context.getStartIndex(), context.getLimit(), maxObsPerPatientPerConcept);
             boolean hasMore = obsCount > context.getStartIndex() + observations.size();
 
             List<FakeObs> fakeObservations = new ArrayList<FakeObs>();
             for (Obs observation : observations) {
                 fakeObservations.add(FakeObs.copyObs(observation));
             }
-
-            return new AlreadyPaged<FakeObs>(context, fakeObservations, hasMore);
+            if(syncDateParameter == null){
+                return new AlreadyPaged<FakeObs>(context, fakeObservations, false);
+            }else{
+                return new AlreadyPaged<FakeObs>(context, fakeObservations, hasMore);
+            }
         }
         return new AlreadyPaged<FakeObs>(context, Collections.<FakeObs>emptyList(), false);
     }

@@ -56,63 +56,102 @@ public class HibernateCoreDao implements CoreDao {
     /**
      * {@inheritDoc}
      *
-     * @see CoreDao#getObservations(java.util.List, java.util.List, Date, int, int)
+     * @see CoreDao#getObservations(java.util.List, java.util.List, Date, int, int, int)
      */
     @Override
     @Transactional(readOnly = true)
     @SuppressWarnings("unchecked")
     public List<Obs> getObservations(final List<String> patientUuids, final List<String> conceptUuids,
-                                     final Date syncDate, final int startIndex, final int size) throws DAOException {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
-        criteria.createAlias("person", "person");
-        criteria.add(Restrictions.in("person.uuid", patientUuids));
-        criteria.createAlias("concept", "concept");
-        criteria.add(Restrictions.in("concept.uuid", conceptUuids));
-        if (syncDate != null) {
-            criteria.add(Restrictions.or(
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
-                            Restrictions.isNull("dateVoided")),
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
-                            Restrictions.isNotNull("dateCreated"))));
-        } else {
-            criteria.add(Restrictions.eq("voided", false));
-        }
+                                     final Date syncDate, final int startIndex, final int size,final int maxObsPerPatientPerConcept) throws DAOException {
+        if(syncDate != null) {
+            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
+            criteria.createAlias("person", "person");
+            criteria.add(Restrictions.in("person.uuid", patientUuids));
+            criteria.createAlias("concept", "concept");
+            criteria.add(Restrictions.in("concept.uuid", conceptUuids));
+            if (syncDate != null) {
+                criteria.add(Restrictions.or(
+                        Restrictions.and(
+                                Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                Restrictions.isNull("dateVoided")),
+                        Restrictions.and(
+                                Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
+                                Restrictions.isNotNull("dateCreated"))));
+            } else {
+                criteria.add(Restrictions.eq("voided", false));
+            }
 
-        criteria.setMaxResults(size);
-        criteria.setFirstResult(startIndex);
-        return criteria.list();
+            criteria.setMaxResults(size);
+            criteria.setFirstResult(startIndex);
+            return criteria.list();
+        }else{
+            List<Obs> obs = new ArrayList<Obs>();
+            for(String patientUuid:patientUuids) {
+                for(String conceptUuid:conceptUuids){
+                    Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
+                    criteria.createAlias("person", "person");
+                    criteria.add(Restrictions.eq("person.uuid", patientUuid));
+                    criteria.createAlias("concept", "concept");
+                    criteria.add(Restrictions.eq("concept.uuid", conceptUuid));
+                    criteria.add(Restrictions.eq("voided", false));
+                    criteria.addOrder(Order.desc("dateCreated"));
+                    criteria.setMaxResults(maxObsPerPatientPerConcept);
+                    criteria.setFirstResult(0);
+                    obs.addAll(criteria.list());
+                }
+            }
+            return obs;
+        }
     }
 
     /**
      * {@inheritDoc}
      *
-     * @see CoreDao#countObservations(java.util.List, java.util.List, Date)
+     * @see CoreDao#countObservations(java.util.List, java.util.List, Date, int)
      */
     @Override
     @Transactional(readOnly = true)
     public Number countObservations(final List<String> patientUuids, final List<String> conceptUuids,
-                                    final Date syncDate) throws DAOException {
-        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
-        criteria.createAlias("person", "person");
-        criteria.add(Restrictions.in("person.uuid", patientUuids));
-        criteria.createAlias("concept", "concept");
-        criteria.add(Restrictions.in("concept.uuid", conceptUuids));
-        if (syncDate != null) {
-            criteria.add(Restrictions.or(
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
-                            Restrictions.isNull("dateVoided")),
-                    Restrictions.and(
-                            Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
-                            Restrictions.isNotNull("dateCreated"))));
-        } else {
-            criteria.add(Restrictions.eq("voided", false));
-        }
+                                    final Date syncDate, final int maxObsPerPatientPerConcept) throws DAOException {
+        int obsCount = 0;
+        if(syncDate != null) {
+            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
+            criteria.createAlias("person", "person");
+            criteria.add(Restrictions.in("person.uuid", patientUuids));
+            criteria.createAlias("concept", "concept");
+            criteria.add(Restrictions.in("concept.uuid", conceptUuids));
+            if (syncDate != null) {
+                criteria.add(Restrictions.or(
+                        Restrictions.and(
+                                Restrictions.and(Restrictions.isNotNull("dateCreated"), Restrictions.ge("dateCreated", syncDate)),
+                                Restrictions.isNull("dateVoided")),
+                        Restrictions.and(
+                                Restrictions.and(Restrictions.isNotNull("dateVoided"), Restrictions.ge("dateVoided", syncDate)),
+                                Restrictions.isNotNull("dateCreated"))));
+            } else {
+                criteria.add(Restrictions.eq("voided", false));
+            }
 
-        criteria.setProjection(Projections.rowCount());
-        return (Number) criteria.uniqueResult();
+            criteria.setProjection(Projections.rowCount());
+            return (Number) criteria.uniqueResult();
+        }else{
+            for(String patientUuid:patientUuids) {
+                for(String conceptUuid:conceptUuids){
+                    Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
+                    criteria.createAlias("person", "person");
+                    criteria.add(Restrictions.eq("person.uuid", patientUuid));
+                    criteria.createAlias("concept", "concept");
+                    criteria.add(Restrictions.eq("concept.uuid", conceptUuid));
+                    criteria.add(Restrictions.eq("voided", false));
+                    criteria.setMaxResults(maxObsPerPatientPerConcept);
+                    criteria.setFirstResult(0);
+
+                    criteria.setProjection(Projections.rowCount());
+                    obsCount += ((Number) criteria.uniqueResult()).intValue();
+                }
+            }
+            return obsCount;
+        }
     }
 
     /**
