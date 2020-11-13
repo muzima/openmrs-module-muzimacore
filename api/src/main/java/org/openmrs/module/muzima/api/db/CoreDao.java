@@ -28,11 +28,11 @@ public interface CoreDao {
 
     @Transactional(readOnly = true)
     List<Obs> getObservations(final List<String> patientUuids, final List<String> conceptUuids,
-                              final Date syncDate, final int startIndex, final int size) throws DAOException;
+                              final Date syncDate, final int startIndex, final int size, final int maxObsPerPatientPerConcept) throws DAOException;
 
     @Transactional(readOnly = true)
     Number countObservations(final List<String> patientUuids, final List<String> conceptUuids,
-                             final Date syncDate) throws DAOException;
+                             final Date syncDate, final int maxObsPerPatientPerConcept) throws DAOException;
 
     @Transactional(readOnly = true)
     List<Encounter> getEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient,

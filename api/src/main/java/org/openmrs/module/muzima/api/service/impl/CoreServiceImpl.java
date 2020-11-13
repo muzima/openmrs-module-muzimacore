@@ -52,14 +52,14 @@ public class CoreServiceImpl extends BaseOpenmrsService implements CoreService {
 
     @Override
     public List<Obs> getObservations(final List<String> patientUuids, final List<String> conceptUuids,
-                                     final Date syncDate, final int startIndex, final int size) throws APIException {
-        return getCoreDao().getObservations(patientUuids, conceptUuids, syncDate, startIndex, size);
+                                     final Date syncDate, final int startIndex, final int size, final int maxObsPerPatientPerConcept) throws APIException {
+        return getCoreDao().getObservations(patientUuids, conceptUuids, syncDate, startIndex, size, maxObsPerPatientPerConcept);
     }
 
     @Override
     public Number countObservations(final List<String> patientUuids, final List<String> conceptUuids,
-                                    final Date syncDate) throws APIException {
-        return getCoreDao().countObservations(patientUuids, conceptUuids, syncDate);
+                                    final Date syncDate, final int maxObsPerPatientPerConcept) throws APIException {
+        return getCoreDao().countObservations(patientUuids, conceptUuids, syncDate, maxObsPerPatientPerConcept);
     }
 
     @Override

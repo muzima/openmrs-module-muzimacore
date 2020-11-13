@@ -73,6 +73,9 @@ public class EncounterResource extends DataDelegatingCrudResource<FakeEncounter>
             MuzimaConfig config = configService.getConfigByUuid(activeSetupConfigUuid);
             if(config != null){
                 encountersDownloadableSetting = config.getConfigMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
+                if(encountersDownloadableSetting == null){
+                    encountersDownloadableSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
+                }
             } else {
                 encountersDownloadableSetting = muzimaSettingService.getMuzimaSettingByProperty(MAXIMUM_ENCOUNTERS_DOWNLOAD_SETTING_PROPERTY);
             }
