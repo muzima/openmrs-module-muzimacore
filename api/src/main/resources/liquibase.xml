@@ -2022,23 +2022,70 @@
         </insert>
     </changeSet>
     <changeSet id="muzima-20201106144400" author="mssavai">
-        <preConditions onFail="MARK_RAN">
-            <sqlCheck expectedResult="0">
-                SELECT COUNT(*) FROM muzima_setting where uuid = '2ef34fe0-9d39-4dc7-9839-c366557e94cb';
-            </sqlCheck>
-        </preConditions>
-        <comment>Enforce demographics update manual review</comment>
-        <insert tableName="muzima_setting">
-            <column name="property" value="DemographicsUpdateManualReviewEnforcement.isEnabled"/>
-            <column name="name" value="Demographics update manual review requirement status" />
-            <column name="description" value="Specifies whether manual review is required for update of specific demographics fields such as
+    <preConditions onFail="MARK_RAN">
+        <sqlCheck expectedResult="0">
+            SELECT COUNT(*) FROM muzima_setting where uuid = '2ef34fe0-9d39-4dc7-9839-c366557e94cb';
+        </sqlCheck>
+    </preConditions>
+    <comment>Enforce demographics update manual review</comment>
+    <insert tableName="muzima_setting">
+        <column name="property" value="DemographicsUpdateManualReviewEnforcement.isEnabled"/>
+        <column name="name" value="Demographics update manual review requirement status" />
+        <column name="description" value="Specifies whether manual review is required for update of specific demographics fields such as
             gender and birthdate." />
-            <column name="setting_data_type" value="BOOLEAN" />
-            <column name="value_boolean" valueBoolean="true" />
-            <column name="date_created" valueDate="2020-11-06T14:44:00" />
-            <column name="creator" value="1" />
-            <column name="uuid" value="2ef34fe0-9d39-4dc7-9839-c366557e94cb" />
-        </insert>
+        <column name="setting_data_type" value="BOOLEAN" />
+        <column name="value_boolean" valueBoolean="true" />
+        <column name="date_created" valueDate="2020-11-06T14:44:00" />
+        <column name="creator" value="1" />
+        <column name="uuid" value="2ef34fe0-9d39-4dc7-9839-c366557e94cb" />
+    </insert>
+    </changeSet>
 
+    <changeSet id="muzima-20200810150300" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="muzima_cohort_report_config"/>
+            </not>
+        </preConditions>
+        <createTable tableName="muzima_cohort_report_config">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cohort_uuid" type="char(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="report_design_uuid" type="char(38)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int" />
+            <column name="date_changed" type="datetime"/>
+            <column name="retired" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retired_by" type="int"/>
+            <column name="date_retired" type="datetime"/>
+            <column name="retire_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_creator"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_changed_by"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_cohort_report_config_retired_by"
+                                 baseTableName="muzima_cohort_report_config" baseColumnNames="retired_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
 </databaseChangeLog>

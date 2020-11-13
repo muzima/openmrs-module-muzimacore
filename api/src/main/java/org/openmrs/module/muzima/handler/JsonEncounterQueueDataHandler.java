@@ -292,10 +292,16 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
                         }
 
                         Object childObsObject = obsJsonObject.get(conceptQuestion);
-                        processObsObject(encounter, obsGroup, childObsObject,editObs);
-                        if (parentObs != null) {
-                            parentObs.addGroupMember(obsGroup);
+
+                        if(childObsObject instanceof JSONArray || childObsObject instanceof JSONObject || childObsObject instanceof LinkedHashMap){
+                            processObsObject(encounter, obsGroup, childObsObject,editObs);
+                            if (parentObs != null) {
+                                parentObs.addGroupMember(obsGroup);
+                            }
+                        }else{
+                            createObs(encounter, parentObs, concept, childObsObject);
                         }
+
                     } else {
                         Object valueObject = obsJsonObject.get(conceptQuestion);
                         if (valueObject instanceof JSONArray) {
@@ -312,6 +318,10 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         }else if(obsObject instanceof LinkedHashMap){
             Object obsAsJsonObject = new JSONObject((Map<String,?>)obsObject);
             processObs(encounter, parentObs, obsAsJsonObject,editObs);
+        }else {
+            String[] conceptElements = StringUtils.split(obsObject.toString(), "\\^");
+            if (conceptElements.length == 3)
+                createObs(encounter, parentObs, parentObs.getConcept(), obsObject);
         }
     }
 
