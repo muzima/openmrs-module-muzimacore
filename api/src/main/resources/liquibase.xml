@@ -2021,4 +2021,24 @@
             <column name="uuid" value="457f8262-a0ce-11ea-b1a0-d0577bb73cd4" />
         </insert>
     </changeSet>
+
+    <changeSet id="muzima-20201112115000" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*) FROM muzima_setting where uuid = '134bc6be-24c4-11eb-940f-d0577bb73cd4';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add maximum obs per patient and concept setting</comment>
+        <insert tableName="muzima_setting">
+            <column name="property" value="Obs.maximumDownloadSize"/>
+            <column name="name" value="Maximum number of observations downloaded per patient for a given concept" />
+            <column name="description" value="Specifies the maximum number of observations to be downloaded into mUzima app per patient for each concept" />
+            <column name="setting_data_type" value="STRING" />
+            <column name="value_string" value="3" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2020-11-12T11:50:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="134bc6be-24c4-11eb-940f-d0577bb73cd4" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>

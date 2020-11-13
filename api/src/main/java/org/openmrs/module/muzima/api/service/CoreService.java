@@ -29,10 +29,10 @@ import java.util.List;
 public interface CoreService extends OpenmrsService {
 
     List<Obs> getObservations(final List<String> patientUuids, final List<String> conceptUuids, final Date syncDate,
-                              final int startIndex, final int size) throws APIException;
+                              final int startIndex, final int size, final int maxObsPerPatientPerConcept) throws APIException;
 
     Number countObservations(final List<String> patientUuids, final List<String> conceptUuids,
-                             final Date syncDate) throws APIException;
+                             final Date syncDate, final int maxObsPerPatientPerConcept) throws APIException;
 
     List<Encounter> getEncounters(final List<String> patientUuids, final int maxEncounterResultsPerPatient,
                                   final Date syncDate) throws APIException;
