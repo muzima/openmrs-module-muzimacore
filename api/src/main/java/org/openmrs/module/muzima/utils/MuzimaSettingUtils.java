@@ -2,6 +2,10 @@ package org.openmrs.module.muzima.utils;
 
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.MuzimaConfigService;
+import org.openmrs.module.muzima.api.service.MuzimaSettingService;
+import org.openmrs.module.muzima.model.MuzimaConfig;
 import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.MuzimaSettingDataType;
 
@@ -33,6 +37,23 @@ public class MuzimaSettingUtils {
                 }
             }
         }
+        return muzimaSetting;
+    }
+
+    public static MuzimaSetting getMuzimaSetting(String settingProperty,String setupConfigUuid){
+        MuzimaSettingService settingService = Context.getService(MuzimaSettingService.class);
+        MuzimaSetting muzimaSetting = null;
+        if(StringUtils.isNotBlank(setupConfigUuid)){
+            MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
+            MuzimaConfig config = configService.getConfigByUuid(setupConfigUuid);
+            if(config != null){
+                muzimaSetting = config.getConfigMuzimaSettingByProperty(settingProperty);
+            }
+        }
+        if(muzimaSetting == null){
+            muzimaSetting = settingService.getMuzimaSettingByProperty(settingProperty);
+        }
+
         return muzimaSetting;
     }
 }

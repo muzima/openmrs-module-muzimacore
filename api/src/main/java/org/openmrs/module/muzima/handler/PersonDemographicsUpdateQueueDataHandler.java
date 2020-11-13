@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Person;
 import org.openmrs.PersonAddress;
 import org.openmrs.PersonAttribute;
+import org.openmrs.PersonAttributeType;
 import org.openmrs.PersonName;
 import org.openmrs.User;
 import org.openmrs.annotation.Handler;
@@ -17,10 +18,12 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
+import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
+import org.openmrs.module.muzima.utils.MuzimaSettingUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -30,6 +33,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.DEMOGRAPHICS_UPDATE_MANUAL_REVIEW_SETTING_PROPERTY;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.copyPersonAddress;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubForPerson;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubFromIndexPatientStub;
@@ -162,7 +166,25 @@ public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandl
             Set<PersonAttribute> attributes = unsavedPerson.getAttributes();
             Iterator<PersonAttribute> iterator = attributes.iterator();
             while(iterator.hasNext()) {
-                savedPerson.addAttribute(iterator.next());
+                Set<PersonAttribute> savedAttributes = savedPerson.getAttributes();
+                boolean preExistingAttributeFound = false;
+                PersonAttribute unsavedAttribute = iterator.next();
+                PersonAttributeType unSavedAttributeType = unsavedAttribute.getAttributeType();
+
+                while (savedAttributes.iterator().hasNext()) {
+                    PersonAttribute savedAttribute = savedAttributes.iterator().next();
+                    PersonAttributeType savedAttributeType = savedAttribute.getAttributeType();
+                    if(StringUtils.equals(savedAttributeType.getUuid(), unSavedAttributeType.getUuid()) ||
+                    StringUtils.equals(savedAttributeType.getName(), unSavedAttributeType.getName())) {
+                        preExistingAttributeFound = true;
+                        savedAttribute.setValue(unsavedAttribute.getValue());
+                        break;
+                    }
+                }
+
+                if(!preExistingAttributeFound){
+                    savedPerson.addAttribute(unsavedAttribute);
+                }
             }
         }
         if(unsavedPerson.getChangedBy() != null) {
@@ -280,7 +302,7 @@ public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandl
     private void setUnsavedPersonBirthDateFromPayload(){
         Date birthDate = JsonUtils.readAsDate(payload, "$['demographicsupdate']['demographicsupdate.birth_date']");
         if(birthDate != null){
-            if(isBirthDateChangeValidated()){
+            if(!isDemographicsUpdateManualReviewRequired() || isBirthDateChangeValidated()){
                 unsavedPerson.setBirthdate(birthDate);
             }else{
                 queueProcessorException.addException(
@@ -298,7 +320,7 @@ public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandl
     private void setUnsavedPersonGenderFromPayload(){
         String gender = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.sex']");
         if(StringUtils.isNotBlank(gender)){
-            if(isGenderChangeValidated()){
+            if(!isDemographicsUpdateManualReviewRequired() || isGenderChangeValidated()){
                 unsavedPerson.setGender(gender);
             }else{
                 queueProcessorException.addException(
@@ -438,6 +460,16 @@ public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandl
 
     private boolean isGenderChangeValidated(){
         return JsonUtils.readAsBoolean(payload, "$['demographicsupdate']['demographicsupdate.gender_change_validated']");
+    }
+
+    private boolean isDemographicsUpdateManualReviewRequired(){
+        String activeSetupConfigUuid = JsonUtils.readAsString(payload, "$['encounter']['encounter.setup_config_uuid']");
+        MuzimaSetting muzimaSetting = MuzimaSettingUtils.getMuzimaSetting(DEMOGRAPHICS_UPDATE_MANUAL_REVIEW_SETTING_PROPERTY,activeSetupConfigUuid);
+        if(muzimaSetting != null){
+            return muzimaSetting.getValueBoolean();
+        }
+        // Manual review is required by default
+        return true;
     }
 
     @Override

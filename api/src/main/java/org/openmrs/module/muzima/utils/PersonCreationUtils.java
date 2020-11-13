@@ -10,6 +10,7 @@ import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 
 import java.util.Date;
+import java.util.UUID;
 
 import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
 
@@ -72,7 +73,6 @@ public class PersonCreationUtils {
             return null;
         }
         PersonAddress personAddress = new PersonAddress();
-        personAddress.setUuid((String)getElementFromJsonObject(addressJsonObject,"uuid"));
         personAddress.setAddress1((String)getElementFromJsonObject(addressJsonObject,"address1"));
         personAddress.setAddress2((String)getElementFromJsonObject(addressJsonObject,"address2"));
         personAddress.setAddress3((String)getElementFromJsonObject(addressJsonObject,"address3"));
@@ -89,6 +89,11 @@ public class PersonCreationUtils {
         personAddress.setStartDate((Date) getElementFromJsonObject(addressJsonObject,"startDate"));
         personAddress.setEndDate((Date) getElementFromJsonObject(addressJsonObject,"endDate"));
         personAddress.setPreferred((Boolean) getElementFromJsonObject(addressJsonObject,"preferred"));
+        personAddress.setUuid((String)getElementFromJsonObject(addressJsonObject,"uuid"));
+
+        if(StringUtils.isEmpty(personAddress.getUuid())){
+            personAddress.setUuid(UUID.randomUUID().toString());
+        }
 
         if(personAddress.isBlank()){
             return null;

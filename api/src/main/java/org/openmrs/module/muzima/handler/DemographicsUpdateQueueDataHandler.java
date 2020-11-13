@@ -34,10 +34,12 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
+import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
+import org.openmrs.module.muzima.utils.MuzimaSettingUtils;
 import org.openmrs.module.muzima.utils.PatientSearchUtils;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +52,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
 
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.DEMOGRAPHICS_UPDATE_MANUAL_REVIEW_SETTING_PROPERTY;
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MUZIMA_VISIT_GENERATION_SETTING_PROPERTY;
 import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.*;
 
@@ -473,7 +477,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     private void setUnsavedPatientBirthDateFromPayload(){
         Date birthDate = JsonUtils.readAsDate(payload, "$['demographicsupdate']['demographicsupdate.birth_date']");
         if(birthDate != null){
-            if(isBirthDateChangeValidated()){
+            if(!isDemographicsUpdateManualReviewRequired() || isBirthDateChangeValidated()){
                 unsavedPatient.setBirthdate(birthDate);
             }else{
                 queueProcessorException.addException(
@@ -491,7 +495,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     private void setUnsavedPatientGenderFromPayload(){
         String gender = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.sex']");
         if(StringUtils.isNotBlank(gender)){
-            if(isGenderChangeValidated()){
+            if(!isDemographicsUpdateManualReviewRequired() || isGenderChangeValidated()){
                 unsavedPatient.setGender(gender);
             }else{
                 queueProcessorException.addException(
@@ -704,6 +708,16 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
 
     private boolean isGenderChangeValidated(){
         return JsonUtils.readAsBoolean(payload, "$['demographicsupdate']['demographicsupdate.gender_change_validated']");
+    }
+
+    private boolean isDemographicsUpdateManualReviewRequired(){
+        String activeSetupConfigUuid = JsonUtils.readAsString(payload, "$['encounter']['encounter.setup_config_uuid']");
+        MuzimaSetting muzimaSetting = MuzimaSettingUtils.getMuzimaSetting(DEMOGRAPHICS_UPDATE_MANUAL_REVIEW_SETTING_PROPERTY,activeSetupConfigUuid);
+        if(muzimaSetting != null){
+            return muzimaSetting.getValueBoolean();
+        }
+        // Manual review is required by default
+        return true;
     }
 
     @Override
