@@ -31,6 +31,7 @@ import org.openmrs.annotation.Handler;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
 import org.openmrs.module.muzima.model.QueueData;
@@ -48,6 +49,9 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubFromIndexPatientStub;
 
 /**
  */
@@ -64,6 +68,7 @@ public class ObsQueueDataHandler implements QueueDataHandler {
     private final Log log = LogFactory.getLog(ObsQueueDataHandler.class);
     private QueueProcessorException queueProcessorException;
     private List<Obs> individualObsList;
+    private boolean isPersonObs = false;
 
     /**
      * 
@@ -76,7 +81,33 @@ public class ObsQueueDataHandler implements QueueDataHandler {
         try {
             if (validate(queueData)) {
                 for(Obs individualObs: individualObsList) {
-                    Context.getObsService().saveObs(individualObs, null);
+                    Context.getObsService().saveObs(individualObs, "Individual Obs");
+                }
+
+                Object indexObsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['index_obs']");
+                Object indexPatientOsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['index_patient']");
+                if (indexObsObject != null && indexPatientOsObject != null) {
+
+                    JSONObject indexPatientPayload = new JSONObject();
+                    JSONObject patientObject = createPersonPayloadStubFromIndexPatientStub(queueData.getPayload());
+                    indexPatientPayload.put("patient",patientObject);
+                    indexPatientPayload.put("observation",indexObsObject);
+                    indexPatientPayload.put("encounter",JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']"));
+
+
+                    QueueData encounterQueueData = new QueueData();
+                    encounterQueueData.setPayload(indexPatientPayload.toJSONString());
+                    encounterQueueData.setDiscriminator("json-encounter");
+                    encounterQueueData.setDataSource(queueData.getDataSource());
+                    encounterQueueData.setCreator(queueData.getCreator());
+                    encounterQueueData.setDateCreated(queueData.getDateCreated());
+                    encounterQueueData.setUuid(UUID.randomUUID().toString());
+                    encounterQueueData.setFormName(queueData.getFormName());
+                    encounterQueueData.setLocation(queueData.getLocation());
+                    encounterQueueData.setProvider(queueData.getProvider());
+                    encounterQueueData.setPatientUuid(queueData.getPatientUuid());
+                    encounterQueueData.setFormDataUuid(queueData.getFormDataUuid());
+                    Context.getService(DataService.class).saveQueueData(encounterQueueData);
                 }
             }
         } catch (Exception e) {
@@ -308,8 +339,8 @@ public class ObsQueueDataHandler implements QueueDataHandler {
         unsavedPatient.addName(personName);
         unsavedPatient.addIdentifier(patientIdentifier);
 
-        Patient candidatePatient;
-        Person candidatePerson;
+        Patient candidatePatient = null;
+        Person candidatePerson = null;
         if (StringUtils.isNotEmpty(unsavedPatient.getUuid())) {
             candidatePatient = Context.getPatientService().getPatientByUuid(unsavedPatient.getUuid());
             if (candidatePatient == null) {
@@ -332,6 +363,7 @@ public class ObsQueueDataHandler implements QueueDataHandler {
                     }
                 }
                 if (candidatePerson != null) {
+                    isPersonObs = true;
                     candidatePatient = new Patient();
                     candidatePatient.setId(candidatePerson.getId());
                 }
@@ -345,10 +377,16 @@ public class ObsQueueDataHandler implements QueueDataHandler {
         }
 
         if (candidatePatient == null) {
-            queueProcessorException.addException(new Exception("Unable to uniquely identify patient for this encounter form data. "));
+            queueProcessorException.addException(new Exception("Unable to uniquely identify patient for this Individual Obs form data. "));
         } else {
-            for(Obs obs:individualObsList){
-                obs.setPerson(candidatePatient);
+            if(candidatePerson != null){
+                for(Obs obs:individualObsList){
+                    obs.setPerson(candidatePerson);
+                }
+            } else {
+                for (Obs obs : individualObsList) {
+                    obs.setPerson(candidatePatient);
+                }
             }
         }
     }

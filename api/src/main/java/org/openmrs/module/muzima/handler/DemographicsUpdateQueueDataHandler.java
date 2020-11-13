@@ -31,12 +31,15 @@ import org.openmrs.User;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
+import org.openmrs.module.muzima.model.MuzimaSetting;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.module.muzima.utils.JsonUtils;
+import org.openmrs.module.muzima.utils.MuzimaSettingUtils;
 import org.openmrs.module.muzima.utils.PatientSearchUtils;
 import org.springframework.stereotype.Component;
 
@@ -47,8 +50,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
+import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.DEMOGRAPHICS_UPDATE_MANUAL_REVIEW_SETTING_PROPERTY;
 import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.copyPersonAddress;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubForPerson;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAttributeFromJsonObject;
 
@@ -72,11 +79,36 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
         log.info("Processing demographics update form data: " + queueData.getUuid());
         try {
             if (validate(queueData)) {
-                updateSavedPatientDemographics();
-                Context.getPatientService().savePatient(savedPatient);
-                String temporaryUuid = getTemporaryPatientUuidFromPayload();
-                if(StringUtils.isNotEmpty(temporaryUuid)) {
-                    saveRegistrationData(temporaryUuid);
+                if(isDemographicsUpdateStubDefined()) {
+                    updateSavedPatientDemographics();
+                    Context.getPatientService().savePatient(savedPatient);
+                    String temporaryUuid = getTemporaryPatientUuidFromPayload();
+                    if (StringUtils.isNotEmpty(temporaryUuid)) {
+                        saveRegistrationData(temporaryUuid);
+                    }
+                }
+
+                Object obsObject = JsonUtils.readAsObject(queueData.getPayload(), "$['observation']");
+                if (obsObject != null) {
+                    //Recreate payload to reflect updated person demographics and eliminate index_patient obs, if any
+                    JSONObject payload = new JSONObject();
+                    payload.put("patient",createPersonPayloadStubForPerson(savedPatient));
+                    payload.put("observation",obsObject);
+                    payload.put("encounter",JsonUtils.readAsObject(queueData.getPayload(), "$['encounter']"));
+
+                    QueueData encounterQueueData = new QueueData();
+                    encounterQueueData.setPayload(payload.toJSONString());
+                    encounterQueueData.setDiscriminator("json-encounter");
+                    encounterQueueData.setDataSource(queueData.getDataSource());
+                    encounterQueueData.setCreator(queueData.getCreator());
+                    encounterQueueData.setDateCreated(queueData.getDateCreated());
+                    encounterQueueData.setUuid(UUID.randomUUID().toString());
+                    encounterQueueData.setFormName(queueData.getFormName());
+                    encounterQueueData.setLocation(queueData.getLocation());
+                    encounterQueueData.setProvider(queueData.getProvider());
+                    encounterQueueData.setPatientUuid(queueData.getPatientUuid());
+                    encounterQueueData.setFormDataUuid(queueData.getFormDataUuid());
+                    Context.getService(DataService.class).saveQueueData(encounterQueueData);
                 }
             }
         } catch (Exception e) {
@@ -132,8 +164,28 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
             savedPatient.setBirthdate(unsavedPatient.getBirthdate());
             savedPatient.setBirthdateEstimated(unsavedPatient.getBirthdateEstimated());
         }
-        if(unsavedPatient.getPersonAddress() != null) {
-            savedPatient.addAddress(unsavedPatient.getPersonAddress());
+
+        if(unsavedPatient.getAddresses() != null) {
+            for(PersonAddress unsavedAddress:unsavedPatient.getAddresses()) {
+                boolean savedAddressFound = false;
+
+                if(StringUtils.isNotBlank(unsavedAddress.getUuid())) {
+                    for (PersonAddress savedAddress : savedPatient.getAddresses()) {
+                        if (StringUtils.equals(unsavedAddress.getUuid(), savedAddress.getUuid())) {
+                            savedAddressFound = true;
+                            try {
+                                copyPersonAddress(unsavedAddress, savedAddress);
+                            } catch (Exception e) {
+                                queueProcessorException.addException(e);
+                            }
+                            break;
+                        }
+                    }
+                }
+                if(!savedAddressFound){
+                    savedPatient.getAddresses().add(unsavedAddress);
+                }
+            }
         }
         if(unsavedPatient.getAttributes() != null) {
             Set<PersonAttribute> attributes = unsavedPatient.getAttributes();
@@ -239,14 +291,20 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     }
 
     private void populateUnsavedPatientDemographicsFromPayload() {
-        setUnsavedPatientIdentifiersFromPayload();
-        setUnsavedPatientBirthDateFromPayload();
-        setUnsavedPatientBirthDateEstimatedFromPayload();
-        setUnsavedPatientGenderFromPayload();
-        setUnsavedPatientNameFromPayload();
-        setUnsavedPatientAddressesFromPayload();
-        setUnsavedPatientPersonAttributesFromPayload();
-        setUnsavedPatientChangedByFromPayload();
+        if(isDemographicsUpdateStubDefined()) {
+            setUnsavedPatientIdentifiersFromPayload();
+            setUnsavedPatientBirthDateFromPayload();
+            setUnsavedPatientBirthDateEstimatedFromPayload();
+            setUnsavedPatientGenderFromPayload();
+            setUnsavedPatientNameFromPayload();
+            setUnsavedPatientAddressesFromPayload();
+            setUnsavedPatientPersonAttributesFromPayload();
+            setUnsavedPatientChangedByFromPayload();
+        }
+    }
+
+    private boolean isDemographicsUpdateStubDefined(){
+        return JsonUtils.containsKey(payload,"$['demographicsupdate']");
     }
 
     private void setUnsavedPatientIdentifiersFromPayload() {
@@ -425,7 +483,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     private void setUnsavedPatientBirthDateFromPayload(){
         Date birthDate = JsonUtils.readAsDate(payload, "$['demographicsupdate']['demographicsupdate.birth_date']");
         if(birthDate != null){
-            if(isBirthDateChangeValidated()){
+            if(!isDemographicsUpdateManualReviewRequired() || isBirthDateChangeValidated()){
                 unsavedPatient.setBirthdate(birthDate);
             }else{
                 queueProcessorException.addException(
@@ -443,7 +501,7 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
     private void setUnsavedPatientGenderFromPayload(){
         String gender = JsonUtils.readAsString(payload, "$['demographicsupdate']['demographicsupdate.sex']");
         if(StringUtils.isNotBlank(gender)){
-            if(isGenderChangeValidated()){
+            if(!isDemographicsUpdateManualReviewRequired() || isGenderChangeValidated()){
                 unsavedPatient.setGender(gender);
             }else{
                 queueProcessorException.addException(
@@ -656,6 +714,16 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
 
     private boolean isGenderChangeValidated(){
         return JsonUtils.readAsBoolean(payload, "$['demographicsupdate']['demographicsupdate.gender_change_validated']");
+    }
+
+    private boolean isDemographicsUpdateManualReviewRequired(){
+        String activeSetupConfigUuid = JsonUtils.readAsString(payload, "$['encounter']['encounter.setup_config_uuid']");
+        MuzimaSetting muzimaSetting = MuzimaSettingUtils.getMuzimaSetting(DEMOGRAPHICS_UPDATE_MANUAL_REVIEW_SETTING_PROPERTY,activeSetupConfigUuid);
+        if(muzimaSetting != null){
+            return muzimaSetting.getValueBoolean();
+        }
+        // Manual review is required by default
+        return true;
     }
 
     @Override

@@ -2021,6 +2021,25 @@
             <column name="uuid" value="457f8262-a0ce-11ea-b1a0-d0577bb73cd4" />
         </insert>
     </changeSet>
+    <changeSet id="muzima-20201106144400" author="mssavai">
+    <preConditions onFail="MARK_RAN">
+        <sqlCheck expectedResult="0">
+            SELECT COUNT(*) FROM muzima_setting where uuid = '2ef34fe0-9d39-4dc7-9839-c366557e94cb';
+        </sqlCheck>
+    </preConditions>
+    <comment>Enforce demographics update manual review</comment>
+    <insert tableName="muzima_setting">
+        <column name="property" value="DemographicsUpdateManualReviewEnforcement.isEnabled"/>
+        <column name="name" value="Demographics update manual review requirement status" />
+        <column name="description" value="Specifies whether manual review is required for update of specific demographics fields such as
+            gender and birthdate." />
+        <column name="setting_data_type" value="BOOLEAN" />
+        <column name="value_boolean" valueBoolean="true" />
+        <column name="date_created" valueDate="2020-11-06T14:44:00" />
+        <column name="creator" value="1" />
+        <column name="uuid" value="2ef34fe0-9d39-4dc7-9839-c366557e94cb" />
+    </insert>
+    </changeSet>
 
     <changeSet id="muzima-20201112115000" author="bmokaya">
         <preConditions onFail="MARK_RAN">

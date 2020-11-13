@@ -76,7 +76,6 @@ public class JsonGenericRegistrationQueueDataHandler implements QueueDataHandler
 
     private Patient unsavedPatient;
     private String payload;
-    Set<PersonAttribute> personAttributes;
     private QueueProcessorException queueProcessorException;
 
     @Override
