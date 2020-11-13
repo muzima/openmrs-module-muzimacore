@@ -152,7 +152,11 @@ public class PersonDemographicsUpdateQueueDataHandler  implements QueueDataHandl
                     for (PersonAddress savedAddress : savedPerson.getAddresses()) {
                         if (StringUtils.equals(unsavedAddress.getUuid(), savedAddress.getUuid())) {
                             savedAddressFound = true;
-                            copyPersonAddress(unsavedAddress, savedAddress);
+                            try {
+                                copyPersonAddress(unsavedAddress, savedAddress);
+                            } catch (Exception e) {
+                                queueProcessorException.addException(e);
+                            }
                             break;
                         }
                     }

@@ -53,9 +53,11 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.DEMOGRAPHICS_UPDATE_MANUAL_REVIEW_SETTING_PROPERTY;
-import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.MUZIMA_VISIT_GENERATION_SETTING_PROPERTY;
 import static org.openmrs.module.muzima.utils.JsonUtils.getElementFromJsonObject;
-import static org.openmrs.module.muzima.utils.PersonCreationUtils.*;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.copyPersonAddress;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubForPerson;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAddressFromJsonObject;
+import static org.openmrs.module.muzima.utils.PersonCreationUtils.getPersonAttributeFromJsonObject;
 
 /**
  */
@@ -171,7 +173,11 @@ public class DemographicsUpdateQueueDataHandler implements QueueDataHandler {
                     for (PersonAddress savedAddress : savedPatient.getAddresses()) {
                         if (StringUtils.equals(unsavedAddress.getUuid(), savedAddress.getUuid())) {
                             savedAddressFound = true;
-                            copyPersonAddress(unsavedAddress, savedAddress);
+                            try {
+                                copyPersonAddress(unsavedAddress, savedAddress);
+                            } catch (Exception e) {
+                                queueProcessorException.addException(e);
+                            }
                             break;
                         }
                     }
