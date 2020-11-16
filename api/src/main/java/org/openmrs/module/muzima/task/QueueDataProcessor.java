@@ -115,6 +115,7 @@ public class QueueDataProcessor {
     private void createErrorData(final QueueData queueData, QueueProcessorException exception) {
         ErrorData errorData = new ErrorData(queueData);
         errorData.setDateProcessed(new Date());
+        errorData.setDateCreated(new Date());
         Set errorMessage = new HashSet();
         for(Exception e : exception.getAllException()){
             ErrorMessage error = new ErrorMessage();
