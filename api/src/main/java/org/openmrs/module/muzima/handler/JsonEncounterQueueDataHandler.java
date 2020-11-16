@@ -110,7 +110,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
 
 
             //if is supposed to edit encounters, search existing, else create new
-            List<Encounter> savedEncounters = Context.getEncounterService().getEncounters(encounter.getPatient());
+            List<Encounter> savedEncounters = Context.getEncounterService().getEncountersByPatient(encounter.getPatient());
             String encounterFormUuidToAddObs = getEncounterFormForEncounterToAddobs(queueData.getPayload());
             boolean foundEncounterToEdit = false;
             for(Encounter savedEncounter:savedEncounters){

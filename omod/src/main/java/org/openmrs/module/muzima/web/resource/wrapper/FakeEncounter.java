@@ -57,7 +57,7 @@ public class FakeEncounter extends BaseOpenmrsData {
                 log.error("Copying property failed for property: '" + property + "' with message: " + e.getMessage(), e);
             }
         }
-        fakeEncounter.setProvider(encounter.getProvider());
+        fakeEncounter.setProvider(encounter.getEncounterProviders().iterator().next().getProvider().getPerson());
         fakeEncounter.setVoided(encounter.getVoided());
         return fakeEncounter;
     }
