@@ -81,6 +81,12 @@ public class WebConverter {
         return map;
     }
 
+    public static Map<String, Object> convertErrorData(final List<ErrorData> errorDataList) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("newErrors",errorDataList.size());
+        return map;
+    }
+
     public static Map<String, Object> convertErrorData(final ErrorData errorData) {
         Map<String, Object> map = new HashMap<String, Object>();
         if (errorData != null) {

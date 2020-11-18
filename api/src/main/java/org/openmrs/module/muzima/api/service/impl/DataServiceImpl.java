@@ -27,6 +27,7 @@ import org.openmrs.module.muzima.api.db.QueueDataDao;
 import org.openmrs.module.muzima.api.service.DataService;
 import org.openmrs.module.muzima.api.service.RegistrationDataService;
 import org.openmrs.module.muzima.exception.QueueProcessorException;
+import org.openmrs.module.muzima.handler.JsonGenericRegistrationQueueDataHandler;
 import org.openmrs.module.muzima.model.ArchiveData;
 import org.openmrs.module.muzima.model.DataSource;
 import org.openmrs.module.muzima.model.ErrorData;
@@ -36,6 +37,7 @@ import org.openmrs.module.muzima.model.NotificationData;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.RegistrationData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
+import org.openmrs.module.muzima.task.QueueDataProcessor;
 import org.openmrs.util.HandlerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -748,6 +750,37 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
         }
         return requeued;
     }
+
+    @Override
+    public List<QueueData> requeueErrorData(@NotNull final ErrorData errorData) {
+        List<QueueData> requeued = new ArrayList<QueueData>();
+        String submittedPatientUuid = errorData.getPatientUuid();
+
+        QueueData queueData = new QueueData(errorData);
+        queueData = this.saveQueueData(queueData);
+        this.purgeErrorData(errorData);
+        requeued.add(queueData);
+
+        if(queueData.isRegistrationQueueData()) {
+            int countOfErrors = this.countErrorData(submittedPatientUuid).intValue();
+            List<ErrorData> allToRequeue = this.getPagedErrorData(submittedPatientUuid, 1, countOfErrors);
+            for (ErrorData errorData1 : allToRequeue) {
+                queueData = new QueueData(errorData1);
+                queueData = this.saveQueueData(queueData);
+                this.purgeErrorData(errorData1);
+                requeued.add(queueData);
+            }
+        }
+
+        return requeued;
+    }
+
+    @Override
+    public List<ErrorData> processQueueData(@NotNull final List<QueueData> queueData) {
+        return QueueDataProcessor.getInstance().processQueueData(queueData);
+    }
+
+
 
     private void registerTemporaryUuid(final String temporaryUuid, final String permanentUuid) {
         RegistrationDataService registrationDataService = Context.getService(RegistrationDataService.class);

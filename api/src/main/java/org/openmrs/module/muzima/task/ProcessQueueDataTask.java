@@ -23,7 +23,7 @@ public class ProcessQueueDataTask extends AbstractTask {
     private QueueDataProcessor processor;
 
     public ProcessQueueDataTask() {
-        this.processor = new QueueDataProcessor();
+        this.processor = QueueDataProcessor.getInstance();
     }
 
     /**

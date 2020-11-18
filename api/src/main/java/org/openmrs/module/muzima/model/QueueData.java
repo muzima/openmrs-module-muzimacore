@@ -13,12 +13,19 @@
  */
 package org.openmrs.module.muzima.model;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * It is a model class. It should extend either {@link org.openmrs.BaseOpenmrsObject} or {@link org.openmrs.BaseOpenmrsMetadata}.
  */
 public class QueueData extends AuditableData {
 
     public QueueData() {
+    }
+
+    public boolean isRegistrationQueueData(){
+        return StringUtils.equals(getDiscriminator(),"json-generic-registration") ||
+                StringUtils.equals(getDiscriminator(),"json-registration");
     }
 
     public QueueData(final AuditableData data) {

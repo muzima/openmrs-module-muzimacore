@@ -88,6 +88,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
     $scope.setControls = function(){
         $('#editJsonSection').hide();
         $( "#btnUpdate" ).prop( "disabled", true );
+        $( "#btnSaveAndProcess" ).prop( "disabled", true );
         $('#wait').hide();
         $('.messages').hide();
     }
@@ -144,6 +145,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
                 //IF THERE ARE NO VALIDATION ERRORS THEN ENABLE UPDATE BUTTON
                 if(Object.keys(result.data.Errors).length == 0){
                     $( "#btnUpdate" ).prop( "disabled", false );
+                    $( "#btnSaveAndProcess" ).prop( "disabled", false );
                     $scope.isValid = true;
                 }
                 else{
@@ -196,7 +198,23 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
             $('#myModal').modal('hide');
         });
     });
+
+    $('#btnSaveAndProcessYesButton').click(function(){
+        $('#wait').show();
+        $('#saveAndProcessModal').hide();
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        var formDataToSave = $('#editJson').val();
+        $data.saveAndProcessFormData($scope.uuid,formDataToSave).
+        then(function () {
+            $('#wait').hide();
+            $location.path("/errors");
+        });
+    });
     $('#btnNo').click(function(){
+
+    });
+    $('#btnSaveAndProcessNoButton').click(function(){
 
     });
 }
