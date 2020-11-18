@@ -57,6 +57,9 @@ public interface DataService extends OpenmrsService {
      */
     QueueData saveQueueData(final QueueData queueData);
 
+    List<QueueData> requeueErrorData(final ErrorData errorData);
+    List<ErrorData> processQueueData(final List<QueueData> queueData);
+
     /**
      * Delete queue data from the database.
      *

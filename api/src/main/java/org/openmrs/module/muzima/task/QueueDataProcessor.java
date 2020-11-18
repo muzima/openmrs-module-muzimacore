@@ -31,6 +31,7 @@ import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.model.handler.QueueDataHandler;
 import org.openmrs.util.HandlerUtil;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -45,12 +46,36 @@ public class QueueDataProcessor {
 
     private static Boolean isRunning = false;
 
+    private static QueueDataProcessor queueDataProcessor;
+
+    private QueueDataProcessor(){
+        super();
+    }
+
+    public static QueueDataProcessor getInstance(){
+        if(queueDataProcessor == null){
+            return new QueueDataProcessor();
+
+        }
+        return queueDataProcessor;
+    }
+
     public void processQueueData() {
         if (!isRunning) {
             processAllQueueData();
         } else {
             log.info("Queue data processor aborting (another processor already running)!");
         }
+    }
+
+    public List<ErrorData> processQueueData(List<QueueData> queueData) {
+        List<ErrorData> errorDataList = new ArrayList<ErrorData>();
+        if (!isRunning) {
+            errorDataList = processQueueDataInList(queueData);
+        } else {
+            log.info("Queue data processor aborting (another processor already running)!");
+        }
+        return errorDataList;
     }
 
     private void processAllQueueData() {
@@ -105,6 +130,61 @@ public class QueueDataProcessor {
         }
     }
 
+    private List<ErrorData> processQueueDataInList(List<QueueData> queueDataList) {
+        List<ErrorData> errorDataList = new ArrayList<ErrorData>();
+        try {
+            isRunning = true;
+            log.info("Starting up queue data processor ...");
+
+            DataService dataService = Context.getService(DataService.class);
+            List<QueueDataHandler> queueDataHandlers =
+                    HandlerUtil.getHandlersForType(QueueDataHandler.class, QueueData.class);
+            for (QueueDataHandler queueDataHandler : queueDataHandlers) {
+                Iterator<QueueData> queueDataIterator = queueDataList.iterator();
+                while (queueDataIterator.hasNext()) {
+                    QueueData queueData = queueDataIterator.next();
+                    try {
+                        if (queueDataHandler.accept(queueData)) {
+                            queueDataHandler.process(queueData);
+                            queueDataIterator.remove();
+                            // archive them after we're done processing the queue data.
+                            createArchiveData(queueData, "Queue data processed successfully!");
+                            dataService.purgeQueueData(queueData);
+                        }
+                    } catch (Exception e) {
+                        log.error("Unable to process queue data due to: " + e.getMessage(), e);
+                        if(queueData.getLocation() == null){
+                            Location location = extractLocationFromPayload(queueData.getPayload());
+                            queueData.setLocation(location);
+                        }
+                        if(queueData.getProvider() == null){
+                            Provider provider = extractProviderFromPayload(queueData.getPayload());
+                            queueData.setProvider(provider);
+                        }
+                        if(queueData.getFormName() == null){
+                            String formName = extractFormNameFromPayload(queueData.getPayload());
+                            queueData.setFormName(formName);
+                        }
+                        if(queueData.getPatientUuid() == null){
+                            String patientUuid = extractPatientUuidFromPayload(queueData.getPayload());
+                            if(patientUuid == null){
+                                queueData.setPatientUuid("");
+                            }
+                            queueData.setPatientUuid(patientUuid);
+                        }
+                        ErrorData errorData = createErrorData(queueData, (QueueProcessorException)e);
+                        dataService.purgeQueueData(queueData);
+                        errorDataList.add(errorData);
+                    }
+                }
+            }
+        } finally {
+            isRunning = false;
+            log.info("Stopping up queue data processor ...");
+            return errorDataList;
+        }
+    }
+
     private void createArchiveData(final QueueData queueData, final String message) {
         ArchiveData archiveData = new ArchiveData(queueData);
         archiveData.setMessage(message);
@@ -112,7 +192,7 @@ public class QueueDataProcessor {
         Context.getService(DataService.class).saveArchiveData(archiveData);
     }
 
-    private void createErrorData(final QueueData queueData, QueueProcessorException exception) {
+    private ErrorData createErrorData(final QueueData queueData, QueueProcessorException exception) {
         ErrorData errorData = new ErrorData(queueData);
         errorData.setDateProcessed(new Date());
         errorData.setDateCreated(new Date());
@@ -128,7 +208,8 @@ public class QueueDataProcessor {
         }
         errorData.setMessage("Unable to process queue data");
         errorData.setErrorMessages(errorMessage);
-        Context.getService(DataService.class).saveErrorData(errorData);
+        errorData = Context.getService(DataService.class).saveErrorData(errorData);
+        return errorData;
     }
 
     private Provider extractProviderFromPayload(String payload) {

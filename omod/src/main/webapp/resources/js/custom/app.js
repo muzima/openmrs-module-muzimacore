@@ -94,6 +94,9 @@ muzimaCoreModule.factory('$data', function ($http) {
     var saveEditedFormData = function (uuid, formData) {
         return $http.post("error.json?uuid="+uuid,formData);
     };
+    var saveAndProcessFormData = function (uuid, formData) {
+        return $http.post("saveAndProcess.json?uuid="+uuid,formData);
+    };
 
     var mergePatient = function(info) {
         return $http.post('mergePatient.json', info);
@@ -120,6 +123,7 @@ muzimaCoreModule.factory('$data', function ($http) {
         saveSource: saveSource,
         deleteSource: deleteSource,
         saveEditedFormData : saveEditedFormData,
+        saveAndProcessFormData : saveAndProcessFormData,
 
         getEdit: getEdit,
         editErrors: editErrors,

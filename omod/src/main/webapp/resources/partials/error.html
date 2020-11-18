@@ -91,6 +91,7 @@
                         <textarea id="editJson" ></textarea>
                         <button id = "btnValidate" type="submit"  class="btn btn-primary">Validate</button>
                         <button id = "btnUpdate" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Save</button>
+                        <button id = "btnSaveAndProcess" type="button" class="btn btn-warning" data-toggle="modal" data-target="#saveAndProcessModal">Save & Process</button>
                         <button id = "btnCancel" type="submit"  class="btn btn-danger">Close</button>
                     </div>
 
@@ -110,22 +111,39 @@
         &nbsp;
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Save changes</h4>
-                </div>
-                <div class="modal-body">
-                    Confirm and save changes to the database?
-                </div>
-                <div class="modal-footer">
-                    <button id = "btnNo" type="button" class="btn btn-warning" data-dismiss="modal">No</button>
-                    <button id = "btnYes" type="button" class="btn btn-success" >Yes</button>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Save changes</h4>
+                    </div>
+                    <div class="modal-body">
+                        Confirm and save changes to the database?
+                    </div>
+                    <div class="modal-footer">
+                        <button id = "btnNo" type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+                        <button id = "btnYes" type="button" class="btn btn-success" >Yes</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="modal fade" id="saveAndProcessModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modatLabel">Save and process changes</h4>
+                    </div>
+                    <div class="modal-body">
+                        Confirm save and process changes?
+                    </div>
+                    <div class="modal-footer">
+                        <button id = "btnSaveAndProcessNoButton" type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+                        <button id = "btnSaveAndProcessYesButton" type="button" class="btn btn-success" >Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

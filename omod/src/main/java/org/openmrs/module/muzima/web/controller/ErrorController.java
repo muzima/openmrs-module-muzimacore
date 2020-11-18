@@ -60,6 +60,24 @@ public class ErrorController {
         return WebConverter.convertErrorData(errorData);
     }
 
+    @RequestMapping(value = "/module/muzimacore/saveAndProcess.json", method = RequestMethod.POST)
+    public Map<String, Object> saveAndProcessFormData(final @RequestParam(value = "uuid") String uuid,
+                                                      final @RequestBody String formData){
+        ErrorData errorData = null;
+        List<ErrorData> newErrorData = new ArrayList<ErrorData>();
+        if (Context.isAuthenticated()) {
+            DataService dataService = Context.getService(DataService.class);
+            ErrorData errorDataEdited = dataService.getErrorDataByUuid(uuid);
+            errorDataEdited.setPayload(formData);
+            List<ErrorMessage> errorMessages = dataService.validateData(uuid, formData);
+            errorDataEdited.setErrorMessages(new HashSet<ErrorMessage>(errorMessages));
+            errorData = dataService.saveErrorData(errorDataEdited);
+            List<QueueData> requeuedQueueData = dataService.requeueErrorData(errorData);
+            newErrorData = dataService.processQueueData(requeuedQueueData);
+           }
+        return WebConverter.convertErrorData(newErrorData);
+    }
+
     @RequestMapping(value = "/module/muzimacore/mergePatient.json", method = RequestMethod.POST)
     public Map<String, Object> mergePatient(final @RequestBody Map<String, String> data) {
         Map<String, Object> map = new LinkedHashMap<String, Object>();
