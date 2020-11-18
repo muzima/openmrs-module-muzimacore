@@ -145,6 +145,13 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         return new XFormParser(new StringReader(result)).validate();
     }
 
+    public ValidationMessages validateMuzimaForm(String html) {
+        HTMLConceptParser parser = new HTMLConceptParser();
+
+        return parser.validateConceptsMetaData(html);
+    }
+
+
     public MuzimaForm getFormById(Integer id) {
         return dao.getFormById(id);
     }
