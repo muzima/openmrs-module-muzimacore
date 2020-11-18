@@ -11,6 +11,7 @@ package org.openmrs.module.muzima.utils;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.javarosa.xform.parse.ValidationMessages;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -66,5 +67,25 @@ public class HTMLConceptParser {
         JSONObject js = new JSONObject();
         js.put("concepts", conceptsArray);
         return js.toJSONString();
+    }
+
+    public ValidationMessages validateConceptsMetaData(String html) {
+        List<String> conceptIdentifiers = parse(html);
+        ValidationMessages messages = new ValidationMessages();
+        ConceptService cs = Context.getConceptService();
+        JSONArray conceptsArray = new JSONArray();
+        for (String uuidOrId : conceptIdentifiers) {
+            Concept concept;
+            if (StringUtils.isNumeric(uuidOrId)) {
+                int conceptId = Integer.parseInt(uuidOrId);
+                concept = Context.getConceptService().getConcept(conceptId);
+            } else {
+                concept = Context.getConceptService().getConceptByUuid(uuidOrId);
+            }
+            if (concept == null) {
+                messages.addError("Concept with ID or UUID = '"+uuidOrId+"' was not found in the concept dictionary.");
+            }
+        }
+        return messages;
     }
 }

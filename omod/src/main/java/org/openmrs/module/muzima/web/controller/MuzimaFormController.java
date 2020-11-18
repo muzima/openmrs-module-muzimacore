@@ -1,5 +1,6 @@
 package org.openmrs.module.muzima.web.controller;
 
+import org.javarosa.xform.parse.ValidationMessages;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.MuzimaForm;
@@ -10,8 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.Scanner;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -31,6 +37,13 @@ public class MuzimaFormController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "validateMuzimaForm.form", method = RequestMethod.POST)
+    public ValidationMessages validate(final MultipartHttpServletRequest request) throws Exception {
+        MuzimaFormService service = Context.getService(MuzimaFormService.class);
+        return service.validateMuzimaForm(extractFile(request));
+    }
+
+    @ResponseBody
     @RequestMapping(method = RequestMethod.DELETE, value = "retire/{formId}.form")
     public void retire(final @PathVariable Integer formId, final @RequestParam String retireReason) throws Exception {
         if (Context.isAuthenticated()) {
@@ -44,5 +57,14 @@ public class MuzimaFormController {
             form.setDateRetired(new Date());
             service.save(form);
         }
+    }
+
+    private String extractFile(final MultipartHttpServletRequest request) throws Exception {
+        MultipartFile file = request.getFile("file");
+        return readStream(file.getInputStream());
+    }
+
+    private String readStream(final InputStream stream) throws IOException {
+        return new Scanner(stream, "UTF-8").useDelimiter("\\A").next();
     }
 }
