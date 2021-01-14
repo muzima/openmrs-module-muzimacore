@@ -115,16 +115,21 @@ function ImportCtrl($scope, FileUploadService, FormService, _, $location, $route
         $location.path('/forms');
     };
 
-    FormService.getEncounterTypes().then(function (results) {
-        $scope.encounterTypes = results.data;
+    FormService.getEncounterTypes().then(function (response) {
+        $scope.encounterTypes = response.data.results;
     });
 
-    $scope.createAndUpload = function (file, form, discriminator, formType, name, version, description,
+    $scope.createAndUpload = function (file, discriminator, formType, name, version, description,
      encounterType) {
+        var encounterTypeuuid = "";
+        if (encounterType != null && encounterType !== 'undefined') {
+            encounterTypeuuid = encounterType.uuid;
+        }
+
         FileUploadService.post({
             url: "html/createAndUpload.form", file: file, params: {
-                form: uuid, discriminator: discriminator, name: name, version: version, description:description,
-                encounterType: encounterType
+                discriminator: discriminator, name: name, version: version, description:description,
+                encounterType: encounterTypeuuid
             }
         }).success(function () {
             $location.path("/forms");
