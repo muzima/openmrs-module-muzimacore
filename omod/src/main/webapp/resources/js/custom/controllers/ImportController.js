@@ -114,4 +114,22 @@ function ImportCtrl($scope, FileUploadService, FormService, _, $location, $route
     $scope.cancelUpload = function () {
         $location.path('/forms');
     };
+
+    FormService.getEncounterTypes().then(function (results) {
+        $scope.encounterTypes = results.data;
+    });
+
+    $scope.createAndUpload = function (file, form, discriminator, formType, name, version, description,
+     encounterType) {
+        FileUploadService.post({
+            url: "html/createAndUpload.form", file: file, params: {
+                form: uuid, discriminator: discriminator, name: name, version: version, description:description,
+                encounterType: encounterType
+            }
+        }).success(function () {
+            $location.path("/forms");
+        }).error(function () {
+            showErrorMessage("The form name already exists !! Please use some other name.");
+        });
+    };
 }
