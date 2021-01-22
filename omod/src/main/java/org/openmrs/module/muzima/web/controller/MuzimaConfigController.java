@@ -18,7 +18,12 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Form;
 import org.openmrs.Location;
+import org.openmrs.Person;
+import org.openmrs.Provider;
 import org.openmrs.api.CohortService;
+import org.openmrs.api.LocationService;
+import org.openmrs.api.PersonService;
+import org.openmrs.api.ProviderService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.service.MuzimaConfigService;
@@ -42,6 +47,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * TODO: Write brief description about the class here.
@@ -193,5 +199,81 @@ public class MuzimaConfigController {
             response.put("objects", objects);
         }
         return response;
+    }
+
+    @RequestMapping(value = "/module/muzimacore/saveLocation.json", method = RequestMethod.POST)
+    public void saveLocation(final @RequestBody Map<String, Object> map) {
+        if (Context.isAuthenticated()) {
+            String name = (String) map.get("name");
+            String description = (String) map.get("description");
+
+            Location location = new Location();
+            location.setName(name);
+            location.setDescription(description);
+            location.setRetired(false);
+
+            LocationService locationService = Context.getService(LocationService.class);
+            locationService.saveLocation(location);
+        }
+    }
+
+    @RequestMapping(value = "/module/muzimacore/saveCohortAndCohortDefinition.json", method = RequestMethod.POST)
+    public void saveCohortAndCohortDefinition(final @RequestBody Map<String, Object> map) {
+        if (Context.isAuthenticated()) {
+            String name = (String) map.get("name");
+            String description = (String) map.get("description");
+            String definition = (String) map.get("definition");
+            boolean isScheduled = (Boolean) map.get("isScheduledForExecution");
+            boolean isMemberAdditionEnabled = (Boolean) map.get("isMemberAdditionEnabled");
+            boolean isMemberRemovalEnabled = (Boolean) map.get("isMemberRemovalEnabled");
+            boolean isFilterByProviderEnabled = (Boolean) map.get("isFilterByProviderEnabled");
+            boolean isFilterByLocationEnabled = (Boolean) map.get("isFilterByLocationEnabled");
+            String filterQuery = (String) map.get("filterQuery");
+            String uuid = UUID.randomUUID().toString();
+
+            Cohort cohort = new Cohort();
+            cohort.setName(name);
+            cohort.setDescription(description);
+            cohort.setUuid(uuid);
+            CohortService cohortService = Context.getCohortService();
+            cohortService.saveCohort(cohort);
+
+            Cohort savedCohort = new Cohort();
+            savedCohort = cohortService.getCohortByUuid(uuid);
+
+            CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
+            CohortDefinitionData cohortDefinitionData = new CohortDefinitionData();
+
+            if(savedCohort != null && !definition.isEmpty()){
+                cohortDefinitionData.setCohortId(savedCohort.getId());
+                cohortDefinitionData.setDefinition(definition);
+                cohortDefinitionData.setIsScheduledForExecution(isScheduled);
+                cohortDefinitionData.setIsMemberAdditionEnabled(isMemberAdditionEnabled);
+                cohortDefinitionData.setIsMemberRemovalEnabled(isMemberRemovalEnabled);
+                cohortDefinitionData.setIsFilterByProviderEnabled(isFilterByProviderEnabled);
+                cohortDefinitionData.setIsFilterByLocationEnabled(isFilterByLocationEnabled);
+                cohortDefinitionData.setFilterQuery(filterQuery);
+                expandedCohortDataService.saveCohortDefinitionData(cohortDefinitionData);
+            }
+        }
+    }
+
+    @RequestMapping(value = "/module/muzimacore/saveProvider.json", method = RequestMethod.POST)
+    public void saveProvider(final @RequestBody Map<String, Object> map) {
+        if (Context.isAuthenticated()) {
+            Integer personID = (Integer) map.get("person_id");
+            String name = (String) map.get("name");
+            String identifier = (String) map.get("identifier");
+
+            PersonService personService = Context.getPersonService();
+            Person person = personService.getPerson(personID);
+            Provider provider = new Provider();
+            provider.setName(name);
+            provider.setPerson(person);
+            provider.setIdentifier(identifier);
+
+            ProviderService providerService = Context.getService(ProviderService.class);
+            providerService.saveProvider(provider);
+        }
     }
 }
