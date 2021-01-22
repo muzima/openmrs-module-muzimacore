@@ -158,6 +158,9 @@ muzimaCoreModule.factory('FormService', function ($http) {
     var searchForms = function(search) {
         return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description,retired)&q=' + (search === undefined ? '' : search));
     };
+    var getEncounterTypes = function () {
+        return $http.get('../../ws/rest/v1/encountertype', {cache: false});
+    };
 
     return {
         all: all,
@@ -166,7 +169,8 @@ muzimaCoreModule.factory('FormService', function ($http) {
         getForms: getForms,
         retire: retire,
         getDiscriminatorTypes: getDiscriminatorTypes,
-        searchForms: searchForms
+        searchForms: searchForms,
+        getEncounterTypes: getEncounterTypes
     }
 });
 
@@ -272,6 +276,41 @@ muzimaCoreModule.factory('$configs', function($http) {
     var searchConfigSettings = function(search) {
         return $http.get('configSettings.json?search=' + (search === undefined ? '' : search));
     };
+    var checkViewLocationPrivilege = function () {
+        return $http.get("checkViewLocationPrivilege.json");
+    };
+    var checkManageProviderPrivilege = function () {
+        return $http.get("checkManageProviderPrivilege.json");
+    };
+    var checkManageFormsPrivilege = function () {
+        return $http.get("checkManageFormsPrivilege.json");
+    };
+    var checkAddCohortsPrivilege = function () {
+        return $http.get("checkAddCohortsPrivilege.json");
+    };
+
+    var saveLocation = function (name, description) {
+        return $http.post("saveLocation.json", {"name": name, "description": description});
+    };
+
+    var saveCohortAndCohortDefinition = function (name, description, definition, isScheduledForExecution,
+                                                  isMemberAdditionEnabled, isMemberRemovalEnabled, isFilterByProviderEnabled,
+                                                   isFilterByLocationEnabled, filterQuery) {
+    return $http.post("saveCohortAndCohortDefinition.json", {"name": name, "description":description, "definition": definition,
+                    "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled,
+                    "isMemberRemovalEnabled": isMemberRemovalEnabled,"isFilterByProviderEnabled":isFilterByProviderEnabled,
+                     "isFilterByLocationEnabled":isFilterByLocationEnabled, "filterQuery": filterQuery});
+
+    };
+
+    var searchConfigPersons = function(search) {
+        return $http.get('../../ws/rest/v1/person?v=custom:(uuid,gender,birthdate,names:(uuid,givenName,middleName,familyName,preferred,),uuid)&q=' + (search === undefined ? '' : search));
+    };
+
+    var saveProvider = function (person_id, name, identifier) {
+        return $http.post("saveLocation.json", {"person_id": person_id, "name": name, "identifier": identifier});
+    };
+
     return {
         getConfiguration: getConfiguration,
         getConfigurations: getConfigurations,
@@ -282,7 +321,15 @@ muzimaCoreModule.factory('$configs', function($http) {
         searchConfigLocations: searchConfigLocations,
         searchConfigProviders: searchConfigProviders,
         searchConfigConcepts: searchConfigConcepts,
-        searchConfigSettings: searchConfigSettings
+        searchConfigSettings: searchConfigSettings,
+        checkViewLocationPrivilege: checkViewLocationPrivilege,
+        checkManageProviderPrivilege: checkManageProviderPrivilege,
+        checkManageFormsPrivilege: checkManageFormsPrivilege,
+        checkAddCohortsPrivilege: checkAddCohortsPrivilege,
+        saveLocation: saveLocation,
+        saveCohortAndCohortDefinition: saveCohortAndCohortDefinition,
+        searchConfigPersons: searchConfigPersons,
+        saveProvider: saveProvider
     }
 });
 

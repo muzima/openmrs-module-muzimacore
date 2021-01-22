@@ -521,6 +521,78 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             }
         });
     };
+
+    $configs.checkViewLocationPrivilege().
+    then(function (response) {
+        var serverData = response.data;
+        $scope.isViewLocationPrivilegeGranted = serverData;
+    });
+
+    $configs.checkManageProviderPrivilege().
+    then(function (response) {
+        var serverData = response.data;
+        $scope.isManageProviderPrivilegeGranted = serverData;
+    });
+
+    $configs.checkManageFormsPrivilege().
+    then(function (response) {
+        var serverData = response.data;
+        $scope.isManageFormsPrivilegeGranted = serverData;
+    });
+
+    $configs.checkManageProviderPrivilege().
+    then(function (response) {
+        var serverData = response.data;
+        $scope.isAddCohortsPrivilegeGranted = serverData;
+    });
+
+    $scope.saveLocation = function (location) {
+        $configs.saveLocation(location.name, location.description).
+        then(function () {
+            //Add location to setupconfig and close the modal
+        })
+    };
+
+    $scope.saveCohortAndCohortDefination = function (cohort) {
+        if(cohort.isScheduledForExecution===undefined){
+            cohort.isScheduledForExecution=false;
+        }
+        if(cohort.isMemberAdditionEnabled===undefined){
+            cohort.isMemberAdditionEnabled=false;
+        }
+        if(cohort.isMemberRemovalEnabled===undefined){
+            cohort.isMemberRemovalEnabled=false;
+        }
+        if(cohort.isFilterByProviderEnabled===undefined){
+            cohort.isFilterByProviderEnabled=false;
+        }
+        if(cohort.isFilterByLocationEnabled===undefined){
+            cohort.isFilterByLocationEnabled=false;
+        }
+
+        $configs.saveCohortAndCohortDefinition(cohort.name, cohort.description, cohort.definition, cohort.isScheduledForExecution,
+         cohort.isMemberAdditionEnabled, cohort.isMemberRemovalEnabled, cohort.isFilterByProviderEnabled, cohort.isFilterByLocationEnabled,
+          cohort.filterQuery).
+        then(function () {
+            //Add cohort to setupconfig and close the modal
+        })
+    };
+
+    $scope.$watch('search.person', function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            $configs.searchConfigPersons($scope.search.person).
+            then(function (response) {
+                $scope.person = response.data.results;
+            });
+        }
+    }, true);
+
+    $scope.saveProvider = function (provider) {
+        $configs.saveProvider(provider.person_id, provider.name, provider.identifier).
+        then(function () {
+            //Add provider to setupconfig and close the modal
+        })
+    };
 }
 
 function ConfigsCtrl($scope, $configs) {

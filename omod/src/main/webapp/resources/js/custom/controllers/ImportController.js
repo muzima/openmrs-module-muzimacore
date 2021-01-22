@@ -119,4 +119,27 @@ function ImportCtrl($scope, FileUploadService, FormService, _, $location, $route
     $scope.cancelUpload = function () {
         $location.path('/forms');
     };
+
+    FormService.getEncounterTypes().then(function (response) {
+        $scope.encounterTypes = response.data.results;
+    });
+
+    $scope.createAndUpload = function (file, discriminator, formType, name, version, description,
+     encounterType) {
+        var encounterTypeuuid = "";
+        if (encounterType != null && encounterType !== 'undefined') {
+            encounterTypeuuid = encounterType.uuid;
+        }
+
+        FileUploadService.post({
+            url: "html/createAndUpload.form", file: file, params: {
+                discriminator: discriminator, name: name, version: version, description:description,
+                encounterType: encounterTypeuuid
+            }
+        }).success(function () {
+            $location.path("/forms");
+        }).error(function () {
+            showErrorMessage("The form name already exists !! Please use some other name.");
+        });
+    };
 }

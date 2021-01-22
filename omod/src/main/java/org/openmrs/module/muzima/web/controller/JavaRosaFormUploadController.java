@@ -1,6 +1,10 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.javarosa.xform.parse.ValidationMessages;
+import org.openmrs.EncounterType;
+import org.openmrs.Form;
+import org.openmrs.api.EncounterService;
+import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.springframework.stereotype.Controller;
@@ -14,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "module/muzimacore")
@@ -65,6 +70,35 @@ public class JavaRosaFormUploadController {
         if (Context.isAuthenticated()) {
             MuzimaFormService service = Context.getService(MuzimaFormService.class);
             service.createHTMLForm(extractFile(request), form, discriminator);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/html/createAndUpload.form", method = RequestMethod.POST)
+    public void createAndUploadHTMLForm(final MultipartHttpServletRequest request,
+                               final @RequestParam String discriminator,
+                               final @RequestParam String name,
+                               final @RequestParam String version,
+                               final @RequestParam String description,
+                               final @RequestParam String encounterType) throws Exception {
+        if (Context.isAuthenticated()) {
+            String formUuid = UUID.randomUUID().toString();
+            Form form = new Form();
+            form.setName(name);
+            form.setVersion(version);
+            form.setDescription(description);
+            if(!encounterType.isEmpty()) {
+                EncounterService encounterService = Context.getEncounterService();
+                EncounterType encounterType1 = encounterService.getEncounterTypeByUuid(encounterType);
+                form.setEncounterType(encounterType1);
+            }
+            form.setUuid(formUuid);
+
+            FormService formService = Context.getFormService();
+            formService.saveForm(form);
+
+            MuzimaFormService service = Context.getService(MuzimaFormService.class);
+            service.createHTMLForm(extractFile(request), formUuid, discriminator);
         }
     }
 

@@ -49,6 +49,10 @@ import java.util.TreeSet;
 /**
  * TODO: Write brief description about the class here.
  */
+/** @deprecated  this class will be removed in future releases.
+ * It is advisable to switch to JsonGenericRegistrationQueueDataHandler to take advantage
+ * of the flexibility that the new class has*/
+@Deprecated
 @Handler(supports = QueueData.class, order = 1)
 public class JsonRegistrationQueueDataHandler implements QueueDataHandler {
 
