@@ -1,0 +1,52 @@
+<form role="form" ng-submit="upload(file, form, discriminator)" name="formUpload">
+    <div class="row">
+        <div class="form-group col-sm-2">
+            <label for="xFormFormDefinition">Form Name</label>
+        </div>
+        <div class="form-group col-sm-7">
+            <select ng-show="forms.length <= 10" class="form-control" id="xFormFormDefinition" ng-model="form" ng-options="form.name for form in forms" required="true" ng-change = loadData()>
+            </select>
+            <input ng-show="forms.length > 10" type="text" class="form-control" ng-model="searchForm" placeholder="Search form by name ..." autocomplete="off"
+                   uib-typeahead="form as form.name for form in searchForms | filter:$viewValue |filter:retired=false | limitTo:10"
+                   uib-typeahead-wait-ms="500" typeahead-on-select="selectForm($item)" uib-typeahead-editable="false"/>
+        </div>
+        <div class="col-sm-3">
+            <a class="link" ng-click="setNextTab('create-form-definition')">Create New</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-2">
+            <label for="xFormFormDefinition">Description</label>
+        </div>
+        <div class="col-sm-10">
+            <textarea class="form-control" placeholder="Form Description" ng-model="form.description" disabled></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-2">
+            <label for="xFormFormDefinition">Version</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" ng-model="form.version">
+        </div>
+        <div class="form-group col-sm-2">
+            <label for="xFormFormDefinition">Discriminator</label>
+        </div>
+        <div class="col-sm-6">
+            <select class="form-control" id="xFormDiscriminator" ng-model="discriminator"
+                    ng-options="discriminator for discriminator in discriminatorTypes" required="true" >
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-2">
+            <label for="xFormFormDefinition">File:</label>
+        </div>
+        <div class="col-sm-6">
+            <file-upload message="Click here to select file"></file-upload>
+        </div>
+        <div class="col-sm-4">
+            <button type="submit" class="btn btn-primary">Validate & upload</button>
+        </div>
+    </div>
+</form>

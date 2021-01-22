@@ -11,7 +11,6 @@ muzimaCoreModule.directive("fileUpload", function () {
 
             $(fileUploadButton).hide();
             $(activator).text(attrs.message);
-
             $(activator).click(function () {
                 $(fileUploadButton).click();
             });

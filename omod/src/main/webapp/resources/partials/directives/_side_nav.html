@@ -1,14 +1,37 @@
 <div class="col-lg-2">
-    <ul class="nav nav-tabs nav-stacked">
-        <li ng-class="{'navigation-active': menuItem === 'sources' || menuItem === 'source'}"><a href="#/sources">Data Source</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'configs' || menuItem === 'config'}"><a href="#/configs">Setup Configurations</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'queues' || menuItem === 'queue'}"><a href="#/queues">Queue Data</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'registrations' || menuItem === 'registration'}"><a href="#/registrations">Registrations</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'forms'}"><a href="#/forms">Muzima Forms</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'errors' || menuItem === 'error'}"><a href="#/errors">Error Data</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'duplicates' || menuItem === 'duplicate'}"><a href="#/duplicates">Potential Duplicates</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'patientReports' || menuItem === 'patientReport'}"><a href="#/reportConfigs">Patient Reports</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'settings' || menuItem === 'setting'}"><a href="#/settings">Settings</a></li>
-        <li ng-class="{'navigation-active': menuItem === 'cohortDefinitions' || menuItem === 'cohortDefinition'}"><a href="#/cohortDefinitions">Cohort Definitions</a></li>
+    <ul class="nav sidenav">
+        <li>
+            <a><span class="brand">mUzima</span></a>
+        </li>
+        <li ng-class="{'navigation-active': menuItem === 'configs' || menuItem === 'config'}">
+            <a href="#/configs"><i class="fa fa-wrench"></i> Setup Configurations</a></li>
+        <li ng-class="{'navigation-active': menuItem === 'queues' || menuItem === 'queue'}">
+            <a href="#/queues"><i class="fa fa-th-list"></i> Queue Data</a></li>
+        <li ng-class="{'navigation-active': menuItem === 'errors' || menuItem === 'error'}">
+            <a href="#/errors"><i class="fa fa-pencil"></i> Error Data</a>
+        </li>
+        <li ng-class="{'navigation-active': menuItem === 'duplicates' || menuItem === 'duplicate'}">
+            <a href="#/duplicates"><i class="fa fa-clone"></i> Potential Duplicates</a>
+        </li>
+        <li ng-class="{'navigation-active': menuItem === 'forms'}">
+        <a href="#/forms"><i class="fa fa-file-text"></i> Muzima Forms</a></li>
+        <li ng-class="{'navigation-active': menuItem === 'patientReports' || menuItem === 'patientReport'}">
+            <a href="#/reportConfigs"><i class="fa fa-th-large"></i> Patient Reports</a>
+        </li>
+        <li ng-class="{'navigation-active': menuItem === 'cohortDefinitions' || menuItem === 'cohortDefinition'}">
+            <a href="#/cohortDefinitions"><i class="fa fa-group"></i> Cohort Definitions</a>
+        </li>
+        <li ng-class="{'navigation-active': menuItem === 'registrations' || menuItem === 'registration'}">
+            <a href="#/registrations"><i class="fa fa-user-plus"></i> Registrations</a>
+        </li>
+        <li ng-class="{'navigation-active': menuItem === 'sources' || menuItem === 'source'}">
+            <a href="#/sources"><i class="fa fa-database"></i>  Data Source</a>
+        </li>
+        <li ng-class="{'navigation-active': menuItem === 'settings' || menuItem === 'setting'}">
+            <a href="#/settings"><i class="fa fa-cogs"></i> Settings</a>
+        </li>
+        <li>
+            <a><i class="fa fa-question-circle-o"></i> Help</a>
+        </li>
     </ul>
 </div>

@@ -75,6 +75,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
     var createJson = function (config) {
         var configJsonString = {"config":{}};
+        configJsonString.config["willRegisteringPatients"] = config.willRegisteringPatients;
         configJsonString.config["name"] = config.name;
         configJsonString.config["description"] = config.description;
         configJsonString.config["forms"] = $scope.configForms;
@@ -408,6 +409,48 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }
 
+    var showConfigWizardModal = function() {
+        $scope.showConfigWizard = true;
+        $scope.activeTab = 'description';
+        $scope.isActiveTab = function (tabName) {
+            console.log("Is active tab ["+tabName+"] will register: "+$scope.config.willRegisteringPatients);
+            return $scope.activeTab == tabName;
+        }
+
+        $scope.setNextTab = function (nextTab) {
+            console.log("Set next tab: "+$scope.config.willRegisteringPatients);
+            $scope.activeTab = nextTab;
+        }
+
+        $scope.setSelectedRegistrationForm = function (formUuid) {
+            console.log('Uploaded form:'+formUuid);
+            //refresh forms list
+            //check selected form
+            $scope.setNextTab('registration-form-selection');
+        }
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: '../../moduleResources/muzimacore/partials/directives/configWizard.html',
+            size: 'xl',
+            scope: $scope,
+            resolve: {
+                items: function () {
+                    return true;
+                }
+            }
+        });
+        $scope.dismiss = function(){
+            modalInstance.close();
+        }
+    }
+
+    $scope.launchWizard = function (e) {
+
+        $scope.configWizardShown = !$scope.configWizardShown;
+        e.preventDefault();
+        showConfigWizardModal();
+    }
+
     $scope.addSetting = function(setting) {
         var settingExists = _.find($scope.configSettings, function (configSetting) {
             return configSetting.uuid == setting.uuid
@@ -481,6 +524,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 }
 
 function ConfigsCtrl($scope, $configs) {
+    $scope.showConfigWizard = false;
     // initialize the paging structure
     $scope.maxSize = 10;
     $scope.pageSize = 10;
@@ -519,4 +563,10 @@ function ConfigsCtrl($scope, $configs) {
             });
         }
     }, true);
+
+    $scope.launchWizard = function (e) {
+        console.log("Launch Wizard!!");
+        $scope.showConfigWizard = !$scope.showConfigWizard;
+        e.preventDefault();
+    }
 }
