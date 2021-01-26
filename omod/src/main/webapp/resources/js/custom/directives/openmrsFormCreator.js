@@ -1,27 +1,7 @@
-muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormService,) {
+muzimaCoreModule.directive('openmrsFormCreator', function(FormService,) {
     return {
         restrict: 'E',
         link:function(scope){
-            scope.$watch('searchForm', function (newValue, oldValue) {
-                if (newValue != oldValue) {
-                    FormService.searchForms(scope.searchForm).
-                    then(function (response) {
-                        scope.searchForms = response.data.results;
-                    });
-                }
-            }, true);
-
-            scope.selectForm = function (value) {
-                scope.form = value;
-                scope.loadData();
-            };
-
-            scope.loadData= function(){
-                console.log("Loading data///////");
-                scope.name = scope.form.name;
-                scope.version = scope.form.version;
-                scope.description = scope.form.description;
-            };
 
             FormService.getDiscriminatorTypes().then(function (results) {
                 scope.discriminatorTypes = results.data;

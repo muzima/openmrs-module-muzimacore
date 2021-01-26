@@ -18,6 +18,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.retire_config = false;
     $scope.retire_reason = false;
 
+    $scope.muzimaforms = [];
+
     // initialize the view to be read only
     $scope.mode = "view";
     $scope.uuid = $routeParams.uuid;
@@ -49,7 +51,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         });
     }
 
-    $configs.searchConfigForms().then(function (response) {
+    $configs.searchMuzimaForms().then(function (response) {
         var metaObjects = response.data.metaObjects;
         angular.forEach(metaObjects, function (object) {
             if (object.metaJson != undefined && object.metaJson != null) {
@@ -65,6 +67,21 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $scope.extractedNotUsedConcepts = _.differenceWith($scope.extractedConcepts,$scope.configConcepts, _.isEqual);
         $scope.specialFields.stillLoading=false;
     });
+
+    $scope.loadForms = function(callback) {
+        FormService.all().then(function (response) {
+            console.log(response.data.results.length);
+            $scope.muzimaforms = _.map(response.data.results, function (form) {
+                console.log("Mapping: " + form.discriminator);
+                return {
+                    form: form,
+                    newTag: "",
+                    retired: false,
+                    retireReason: ''
+                };
+            });
+        }).then(callback());
+    }
 
     $scope.save = function (config) {
         $configs.saveConfiguration(config.uuid, config.name, config.description, createJson(config)).
@@ -115,7 +132,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
      *****************************************************************************************/
     $scope.$watch('search.forms', function (newValue, oldValue) {
         if (newValue != oldValue) {
-            $configs.searchConfigForms($scope.search.forms).
+            $configs.searchMuzimaForms($scope.search.forms).
             then(function (response) {
                 $scope.forms = response.data.objects;
             });
@@ -413,13 +430,19 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $scope.showConfigWizard = true;
         $scope.activeTab = 'description';
         $scope.isActiveTab = function (tabName) {
-            console.log("Is active tab ["+tabName+"] will register: "+$scope.config.willRegisteringPatients);
+            //console.log("Is active tab ["+tabName+"] will register: "+$scope.config.willRegisteringPatients);
             return $scope.activeTab == tabName;
         }
 
         $scope.setNextTab = function (nextTab) {
-            console.log("Set next tab: "+$scope.config.willRegisteringPatients);
-            $scope.activeTab = nextTab;
+            if(nextTab == "registration-form-selection"){
+                //reload forms
+                $scope.loadForms(()=>{
+                    $scope.activeTab = nextTab;
+                });
+            } else {
+                $scope.activeTab = nextTab;
+            }
         }
 
         $scope.setSelectedRegistrationForm = function (formUuid) {
@@ -428,6 +451,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             //check selected form
             $scope.setNextTab('registration-form-selection');
         }
+
+        $scope.isRegistrationForm = function(muzimaform){
+            console.log("Check is reg: "+muzimaform.form.discriminator);
+            return muzimaform.form.discriminator == 'json-registration' ||
+                muzimaform.form.discriminator == 'json-generic-registration'
+        }
+
         var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: '../../moduleResources/muzimacore/partials/directives/configWizard.html',
@@ -439,6 +469,17 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 }
             }
         });
+
+        $scope.hasRegistrationForms = function(){
+            for (muzimaform of $scope.muzimaforms){
+                console.log(muzimaform);
+                if($scope.isRegistrationForm(muzimaform)){
+                    return true;
+                }
+            }
+            return false;
+        }
+
         $scope.dismiss = function(){
             modalInstance.close();
         }

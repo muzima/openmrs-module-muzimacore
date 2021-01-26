@@ -56,29 +56,21 @@
             <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
         </div>
         <div class="col-sm-9">
-            <div>
-                <label class="w-100">Do you plan on registering patients on the mobile app?</label>
-                <label class="w-25">
-                    <input type="radio" name="willRegisteringPatients2" value="true"
-                           ng-checked="config.willRegisteringPatients" disabled> Yes
-                </label>
-                <label  class="w-25">
-                    <input type="radio" name="willRegisteringPatients2" value="false" disabled> No</label>
-            </div>
-            <hr>
             <label class="alert alert-info w-100">Please select the registration form to use.</label>
             <div class="row">
-                <div class="col-md-7 ">
-                    <div class="row" ng-repeat="muzimaform in muzimaforms">
-                        <div class="col-sm-8">
-                            {{muzimaform.name}}
-                        </div>
-                        <div class="col-sm-4">
-                            <input type="checkbox">
-                        </div>
-
-                    </div>
-
+                <div class="col-md-7" style="margin-bottom: 70px; overflow-y:scroll">
+                    <table class="table table-hover table-striped">
+                    <tr ng-repeat="muzimaform in muzimaforms | filter:isRegistrationForm">
+                        <td>
+                            <label class="w-100">{{muzimaform.form.name}} {{muzimaform.form.discriminator}}
+                                <input class="pull-right" type="checkbox"></label>
+                        </td>
+                    </tr>
+                    </table>
+                    <label ng-show="!hasRegistrationForms()" class="alert alert-error">
+                        There are no registration forms available. Please click on
+                        <i><u>Upload new form</u></i> button to upload a registration form.
+                    </label>
                 </div>
                 <div class="col-md-5">
                     <button class="btn btn-primary" ng-click="setNextTab('form-upload')">Upload new form</button>
@@ -111,7 +103,7 @@
                 <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('registration-form-selection')">
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-success btn-md pull-right" ng-click="setNextTab('cohorts')">
+                <button class="btn btn-success btn-md pull-right" disabled>
                     Next <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
@@ -144,15 +136,18 @@
             <div class="row">
                 <div class="col-sm-12">
                     <select class="form-control">
-                        <option value="" selected disabled>Encounter Type</option>
+                        <option value>Encounter Type</option>
+                    </select>
+                    <select class="form-control" ng-model="encountertypes"
+                            ng-options="encounterType for encounterType in encounterTypes" required="true" >
                     </select>
                 </div>
             </div>
             <div class="wizard-nav-bar">
-                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('forms')">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('form-upload')">
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-success btn-md pull-right" ng-click="setNextTab('cohorts')">
+                <button class="btn btn-success btn-md pull-right" disabled>
                     Next <i class="fa fa-arrow-right"></i>
                 </button>
             </div>

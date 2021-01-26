@@ -131,7 +131,7 @@ public class MuzimaConfigController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/module/muzimacore/configForms.json", method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/mUzimaForms.json", method = RequestMethod.GET)
     public Map<String, Object> getForms(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
 
@@ -238,8 +238,7 @@ public class MuzimaConfigController {
             CohortService cohortService = Context.getCohortService();
             cohortService.saveCohort(cohort);
 
-            Cohort savedCohort = new Cohort();
-            savedCohort = cohortService.getCohortByUuid(uuid);
+            Cohort savedCohort = cohortService.getCohortByUuid(uuid);
 
             CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
             CohortDefinitionData cohortDefinitionData = new CohortDefinitionData();
