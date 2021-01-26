@@ -453,10 +453,22 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
 
         $scope.isRegistrationForm = function(muzimaform){
-            console.log("Check is reg: "+muzimaform.form.discriminator);
+            //console.log("Check is reg: "+muzimaform.form.discriminator);
             return muzimaform.form.discriminator == 'json-registration' ||
                 muzimaform.form.discriminator == 'json-generic-registration'
         }
+
+        $scope.setNewFormMetadata = function (name, version, description,encounterType) {
+            $scope.newFormMetaData = {
+                name:name,
+                version:version,
+                description:description,
+                encounterType:encounterType,
+                uuid:'newFormMetadata'
+            }
+            console.log("New metadata: "+JSON.stringify($scope.newFormMetaData));
+            $scope.setNextTab("form-upload");
+        };
 
         var modalInstance = $uibModal.open({
             animation: true,
@@ -472,7 +484,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
         $scope.hasRegistrationForms = function(){
             for (muzimaform of $scope.muzimaforms){
-                console.log(muzimaform);
                 if($scope.isRegistrationForm(muzimaform)){
                     return true;
                 }
