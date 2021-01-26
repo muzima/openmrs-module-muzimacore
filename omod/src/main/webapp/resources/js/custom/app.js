@@ -170,6 +170,7 @@ muzimaCoreModule.factory('FormService', function ($http) {
         get: get,
         save: save,
         getForms: getForms,
+        getNonMuzimaForms: getNonMuzimaForms,
         retire: retire,
         getDiscriminatorTypes: getDiscriminatorTypes,
         searchForms: searchForms,
@@ -213,6 +214,7 @@ muzimaCoreModule.factory('TagService', function ($http) {
 muzimaCoreModule.factory('FileUploadService', function ($http) {
     return {
         post: function (options) {
+            console.log("jjj: "+JSON.stringify(options.params));
             return $http({
                 method: 'POST',
                 url: options.url,

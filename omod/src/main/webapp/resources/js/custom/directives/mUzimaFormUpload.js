@@ -11,6 +11,7 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                 }
             }, true);
 
+
             scope.selectForm = function (value) {
                 scope.form = value;
                 scope.loadData();
@@ -28,13 +29,28 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                 //scope.discriminator = scope.discriminatorTypes[0];
             });
 
-            FormService.getForms().then(function (results) {
-                scope.forms = results.data.results;
-                // if (scope.forms.length > 0 && scope.forms.length <= 10) {
-                //     scope.form = scope.forms[0];
-                //     scope.loadData();
-                // }
-            });
+            scope.loadFormsList = function() {
+                FormService.getForms().then(function (results) {
+                    scope.forms = results.data.results;
+                    console.log("Gottent forms: "+JSON.stringify(scope.forms));
+
+                    if (scope.newFormMetaData != undefined) {
+                        console.log('There is new form metadata');
+                        var newForm = scope.newFormMetaData
+
+                        scope.forms.push(newForm);
+                        console.log('There is new form metadata: '+JSON.stringify(scope.forms));
+                        scope.selectForm(newForm)
+                    } else {
+                        console.log("New metadata unavailable");
+                    }
+                });
+            }
+            scope.loadFormsList();
+
+            scope.$watch('newFormMetaData', function () {
+                scope.loadFormsList();
+            }, true);
 
             var showErrorMessage = function (content, cl, time) {
                 $('<div/>')
@@ -72,18 +88,34 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                     uuid = form.uuid;
                 }
 
-                FileUploadService.post({
-                    url: 'html/upload.form', file: file, params: {
-                        form: uuid, discriminator: discriminator
-                    }
-                }).success(function () {
-                    console.log("Success...");
-                    scope.setSelectedRegistrationForm(uuid,wizardStep);
-                    //$location.path("/forms");
-                }).error(function () {
-                    console.log("Error....");
-                    showErrorMessage("The form name already exists !! Please use some other name.");
-                });
+                if(uuid == 'newFormMetadata'){
+                    console.log("Uploading with new form metadata...");
+                    FileUploadService.post({
+                        url: "html/createAndUpload.form", file: file, params: {
+                            discriminator: discriminator, name: form.name, version: form.version,
+                            description:form.description,encounterType: form.encounterType.uuid
+                        }
+                    }).success(function () {
+                        console.log("Success...");
+                        //get created form uuid
+                        scope.setSelectedForm(uuid, wizardStep);
+                    }).error(function () {
+                        showErrorMessage("The form name already exists !! Please use some other name.");
+                    });
+
+                } else {
+                    FileUploadService.post({
+                        url: 'html/upload.form', file: file, params: {
+                            form: uuid, discriminator: discriminator
+                        }
+                    }).success(function () {
+                        console.log("Success...");
+                        scope.setSelectedForm(uuid, wizardStep);
+                    }).error(function () {
+                        console.log("Error....");
+                        showErrorMessage("The form name already exists !! Please use some other name.");
+                    });
+                }
             };
         },
         templateUrl: '../../moduleResources/muzimacore/partials/directives/mUzimaFormUpload.html'
