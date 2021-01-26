@@ -1,0 +1,305 @@
+<div>
+    <div class='ng-modal-close' ng-click='dismiss()'>X</div>
+    <div class='ng-modal-dialog-content container-fluid h-100' id="config-wizard-dialog">
+    <div class="row fill-height" ng-show="isActiveTab('description')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="1"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <p class="font-weight-bold font-italic">
+                    Upon login for the first time, mUzima mobile app displays the list of available
+                setup configurations, and the user will need to select a setup configuration
+                    that best suits their needs.
+                </p>
+                <label class="alert alert-info w-100">Please provide a name and a description of your setup configuration.</label>
+                <input class="form-control" placeholder="Setup Name" ng-model="config.name">
+                <textarea class="form-control" placeholder="Setup Description" rows="4" ng-model="config.description"></textarea>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-success btn-md pull-right" ng-click="setNextTab('forms')">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('forms')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <p class="font-weight-bold font-italic">
+                    mUzima can be adapted to enable registration of patients and to collect various other kinds of
+                    patient data through forms.
+                </p>
+                <label class="alert alert-info w-100">Do you plan on registering patients on the mobile app?</label>
+                <label class="w-25 offset-2">
+                    <input type="radio" name="willRegisteringPatients" ng-checked="config.willRegisteringPatients" value="true"
+                           ng-model="config.willRegisteringPatients" ng-click="setNextTab('registration-form-selection')"> Yes
+                </label>
+                <label  class="w-25"><input type="radio" name="willRegisteringPatients" value="false"
+                                            ng-model="config.willRegisteringPatients"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('description')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="setNextTab('cohorts')">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('registration-form-selection')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <label class="alert alert-info w-100">Please select the registration form to use.</label>
+            <div class="row">
+                <div class="col-md-7" style="margin-bottom: 70px; overflow-y:scroll">
+                    <table class="table table-hover table-striped">
+                    <tr ng-repeat="muzimaform in muzimaforms | filter:isRegistrationForm">
+                        <td>
+                            <label class="w-100">{{muzimaform.form.name}} {{muzimaform.form.discriminator}}
+                                <input class="pull-right" type="checkbox"></label>
+                        </td>
+                    </tr>
+                    </table>
+                    <label ng-show="!hasRegistrationForms()" class="alert alert-error">
+                        There are no registration forms available. Please click on
+                        <i><u>Upload new form</u></i> button to upload a registration form.
+                    </label>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary" ng-click="setNextTab('form-upload')">Upload new form</button>
+                </div>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('forms')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="setNextTab('cohorts')">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('form-upload')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="pull-left">Form Upload</label>
+                </div>
+            </div>
+            <hr>
+            <m-uzima-form-upload upload-return-fn="setSelectedRegistrationForm"></m-uzima-form-upload>
+
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('registration-form-selection')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" disabled>
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('create-form-definition')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="pull-left">Create new Form Metadata</label>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-8">
+                    <input class="form-control" placeholder="Form Name">
+                </div>
+                <div class="col-sm-4">
+                    <input class="form-control" placeholder="Version">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <textarea class="form-control" placeholder="Form Description"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <select class="form-control">
+                        <option value>Encounter Type</option>
+                    </select>
+                    <select class="form-control" ng-model="encountertypes"
+                            ng-options="encounterType for encounterType in encounterTypes" required="true" >
+                    </select>
+                </div>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('form-upload')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" disabled>
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('cohorts')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="3"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <p class="font-weight-bold font-italic">
+                    mUzima supports the use of Cohorts to group patient with common characteristics.
+                </p>
+                <label class="alert alert-info w-100">
+                    Do you want to add Cohorts as part of the information that should be downloaded to the mobile application?
+                </label>
+                <label class="w-25"><input type="radio" name="willRegisteringPatients" value="true" ng-model="config.willRegisteringPatients"> Yes</label>
+                <label  class="w-25"><input type="radio" name="willRegisteringPatients" value="false" ng-model="config.willRegisteringPatients"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('forms')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="setNextTab('concepts')">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('concepts')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="4"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <p class="font-weight-bold font-italic">
+                    mUzima uses Concepts to determine the kinds of historical data that should be downloaded and retained
+                    on the mobile devices after form filling. <br> <a class="learn-more">Learn more</a>
+                </p>
+                <label class="alert alert-info w-100">
+                    Do you want to include Concepts as part of the data that should be downloaded to the mobile application?
+                </label>
+                <label class="w-25"><input type="radio" name="willRegisteringPatients" value="true" ng-model="config.willRegisteringPatients"> Yes</label>
+                <label  class="w-25"><input type="radio" name="willRegisteringPatients" value="false" ng-model="config.willRegisteringPatients"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('cohorts')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="setNextTab('locations')">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('locations')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="5"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <p class="font-weight-bold font-italic">
+                    We recognize that many implementations cannot download all locations to the devices for listing as
+                    the care location.
+                    mUzima provides the options for selecting a subset of these locations to the device. These will be
+                    locations that appear as the Encounter Location for patients.<br>
+                    <a class="learn-more">Learn more</a>
+                </p>
+                <label class="alert alert-info w-100">
+                    Please search and select Encounter Location(s) you want downloaded to mUzima for this program.
+                </label>
+                <input class="form-control" type="search">
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('concepts')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"  ng-click="setNextTab('providers')">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('providers')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="6"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <p class="font-weight-bold font-italic">
+                    We recognize that many implementations cannot download all providers to the devices for listing as
+                    the care provider.
+                    mUzima provides the options for selecting a subset of these providers to the device. These will be
+                    providers that appear as the Encounter providers for patients.<br>
+                    <a class="learn-more">Learn more</a>
+                </p>
+                <label class="alert alert-info w-100">
+                    Please search and select Encounter Provider(s) you want downloaded to mUzima for this program.
+                </label>
+                <input class="form-control" type="search">
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('locations')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"  ng-click="setNextTab('settings')">
+                    Continue <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" style="min-width:860px" ng-show="isActiveTab('settings')">
+        <div class="col-md-3">
+            <config-wizard-side-nav wizard-stage="7"></config-wizard-side-nav>
+        </div>
+        <div class="col-md-9">
+            <div style="width: 100%">
+                <p></p>
+                <label class="alert alert-info w-100">
+                    Please review and update settings below to suit your implementation.
+                </label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('providers')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"  ng-click="setNextTab('review')">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('review')">
+        <div class="col-md-3">
+            <config-wizard-side-nav wizard-stage="8"></config-wizard-side-nav>
+        </div>
+        <div class="col-md-9">
+            <div style="width:100%">
+                <label class="alert alert-info">
+                    Review
+                </label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="setNextTab('settings')">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"  ng-click="setNextTab('review')">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

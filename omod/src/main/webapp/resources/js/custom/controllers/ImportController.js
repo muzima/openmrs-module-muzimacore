@@ -47,7 +47,12 @@ function ImportCtrl($scope, FileUploadService, FormService, _, $location, $route
 
     $scope.validate = function (file, formType) {
         if (formType == 'html') {
-            $scope.validations = { list: []};
+            FileUploadService.post({
+                url: 'validateMuzimaForm.form',
+                file: file
+            }).then(function (result) {
+                $scope.validations = result.data;
+            });
         } else {
             FileUploadService.post({
                 url: formType == 'odk' ? 'odk/validate.form' : 'javarosa/validate.form',

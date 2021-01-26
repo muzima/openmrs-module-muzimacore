@@ -1,6 +1,6 @@
 <div id="wide-sidebar" class="row">
     <side-navigation menu-item="config"></side-navigation>
-    <div class="col-lg-8">
+    <div class="col-md-8">
         <div id='wait' class='loader'>
             &nbsp;
         </div>
@@ -10,14 +10,14 @@
                     <tbody>
                     <tr>
                         <td>
-                            <div class="col-lg-8 row">
+                            <div class="col-md-12">
                                 <input class="form-control" placeholder="Configuration name ..." type="text" disabled="" ng-model="config.name">
                             </div>
-                            <div class="col-lg-8 row">
+                            <div class="col-md-12">
 									<textarea class="form-control" placeholder="Configuration description ..." rows="4" disabled="" ng-model="config.description">
 									</textarea>
                             </div>
-                            <div class="col-lg-8 row">
+                            <div class="col-md-12">
                                 <input class="form-control" placeholder="Configuration uuid ..." type="text" disabled="" ng-model="config.uuid">
                             </div>
                         </td>
@@ -38,11 +38,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <div>
+                            <div class="pull-right">
                                 <button type="submit" ng-click="edit()" ng-disabled="specialFields.stillLoading" class="btn btn-primary">
                                     <span ng-hide="specialFields.stillLoading">Edit</span>
                                     <span ng-show="specialFields.stillLoading"><i class="icon-refresh icon-spin"></i> Preparing... </span>
                                 </button>
+                                <button ng-click="launchWizard($event)" class="btn btn-dark">Edit via config Wizard</button>
                                 <button type="submit" ng-click="cancel()" class="btn btn-danger">Close</button>
                             </div>
                         </td>
@@ -55,94 +56,94 @@
                     <tbody>
                     <tr>
                         <td>
-                            <div class=" col-lg-8 row">
+                            <div class=" col-md-12">
                                 <input class="form-control" placeholder="Configuration name ..." type="text" ng-model="config.name">
                             </div>
-                            <div class="col-lg-8 row">
+                            <div class="col-md-12">
                                 <textarea class="form-control" placeholder="Configuration description ..." rows="4" ng-model="config.description"></textarea>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div class="panel panel-default panel-body col-lg-12">
+                            <div class="panel panel-default panel-body col-md-12">
                                 <uib-tabset active="active">
                                     <uib-tab index="0" heading="Forms">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
+                                        <div class="row col-md-12">
+                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
                                                 <strong>Add Form</strong>
                                             </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
+                                            <div class="col-sm-5" style="margin-top: 8px">
                                                 <input type="text" class="form-control" ng-model="search.forms" placeholder="Search form by name ..." autocomplete="off"
                                                        uib-typeahead="form as form.name for form in forms | filter:$viewValue | limitTo:8"
                                                        uib-typeahead-wait-ms="500" typeahead-on-select="addForm($item)" uib-typeahead-editable="false"/>
                                             </div>
                                         </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
+                                        <div class="row col-md-12">
+                                            <select class="col-md-10 selectClass" size="8">
                                                 <option ng-click="chosenForm(form.uuid)" ng-repeat="form in configForms">{{form.name}}</option>
                                             </select>
                                             <button type="submit" ng-disabled="!selected.form" ng-click="removeForm()" class="btn btn-sm">Remove Form</button>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="1" heading="Cohorts">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
+                                        <div class="row col-md-12">
+                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
                                                 <strong>Add Cohort</strong>
                                             </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
+                                            <div class="col-sm-5" style="margin-top: 8px">
                                                 <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
                                                        uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
                                                        uib-typeahead-wait-ms="500" typeahead-on-select="addCohort($item)" uib-typeahead-editable="false"/>
                                             </div>
                                         </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
+                                        <div class="row col-md-12">
+                                            <select class="col-md-10 selectClass" size="8">
                                                 <option ng-click="chosenCohort(cohort.uuid)" ng-repeat="cohort in configCohorts">{{cohort.name}}</option>
                                             </select>
                                             <button type="submit" ng-disabled="!selected.cohort" ng-click="removeCohort()" class="btn btn-sm">Remove Cohort</button>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="2" heading="Locations">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
+                                        <div class="row col-md-12">
+                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
                                                 <strong>Add Location</strong>
                                             </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
+                                            <div class="col-sm-5" style="margin-top: 8px">
                                                 <input type="text" class="form-control" id="muzimaLocation" ng-model="search.locations"
                                                        placeholder="Search location by name ..." autocomplete="off"
                                                        uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
                                                        uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
                                             </div>
                                         </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
+                                        <div class="row col-md-12">
+                                            <select class="col-md-10 selectClass" size="8">
                                                 <option ng-click="chosenLocation(location.uuid)" ng-repeat="location in configLocations">{{location.name}}</option>
                                             </select>
                                             <button type="submit" ng-disabled="!selected.location" ng-click="removeLocation()" class="btn btn-sm">Remove Cohort</button>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="3" heading="Providers">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
+                                        <div class="row col-md-12">
+                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
                                                 <strong>Add Provider</strong>
                                             </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
+                                            <div class="col-sm-5" style="margin-top: 8px">
                                                 <input type="text" class="form-control" ng-model="search.providers" placeholder="Search provider by name ..." autocomplete="off"
                                                        uib-typeahead="provider as provider.name for provider in providers | filter:$viewValue | limitTo:8"
                                                        uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
                                             </div>
                                         </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
+                                        <div class="row col-md-12">
+                                            <select class="col-md-10 selectClass" size="8">
                                                 <option ng-click="chosenProvider(provider.uuid)" ng-repeat="provider in configProviders">{{provider.name}}</option>
                                             </select>
                                             <button type="submit" ng-disabled="!selected.provider" ng-click="removeProvider()" class="btn btn-sm">Remove Provider</button>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="4" heading="Concepts">
-                                        <div class="row col-lg-12">
-                                            <table class="col-lg-12 table-borderless">
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
                                                 <tr align="center">
                                                     <td width="45%" align="left">
                                                         <label for="selectedConcepts" style="margin-top: 10px">Selected Concepts</label>
@@ -169,18 +170,18 @@
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="5" heading="Settings">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
+                                        <div class="row col-md-12">
+                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
                                                 <strong>Add Setting</strong>
                                             </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
+                                            <div class="col-sm-5" style="margin-top: 8px">
                                                 <input type="text" class="form-control" ng-model="search.settings" placeholder="Search settings by name ..." autocomplete="off"
                                                        uib-typeahead="setting as setting.name for setting in settings | filter:$viewValue | limitTo:8"
                                                        uib-typeahead-wait-ms="500" typeahead-on-select="addSetting($item)" uib-typeahead-editable="false"/>
                                             </div>
                                         </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
+                                        <div class="row col-md-12">
+                                            <select class="col-md-10 selectClass" size="8">
                                                 <option ng-click="chosenSetting(setting.uuid)" ng-repeat="setting in configSettings">{{formatSettingDisplay(setting)}}</option>
                                             </select>
                                             <button type="submit" ng-disabled="!selected.setting" ng-click="removeSetting()" class="btn btn-sm">Remove Setting</button>
@@ -194,16 +195,19 @@
                     </tr>
                     <tr>
                         <td>
-                            <input class="col-lg-10 form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="config.retireReason" ng-show="retire_config" ng-required="retire_config"/>
+                            <input class="col-md-10 form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="config.retireReason" ng-show="retire_config" ng-required="retire_config"/>
                             <div ng-show="config.retireReasonError" style="color:red">Retire reason is required</div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <button type="submit" ng-click="save(config)" class="btn btn-success">Save</button>
-                            <button type="submit" ng-click="toggleRetireConfig()" class="btn btn-danger" ng-show="!retire_config && config.uuid">Retire</button>
-                            <button type="submit" ng-click="delete(config)" class="btn btn-danger" ng-show="retire_config">Retire</button>
-                            <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
+                            <div class="pull-right">
+                                <button ng-click="launchWizard($event)" class="btn btn-dark">Edit via config Wizard</button>
+                                <button type="submit" ng-click="save(config)" class="btn btn-success">Save</button>
+                                <button type="submit" ng-click="toggleRetireConfig()" class="btn btn-danger" ng-show="!retire_config && config.uuid">Retire</button>
+                                <button type="submit" ng-click="delete(config)" class="btn btn-danger" ng-show="retire_config">Retire</button>
+                                <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>

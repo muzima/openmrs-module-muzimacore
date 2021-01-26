@@ -149,6 +149,9 @@ muzimaCoreModule.factory('FormService', function ($http) {
     var getForms = function() {
         return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description)');
     };
+    var getNonMuzimaForms = function() {
+        return $http.get('../../module/muzimacore/nonMuzimaForms.json');
+    };
     var retire = function (form, retireReason) {
         return $http.delete('retire/' + form.id +'.form' +'?retireReason=' + retireReason);
     };
@@ -258,8 +261,8 @@ muzimaCoreModule.factory('$configs', function($http) {
     var deleteConfiguration = function (uuid,retireReason) {
         return $http.post("config.json", {"uuid": uuid, "retireReason": retireReason});
     };
-    var searchConfigForms = function(search) {
-        return $http.get("configForms.json?search=" + (search === undefined ? '' : search));
+    var searchMuzimaForms = function(search) {
+        return $http.get("mUzimaForms.json?search=" + (search === undefined ? '' : search));
     };
     var searchConfigCohorts = function(search) {
         return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
@@ -316,7 +319,7 @@ muzimaCoreModule.factory('$configs', function($http) {
         getConfigurations: getConfigurations,
         saveConfiguration: saveConfiguration,
         deleteConfiguration: deleteConfiguration,
-        searchConfigForms: searchConfigForms,
+        searchMuzimaForms: searchMuzimaForms,
         searchConfigCohorts: searchConfigCohorts,
         searchConfigLocations: searchConfigLocations,
         searchConfigProviders: searchConfigProviders,

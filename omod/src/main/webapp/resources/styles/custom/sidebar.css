@@ -1,0 +1,86 @@
+.sidenav{
+  background: #209F85;
+  color: #FFFFFF !important;
+  font-family: "Proxima Nova",Arial,sans-serif;
+  border-radius: 0px 4px 4px 0px;
+  height: 100%;
+  backface-visibility: hidden;
+  padding-bottom: 20px;
+  z-index: 999;
+  overflow-y: auto;
+  will-change: transform;
+  width: 250px;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-top: 0;
+  transform: translateX(0);
+}
+
+ul.sidenav{
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+.sidenav li {
+  width:100%;
+  float: none;
+  line-height: 48px;
+}
+
+.sidenav li.active{
+  border-right: solid 8px #FFFFFF;
+}
+
+.sidenav li.active a{
+  color:#1a1a1a;
+  font-weight: bold !important;
+}
+
+.sidenav li:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color:#1a1a1a;
+}
+
+.sidenav li > a {
+  display: block;
+  cursor: pointer;
+  font-weight: 500;
+  line-height: inherit;
+  height: inherit;
+  padding: 0 16px;
+  letter-spacing: 0.0015em;
+  color: #FFFFFF !important;
+  text-decoration: none;
+}
+
+.sidenav li > a:hover {
+  letter-spacing: 0.0015em;
+  color: #1a1a1a !important;
+}
+
+.sidenav li > a > i.material-icons {
+  float: left;
+  line-height: inherit;
+  height: inherit;
+  margin: 0 10px 0 0;
+  width: 24px;
+}
+
+
+.sidenav .brand {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 20px;
+}
+
+ul.sidenav li:first-child{
+  margin-bottom: 50px;
+  line-height: 17px;
+  margin-top: 10px;
+}
+
+ul.sidenav li:last-child{
+  margin-top: 30px;
+}
+
+
