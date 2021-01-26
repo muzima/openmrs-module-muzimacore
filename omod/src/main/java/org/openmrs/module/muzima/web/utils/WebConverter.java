@@ -17,6 +17,7 @@ import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.codehaus.jettison.json.JSONArray;
 import org.openmrs.Cohort;
 import org.openmrs.Form;
 import org.openmrs.Location;
@@ -338,5 +339,21 @@ public class WebConverter {
             map.put("name", reportDesign.getName());
         }
         return map;
+    }
+
+    public static String convertForm(List<Form> forms) {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        for (Form form : forms) {
+            JSONObject jGroup = new JSONObject();
+            jGroup.put("uuid", form.getUuid());
+            jGroup.put("name", form.getName());
+            jGroup.put("version", form.getVersion());
+            jGroup.put("description", form.getDescription());
+
+            jsonArray.put(jGroup);
+        }
+        String jsonOb = jsonArray.toString();
+        return jsonOb;
     }
 }

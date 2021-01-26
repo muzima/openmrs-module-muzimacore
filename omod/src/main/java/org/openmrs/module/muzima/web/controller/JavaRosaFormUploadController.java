@@ -7,6 +7,8 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
+import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -75,12 +78,12 @@ public class JavaRosaFormUploadController {
 
     @ResponseBody
     @RequestMapping(value = "/html/createAndUpload.form", method = RequestMethod.POST)
-    public String createAndUploadHTMLForm(final MultipartHttpServletRequest request,
-                               final @RequestParam String discriminator,
-                               final @RequestParam String name,
-                               final @RequestParam String version,
-                               final @RequestParam String description,
-                               final @RequestParam String encounterType) throws Exception {
+    public Map<String, Object> createAndUploadHTMLForm(final MultipartHttpServletRequest request,
+                                                       final @RequestParam String discriminator,
+                                                       final @RequestParam String name,
+                                                       final @RequestParam String version,
+                                                       final @RequestParam String description,
+                                                       final @RequestParam String encounterType) throws Exception {
         if (Context.isAuthenticated()) {
             String formUuid = UUID.randomUUID().toString();
             Form form = new Form();
@@ -99,7 +102,8 @@ public class JavaRosaFormUploadController {
 
             MuzimaFormService service = Context.getService(MuzimaFormService.class);
             service.createHTMLForm(extractFile(request), formUuid, discriminator);
-            return formUuid;
+            MuzimaForm muzimaForm = service.getMuzimaFormByForm(formUuid,true).get(0);
+            return WebConverter.convertMuzimaForm(form,muzimaForm);
         }
         return null;
     }

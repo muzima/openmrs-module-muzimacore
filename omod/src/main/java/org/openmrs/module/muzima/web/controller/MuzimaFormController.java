@@ -1,10 +1,12 @@
 package org.openmrs.module.muzima.web.controller;
 
+import net.minidev.json.JSONObject;
 import org.javarosa.xform.parse.ValidationMessages;
 import org.openmrs.Form;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -63,10 +66,13 @@ public class MuzimaFormController {
 
     @ResponseBody
     @RequestMapping(value = "nonMuzimaForms.json", method = RequestMethod.GET)
-    public List<Form> getNonMuzimaForms() throws Exception {
+    public String getNonMuzimaForms() throws Exception {
         MuzimaFormService service = Context.getService(MuzimaFormService.class);
         List<Form> forms = service.getNonMuzimaForms();
-        return forms;
+        String form =  WebConverter.convertForm(forms);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("results",form);
+        return jsonObject.toJSONString();
     }
 
     private String extractFile(final MultipartHttpServletRequest request) throws Exception {

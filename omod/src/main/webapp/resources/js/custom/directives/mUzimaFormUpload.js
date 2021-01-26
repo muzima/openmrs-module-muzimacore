@@ -30,7 +30,7 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
             });
 
             scope.loadFormsList = function() {
-                FormService.getForms().then(function (results) {
+                FormService.getNonMuzimaForms().then(function (results) {
                     scope.forms = results.data.results;
                     console.log("Gottent forms: "+JSON.stringify(scope.forms));
 
