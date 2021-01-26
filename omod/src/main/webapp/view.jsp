@@ -40,6 +40,7 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/configWizard.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/mUzimaFormUpload.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/configWizardSideNav.js"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/openmrsFormCreator.js"/>
 
 <div class="bootstrap-scope" ng-app="muzimaCoreModule">
     <div ng-view ></div>
