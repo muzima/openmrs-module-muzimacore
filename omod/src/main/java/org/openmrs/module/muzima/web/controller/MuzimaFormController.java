@@ -1,6 +1,7 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.javarosa.xform.parse.ValidationMessages;
+import org.openmrs.Form;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.MuzimaForm;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -57,6 +59,14 @@ public class MuzimaFormController {
             form.setDateRetired(new Date());
             service.save(form);
         }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "nonMuzimaForms.json", method = RequestMethod.GET)
+    public List<Form> getNonMuzimaForms() throws Exception {
+        MuzimaFormService service = Context.getService(MuzimaFormService.class);
+        List<Form> forms = service.getNonMuzimaForms();
+        return forms;
     }
 
     private String extractFile(final MultipartHttpServletRequest request) throws Exception {

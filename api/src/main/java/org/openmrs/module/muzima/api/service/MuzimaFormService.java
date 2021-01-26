@@ -1,6 +1,7 @@
 package org.openmrs.module.muzima.api.service;
 
 import org.javarosa.xform.parse.ValidationMessages;
+import org.openmrs.Form;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaXForm;
@@ -52,6 +53,8 @@ public interface MuzimaFormService extends OpenmrsService {
     ValidationMessages validateJavaRosa(String xml);
 
     ValidationMessages validateMuzimaForm(String html);
+
+    List<Form> getNonMuzimaForms();
 
     ValidationMessages validateODK(String xml) throws Exception;
 }

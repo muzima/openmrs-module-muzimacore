@@ -75,7 +75,7 @@ public class JavaRosaFormUploadController {
 
     @ResponseBody
     @RequestMapping(value = "/html/createAndUpload.form", method = RequestMethod.POST)
-    public void createAndUploadHTMLForm(final MultipartHttpServletRequest request,
+    public String createAndUploadHTMLForm(final MultipartHttpServletRequest request,
                                final @RequestParam String discriminator,
                                final @RequestParam String name,
                                final @RequestParam String version,
@@ -99,7 +99,9 @@ public class JavaRosaFormUploadController {
 
             MuzimaFormService service = Context.getService(MuzimaFormService.class);
             service.createHTMLForm(extractFile(request), formUuid, discriminator);
+            return formUuid;
         }
+        return null;
     }
 
     @ResponseBody
