@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.UUID;
@@ -105,7 +106,7 @@ public class JavaRosaFormUploadController {
             MuzimaForm muzimaForm = service.getMuzimaFormByForm(formUuid,true).get(0);
             return WebConverter.convertMuzimaForm(form,muzimaForm);
         }
-        return null;
+        return new HashMap<String, Object>();
     }
 
     @ResponseBody
