@@ -11,7 +11,6 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                 }
             }, true);
 
-
             scope.selectForm = function (value) {
                 scope.form = value;
                 scope.loadData();
@@ -26,20 +25,17 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
 
             FormService.getDiscriminatorTypes().then(function (results) {
                 scope.discriminatorTypes = results.data;
-                //scope.discriminator = scope.discriminatorTypes[0];
             });
 
             scope.loadFormsList = function() {
                 FormService.getNonMuzimaForms().then(function (results) {
                     scope.forms = results.data.results;
-                    console.log("Gottent forms: "+JSON.stringify(scope.forms));
 
                     if (scope.newFormMetaData != undefined) {
                         console.log('There is new form metadata');
                         var newForm = scope.newFormMetaData
 
                         scope.forms.push(newForm);
-                        console.log('There is new form metadata: '+JSON.stringify(scope.forms));
                         scope.selectForm(newForm)
                     } else {
                         console.log("New metadata unavailable");
@@ -95,10 +91,12 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                             discriminator: discriminator, name: form.name, version: form.version,
                             description:form.description,encounterType: form.encounterType.uuid
                         }
-                    }).success(function () {
-                        console.log("Success...");
-                        //get created form uuid
-                        scope.setSelectedForm(uuid, wizardStep);
+                    }).success(function (response) {
+                        console.log("Upload response:"+JSON.stringify(response));
+                        if(response.hasOwnProperty('uuid')) {
+                            form.uuid = response.uuid;
+                            scope.setSelectedForm(form,'registration-form-selection');
+                        }
                     }).error(function () {
                         showErrorMessage("The form name already exists !! Please use some other name.");
                     });
@@ -109,8 +107,7 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                             form: uuid, discriminator: discriminator
                         }
                     }).success(function () {
-                        console.log("Success...");
-                        scope.setSelectedForm(uuid, wizardStep);
+                        scope.setSelectedForm(form, 'registration-form-selection');
                     }).error(function () {
                         console.log("Error....");
                         showErrorMessage("The form name already exists !! Please use some other name.");

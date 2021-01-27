@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -66,13 +67,13 @@ public class MuzimaFormController {
 
     @ResponseBody
     @RequestMapping(value = "nonMuzimaForms.json", method = RequestMethod.GET)
-    public String getNonMuzimaForms() throws Exception {
+    public Map<String, Object>  getNonMuzimaForms() throws Exception {
+        Map<String, Object> response = new HashMap<String, Object>();
+
         MuzimaFormService service = Context.getService(MuzimaFormService.class);
         List<Form> forms = service.getNonMuzimaForms();
-        String form =  WebConverter.convertForm(forms);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("results",form);
-        return jsonObject.toJSONString();
+        response.put("results",WebConverter.convertForms(forms));
+        return response;
     }
 
     private String extractFile(final MultipartHttpServletRequest request) throws Exception {

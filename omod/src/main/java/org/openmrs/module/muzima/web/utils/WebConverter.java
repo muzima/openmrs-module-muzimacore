@@ -41,6 +41,7 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -341,19 +342,22 @@ public class WebConverter {
         return map;
     }
 
-    public static String convertForm(List<Form> forms) {
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        for (Form form : forms) {
-            JSONObject jGroup = new JSONObject();
-            jGroup.put("uuid", form.getUuid());
-            jGroup.put("name", form.getName());
-            jGroup.put("version", form.getVersion());
-            jGroup.put("description", form.getDescription());
-
-            jsonArray.put(jGroup);
+    public static Map<String, Object>  convertForm(Form form) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (form != null) {
+            map.put("uuid", form.getUuid());
+            map.put("name", form.getName());
+            map.put("version", form.getVersion());
+            map.put("description", form.getDescription());
         }
-        String jsonOb = jsonArray.toString();
-        return jsonOb;
+        return map;
+    }
+
+    public static List<Map<String,Object>>  convertForms(List<Form> forms) {
+        List<Map<String,Object>> map = new ArrayList<Map<String, Object>>();
+        for (Form form:forms) {
+            map.add(convertForm(form));
+        }
+        return map;
     }
 }

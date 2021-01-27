@@ -58,12 +58,13 @@
         <div class="col-sm-9">
             <label class="alert alert-info w-100">Please select the registration form to use.</label>
             <div class="row">
-                <div class="col-md-7" style="margin-bottom: 70px; overflow-y:scroll">
+                <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
                     <table class="table table-hover table-striped">
                     <tr ng-repeat="muzimaform in muzimaforms | filter:isRegistrationForm">
                         <td>
-                            <label class="w-100">{{muzimaform.form.name}} {{muzimaform.form.discriminator}}
-                                <input class="pull-right" type="checkbox"></label>
+                            <label class="w-100">{{muzimaform.form.name}}
+                                <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
+                                       ng-click="toggleFormSelection(muzimaform.form)" type="checkbox"></label>
                         </td>
                     </tr>
                     </table>

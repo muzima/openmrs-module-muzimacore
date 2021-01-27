@@ -139,43 +139,52 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }, true);
 
-    $scope.addForm = function(form) {
-        var formExists = _.find($scope.configForms, function (configForm) {
-            return configForm.uuid == form.uuid
+
+    var formExistsInConfig = function(formUuid){
+        return !!_.find($scope.configForms, function (configForm) {
+            return configForm.uuid == formUuid;
         });
-        if (!formExists) {
-            $scope.configForms.push(form);
-            $scope.search.forms = '';
-            $scope.specialFields.extractingMeta=true;
+    }
 
-            FormService.get(form.uuid).then(function (response) {
+    var addFormToConfig = function(form){
+        $scope.configForms.push(form);
+        $scope.search.forms = '';
+        $scope.specialFields.extractingMeta=true;
 
-                var formResult = response.data;
-                var metaJson = JSON.parse(formResult.metaJson);
-                if (metaJson != null && metaJson.concepts != undefined) {
-                    angular.forEach(metaJson.concepts, function (mConcept) {
-                        var conceptExists = _.find($scope.extractedConcepts, function (eConcept) {
-                            return mConcept.uuid == eConcept.uuid
-                        });
+        FormService.get(form.uuid).then(function (response) {
 
-                        if (!conceptExists)
-                            $scope.extractedConcepts.push(mConcept);
-                    });
-                }
-                //pick only the not used concepts
-            }).then(function () {
-                $scope.extractedNotUsedConcepts = [];
-                angular.forEach($scope.extractedConcepts, function (eConcept) {
-                    var conceptExists = _.find($scope.configConcepts, function (configConcept) {
-                        return configConcept.uuid == eConcept.uuid
+            var formResult = response.data;
+            var metaJson = JSON.parse(formResult.metaJson);
+            if (metaJson != null && metaJson.concepts != undefined) {
+                angular.forEach(metaJson.concepts, function (mConcept) {
+                    var conceptExists = _.find($scope.extractedConcepts, function (eConcept) {
+                        return mConcept.uuid == eConcept.uuid
                     });
 
                     if (!conceptExists)
-                        $scope.extractedNotUsedConcepts.push(eConcept);
+                        $scope.extractedConcepts.push(mConcept);
+                });
+            }
+            //pick only the not used concepts
+        }).then(function () {
+            $scope.extractedNotUsedConcepts = [];
+            angular.forEach($scope.extractedConcepts, function (eConcept) {
+                var conceptExists = _.find($scope.configConcepts, function (configConcept) {
+                    return configConcept.uuid == eConcept.uuid
                 });
 
-                $scope.specialFields.extractingMeta=false;
+                if (!conceptExists)
+                    $scope.extractedNotUsedConcepts.push(eConcept);
             });
+
+            $scope.specialFields.extractingMeta=false;
+        });
+    }
+
+    $scope.addForm = function(form) {
+        var formExists = formExistsInConfig(form.uuid);
+        if (!formExists) {
+            addFormToConfig(form);
         }
     };
 
@@ -183,13 +192,17 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $scope.selected.form = value;
     };
 
-    $scope.removeForm = function () {
+    var removeFormFromConfig = function(formUuid){
         angular.forEach($scope.configForms, function (configForm, index) {
-            if (configForm.uuid === $scope.selected.form) {
+            if (configForm.uuid === formUuid) {
                 $scope.configForms.splice(index, 1);
                 $scope.selected.form = '';
             }
         });
+    }
+
+    $scope.removeForm = function () {
+        removeFormFromConfig($scope.selected.form);
     };
 
     /****************************************************************************************
@@ -426,11 +439,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }
 
+    /****************************************************************************************
+     ***** Group of methods to manipulate config wizard
+     *****************************************************************************************/
     var showConfigWizardModal = function() {
         $scope.showConfigWizard = true;
         $scope.activeTab = 'description';
         $scope.isActiveTab = function (tabName) {
-            //console.log("Is active tab ["+tabName+"] will register: "+$scope.config.willRegisteringPatients);
             return $scope.activeTab == tabName;
         }
 
@@ -440,20 +455,49 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 $scope.loadForms(()=>{
                     $scope.activeTab = nextTab;
                 });
+            } else if (nextTab == "cohorts"){
+
+                $scope.activeTab = nextTab;
             } else {
                 $scope.activeTab = nextTab;
             }
         }
 
-        $scope.setSelectedRegistrationForm = function (formUuid) {
-            console.log('Uploaded form:'+formUuid);
-            //refresh forms list
-            //check selected form
-            $scope.setNextTab('registration-form-selection');
+        $scope.selectedForms = []
+
+        $scope.setSelectedForm = function (form,nextTab) {
+            $scope.selectedForms.push(form.uuid);
+
+            //add to config
+            addFormToConfig(form);
+            if(nextTab != undefined || nextTab != ''){
+                $scope.setNextTab(nextTab);
+            }
+        }
+
+        $scope.unsetDeselectedForm = function(form){
+            var index = $scope.selectedForms.indexOf(form.uuid);
+            if(index > -1) {
+                $scope.selectedForms.splice(index, 1);
+                removeFormFromConfig(form.uuid);
+            }
+        }
+
+        $scope.toggleFormSelection = function(form){
+            if(formExistsInConfig(form.uuid)){
+                console.log("Form exists in config. Removing it: "+form.uuid);
+                removeFormFromConfig(form.uuid);
+            } else {
+                console.log("Form does not exist in config. Adding it: "+form.uuid);
+                addFormToConfig(form);
+            }
+        }
+
+        $scope.isFormSelected = function(formUuid){
+            return $scope.selectedForms.includes(formUuid);
         }
 
         $scope.isRegistrationForm = function(muzimaform){
-            //console.log("Check is reg: "+muzimaform.form.discriminator);
             return muzimaform.form.discriminator == 'json-registration' ||
                 muzimaform.form.discriminator == 'json-generic-registration'
         }
