@@ -23,6 +23,7 @@ import org.openmrs.module.muzima.api.db.CohortDefinitionDataDao;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.openmrs.module.muzima.task.ExpandedCohortProcessor;
 
+import java.util.Date;
 import java.util.List;
 
 public class CohortDefinitionDataServiceImpl extends BaseOpenmrsService implements CohortDefinitionDataService {
@@ -76,5 +77,10 @@ public class CohortDefinitionDataServiceImpl extends BaseOpenmrsService implemen
 
     public CohortDefinitionData getCohortDefinitionDataByCohortId(final Integer cohortId){
         return dao.getCohortDefinitionDataByCohortId(cohortId);
+    }
+
+    @Override
+    public String getLastExecutionTime() {
+        return dao.getLastExecutionTime();
     }
 }

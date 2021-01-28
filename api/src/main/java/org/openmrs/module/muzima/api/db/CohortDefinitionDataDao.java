@@ -17,6 +17,7 @@ import org.openmrs.module.muzima.model.CohortDefinitionData;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CohortDefinitionDataDao {
@@ -53,4 +54,8 @@ public interface CohortDefinitionDataDao {
 
     @Transactional
     CohortDefinitionData getCohortDefinitionDataByCohortId(final Integer cohortId);
+
+    @SuppressWarnings("unchecked")
+    @Transactional(readOnly = true)
+    String getLastExecutionTime();
 }

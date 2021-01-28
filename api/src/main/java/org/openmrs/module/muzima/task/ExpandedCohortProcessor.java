@@ -13,13 +13,20 @@
  */
 package org.openmrs.module.muzima.task;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.service.ExpandedCohortProcessorService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
+import org.openmrs.module.muzima.utils.ISO8601Util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,10 +36,44 @@ public class ExpandedCohortProcessor {
     public void processExpandedCohorts() {
         if (!isRunning) {
             log.info("Starting up Expanded cohort processor ...");
-            process();
+            CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+
+            List<CohortDefinitionData> cohortDefinitionDataList = cohortDefinitionDataService.getAllScheduledCohortDefinitionData();
+
+            String lastExecutionTime = cohortDefinitionDataService.getLastExecutionTime();
+            Date date = null;
+            if(lastExecutionTime != null) {
+                date = parseDate(lastExecutionTime);
+            }
+            Date today = new Date();
+            long diff = 0;
+            if(date != null) {
+                 diff = today.getTime() - date.getTime();
+            }
+            double hours = diff/(60 * 60 * 1000);
+            if(date == null || hours>12) {
+                process();
+            }
         } else {
             log.info("Expanded cohort processor aborting (another processor already running)!");
         }
+    }
+
+    private Date parseDate(final String dateValue) {
+        Date date = null;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if(StringUtils.isNumeric(dateValue))
+        {
+            long timestamp = Long.parseLong(dateValue);
+            date = new Date(timestamp);
+        }else {
+            try {
+                date = dateFormat.parse(dateValue);
+            } catch (ParseException e) {
+                log.error("Unable to parse date data for encounter!", e);
+            }
+        }
+        return date;
     }
 
     public void processExpandedCohort(final String uuid) {

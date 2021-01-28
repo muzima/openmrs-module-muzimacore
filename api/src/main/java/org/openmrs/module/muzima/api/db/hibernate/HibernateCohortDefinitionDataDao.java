@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.muzima.api.db.hibernate;
 
+import org.hibernate.SQLQuery;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.CohortDefinitionDataDao;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
@@ -20,9 +21,12 @@ import org.openmrs.module.muzima.model.CohortDefinitionData;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.module.muzima.utils.MuzimaSettingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao{
@@ -101,5 +105,18 @@ public class HibernateCohortDefinitionDataDao implements CohortDefinitionDataDao
         criteria.add(Restrictions.eq("cohortId", cohortId));
         criteria.add(Restrictions.eq("voided", Boolean.FALSE));
         return (CohortDefinitionData)criteria.uniqueResult();
+    }
+
+    @Override
+    public String getLastExecutionTime() {
+        String Sql = "select last_execution_time from scheduler_task_config where schedulable_class = 'org.openmrs.module.muzima.task.ProcessExpandedCohortTask'";
+        SQLQuery squeryQuery = sessionFactory.getCurrentSession().createSQLQuery(Sql);
+        List<?> list = squeryQuery.list();
+        if(list.size()>0){
+            Timestamp obj= (Timestamp)list.get(0);
+            if(obj != null)
+                return obj.toString();
+        }
+        return null;
     }
 }

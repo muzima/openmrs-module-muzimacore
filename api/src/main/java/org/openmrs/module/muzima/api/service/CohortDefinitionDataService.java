@@ -16,6 +16,7 @@ package org.openmrs.module.muzima.api.service;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CohortDefinitionDataService  extends OpenmrsService {
@@ -29,4 +30,5 @@ public interface CohortDefinitionDataService  extends OpenmrsService {
     Number countCohortDefinitionData();
     void processCohortDefinitionData(final String uuid);
     CohortDefinitionData getCohortDefinitionDataByCohortId(final Integer id);
+    String getLastExecutionTime();
 }
