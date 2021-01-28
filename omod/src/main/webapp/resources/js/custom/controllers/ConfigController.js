@@ -32,6 +32,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             var configString = JSON.parse($scope.config.configJson);
             if (configString != null && configString != undefined) {
                 if (configString.config["forms"] != undefined)
+                    //console.log("Skip forms");
                     $scope.configForms = configString.config["forms"];
                 if (configString.config["cohorts"] != undefined)
                     $scope.configCohorts = configString.config["cohorts"];
@@ -147,6 +148,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     }
 
     var addFormToConfig = function(form){
+        form = {'uuid':form.uuid,'name':form.name};
+        console.log("Adding form: "+JSON.stringify(form));
         $scope.configForms.push(form);
         $scope.search.forms = '';
         $scope.specialFields.extractingMeta=true;
@@ -439,114 +442,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }
 
-    /****************************************************************************************
-     ***** Group of methods to manipulate config wizard
-     *****************************************************************************************/
-    var showConfigWizardModal = function() {
-        $scope.showConfigWizard = true;
-        $scope.activeTab = 'description';
-        $scope.isActiveTab = function (tabName) {
-            return $scope.activeTab == tabName;
-        }
-
-        $scope.setNextTab = function (nextTab) {
-            if(nextTab == "registration-form-selection"){
-                //reload forms
-                $scope.loadForms(()=>{
-                    $scope.activeTab = nextTab;
-                });
-            } else if (nextTab == "cohorts"){
-
-                $scope.activeTab = nextTab;
-            } else {
-                $scope.activeTab = nextTab;
-            }
-        }
-
-        $scope.selectedForms = []
-
-        $scope.setSelectedForm = function (form,nextTab) {
-            $scope.selectedForms.push(form.uuid);
-
-            //add to config
-            addFormToConfig(form);
-            if(nextTab != undefined || nextTab != ''){
-                $scope.setNextTab(nextTab);
-            }
-        }
-
-        $scope.unsetDeselectedForm = function(form){
-            var index = $scope.selectedForms.indexOf(form.uuid);
-            if(index > -1) {
-                $scope.selectedForms.splice(index, 1);
-                removeFormFromConfig(form.uuid);
-            }
-        }
-
-        $scope.toggleFormSelection = function(form){
-            if(formExistsInConfig(form.uuid)){
-                console.log("Form exists in config. Removing it: "+form.uuid);
-                removeFormFromConfig(form.uuid);
-            } else {
-                console.log("Form does not exist in config. Adding it: "+form.uuid);
-                addFormToConfig(form);
-            }
-        }
-
-        $scope.isFormSelected = function(formUuid){
-            return $scope.selectedForms.includes(formUuid);
-        }
-
-        $scope.isRegistrationForm = function(muzimaform){
-            return muzimaform.form.discriminator == 'json-registration' ||
-                muzimaform.form.discriminator == 'json-generic-registration'
-        }
-
-        $scope.setNewFormMetadata = function (name, version, description,encounterType) {
-            $scope.newFormMetaData = {
-                name:name,
-                version:version,
-                description:description,
-                encounterType:encounterType,
-                uuid:'newFormMetadata'
-            }
-            console.log("New metadata: "+JSON.stringify($scope.newFormMetaData));
-            $scope.setNextTab("form-upload");
-        };
-
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: '../../moduleResources/muzimacore/partials/directives/configWizard.html',
-            size: 'xl',
-            scope: $scope,
-            resolve: {
-                items: function () {
-                    return true;
-                }
-            }
-        });
-
-        $scope.hasRegistrationForms = function(){
-            for (muzimaform of $scope.muzimaforms){
-                if($scope.isRegistrationForm(muzimaform)){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        $scope.dismiss = function(){
-            modalInstance.close();
-        }
-    }
-
-    $scope.launchWizard = function (e) {
-
-        $scope.configWizardShown = !$scope.configWizardShown;
-        e.preventDefault();
-        showConfigWizardModal();
-    }
-
     $scope.addSetting = function(setting) {
         var settingExists = _.find($scope.configSettings, function (configSetting) {
             return configSetting.uuid == setting.uuid
@@ -580,10 +475,156 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     };
 
     /****************************************************************************************
+     ***** Group of methods to manipulate config wizard
+     *****************************************************************************************/
+    var showConfigWizardModal = function() {
+        $scope.showConfigWizard = true;
+        var navigationTabs = [];
+
+        var getActiveTab = function(){
+            return navigationTabs[navigationTabs.length - 1];
+        }
+
+        $scope.isActiveTab = function (tabName) {
+            return getActiveTab() == tabName;
+        }
+
+        var loadWizardTab = function (nextWizardTab, isBackNavigation) {
+            if(nextWizardTab == "registration-form-selection" || nextWizardTab == "other-forms-selection"){
+                //reload forms
+                $scope.loadForms(()=>{
+                    $scope.activeTab = nextWizardTab;
+                });
+            } else if (nextWizardTab == "cohorts"){
+
+                $scope.activeTab = nextWizardTab;
+            } else {
+                $scope.activeTab = nextWizardTab;
+            }
+
+            if(!isBackNavigation){
+                navigationTabs.push(nextWizardTab);
+            }
+        }
+        loadWizardTab('description'); //initialize first page of wizard
+
+        $scope.goToPreviousWizardTab = function(){
+            if(navigationTabs.length > 1){
+                navigationTabs.pop();
+                loadWizardTab(navigationTabs[navigationTabs.length-1],true);
+            }
+        }
+
+        $scope.goToNextWizardTab = function(nextWizardTab){
+            loadWizardTab(nextWizardTab,false);
+        }
+
+        $scope.selectedForms = []
+
+        $scope.setSelectedForm = function (form) {
+            $scope.selectedForms.push(form.uuid);
+            //add to config
+            addFormToConfig(form);
+        }
+
+        $scope.unsetDeselectedForm = function(form){
+            var index = $scope.selectedForms.indexOf(form.uuid);
+            if(index > -1) {
+                $scope.selectedForms.splice(index, 1);
+                removeFormFromConfig(form.uuid);
+            }
+        }
+
+        $scope.toggleFormSelection = function(form){
+            if(formExistsInConfig(form.uuid)){
+                console.log("Form exists in config. Removing it: "+form.uuid);
+                removeFormFromConfig(form.uuid);
+            } else {
+                console.log("Form does not exist in config. Adding it: "+form.uuid);
+                addFormToConfig(form);
+            }
+        }
+
+        $scope.isFormSelected = function(formUuid){
+            return $scope.selectedForms.includes(formUuid) || formExistsInConfig(formUuid);
+        }
+
+        $scope.isRegistrationForm = function(muzimaform){
+            return muzimaform.form.discriminator == 'json-registration' ||
+                muzimaform.form.discriminator == 'json-generic-registration'
+        }
+
+        $scope.isNonRegistrationForm = function(muzimaform){
+            return !$scope.isRegistrationForm(muzimaform);
+        }
+
+        $scope.hasRegistrationForms = function(){
+            for (muzimaform of $scope.muzimaforms){
+                if($scope.isRegistrationForm(muzimaform)){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        $scope.hasNonRegistrationForms = function(){
+            for (muzimaform of $scope.muzimaforms){
+                if($scope.isNonRegistrationForm(muzimaform)){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        $scope.setNewFormMetadata = function (name, version, description,encounterType) {
+            $scope.newFormMetaData = {
+                name:name,
+                version:version,
+                description:description,
+                encounterType:encounterType,
+                uuid:'newFormMetadata'
+            }
+            console.log("New metadata: "+JSON.stringify($scope.newFormMetaData));
+            $scope.goToPreviousWizardTab();
+        };
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: '../../moduleResources/muzimacore/partials/directives/configWizard.html',
+            size: 'xl',
+            scope: $scope,
+            resolve: {
+                items: function () {
+                    return true;
+                }
+            }
+        });
+
+        $scope.dismiss = function(){
+            modalInstance.close();
+        }
+    }
+
+    $scope.launchWizard = function (e) {
+        if(e != undefined) {
+            e.preventDefault();
+        }
+        showConfigWizardModal();
+    }
+
+    var launchWizard = $routeParams.launchWizard;
+    if(launchWizard != undefined && launchWizard == true){
+        $scope.launchWizard();
+    } else {
+        console.log("Launch wizard undefined");
+    }
+
+    /****************************************************************************************
      ***** Group of convenient methods to display a Json form
      *****************************************************************************************/
     $scope.bindData = function(){
         $scope.ul_li_Data = '';
+        console.log($scope.config.configJson);
         var jsonFormData = JSON.parse($scope.config.configJson);
         if (jsonFormData != undefined) {
             $scope.to_ul(jsonFormData,'treeul');
