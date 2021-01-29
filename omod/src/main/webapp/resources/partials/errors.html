@@ -34,7 +34,7 @@
                             <input type="checkbox" value="{{error.uuid}}"
                                    ng-checked="selected[error.uuid]" ng-model="selected[error.uuid]" ng-change="toggleSelectAllCheckbox()">
                         </td>
-                        <td><a href="#/error/{{error.uuid}}"  style="text-decoration: none"><i class=icon-edit icon-edit></i></a></td>
+                        <td><a href="#/error/{{error.uuid}}"  style="text-decoration: none"><i class="fa fa-pencil-square-o"></i></a></td>
                         <td>{{error.providerId}} - {{error.providerName}}</td>
                         <td>{{error.locationId}} - {{error.locationName}}</td>
                         <td>{{error.formName}}</td>
@@ -53,3 +53,4 @@
         </div>
     </div>
 </div>
+<footer></footer>
