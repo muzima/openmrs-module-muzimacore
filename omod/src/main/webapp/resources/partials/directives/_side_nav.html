@@ -3,7 +3,7 @@
         <li>
             <a><span class="brand">mUzima</span></a>
         </li>
-        <li ng-class="{'navigation-active': menuItem === 'configs' || menuItem === 'config'}">
+        <li id="e0" ng-class="{'navigation-active': menuItem === 'configs' || menuItem === 'config'}">
             <a href="#/configs"><i class="fa fa-wrench"></i> Setup Configurations</a></li>
         <li ng-class="{'navigation-active': menuItem === 'queues' || menuItem === 'queue'}">
             <a href="#/queues"><i class="fa fa-th-list"></i> Queue Data</a></li>
@@ -13,12 +13,12 @@
         <li ng-class="{'navigation-active': menuItem === 'duplicates' || menuItem === 'duplicate'}">
             <a href="#/duplicates"><i class="fa fa-clone"></i> Potential Duplicates</a>
         </li>
-        <li ng-class="{'navigation-active': menuItem === 'forms'}">
-        <a href="#/forms"><i class="fa fa-file-text"></i> Muzima Forms</a></li>
+        <li id="e1" ng-class="{'navigation-active': menuItem === 'forms'}">
+            <a href="#/forms"><i class="fa fa-file-text"></i> Muzima Forms</a></li>
         <li ng-class="{'navigation-active': menuItem === 'patientReports' || menuItem === 'patientReport'}">
             <a href="#/reportConfigs"><i class="fa fa-th-large"></i> Patient Reports</a>
         </li>
-        <li ng-class="{'navigation-active': menuItem === 'cohortDefinitions' || menuItem === 'cohortDefinition'}">
+        <li id="e2" ng-class="{'navigation-active': menuItem === 'cohortDefinitions' || menuItem === 'cohortDefinition'}">
             <a href="#/cohortDefinitions"><i class="fa fa-group"></i> Cohort Definitions</a>
         </li>
         <li ng-class="{'navigation-active': menuItem === 'registrations' || menuItem === 'registration'}">
@@ -27,11 +27,74 @@
         <li ng-class="{'navigation-active': menuItem === 'sources' || menuItem === 'source'}">
             <a href="#/sources"><i class="fa fa-database"></i>  Data Source</a>
         </li>
-        <li ng-class="{'navigation-active': menuItem === 'settings' || menuItem === 'setting'}">
+        <li id="e3" ng-class="{'navigation-active': menuItem === 'settings' || menuItem === 'setting'}">
             <a href="#/settings"><i class="fa fa-cogs"></i> Settings</a>
         </li>
-        <li>
-            <a><i class="fa fa-question-circle-o"></i> Help</a>
+        <li id="e4">
+            <a ng-click="openTour()"><i class="fa fa-question-circle-o"></i> Take a tour</a>
         </li>
     </ul>
 </div>
+<script id="tour/tour.tpl.html" type="text/ng-template">
+    <div class="tour-tip">
+        <span class="tour-arrow tt-{{ ttPlacement }}" ng-hide="centered"></span>
+        <div class="tour-content-wrapper">
+            <div ng-bind-html="ttContent"></div>
+            <a ng-click="proceed()" ng-bind="ttNextLabel" class="small button tour-next-tip"></a>
+            <a ng-click="closeTour()" class="tour-close-tip">×</a>
+        </div>
+    </div>
+</script>
+<tour step="currentStep" post-tour="postTourCallback()" post-step="postStepCallback()" tour-complete="tourCompleteCallback()">
+    <virtual-step
+            tourtip="With Setup Configurations, it is easy to create packages for the initial setup  of mUzima mobile app <br/>
+            Setup configurations are used to define the specific forms, cohorts, concepts, locations, providers as well as settings to be downloaded to the mobile application during initial setup
+.<br/><br/>
+<a href='https://wiki.muzima.org/display/muzima/Setup+Configurations' target='_blank'>Learn More</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href='#/configWizard/1' class='button tour-next-tip'>Launch wizard</a><br/><br/>"
+            tourtip-next-label="Next"
+            tourtip-placement="bottom"
+            tourtip-step="0"
+            tourtip-margin="5"
+            tourtip-element="#e0"></virtual-step>
+    <virtual-step
+            tourtip="muzima can be adapted to enable registration of patients and collect various kinds of patient data(encounters) through data collection forms <br/>
+             mUzima forms are programmed using HTML, CSS and Javascript.
+             <br/><br/>
+<a href='https://wiki.muzima.org/display/muzima/Form+Development' target='_blank'>Learn More</a>
+<br/><br/>"
+            tourtip-placement="bottom"
+            tourtip-step="1"
+            tourtip-margin="5"
+            tourtip-element="#e1"></virtual-step>
+    <virtual-step
+            tourtip="Cohorts comprise patient lists that can be downloaded to mobile applications.<br/>
+mUzima supports both static(cohort membership remain the same once the cohort is created) and dynamic(cohort membership changes based on a given criteria) cohorts.
+<br/><br/>
+<a href='https://wiki.muzima.org/display/muzima/Cohort+Definitions' target='_blank'>Learn More</a>
+<br/><br/>"
+            tourtip-next-label="Continue"
+            tourtip-placement="bottom"
+            tourtip-step="2"
+            tourtip-margin="5"
+            tourtip-element="#e2"></virtual-step>
+    <virtual-step
+            tourtip="mUzima is a flexible app that can be configured through settings to suit the implementation needs.  Setting will be used to:<br/>
+1. Enable or disable application features i.e implementations will decide which features will be available on the mobile<br/>
+2. Provide information needed for some features on the mobile app to function properly e.g setting of map key if geomapping feature will be used on the app.
+<br/><br/>
+<a href='https://wiki.muzima.org/display/muzima/mUzima+Settings' target='_blank'>Learn More</a>
+<br/><br/>"
+            tourtip-next-label="Continue"
+            tourtip-placement="bottom"
+            tourtip-step="3"
+            tourtip-margin="5"
+            tourtip-element="#e3"></virtual-step>
+    <virtual-step
+            tourtip="For more info, please visit <a href='https://www.muzima.org/' target='_blank'>www.muzima.org</a><br/><br/>"
+            tourtip-next-label="Finish."
+            tourtip-placement="bottom"
+            tourtip-step="4"
+            tourtip-margin="5"
+            tourtip-element="#e4"></virtual-step>
+</tour>

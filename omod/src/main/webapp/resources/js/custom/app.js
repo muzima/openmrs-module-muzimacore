@@ -1,4 +1,4 @@
-var muzimaCoreModule = angular.module('muzimaCoreModule', ['ui.bootstrap', 'ngRoute', 'ngSanitize', 'filters', 'muzimafilters']);
+var muzimaCoreModule = angular.module('muzimaCoreModule', ['ui.bootstrap', 'ngRoute', 'ngSanitize', 'filters', 'muzimafilters' ,'angular-tour']);
 
 muzimaCoreModule.
     config(['$routeProvider', '$compileProvider', function ($routeProvider, $compileProvider) {
