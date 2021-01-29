@@ -1,5 +1,5 @@
 //TODO: Write angular e2e tests for testing this
-muzimaCoreModule.directive("fileUpload", function () {
+muzimaCoreModule.directive("fileUpload", function ($timeout) {
     return {
         restrict: "E",
         templateUrl: "../../moduleResources/muzimacore/partials/directives/fileUpload.html",
@@ -18,7 +18,10 @@ muzimaCoreModule.directive("fileUpload", function () {
             scope.$parent.clearFile = function() {
                 scope.file = scope.$parent.file = null;
                 $(activator).text(attrs.message);
-                scope.$parent.$apply();
+                $timeout(function () {
+                    scope.$parent.$apply();
+                });
+
             };
 
             $(fileUploadButton).on("change", function () {

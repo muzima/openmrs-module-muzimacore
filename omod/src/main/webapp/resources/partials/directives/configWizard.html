@@ -46,7 +46,8 @@
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
                 <button class="btn btn-success btn-md pull-right"
-                        ng-click="config.willRegisteringPatients ? goToNextWizardTab('registration-form-selection'):goToNextWizardTab('other-forms-option')">
+                        ng-click="config.willRegisteringPatients ? goToNextWizardTab('registration-form-selection'):goToNextWizardTab('other-forms-option')"
+                ng-disabled = "config.willRegisteringPatients == undefined">
                     Next <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
@@ -157,7 +158,8 @@
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
                 <button class="btn btn-success btn-md pull-right"
-                        ng-click="config.willFillOtherForms ? goToNextWizardTab('other-forms-selection'):goToNextWizardTab('cohorts')">
+                        ng-click="config.willFillOtherForms ? goToNextWizardTab('other-forms-selection'):goToNextWizardTab('cohorts')"
+                        ng-disabled="config.willFillOtherForms == undefined">
                     Next <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
