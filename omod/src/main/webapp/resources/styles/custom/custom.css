@@ -298,6 +298,12 @@ body{
     min-width: 950px;
 }
 
+.col-lg-8 {
+    flex: 0 0 80%;
+    max-width: 80%;
+    overflow-x: auto;
+}
+
 
 
 

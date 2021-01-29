@@ -8,6 +8,7 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/styles/bootstrap-4.5.3/css/bootstrap.css"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/styles/custom/custom.css"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/styles/custom/sidebar.css"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/styles/angular-tour/angular-tour.css"/>
 
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/jquery/jquery.js" />
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/lodash/lodash.js"/>
@@ -21,6 +22,7 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/angular/angular-strap.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/filters.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/app.js"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/angular/angular-tour.min.js" />
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/EditController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/ErrorController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/FormController.js"/>
