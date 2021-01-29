@@ -8,6 +8,7 @@ muzimaCoreModule.
             when('/createSource/', {controller: SourceCtrl, templateUrl: '../../moduleResources/muzimacore/partials/source.html'}).
             when('/sources', {controller: SourcesCtrl, templateUrl: '../../moduleResources/muzimacore/partials/sources.html'}).
             when('/config/:uuid', {controller: ConfigCtrl, templateUrl: '../../moduleResources/muzimacore/partials/config.html'}).
+            when('/configWizard/:launchWizard', {controller: ConfigCtrl, templateUrl: '../../moduleResources/muzimacore/partials/config.html'}).
             when('/createConfig/', {controller: ConfigCtrl, templateUrl: '../../moduleResources/muzimacore/partials/config.html'}).
             when('/configs', {controller: ConfigsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/configs.html'}).
             when('/queue/:uuid', {controller: QueueCtrl, templateUrl: '../../moduleResources/muzimacore/partials/queue.html'}).
