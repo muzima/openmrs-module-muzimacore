@@ -68,13 +68,22 @@ public class JavaRosaFormUploadController {
 
     @ResponseBody
     @RequestMapping(value = "/html/upload.form", method = RequestMethod.POST)
-    public void uploadHTMLForm(final MultipartHttpServletRequest request,
+    public Map<String, Object>  uploadHTMLForm(final MultipartHttpServletRequest request,
                                final @RequestParam String form,
                                final @RequestParam String discriminator) throws Exception {
-        if (Context.isAuthenticated()) {
-            MuzimaFormService service = Context.getService(MuzimaFormService.class);
-            service.createHTMLForm(extractFile(request), form, discriminator);
+        try {
+            if (Context.isAuthenticated()) {
+                MuzimaFormService service = Context.getService(MuzimaFormService.class);
+                service.createHTMLForm(extractFile(request), form, discriminator);
+
+                MuzimaForm muzimaForm = service.getMuzimaFormByForm(form, true).get(0);
+                Form openmrsForm = Context.getFormService().getFormByUuid(form);
+                return WebConverter.convertMuzimaForm(openmrsForm, muzimaForm);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
+        return new HashMap<String, Object>();
     }
 
     @ResponseBody

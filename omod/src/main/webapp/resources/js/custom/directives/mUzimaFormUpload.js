@@ -15,7 +15,13 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                 scope.uploadCandidateForm = value;
             };
 
-            $('#fileUploadControl').val('');
+            var clearFormUploadFields = function () {
+                scope.uploadCandidateForm ={};
+                scope.newFormMetaData = {}
+                scope.clearFile();
+                console.log("Cleared file");
+            }
+
 
             FormService.getDiscriminatorTypes().then(function (results) {
                 scope.discriminatorTypes = results.data;
@@ -78,23 +84,30 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                         console.log("Upload response:"+JSON.stringify(response));
                         if(response.hasOwnProperty('uuid')) {
                             form.uuid = response.uuid;
-                            scope.setSelectedForm(form,);
+                            scope.setSelectedForm(form);
                             scope.goToPreviousWizardTab();
+                            clearFormUploadFields();
                         }
                     }).error(function () {
                         showErrorMessage("The form name already exists !! Please use some other name.");
                     });
 
                 } else {
+                    console.log("Going to upload");
                     FileUploadService.post({
                         url: 'html/upload.form', file: file, params: {
-                            form: uuid, discriminator: discriminator
+                            form: form.uuid, discriminator: form.discriminator
                         }
-                    }).success(function () {
-                        scope.setSelectedForm(form, );
-                        scope.goToPreviousWizardTab();
-                    }).error(function () {
-                        console.log("Error....");
+                    }).success(function (response) {
+                        console.log("Upload response:"+JSON.stringify(response));
+                        if(response.hasOwnProperty('uuid')) {
+                            form.uuid = response.uuid;
+                            scope.setSelectedForm(form);
+                            scope.goToPreviousWizardTab();
+                            clearFormUploadFields();
+                        }
+                    }).error(function (error) {
+                        console.log("Error...."+JSON.stringify(error));
                         showErrorMessage("The form name already exists !! Please use some other name.");
                     });
                 }

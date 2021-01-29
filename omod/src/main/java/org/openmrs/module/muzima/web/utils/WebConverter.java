@@ -250,6 +250,7 @@ public class WebConverter {
         Map<String, Object> map = new HashMap<String, Object>();
         if (form != null) {
             map.put("uuid", muzimaForm.getUuid());
+            map.put("discriminator", muzimaForm.getDiscriminator());
             map.put("name", form.getName());
         }
         return map;
