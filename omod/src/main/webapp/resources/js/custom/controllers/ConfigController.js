@@ -1,4 +1,4 @@
-function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormService) {
+function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormService,$cohortDefinitionService) {
 
     // initialize control objects
     $scope.search = {forms: '', cohorts: '', locations: '', providers: '', concepts: ''};
@@ -147,13 +147,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         });
     }
 
-    var registrationFormExistsInConfig = function(){
+    $scope.configHasRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
             return configForm.discriminator.includes("registration");
         });
     }
 
-    var nonRegistrationFormExistsInConfig = function(){
+    $scope.configHasNonRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
             return !configForm.discriminator.includes("registration");
         });
@@ -222,21 +222,35 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     /****************************************************************************************
      ***** Group of methods to manipulate Cohorts
      *****************************************************************************************/
+    $scope.cohorts = [];
+    $scope.loadCohorts = function() {
+        return new Promise((resolve, reject) => {
+            $cohortDefinitionService.getAllCohorts().then(function (response) {
+                $scope.cohorts = response.data.objects;
+            });
+            resolve($scope.cohorts);
+        });
+    }
 
     $scope.$watch('search.cohorts', function (newValue, oldValue) {
         if (newValue != oldValue) {
-            $configs.searchConfigCohorts($scope.search.cohorts).
+            $configs.searchCohorts($scope.search.cohorts).
             then(function (response) {
                 $scope.cohorts = response.data.objects;
             });
         }
     }, true);
 
-    $scope.addCohort = function(cohort) {
-        var cohortExists = _.find($scope.configCohorts, function (configCohort) {
+   $scope.cohortExistsInConfig = function(cohort) {
+        return !!_.find($scope.configCohorts, function (configCohort) {
             return configCohort.uuid == cohort.uuid
         });
-        if (!cohortExists) {
+    }
+
+    $scope.addCohort = function(cohort) {
+
+        if (!$scope.cohortExistsInConfig(cohort)) {
+            cohort = {'uuid':cohort.uuid,'name':cohort.name};
             $scope.configCohorts.push(cohort);
             $scope.search.cohorts = '';
         }
@@ -254,6 +268,34 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             }
         });
     };
+
+    $scope.hasDefinedCohorts = function(){
+        return $scope.cohorts.length > 0
+    }
+
+    $scope.configHasCohorts = function(){
+        return $scope.configCohorts.length > 0;
+    }
+
+    $scope.selectedCohorts = []
+
+    $scope.setSelectedCohort = function (cohort) {
+        $scope.selectedCohorts.push(cohort.uuid);
+        //add to config
+        $scope.addCohort(cohort);
+    }
+
+    $scope.toggleCohortSelection = function(selectedCohort){
+        if($scope.cohortExistsInConfig(selectedCohort)){
+            angular.forEach($scope.configCohorts, function (configCohort, index) {
+                if (configCohort.uuid === selectedCohort.uuid) {
+                    $scope.configCohorts.splice(index, 1);
+                }
+            });
+        } else {
+            $scope.addCohort(selectedCohort);
+        }
+    }
 
     /****************************************************************************************
      ***** Group of methods to manipulate locations
@@ -501,12 +543,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
         var loadWizardTab = function (nextWizardTab, isBackNavigation) {
             if(nextWizardTab == "registration-form-selection" || nextWizardTab == "other-forms-selection"){
-                //reload forms
                 $scope.loadForms().then(()=>{
                     $scope.activeTab = nextWizardTab;
                 });
-            } else if (nextWizardTab == "cohorts"){
-
+            } else if (nextWizardTab == "cohorts-selection"){
+                $scope.loadCohorts().then(()=>{
+                    $scope.activeTab = nextWizardTab;
+                });
                 $scope.activeTab = nextWizardTab;
             } else {
                 $scope.activeTab = nextWizardTab;
@@ -583,12 +626,16 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             return false;
         }
 
-        if(registrationFormExistsInConfig()){
+        if($scope.configHasRegistrationForms()){
             $scope.config.willRegisteringPatients = true;
         }
 
-        if(nonRegistrationFormExistsInConfig()){
+        if($scope.configHasNonRegistrationForms()){
             $scope.config.willFillOtherForms = true;
+        }
+
+        if($scope.configHasCohorts()){
+            $scope.config.willAddCohorts = true;
         }
 
         $scope.setNewFormMetadata = function (name, version, description,encounterType) {
@@ -698,31 +745,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $configs.saveLocation(location.name, location.description).
         then(function () {
             //Add location to setupconfig and close the modal
-        })
-    };
-
-    $scope.saveCohortAndCohortDefination = function (cohort) {
-        if(cohort.isScheduledForExecution===undefined){
-            cohort.isScheduledForExecution=false;
-        }
-        if(cohort.isMemberAdditionEnabled===undefined){
-            cohort.isMemberAdditionEnabled=false;
-        }
-        if(cohort.isMemberRemovalEnabled===undefined){
-            cohort.isMemberRemovalEnabled=false;
-        }
-        if(cohort.isFilterByProviderEnabled===undefined){
-            cohort.isFilterByProviderEnabled=false;
-        }
-        if(cohort.isFilterByLocationEnabled===undefined){
-            cohort.isFilterByLocationEnabled=false;
-        }
-
-        $configs.saveCohortAndCohortDefinition(cohort.name, cohort.description, cohort.definition, cohort.isScheduledForExecution,
-         cohort.isMemberAdditionEnabled, cohort.isMemberRemovalEnabled, cohort.isFilterByProviderEnabled, cohort.isFilterByLocationEnabled,
-          cohort.filterQuery).
-        then(function () {
-            //Add cohort to setupconfig and close the modal
         })
     };
 

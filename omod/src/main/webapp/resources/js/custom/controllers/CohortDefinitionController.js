@@ -146,11 +146,9 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
             then(function (response) {
                 $('#wait').hide();
                 $('#processingSuccessful').show();
-                console.log("success");
             },function (response) {
                 $('#wait').hide();
                 $('#processingFailure').show();
-                console.log("fail");
             });
     };
 }

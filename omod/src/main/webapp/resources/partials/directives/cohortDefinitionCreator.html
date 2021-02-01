@@ -1,0 +1,120 @@
+<div class="row">
+    <div class="col-sm-12">
+        <label class="pull-left">Create new Cohort</label>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-sm-3">
+        Cohort Name <span class="required">*</span> :
+    </div>
+    <div class="col-sm-9">
+        <input class="form-control" ng-model="cohortDefinition.name" placeholder="Form name">
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        Description:
+    </div>
+    <div class="col-sm-9">
+        <textarea class="form-control" ng-model="cohortDefinition.description" placeholder="Cohort Description"></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <hr />
+    </div>
+</div>
+<div class="row" ng-show="enableDynamicCohort == undefined || enableDynamicCohort == false">
+    <div class="col-sm-12">
+        <p class="font-weight-bold font-italic">
+        mUzima supports the dynamic feature of cohorts so as to automatically update cohort membership.
+        </p>
+        <label class="alert alert-info w-100">Do you want to enable the dynamic cohort feature for this cohort? <span class="required">*</span></label>
+        <label class="w-25 offset-2">
+            <input type="radio" ng-value="true"
+                   ng-model="enableDynamicCohort"> Yes
+        </label>
+        <label  class="w-25"><input type="radio" ng-value="false"
+                                    ng-model="enableDynamicCohort"> No
+        </label>
+    </div>
+</div>
+<div class="row bg-light" ng-show="enableDynamicCohort">
+    <div class="col-sm-6">
+        <label class="w-100">Cohort Criteria SQL query
+        <textarea class="form-control" ng-model="cohortDefinition.definition"
+                  placeholder="Enter Cohort Criteria SQL query here..." rows="5"></textarea>
+        </label>
+    </div>
+    <div class="col-sm-6" style="margin: auto">
+        <div class="row">
+            <div class="" title="Check this to automatically add members who meet criteria">
+                <input type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled" > Automatically add new members &#9432;
+            </div>
+        </div>
+        <div class="row">
+            <div class="" title="Check this to automatically remove members who no longer meet criteria (or mark as inactive members for OpenMRS versions 2.1.0 and above.)">
+                <input type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> Automatically remove members &#9432;
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-show="enableDynamicCohort == true">
+    <div class="col-sm-12">
+        <hr />
+    </div>
+</div>
+<div class="row" ng-show="enableDynamicCohort == true && (enableCohortFilters == undefined || enableCohortFilters == false)">
+    <div class="col-sm-12">
+        <p class="font-weight-bold font-italic">
+        With Cohort filters, only a subet of a cohort may be downloaded to the mobile app based on whether it matches the
+        Provider and/or default Location of the device.
+        </p>
+
+        <label class="alert alert-success w-100">Do you want to enable the cohort filtering feature for this cohort? <span class="required">*</span></label>
+        <label class="w-25 offset-2">
+            <input type="radio" ng-value="true"
+                   ng-model="enableCohortFilters"> Yes
+        </label>
+        <label  class="w-25"><input type="radio" ng-value="false"
+                                    ng-model="enableCohortFilters"> No
+        </label>
+    </div>
+</div>
+<div class="row bg-light" ng-show="enableCohortFilters">
+    <div class="col-sm-6">
+        <label class="w-100">Filter SQL query
+        <textarea class="form-control" ng-model="cohortDefinition.filterQuery"
+                  placeholder="Enter Filter SQL query here..." rows="5"></textarea></label>
+    </div>
+    <div class="col-sm-6" style="margin: auto">
+        <div class="row">
+            <div class="" title="Check this to set cohort filter by provider">
+                <input type="checkbox"  ng-model="cohortDefinition.isFilterByProviderEnabled"> Filter cohort by provider &#9432;
+            </div>
+        </div>
+        <div class="row">
+            <div class="" title="Check this to filter cohort by location">
+                <input type="checkbox"  ng-model="cohortDefinition.isFilterByLocationEnabled"> Filter cohort by location &#9432;
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-9">
+        <button class="btn btn-primary btn-md pull-right" ng-disabled="enableDynamicCohort !== false && enableCohortFilters == undefined"
+        ng-click="saveCohortAndCohortDefinition(cohortDefinition)">
+            Validate & Save
+        </button>
+    </div>
+</div>

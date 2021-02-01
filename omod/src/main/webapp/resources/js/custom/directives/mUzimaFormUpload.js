@@ -19,7 +19,6 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                 scope.uploadCandidateForm ={};
                 scope.newFormMetaData = {}
                 scope.clearFile();
-                console.log("Cleared file");
             }
 
 
@@ -32,12 +31,9 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                     scope.forms = results.data.results;
 
                     if (scope.newFormMetaData != undefined && !$.isEmptyObject(scope.newFormMetaData)) {
-                        console.log('There is new form metadata');
                         var newForm = scope.newFormMetaData;
                         scope.forms.push(newForm);
                         scope.selectForm(newForm);
-                    } else {
-                        console.log("New metadata unavailable");
                     }
                 });
             }
@@ -74,14 +70,12 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                 }
 
                 if(uuid == 'newFormMetadata'){
-                    console.log("Uploading with new form metadata...");
                     FileUploadService.post({
                         url: "html/createAndUpload.form", file: file, params: {
                             discriminator: form.discriminator, name: form.name, version: form.version,
                             description: form.description, encounterType: form.encounterType.uuid
                         }
                     }).success(function (response) {
-                        console.log("Upload response:"+JSON.stringify(response));
                         if(response.hasOwnProperty('uuid')) {
                             form.uuid = response.uuid;
                             scope.setSelectedForm(form);
@@ -93,13 +87,11 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                     });
 
                 } else {
-                    console.log("Going to upload");
                     FileUploadService.post({
                         url: 'html/upload.form', file: file, params: {
                             form: form.uuid, discriminator: form.discriminator
                         }
                     }).success(function (response) {
-                        console.log("Upload response:"+JSON.stringify(response));
                         if(response.hasOwnProperty('uuid')) {
                             form.uuid = response.uuid;
                             scope.setSelectedForm(form);
@@ -107,7 +99,6 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                             clearFormUploadFields();
                         }
                     }).error(function (error) {
-                        console.log("Error...."+JSON.stringify(error));
                         showErrorMessage("The form name already exists !! Please use some other name.");
                     });
                 }

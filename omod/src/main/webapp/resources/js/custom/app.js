@@ -215,7 +215,6 @@ muzimaCoreModule.factory('TagService', function ($http) {
 muzimaCoreModule.factory('FileUploadService', function ($http) {
     return {
         post: function (options) {
-            console.log("jjj: "+JSON.stringify(options.params));
             return $http({
                 method: 'POST',
                 url: options.url,
@@ -267,7 +266,7 @@ muzimaCoreModule.factory('$configs', function($http) {
     var searchMuzimaForms = function(search) {
         return $http.get("mUzimaForms.json?search=" + (search === undefined ? '' : search));
     };
-    var searchConfigCohorts = function(search) {
+    var searchCohorts = function(search) {
         return $http.get("configCohorts.json?search=" + (search === undefined ? '' : search));
     };
     var searchConfigLocations = function(search) {
@@ -299,16 +298,6 @@ muzimaCoreModule.factory('$configs', function($http) {
         return $http.post("saveLocation.json", {"name": name, "description": description});
     };
 
-    var saveCohortAndCohortDefinition = function (name, description, definition, isScheduledForExecution,
-                                                  isMemberAdditionEnabled, isMemberRemovalEnabled, isFilterByProviderEnabled,
-                                                   isFilterByLocationEnabled, filterQuery) {
-    return $http.post("saveCohortAndCohortDefinition.json", {"name": name, "description":description, "definition": definition,
-                    "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled,
-                    "isMemberRemovalEnabled": isMemberRemovalEnabled,"isFilterByProviderEnabled":isFilterByProviderEnabled,
-                     "isFilterByLocationEnabled":isFilterByLocationEnabled, "filterQuery": filterQuery});
-
-    };
-
     var searchConfigPersons = function(search) {
         return $http.get('../../ws/rest/v1/person?v=custom:(uuid,gender,birthdate,names:(uuid,givenName,middleName,familyName,preferred,),uuid)&q=' + (search === undefined ? '' : search));
     };
@@ -323,7 +312,7 @@ muzimaCoreModule.factory('$configs', function($http) {
         saveConfiguration: saveConfiguration,
         deleteConfiguration: deleteConfiguration,
         searchMuzimaForms: searchMuzimaForms,
-        searchConfigCohorts: searchConfigCohorts,
+        searchCohorts: searchCohorts,
         searchConfigLocations: searchConfigLocations,
         searchConfigProviders: searchConfigProviders,
         searchConfigConcepts: searchConfigConcepts,
@@ -333,7 +322,6 @@ muzimaCoreModule.factory('$configs', function($http) {
         checkManageFormsPrivilege: checkManageFormsPrivilege,
         checkAddCohortsPrivilege: checkAddCohortsPrivilege,
         saveLocation: saveLocation,
-        saveCohortAndCohortDefinition: saveCohortAndCohortDefinition,
         searchConfigPersons: searchConfigPersons,
         saveProvider: saveProvider
     }
@@ -410,18 +398,28 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
         return $http.get("cohortDefinitions.json?pageNumber=" + pageNumber + "&pageSize=" + pageSize);
     };
     var getCohortDefinition = function (uuid) {
-            return $http.get("cohortDefinition.json?uuid=" + uuid);
-        };
+        return $http.get("cohortDefinition.json?uuid=" + uuid);
+    };
     var getAllCohorts = function () {
-            return $http.get("cohorts.json");
-        };
+        return $http.get("cohorts.json");
+    };
     var getAllCohortsWithoutDefinition=function(){
-            return $http.get("cohortswithoutdefinition.json");
-         };
+        return $http.get("cohortswithoutdefinition.json");
+    };
     var saveCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled, isFilterByProviderEnabled, isFilterByLocationEnabled, filterQuery) {
-            return $http.post("cohortDefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition,
-                "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled,"isFilterByProviderEnabled":isFilterByProviderEnabled, "isFilterByLocationEnabled":isFilterByLocationEnabled, "filterQuery": filterQuery});
-        };
+        return $http.post("cohortDefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition,
+            "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled, "isMemberRemovalEnabled": isMemberRemovalEnabled,"isFilterByProviderEnabled":isFilterByProviderEnabled, "isFilterByLocationEnabled":isFilterByLocationEnabled, "filterQuery": filterQuery});
+    };
+
+    var saveCohortAndCohortDefinition = function (name, description, definition, isScheduledForExecution,
+                                                  isMemberAdditionEnabled, isMemberRemovalEnabled, isFilterByProviderEnabled,
+                                                  isFilterByLocationEnabled, filterQuery) {
+        return $http.post("saveCohortAndCohortDefinition.json", {"name": name, "description":description, "definition": definition,
+            "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled,
+            "isMemberRemovalEnabled": isMemberRemovalEnabled,"isFilterByProviderEnabled":isFilterByProviderEnabled,
+            "isFilterByLocationEnabled":isFilterByLocationEnabled, "filterQuery": filterQuery});
+
+    };
 
     var deleteCohortDefinition = function (uuid, cohortid, definition, isScheduledForExecution, isMemberAdditionEnabled, isMemberRemovalEnabled, isFilterByProviderEnabled, isFilterByLocationEnabled, filterQuery, retireReason) {
         return $http.post("cohortDefinition.json", {"uuid": uuid, "cohortid":cohortid, "definition": definition, "isScheduledForExecution": isScheduledForExecution,
@@ -437,6 +435,7 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
         getCohortDefinitions: getCohortDefinitions,
         getCohortDefinition:getCohortDefinition,
         saveCohortDefinition:saveCohortDefinition,
+        saveCohortAndCohortDefinition: saveCohortAndCohortDefinition,
         getAllCohorts:getAllCohorts,
         getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition,
         deleteCohortDefinition : deleteCohortDefinition,

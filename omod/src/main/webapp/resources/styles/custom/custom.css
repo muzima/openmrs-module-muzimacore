@@ -289,6 +289,13 @@ body{
     right: 30px;
 }
 
+.half-wizard-nav-bar {
+    position: absolute;
+    bottom:10px;
+    left: 30px;
+    right: 300px;
+}
+
 .btn-success,.wizard-active {
     background-color: #229f98 !important;
     color: #ffffff !important;
@@ -351,6 +358,7 @@ body{
     overflow: hidden;
     background-color: #e5e5e5;
 }
+
 
 
 

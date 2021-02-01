@@ -84,8 +84,9 @@
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('other-forms-option')">
-                    Next <i class="fa fa-arrow-right"></i>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('other-forms-option')"
+                ng-disabled="!configHasRegistrationForms()">
+                    Use selected <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
         </div>
@@ -165,42 +166,43 @@
             </div>
         </div>
     </div>
-        <div class="row fill-height" ng-show="isActiveTab('other-forms-selection')">
-            <div class="col-sm-3">
-                <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+    <div class="row fill-height" ng-show="isActiveTab('other-forms-selection')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <label class="alert alert-info w-100">Please select from available non-registration forms or upload a new one below:</label>
+            <div class="row">
+                <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
+                    <table class="table table-hover table-striped">
+                        <tr ng-repeat="muzimaform in muzimaforms | filter:isNonRegistrationForm">
+                            <td>
+                                <label class="w-100" title="{{muzimaform.form.discriminator}}">{{muzimaform.form.name}}
+                                    <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
+                                           ng-click="toggleFormSelection(muzimaform.form)" type="checkbox"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <label ng-show="!hasNonRegistrationForms()" class="alert alert-error">
+                        There are no non-registration forms available. Please click on
+                        <i><u>Upload new form</u></i> button to upload a form.
+                    </label>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary" ng-click="goToNextWizardTab('form-upload')">Upload new form</button>
+                </div>
             </div>
-            <div class="col-sm-9">
-                <label class="alert alert-info w-100">Please select from available non-registration forms or upload a new one below:</label>
-                <div class="row">
-                    <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
-                        <table class="table table-hover table-striped">
-                            <tr ng-repeat="muzimaform in muzimaforms | filter:isNonRegistrationForm">
-                                <td>
-                                    <label class="w-100" title="{{muzimaform.form.discriminator}}">{{muzimaform.form.name}}
-                                        <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
-                                               ng-click="toggleFormSelection(muzimaform.form)" type="checkbox"></label>
-                                </td>
-                            </tr>
-                        </table>
-                        <label ng-show="!hasNonRegistrationForms()" class="alert alert-error">
-                            There are no non-registration forms available. Please click on
-                            <i><u>Upload new form</u></i> button to upload a form.
-                        </label>
-                    </div>
-                    <div class="col-md-5">
-                        <button class="btn btn-primary" ng-click="goToNextWizardTab('form-upload')">Upload new form</button>
-                    </div>
-                </div>
-                <div class="wizard-nav-bar">
-                    <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
-                        <i class="fa fa-arrow-left"></i> Back
-                    </button>
-                    <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('cohorts')">
-                        Next <i class="fa fa-arrow-right"></i>
-                    </button>
-                </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('cohorts')"
+                ng-disabled="!configHasNonRegistrationForms()">
+                    Use selected <i class="fa fa-arrow-right"></i>
+                </button>
             </div>
         </div>
+    </div>
     <div class="row fill-height" ng-show="isActiveTab('cohorts')">
         <div class="col-sm-3">
             <config-wizard-side-nav wizard-stage="3"></config-wizard-side-nav>
@@ -213,15 +215,72 @@
                 <label class="alert alert-info w-100">
                     Do you want to add Cohorts as part of the information that should be downloaded to the mobile application?
                 </label>
-                <label class="w-25"><input type="radio" name="willRegisteringPatients" value="true" ng-model="config.willRegisteringPatients"> Yes</label>
-                <label  class="w-25"><input type="radio" name="willRegisteringPatients" value="false" ng-model="config.willRegisteringPatients"> No</label>
+                <label class="w-25">
+                    <input type="radio" ng-checked="config.willAddCohorts" ng-value="true"
+                           ng-model="config.willAddCohorts" ng-click="goToNextWizardTab('cohorts-selection')"> Yes
+                </label>
+                <label  class="w-25">
+                    <input type="radio" ng-value="false" ng-model="config.willAddCohorts"> No
+                </label>
             </div>
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('concepts')">
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willAddCohorts ? goToNextWizardTab('cohorts-selection'):goToNextWizardTab('concepts')"
+                        ng-disabled="config.willAddCohorts == undefined">
                     Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('cohorts-selection')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="3"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <label class="alert alert-info w-100">Please select or define new cohorts to be added to the mobile application:</label>
+            <div class="row">
+                <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
+                    <table class="table table-hover table-striped">
+                        <tr ng-repeat="cohort in cohorts">
+                            <td>
+                                <label class="w-100" title="{{cohort.description}}">{{cohort.name}}
+                                    <input class="pull-right" ng-checked="cohortExistsInConfig(cohort)"
+                                           ng-click="toggleCohortSelection(cohort)" type="checkbox"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <label ng-hide="hasDefinedCohorts()" class="alert alert-error">
+                        There are no Cohorts available. Please click on
+                        <i><u>Define new cohort</u></i> button to create a new one.
+                    </label>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary" ng-click="goToNextWizardTab('create-cohort-definition')">Define new cohort</button>
+                </div>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('concepts')"
+                        ng-disabled="configHasCohorts() == false">
+                    Use selected <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('create-cohort-definition')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="3"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <cohort-definition-creator></cohort-definition-creator>
+            <div class="half-wizard-nav-bar" >
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
                 </button>
             </div>
         </div>

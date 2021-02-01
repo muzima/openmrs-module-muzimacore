@@ -13,6 +13,8 @@
  */
 package org.openmrs.module.muzima.web.controller;
 
+import org.openmrs.Cohort;
+import org.openmrs.api.CohortService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.model.CohortDefinitionData;
@@ -27,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class CohortDefinitionController {
@@ -78,10 +82,9 @@ public class CohortDefinitionController {
             cohortDefinitionData.setIsFilterByLocationEnabled(isFilterByLocationEnabled);
             cohortDefinitionData.setFilterQuery(filterQuery);
             expandedCohortDataService.saveCohortDefinitionData(cohortDefinitionData);
-
         }
-
     }
+
     @RequestMapping(value = "/module/muzimacore/processCohortDefinition.json", method = RequestMethod.POST)
     public void processCohortDefinition(final @RequestBody Map<String, Object> map){
         if (Context.isAuthenticated()) {
@@ -91,5 +94,55 @@ public class CohortDefinitionController {
                expandedCohortDataService.processCohortDefinitionData(uuid);
             }
         }
+    }
+
+    @RequestMapping(value = "/module/muzimacore/saveCohortAndCohortDefinition.json", method = RequestMethod.POST)
+    public Map<String, Object>  saveCohortAndCohortDefinition(final @RequestBody Map<String, Object> map) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        if (Context.isAuthenticated()) {
+            try {
+                String name = (String) map.get("name");
+                String description = (String) map.get("description");
+                String definition = (String) map.get("definition");
+                boolean isScheduled = (Boolean) map.get("isScheduledForExecution");
+                boolean isMemberAdditionEnabled = (Boolean) map.get("isMemberAdditionEnabled");
+                boolean isMemberRemovalEnabled = (Boolean) map.get("isMemberRemovalEnabled");
+                boolean isFilterByProviderEnabled = (Boolean) map.get("isFilterByProviderEnabled");
+                boolean isFilterByLocationEnabled = (Boolean) map.get("isFilterByLocationEnabled");
+                String filterQuery = (String) map.get("filterQuery");
+                String uuid = UUID.randomUUID().toString();
+
+                Cohort cohort = new Cohort();
+                cohort.setName(name);
+                cohort.setDescription(description);
+                cohort.setUuid(uuid);
+                CohortService cohortService = Context.getCohortService();
+                cohortService.saveCohort(cohort);
+
+                Cohort savedCohort = cohortService.getCohortByUuid(uuid);
+
+                CohortDefinitionDataService expandedCohortDataService = Context.getService(CohortDefinitionDataService.class);
+                CohortDefinitionData cohortDefinitionData = new CohortDefinitionData();
+
+                if (savedCohort != null && StringUtils.isNotEmpty(definition)) {
+                    cohortDefinitionData.setCohortId(savedCohort.getId());
+                    cohortDefinitionData.setDefinition(definition);
+                    cohortDefinitionData.setIsScheduledForExecution(isScheduled);
+                    cohortDefinitionData.setIsMemberAdditionEnabled(isMemberAdditionEnabled);
+                    cohortDefinitionData.setIsMemberRemovalEnabled(isMemberRemovalEnabled);
+                    cohortDefinitionData.setIsFilterByProviderEnabled(isFilterByProviderEnabled);
+                    cohortDefinitionData.setIsFilterByLocationEnabled(isFilterByLocationEnabled);
+                    cohortDefinitionData.setFilterQuery(filterQuery);
+                    expandedCohortDataService.saveCohortDefinitionData(cohortDefinitionData);
+                }
+                response = WebConverter.convertMuzimaCohort(savedCohort);
+            }catch (Exception e){
+                e.printStackTrace();
+                response.put("error","Could not save cohort definition. Error: "+e.getMessage());
+            }
+        } else {
+            response.put("error", "User session is not authenticated");
+        }
+        return response;
     }
 }
