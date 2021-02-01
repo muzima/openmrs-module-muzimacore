@@ -31,12 +31,12 @@
                         <td colspan="4">No reportConfigurations created in the system.</td>
                     </tr>
                     <tr ng-repeat="reportConfiguration in reportConfigurations | filter:filterReportConfiguration() | orderBy:'created':true">
-                        <td><a href="#/reportConfig/{{reportConfiguration.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
+                        <td><a href="#/reportConfig/{{reportConfiguration.uuid}}" style="text-decoration: none"><i class="fa fa-pencil-square-o"></i></a></td>
                         <td>{{reportConfiguration.cohort}}</td>
                         <td>
                             <table>
                                 <tr ng-repeat="report in reportConfiguration.reports">
-                                    <td><i class="fa fa-pencil-square-o"></i> {{report.name}}</td>
+                                    <td><i class="fa fa-caret-right"></i> {{report.name}}</td>
                                 </tr>
                             </table>
                         </td>

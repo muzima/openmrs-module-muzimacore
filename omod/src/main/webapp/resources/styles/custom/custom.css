@@ -112,7 +112,7 @@
 
 /*==============================================*/
 body{
-    background-color: #eeeeee;
+    background-color: #ffffff;
 }
 .content{
     background-color: #ffffff;
@@ -139,6 +139,16 @@ body{
 
 .form-tag {
     margin-top: 4px;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
 }
 
 .navbar-custom {
@@ -304,6 +314,43 @@ body{
     overflow-x: auto;
 }
 
+.navbar-right {
+    float: right !important;
+    margin-right: -15px;
+}
+
+.navbar-btn {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.navbar-nav .dropdown-menu {
+    position: absolute;
+    right: 0;
+    left: auto;
+}
+
+.navbar .container, .navbar .container-fluid, .navbar .container-sm, .navbar .container-md, .navbar .container-lg, .navbar .container-xl {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
+    width: fit-content;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.dropdown-menu .divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
 
 
 
