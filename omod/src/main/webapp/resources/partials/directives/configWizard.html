@@ -7,12 +7,12 @@
         </div>
         <div class="col-sm-9">
             <div>
-                <p class="font-weight-bold font-italic">
+                <label class="alert alert-info w-100">
                     Upon login for the first time, mUzima mobile app displays the list of available
                 setup configurations, and the user will need to select a setup configuration
                     that best suits their needs.
-                </p>
-                <label class="alert alert-info w-100">Please provide a name and a description of your setup configuration.</label>
+                </label>
+                <label class="alert alert-success w-100">Please provide a name and a description of your setup configuration.</label>
                 <input class="form-control" placeholder="Setup Name" ng-model="config.name">
                 <textarea class="form-control" placeholder="Setup Description" rows="4" ng-model="config.description"></textarea>
             </div>
@@ -29,11 +29,11 @@
         </div>
         <div class="col-sm-9">
             <div>
-                <p class="font-weight-bold font-italic">
+                <label class="alert alert-info w-100">
                     mUzima can be adapted to enable registration of patients and to collect various other kinds of
                     patient data through forms.
-                </p>
-                <label class="alert alert-info w-100">Do you plan on registering patients on the mobile application?</label>
+                </label>
+                <label class="alert alert-success w-100">Do you plan on registering patients on the mobile application?</label>
                 <label class="w-25 offset-2">
                     <input type="radio" ng-checked="config.willRegisteringPatients" ng-value="true"
                            ng-model="config.willRegisteringPatients" ng-click="goToNextWizardTab('registration-form-selection')"> Yes
@@ -58,7 +58,7 @@
             <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
         </div>
         <div class="col-sm-9">
-            <label class="alert alert-info w-100">Please select a registration form to be used for registering patients
+            <label class="alert alert-success w-100">Please select a registration form to be used for registering patients
                 on the mobile application.</label>
             <div class="row">
                 <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
@@ -98,10 +98,9 @@
         <div class="col-sm-9">
             <div class="row">
                 <div class="col-sm-12">
-                    <label class="pull-left">Form Upload</label>
+                    <label class="alert alert-success w-100">Please provide details of the form to be uploaded</label>
                 </div>
             </div>
-            <hr>
             <m-uzima-form-upload upload-return-fn="setSelectedRegistrationForm"></m-uzima-form-upload>
 
             <div class="wizard-nav-bar">
@@ -136,7 +135,7 @@
         </div>
         <div class="col-sm-9">
             <div>
-                <p class="font-weight-bold font-italic">
+                <label class="alert alert-info w-100">
                     Besides registration forms, mUzima supports other kinds of forms that include:
                     <ol>
                         <li>Patient demographics update form</li>
@@ -145,8 +144,8 @@
                         <li>Tele-consultation form</li>
                         <li>Patient encounter form</li>
                     </ol>
-                </p>
-                <label class="alert alert-info w-100">Do you have any form to be downloaded to the mobile application?</label>
+                </label>
+                <label class="alert alert-success w-100">Do you have any form to be downloaded to the mobile application?</label>
                 <label class="w-25 offset-2">
                     <input type="radio" ng-checked="config.willFillOtherForms" ng-value="true"
                            ng-model="config.willFillOtherForms" ng-click="goToNextWizardTab('other-forms-selection')"> Yes
@@ -171,7 +170,7 @@
             <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
         </div>
         <div class="col-sm-9">
-            <label class="alert alert-info w-100">Please select from available non-registration forms or upload a new one below:</label>
+            <label class="alert alert-success w-100">Please select from available non-registration forms or upload a new one below:</label>
             <div class="row">
                 <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
                     <table class="table table-hover table-striped">
@@ -209,10 +208,10 @@
         </div>
         <div class="col-sm-9">
             <div>
-                <p class="font-weight-bold font-italic">
-                    mUzima supports the use of Cohorts to group patient with common characteristics.
-                </p>
                 <label class="alert alert-info w-100">
+                    mUzima supports the use of Cohorts to group patient with common characteristics.
+                </label>
+                <label class="alert alert-success w-100">
                     Do you want to add Cohorts as part of the information that should be downloaded to the mobile application?
                 </label>
                 <label class="w-25">
@@ -240,7 +239,7 @@
             <config-wizard-side-nav wizard-stage="3"></config-wizard-side-nav>
         </div>
         <div class="col-sm-9">
-            <label class="alert alert-info w-100">Please select or define new cohorts to be added to the mobile application:</label>
+            <label class="alert alert-success w-100">Please select or define new cohorts to be added to the mobile application:</label>
             <div class="row">
                 <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
                     <table class="table table-hover table-striped">
@@ -291,15 +290,75 @@
         </div>
         <div class="col-sm-9">
             <div>
-                <p class="font-weight-bold font-italic">
+                <label class="alert alert-info w-100">
                     mUzima uses Concepts to determine the kinds of historical data that should be downloaded and retained
                     on the mobile devices after form filling. <br> <a class="learn-more">Learn more</a>
-                </p>
-                <label class="alert alert-info w-100">
+                </label>
+                <label class="alert alert-success w-100">
                     Do you want to include Concepts as part of the data that should be downloaded to the mobile application?
                 </label>
-                <label class="w-25"><input type="radio" name="willRegisteringPatients" value="true" ng-model="config.willRegisteringPatients"> Yes</label>
-                <label  class="w-25"><input type="radio" name="willRegisteringPatients" value="false" ng-model="config.willRegisteringPatients"> No</label>
+                <label class="w-25"><input type="radio" name="willAddConcepts"
+                                           ng-value="true" ng-model="config.willAddConcepts"
+                                           ng-click="goToNextWizardTab('add-concepts')"> Yes</label>
+                <label  class="w-25"><input type="radio" name="willAddConcepts" value="false" ng-model="config.willAddConcepts"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willAddConcepts ? goToNextWizardTab('add-concepts'):goToNextWizardTab('locations')"
+                        ng-disabled="config.willAddConcepts == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('add-concepts')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="4"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row col-md-12"  style="margin-bottom: 75px">
+                <label class="alert alert-success w-100">Please select Concepts to be downloaded to the mobile application:</label>
+                <table class="col-md-12 table-borderless">
+                    <tr align="center">
+                        <td align="left">
+                            <input type="text" class="form-control" ng-model="search.concepts" placeholder="Search from the Server ..." autocomplete="off"
+                                   uib-typeahead="concept as concept.name.name for concept in concepts | filter:$viewValue | limitTo:15"
+                                   uib-typeahead-wait-ms="500" typeahead-on-select="addConcept($item)" uib-typeahead-editable="false"/>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr align="center">
+                        <td width="45%" align="left">
+                            <div class="card">
+                                <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Concepts extracted from forms</label>
+                                <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
+                                         style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                    <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}"
+                                            class="list-group-item">{{concept.name}}</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td width="10%" align="center">
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eConcepts.length" ng-click="moveSelected()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!extractedNotUsedConcepts.length" ng-click="moveAll()" style="width: 50px; height: 20px; padding: 0">>></button>
+                        </td>
+                        <td width="45%" align="left" valign="top">
+                            <div class="card">
+                                <label for="selectedConcepts" class="w-100  card-header alert-primary">Selected Concepts</label>
+                                <select class="list-group list-group-flush" size="15" id="selectedConcepts" ng-model="selected.concepts"
+                                        style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                    <option ng-repeat="concept in configConcepts" value="{{concept}}"
+                                    class="list-group-item">{{concept.name}}</option>
+                                </select>
+                                <button type="submit" ng-show="selected.concepts.length" ng-click="removeSelected()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
@@ -317,14 +376,14 @@
         </div>
         <div class="col-sm-9">
             <div>
-                <p class="font-weight-bold font-italic">
+                <label class="alert alert-info w-100">
                     We recognize that many implementations cannot download all locations to the devices for listing as
                     the care location.
                     mUzima provides the options for selecting a subset of these locations to the device. These will be
                     locations that appear as the Encounter Location for patients.<br>
                     <a class="learn-more">Learn more</a>
-                </p>
-                <label class="alert alert-info w-100">
+                </label>
+                <label class="alert alert-success w-100">
                     Please search and select Encounter Location(s) you want downloaded to mUzima for this program.
                 </label>
                 <input class="form-control" type="search">
@@ -345,14 +404,14 @@
         </div>
         <div class="col-sm-9">
             <div>
-                <p class="font-weight-bold font-italic">
+                <label class="alert alert-info w-100">
                     We recognize that many implementations cannot download all providers to the devices for listing as
                     the care provider.
                     mUzima provides the options for selecting a subset of these providers to the device. These will be
                     providers that appear as the Encounter providers for patients.<br>
                     <a class="learn-more">Learn more</a>
-                </p>
-                <label class="alert alert-info w-100">
+                </label>
+                <label class="alert alert-success w-100">
                     Please search and select Encounter Provider(s) you want downloaded to mUzima for this program.
                 </label>
                 <input class="form-control" type="search">
@@ -374,7 +433,7 @@
         <div class="col-md-9">
             <div style="width: 100%">
                 <p></p>
-                <label class="alert alert-info w-100">
+                <label class="alert alert-success w-100">
                     Please review and update settings below to suit your implementation.
                 </label>
             </div>
@@ -394,7 +453,7 @@
         </div>
         <div class="col-md-9">
             <div style="width:100%">
-                <label class="alert alert-info">
+                <label class="alert alert-success">
                     Review
                 </label>
             </div>
