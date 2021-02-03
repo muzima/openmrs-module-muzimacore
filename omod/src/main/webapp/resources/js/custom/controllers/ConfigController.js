@@ -13,6 +13,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.configProviders = [];
     $scope.extractedConcepts = [];
     $scope.extractedNotUsedConcepts = [];
+    $scope.availableNotUsedLocations = [];
     $scope.configConcepts = [];
     $scope.configSettings = [];
     $scope.retire_config = false;
@@ -84,6 +85,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         });
     }
 
+
     $scope.save = function (config) {
         $configs.saveConfiguration(config.uuid, config.name, config.description, createJson(config)).
         then(function () {
@@ -149,13 +151,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
     $scope.configHasRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
-            return configForm.discriminator.includes("registration");
+            return configForm.discriminator!= undefined && configForm.discriminator.includes("registration");
         });
     }
 
     $scope.configHasNonRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
-            return !configForm.discriminator.includes("registration");
+            return !(configForm.discriminator!=undefined && configForm.discriminator.includes("registration"));
         });
     }
 
@@ -256,6 +258,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     };
 
+
+
     $scope.chosenCohort = function (value) {
         $scope.selected.cohort = value;
     };
@@ -309,6 +313,15 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }, true);
 
+    $scope.loadLocations = function() {
+        return new Promise((resolve, reject) => {
+            $configs.searchConfigLocations().then(function (response) {
+                $scope.availableNotUsedLocations = response.data.objects;
+                resolve($scope.availableNotUsedLocations);
+            });
+        });
+    }
+
     $scope.addLocation = function(location) {
         var locationExists = _.find($scope.configLocations, function (configLocation) {
             return configLocation.uuid == location.uuid
@@ -316,6 +329,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         if (!locationExists) {
             $scope.configLocations.push(location);
             $scope.search.locations = '';
+
+            angular.forEach($scope.availableNotUsedLocations, function (availableLocation, index) {
+                if (location.uuid === availableLocation.uuid) {
+                    $scope.availableNotUsedLocations.splice(index, 1);
+                    $scope.selected.location = '';
+                }
+            });
         }
     };
 
@@ -330,6 +350,53 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 $scope.selected.location = '';
             }
         });
+    };
+
+    $scope.removeSelectedLocations = function () {
+        if ($scope.selected.locations != undefined && $scope.selected.locations != null) {
+            angular.forEach($scope.selected.locations, function (location) {
+                var selectedLocation = JSON.parse(location);
+                var locationIndex = _.findIndex($scope.configLocations, function (configLocation) {
+                    return configLocation.uuid == selectedLocation.uuid
+                });
+
+                // remove it from configs
+                if (locationIndex >= 0) {
+                    $scope.configLocations.splice(locationIndex, 1);
+                    $scope.availableNotUsedLocations.push(selectedLocation);
+                }
+            });
+            $scope.selected.locations = [];
+        }
+    };
+
+    $scope.moveAllAvailableLocations = function () {
+        angular.forEach($scope.availableNotUsedLocations, function (eLocation) {
+            var locationExists = _.find($scope.configLocations, function (configLoction) {
+                return configLoction.uuid == eLocation.uuid
+            });
+
+            if (!locationExists)
+                $scope.configLocations.push(eLocation);
+        });
+        $scope.availableNotUsedLocations = [];
+    };
+
+    $scope.moveSelectedLocations = function () {
+        if ($scope.selected.eLocations != undefined && $scope.selected.eLocations != null) {
+            angular.forEach($scope.selected.eLocations, function (eLocation) {
+                var selectedLocation = JSON.parse(eLocation);
+                $scope.configLocations.push(selectedLocation);
+
+                angular.forEach($scope.availableNotUsedLocations, function (location, index) {
+                    if (location.uuid === selectedLocation.uuid) {
+                        $scope.availableNotUsedLocations.splice(index, 1);
+                        $scope.selected.location = '';
+                    }
+                });
+            });
+            $scope.selected.eLocations = [];
+        }
     };
 
     /****************************************************************************************
@@ -529,12 +596,16 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     /****************************************************************************************
      ***** Group of methods to manipulate config wizard
      *****************************************************************************************/
+    var navigationTabs = [];
+
     var showConfigWizardModal = function() {
         $scope.showConfigWizard = true;
-        var navigationTabs = [];
 
         var getActiveTab = function(){
-            return navigationTabs[navigationTabs.length - 1];
+            if(navigationTabs.length>0) {
+                return navigationTabs[navigationTabs.length - 1];
+            }
+            return '';
         }
 
         $scope.isActiveTab = function (tabName) {
@@ -551,6 +622,11 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                     $scope.activeTab = nextWizardTab;
                 });
                 $scope.activeTab = nextWizardTab;
+            } else if (nextWizardTab == "add-locations"){
+                $scope.loadLocations().then(()=>{
+                    $scope.activeTab = nextWizardTab;
+                });
+                $scope.activeTab = nextWizardTab;
             } else {
                 $scope.activeTab = nextWizardTab;
             }
@@ -559,7 +635,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 navigationTabs.push(nextWizardTab);
             }
         }
-        loadWizardTab('description'); //initialize first page of wizard
+        var activeTab = getActiveTab();
+        loadWizardTab(activeTab == ''?'description':activeTab); //initialize first page of wizard
 
         $scope.goToPreviousWizardTab = function(){
             if(navigationTabs.length > 1){

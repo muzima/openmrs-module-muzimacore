@@ -300,7 +300,7 @@
                 <label class="w-25"><input type="radio" name="willAddConcepts"
                                            ng-value="true" ng-model="config.willAddConcepts"
                                            ng-click="goToNextWizardTab('add-concepts')"> Yes</label>
-                <label  class="w-25"><input type="radio" name="willAddConcepts" value="false" ng-model="config.willAddConcepts"> No</label>
+                <label  class="w-25"><input type="radio" name="willAddConcepts" ng-value="false" ng-model="config.willAddConcepts"> No</label>
             </div>
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
@@ -323,7 +323,7 @@
                 <label class="alert alert-success w-100">Please select Concepts to be downloaded to the mobile application:</label>
                 <table class="col-md-12 table-borderless">
                     <tr align="center">
-                        <td align="left">
+                        <td align="left" class="wizard-search-container">
                             <input type="text" class="form-control" ng-model="search.concepts" placeholder="Search from the Server ..." autocomplete="off"
                                    uib-typeahead="concept as concept.name.name for concept in concepts | filter:$viewValue | limitTo:15"
                                    uib-typeahead-wait-ms="500" typeahead-on-select="addConcept($item)" uib-typeahead-editable="false"/>
@@ -384,15 +384,77 @@
                     <a class="learn-more">Learn more</a>
                 </label>
                 <label class="alert alert-success w-100">
-                    Please search and select Encounter Location(s) you want downloaded to mUzima for this program.
+                    Do you want to add Location(s) to be downloaded to mUzima for this program.
                 </label>
-                <input class="form-control" type="search">
+                <label class="w-25"><input type="radio" name="willAddLocations"
+                                           ng-value="true" ng-model="config.willAddLocations"
+                                           ng-click="goToNextWizardTab('add-locations')"> Yes</label>
+                <label  class="w-25"><input type="radio" name="willAddLocations" ng-value="false" ng-model="config.willAddLocations"> No</label>
             </div>
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-success btn-md pull-right"  ng-click="goToNextWizardTab('providers')">
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willAddLocations ? goToNextWizardTab('add-locations'):goToNextWizardTab('providers')"
+                        ng-disabled="config.willAddLocations == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('add-locations')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="4"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row col-md-12"  style="margin-bottom: 75px">
+                <label class="alert alert-success w-100">Please search and select Encounter Location(s) you want downloaded to mUzima for this program.</label>
+                <table class="col-md-12 table-borderless">
+                    <tr align="center">
+                        <td align="left" class="wizard-search-container">
+                            <input type="text" class="form-control" id="muzimaLocation" ng-model="search.locations"
+                                   placeholder="Search location by name ..." autocomplete="off"
+                                   uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
+                                   uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr align="center">
+                        <td width="45%" align="left">
+                            <div class="card">
+                                <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Available locations</label>
+                                <select  ng-disabled="specialFields.extractingMeta" size="10" id="availableNotUsedLocations" ng-model="selected.eLocations"
+                                         style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                    <option ng-repeat="location in availableNotUsedLocations" value="{{location}}"
+                                            class="list-group-item">{{location.name}}</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td width="10%" align="center">
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eLocations.length" ng-click="moveSelectedLocations()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedLocations.length" ng-click="moveAllAvailableLocations()" style="width: 50px; height: 20px; padding: 0">>></button>
+                        </td>
+                        <td width="45%" align="left" valign="top">
+                            <div class="card">
+                                <label for="selectedLocations" class="w-100  card-header alert-primary">Selected Locations</label>
+                                <select class="list-group list-group-flush" size="15" id="selectedLocations" ng-model="selected.locations"
+                                        style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                    <option ng-repeat="location in configLocations" value="{{location}}"
+                                            class="list-group-item">{{location.name}}</option>
+                                </select>
+                                <button type="submit" ng-show="selected.locations.length" ng-click="removeSelectedLocations()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('providers')">
                     Next <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
