@@ -1,38 +1,38 @@
 <div>
-    <div class="modal-header">
+    <div class="modal-header alert-primary">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Please specify setting value</h3>
+        <label>Please specify setting value</label>
     </div>
     <div class="modal-body">
         <div class="row">
             <div class="col-lg-2">
-                <h5>Name:</h5>
+                <label for="settingName">Name:</label>
             </div>
             <div class="col-lg-10">
-                <input class="col-lg-10 form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+                <input id="settingName" class="col-lg-10 form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
             </div>
         </div>
         <div class="row">
             <div class="col-lg-2">
-                <h5>Property:</h5>
+                <label for="settingProperty">Property:</label>
             </div>
             <div class="col-lg-10">
-                <input class="col-lg-10 form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+                <input id="settingProperty" class="col-lg-10 form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
 
             </div>
         </div>
         <div class="row">
             <div class="col-lg-2">
-                <h5>Description:</h5>
+                <label for="settingDescription">Description:</label>
             </div>
             <div class="col-lg-10">
-                        <textarea class="col-lg-8 form-control" placeholder="Setting description ..." rows="7" disabled="" ng-model="setting.description">
+                        <textarea id="settingDescription" class="col-lg-8 form-control" placeholder="Setting description ..." rows="7" disabled="" ng-model="setting.description">
                         </textarea>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-2">
-                <h5>Value:</h5>
+                <label>Value:</label>
             </div>
             <div class="col-lg-10" ng-show="setting.datatype == 'STRING'">
                 <input class="col-lg-10 form-control" placeholder="Setting value ..." type="text" ng-model="setting.value">

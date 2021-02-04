@@ -13,6 +13,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.configProviders = [];
     $scope.extractedConcepts = [];
     $scope.extractedNotUsedConcepts = [];
+    $scope.availableNotUsedLocations = [];
     $scope.configConcepts = [];
     $scope.configSettings = [];
     $scope.retire_config = false;
@@ -84,6 +85,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         });
     }
 
+
     $scope.save = function (config) {
         $configs.saveConfiguration(config.uuid, config.name, config.description, createJson(config)).
         then(function () {
@@ -149,13 +151,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
     $scope.configHasRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
-            return configForm.discriminator.includes("registration");
+            return configForm.discriminator!= undefined && configForm.discriminator.includes("registration");
         });
     }
 
     $scope.configHasNonRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
-            return !configForm.discriminator.includes("registration");
+            return !(configForm.discriminator!=undefined && configForm.discriminator.includes("registration"));
         });
     }
 
@@ -256,6 +258,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     };
 
+
+
     $scope.chosenCohort = function (value) {
         $scope.selected.cohort = value;
     };
@@ -309,6 +313,15 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }, true);
 
+    $scope.loadLocations = function() {
+        return new Promise((resolve, reject) => {
+            $configs.searchConfigLocations().then(function (response) {
+                $scope.availableNotUsedLocations = response.data.objects;
+                resolve($scope.availableNotUsedLocations);
+            });
+        });
+    }
+
     $scope.addLocation = function(location) {
         var locationExists = _.find($scope.configLocations, function (configLocation) {
             return configLocation.uuid == location.uuid
@@ -316,6 +329,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         if (!locationExists) {
             $scope.configLocations.push(location);
             $scope.search.locations = '';
+
+            angular.forEach($scope.availableNotUsedLocations, function (availableLocation, index) {
+                if (location.uuid === availableLocation.uuid) {
+                    $scope.availableNotUsedLocations.splice(index, 1);
+                    $scope.selected.location = '';
+                }
+            });
         }
     };
 
@@ -332,6 +352,52 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         });
     };
 
+    $scope.removeSelectedLocations = function () {
+        if ($scope.selected.locations != undefined && $scope.selected.locations != null) {
+            angular.forEach($scope.selected.locations, function (location) {
+                var selectedLocation = JSON.parse(location);
+                var locationIndex = _.findIndex($scope.configLocations, function (configLocation) {
+                    return configLocation.uuid == selectedLocation.uuid
+                });
+
+                // remove it from configs
+                if (locationIndex >= 0) {
+                    $scope.configLocations.splice(locationIndex, 1);
+                    $scope.availableNotUsedLocations.push(selectedLocation);
+                }
+            });
+            $scope.selected.locations = [];
+        }
+    };
+
+    $scope.moveAllAvailableLocations = function () {
+        angular.forEach($scope.availableNotUsedLocations, function (eLocation) {
+            var locationExists = _.find($scope.configLocations, function (configLoction) {
+                return configLoction.uuid == eLocation.uuid
+            });
+
+            if (!locationExists)
+                $scope.configLocations.push(eLocation);
+        });
+        $scope.availableNotUsedLocations = [];
+    };
+
+    $scope.moveSelectedLocations = function () {
+        if ($scope.selected.eLocations != undefined && $scope.selected.eLocations != null) {
+            angular.forEach($scope.selected.eLocations, function (eLocation) {
+                var selectedLocation = JSON.parse(eLocation);
+                $scope.configLocations.push(selectedLocation);
+
+                angular.forEach($scope.availableNotUsedLocations, function (location, index) {
+                    if (location.uuid === selectedLocation.uuid) {
+                        $scope.availableNotUsedLocations.splice(index, 1);
+                    }
+                });
+            });
+            $scope.selected.eLocations = [];
+        }
+    };
+
     /****************************************************************************************
      ***** Group of methods to manipulate providers
      *****************************************************************************************/
@@ -344,6 +410,15 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }, true);
 
+    $scope.loadProviders = function() {
+        return new Promise((resolve, reject) => {
+            $configs.searchConfigProviders().then(function (response) {
+                $scope.availableNotUsedProviders = response.data.results;
+                resolve($scope.availableNotUsedProviders);
+            });
+        });
+    }
+
     $scope.addProvider = function(provider) {
         var providerExists = _.find($scope.configProviders, function (configProvider) {
             return configProvider.uuid == provider.uuid
@@ -351,6 +426,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         if (!providerExists) {
             $scope.configProviders.push(provider);
             $scope.search.providers = '';
+
+            angular.forEach($scope.availableNotUsedProviders, function (availableProvider, index) {
+                if (provider.uuid === availableProvider.uuid) {
+                    $scope.availableNotUsedProviders.splice(index, 1);
+                    $scope.selected.provider = '';
+                }
+            });
         }
     };
 
@@ -365,6 +447,51 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 $scope.selected.provider = '';
             }
         });
+    };
+
+    $scope.removeSelectedProviders = function () {
+        if ($scope.selected.providers != undefined && $scope.selected.providers != null) {
+            angular.forEach($scope.selected.providers, function (provider) {
+                var selectedProvider = JSON.parse(provider);
+                var providerIndex = _.findIndex($scope.configProviders, function (configProvider) {
+                    return configProvider.uuid == selectedProvider.uuid
+                });
+
+                if (providerIndex >= 0) {
+                    $scope.configProviders.splice(providerIndex, 1);
+                    $scope.availableNotUsedProviders.push(selectedProvider);
+                }
+            });
+            $scope.selected.providers = [];
+        }
+    };
+
+    $scope.moveAllAvailableProviders = function () {
+        angular.forEach($scope.availableNotUsedProviders, function (eProvider) {
+            var providerExists = _.find($scope.configProviders, function (configProvider) {
+                return configProvider.uuid == eProvider.uuid
+            });
+
+            if (!providerExists)
+                $scope.configProviders.push(eProvider);
+        });
+        $scope.availableNotUsedProviders = [];
+    };
+
+    $scope.moveSelectedProviders = function () {
+        if ($scope.selected.eProviders != undefined && $scope.selected.eProviders != null) {
+            angular.forEach($scope.selected.eProviders, function (eProvider) {
+                var selectedProvider = JSON.parse(eProvider);
+                $scope.configProviders.push(selectedProvider);
+
+                angular.forEach($scope.availableNotUsedProviders, function (provider, index) {
+                    if (provider.uuid === selectedProvider.uuid) {
+                        $scope.availableNotUsedProviders.splice(index, 1);
+                    }
+                });
+            });
+            $scope.selected.eProviders = [];
+        }
     };
 
     /****************************************************************************************
@@ -462,6 +589,15 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }, true);
 
+    $scope.loadSettings = function() {
+        return new Promise((resolve, reject) => {
+            $configs.searchConfigSettings().then(function (response) {
+                $scope.availableNotUsedSettings = response.data.objects;
+                resolve($scope.availableNotUsedSettings);
+            });
+        });
+    }
+
     $scope.formatSettingDisplay = function (setting) {
         var value = '';
         if (setting.datatype == 'BOOLEAN'){
@@ -477,6 +613,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         return setting.name + ' : ' + value;
     }
     var showSettingEditModal = function(setting) {
+        console.log("showSettingEditModal: "+setting.name);
         $scope.setting = setting;
         var modalInstance = $uibModal.open({
             animation: true,
@@ -506,6 +643,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     };
 
     $scope.chosenSetting = function (value) {
+        console.log("Set chosen setting: "+value);
         $scope.selected.setting = value;
     };
 
@@ -519,22 +657,77 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     };
 
     $scope.editSettingValue = function () {
+        if($scope.selected.settings != undefined && $scope.selected.settings.length == 1){
+            var selected = JSON.parse($scope.selected.settings[0]);
+            $scope.chosenSetting(selected.uuid);
+        }
         angular.forEach($scope.configSettings, function (configSetting, index) {
             if (configSetting.uuid === $scope.selected.setting) {
                 showSettingEditModal(configSetting);
+            } else {
+                console.log("Not equal: "+configSetting.uuid+" != "+$scope.selected.setting);
             }
         });
+    };
+
+    $scope.removeSelectedSettings = function () {
+        if ($scope.selected.settings != undefined && $scope.selected.settings != null) {
+            angular.forEach($scope.selected.settings, function (setting) {
+                var selectedSetting = JSON.parse(setting);
+                var settingIndex = _.findIndex($scope.configSettings, function (configSetting) {
+                    return configSetting.uuid == selectedSetting.uuid
+                });
+
+                if (settingIndex >= 0) {
+                    $scope.configSettings.splice(settingIndex, 1);
+                    $scope.availableNotUsedSettings.push(selectedSetting);
+                }
+            });
+            $scope.selected.settings = [];
+        }
+    };
+
+    $scope.moveAllAvailableSettings = function () {
+        angular.forEach($scope.availableNotUsedSettings, function (eSetting) {
+            var settingExists = _.find($scope.configSettings, function (configSetting) {
+                return configSetting.uuid == eSetting.uuid
+            });
+
+            if (!settingExists)
+                $scope.configSettings.push(eSetting);
+        });
+        $scope.availableNotUsedSettings = [];
+    };
+
+    $scope.moveSelectedSettings = function () {
+        if ($scope.selected.eSettings != undefined && $scope.selected.eSettings != null) {
+            angular.forEach($scope.selected.eSettings, function (eSetting) {
+                var selectedSetting = JSON.parse(eSetting);
+                $scope.configSettings.push(selectedSetting);
+
+                angular.forEach($scope.availableNotUsedSettings, function (setting, index) {
+                    if (setting.uuid === selectedSetting.uuid) {
+                        $scope.availableNotUsedSettings.splice(index, 1);
+                    }
+                });
+            });
+            $scope.selected.eSettings = [];
+        }
     };
 
     /****************************************************************************************
      ***** Group of methods to manipulate config wizard
      *****************************************************************************************/
+    var navigationTabs = [];
+
     var showConfigWizardModal = function() {
         $scope.showConfigWizard = true;
-        var navigationTabs = [];
 
         var getActiveTab = function(){
-            return navigationTabs[navigationTabs.length - 1];
+            if(navigationTabs.length>0) {
+                return navigationTabs[navigationTabs.length - 1];
+            }
+            return '';
         }
 
         $scope.isActiveTab = function (tabName) {
@@ -550,7 +743,18 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 $scope.loadCohorts().then(()=>{
                     $scope.activeTab = nextWizardTab;
                 });
-                $scope.activeTab = nextWizardTab;
+            } else if (nextWizardTab == "add-locations"){
+                $scope.loadLocations().then(()=>{
+                    $scope.activeTab = nextWizardTab;
+                });
+            } else if (nextWizardTab == "add-providers"){
+                $scope.loadProviders().then(()=>{
+                    $scope.activeTab = nextWizardTab;
+                });
+            } else if (nextWizardTab == "add-settings"){
+                $scope.loadSettings().then(()=>{
+                    $scope.activeTab = nextWizardTab;
+                });
             } else {
                 $scope.activeTab = nextWizardTab;
             }
@@ -559,7 +763,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 navigationTabs.push(nextWizardTab);
             }
         }
-        loadWizardTab('description'); //initialize first page of wizard
+        var activeTab = getActiveTab();
+        loadWizardTab(activeTab == ''?'description':activeTab); //initialize first page of wizard
 
         $scope.goToPreviousWizardTab = function(){
             if(navigationTabs.length > 1){
