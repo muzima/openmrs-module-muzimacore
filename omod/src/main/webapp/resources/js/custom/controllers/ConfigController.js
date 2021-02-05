@@ -764,6 +764,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             }
         }
         var activeTab = getActiveTab();
+
         loadWizardTab(activeTab == ''?'description':activeTab); //initialize first page of wizard
 
         $scope.goToPreviousWizardTab = function(){
