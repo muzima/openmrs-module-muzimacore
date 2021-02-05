@@ -609,11 +609,13 @@
                     <tr align="center">
                         <td width="45%" align="left">
                             <div class="card">
-                                <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings</label>
+                                <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings H</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedSettings" ng-model="selected.eSettings"
                                          style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="setting in availableNotUsedSettings" value="{{setting}}"
-                                            class="list-group-item">{{formatSettingDisplay(setting)}}</option>
+                                            class="list-group-item">
+                                        <div>H {{formatSettingDisplay(setting)}}</div>
+                                    </option>
                                 </select>
                             </div>
                         </td>
@@ -627,7 +629,9 @@
                                 <select class="list-group list-group-flush" size="15" id="selectedSettings" ng-model="selected.settings"
                                         style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
                                     <option ng-repeat="setting in configSettings" value="{{setting}}"
-                                            class="list-group-item">{{formatSettingDisplay(setting)}}</option>
+                                            class="list-group-item">
+                                        <div>H {{formatSettingDisplay(setting)}}</div>
+                                    </option>
                                 </select>
                                 <button type="submit" ng-show="selected.settings.length" ng-click="removeSelectedSettings()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
                                 <button type="submit" ng-show="selected.settings.length == 1" ng-click="editSettingValue()" class="btn btn-sm btn-outline-primary">Edit value</button>
@@ -640,7 +644,7 @@
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('settings')">
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('review')">
                     Next <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
@@ -652,15 +656,111 @@
         </div>
         <div class="col-md-9">
             <div style="width:100%">
-                <label class="alert alert-success">
-                    Review
+                <label class="alert alert-success w-100">
+                    Please review your preferences before saving
                 </label>
+                <label class="w-100">
+                    {{config.name}}
+                </label>
+                <label class="w-100">
+                    {{config.description}}
+                </label>
+                <hr>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="forms-tab" data-toggle="tab" href="#forms" role="tab"
+                           aria-controls="forms" aria-selected="true">Forms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="cohorts-tab" data-toggle="tab" href="#cohorts" role="tab"
+                           aria-controls="cohorts" aria-selected="false">Cohorts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#concepts" role="tab"
+                           aria-controls="concepts" aria-selected="false">Concepts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="locations-tab" data-toggle="tab" href="#locations" role="tab"
+                           aria-controls="locations" aria-selected="false">Locations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="providers-tab" data-toggle="tab" href="#providers" role="tab"
+                           aria-controls="providers" aria-selected="false">Providers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
+                           aria-controls="settings" aria-selected="false">Settings</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="forms" role="tabpanel" aria-labelledby="forms-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="form in configForms">
+                                {{form.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configForms.length">
+                            No forms added for this config
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="cohorts" role="tabpanel" aria-labelledby="cohorts-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="cohort in configCohorts">
+                                {{cohort.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configCohorts.length">
+                            No cohorts added for this config
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="concepts" role="tabpanel" aria-labelledby="concepts-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="concept in configConcepts">
+                                {{concept.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configConcepts.length">
+                            No Concepts added for this config
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="locations" role="tabpanel" aria-labelledby="locations-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="location in configLocations">
+                                {{location.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configLocations.length">
+                            No Locations added for this config
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="providers" role="tabpanel" aria-labelledby="providers-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="provider in configProviders">
+                                {{provider.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configProviders.length">
+                            No Providers added for this config
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="setting in configSettings">
+                                {{formatSettingDisplay(setting)}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configSettings.length">
+                            No Settings added for this config
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
                     <i class="fa fa-arrow-left"></i> Back
                 </button>
-                <button class="btn btn-success btn-md pull-right"  ng-click="goToNextWizardTab('review')">
+                <button class="btn btn-success btn-md pull-right"   ng-click="save(config)">
                     Save
                 </button>
             </div>

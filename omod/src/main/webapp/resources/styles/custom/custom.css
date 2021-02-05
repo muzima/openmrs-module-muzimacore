@@ -307,7 +307,7 @@ body{
 }
 
 .learn-more, .link{
-    color:#2196f3;
+    color:#2196f3 !important;
     text-decoration: underline;
 }
 
@@ -367,6 +367,8 @@ body{
     text-decoration: none;
 }
 
-
+.review-list-group-item{
+    color:#666;
+}
 
 
