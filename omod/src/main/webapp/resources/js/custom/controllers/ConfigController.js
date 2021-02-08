@@ -84,6 +84,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             });
         });
     }
+    $scope.loadForms();
 
 
     $scope.save = function (config) {
@@ -233,6 +234,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             resolve($scope.cohorts);
         });
     }
+    $scope.loadCohorts();
 
     $scope.$watch('search.cohorts', function (newValue, oldValue) {
         if (newValue != oldValue) {
@@ -321,6 +323,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             });
         });
     }
+    $scope.loadLocations();
 
     $scope.addLocation = function(location) {
         var locationExists = _.find($scope.configLocations, function (configLocation) {
@@ -410,6 +413,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }, true);
 
+    $scope.availableNotUsedProviders = [];
     $scope.loadProviders = function() {
         return new Promise((resolve, reject) => {
             $configs.searchConfigProviders().then(function (response) {
@@ -418,6 +422,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             });
         });
     }
+    $scope.loadProviders();
 
     $scope.addProvider = function(provider) {
         var providerExists = _.find($scope.configProviders, function (configProvider) {
@@ -597,6 +602,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             });
         });
     }
+    $scope.loadSettings();
 
     $scope.formatSettingDisplay = function (setting) {
         var value = '';
