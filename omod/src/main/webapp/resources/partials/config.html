@@ -66,104 +66,175 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="panel panel-default panel-body col-md-12">
+                            <div class="card card-body col-md-12">
                                 <uib-tabset active="active">
                                     <uib-tab index="0" heading="Forms">
-                                        <div class="row col-md-12">
-                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Form</strong>
+                                        <div class="row">
+                                            <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
+                                                <table class="table table-hover table-striped">
+                                                    <tr ng-repeat="muzimaform in muzimaforms">
+                                                        <td>
+                                                            <label class="w-100" title="{{muzimaform.form.discriminator}}">{{muzimaform.form.name}}
+                                                                <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
+                                                                       ng-click="toggleFormSelection(muzimaform.form)" type="checkbox"></label>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <label ng-show="!hasNonRegistrationForms() && !hasRegistrationForms()" class="alert alert-error">
+                                                    There are no mUzima forms available. Please click on
+                                                    <i><u>Upload new form</u></i> button to upload a form.
+                                                </label>
                                             </div>
-                                            <div class="col-sm-5" style="margin-top: 8px">
-                                                <input type="text" class="form-control" ng-model="search.forms" placeholder="Search form by name ..." autocomplete="off"
-                                                       uib-typeahead="form as form.name for form in forms | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addForm($item)" uib-typeahead-editable="false"/>
+                                            <div class="col-md-5">
+                                                <button class="btn btn-primary" ng-click="goToNextWizardTab('form-upload')">Upload new form</button>
                                             </div>
-                                        </div>
-                                        <div class="row col-md-12">
-                                            <select class="col-md-10 selectClass" size="8">
-                                                <option ng-click="chosenForm(form.uuid)" ng-repeat="form in configForms">{{form.name}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.form" ng-click="removeForm()" class="btn btn-sm">Remove Form</button>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="1" heading="Cohorts">
-                                        <div class="row col-md-12">
-                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Cohort</strong>
+                                        <div class="row">
+                                            <div class="col-md-7" style="max-height: 285px; overflow-y:scroll">
+                                                <table class="table table-hover table-striped">
+                                                    <tr ng-repeat="cohort in cohorts">
+                                                        <td>
+                                                            <label class="w-100" title="{{cohort.description}}">{{cohort.name}}
+                                                                <input class="pull-right" ng-checked="cohortExistsInConfig(cohort)"
+                                                                       ng-click="toggleCohortSelection(cohort)" type="checkbox"></label>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <label ng-hide="hasDefinedCohorts()" class="alert alert-error">
+                                                    There are no Cohorts available. Please click on
+                                                    <i><u>Define new cohort</u></i> button to create a new one.
+                                                </label>
                                             </div>
-                                            <div class="col-sm-5" style="margin-top: 8px">
-                                                <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
-                                                       uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addCohort($item)" uib-typeahead-editable="false"/>
+                                            <div class="col-md-5">
+                                                <button class="btn btn-primary" ng-click="goToNextWizardTab('create-cohort-definition')">Define new cohort</button>
                                             </div>
-                                        </div>
-                                        <div class="row col-md-12">
-                                            <select class="col-md-10 selectClass" size="8">
-                                                <option ng-click="chosenCohort(cohort.uuid)" ng-repeat="cohort in configCohorts">{{cohort.name}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.cohort" ng-click="removeCohort()" class="btn btn-sm">Remove Cohort</button>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="2" heading="Locations">
                                         <div class="row col-md-12">
-                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Location</strong>
-                                            </div>
-                                            <div class="col-sm-5" style="margin-top: 8px">
-                                                <input type="text" class="form-control" id="muzimaLocation" ng-model="search.locations"
-                                                       placeholder="Search location by name ..." autocomplete="off"
-                                                       uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
-                                            </div>
-                                        </div>
-                                        <div class="row col-md-12">
-                                            <select class="col-md-10 selectClass" size="8">
-                                                <option ng-click="chosenLocation(location.uuid)" ng-repeat="location in configLocations">{{location.name}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.location" ng-click="removeLocation()" class="btn btn-sm">Remove Cohort</button>
+                                            <table class="col-md-12 table-borderless">
+                                                <tr align="center">
+                                                    <td align="left" class="wizard-search-container">
+                                                        <input type="text" class="form-control" id="muzimaLocation" ng-model="search.locations"
+                                                               placeholder="Search location by name ..." autocomplete="off"
+                                                               uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedLocations" style="">Available locations</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedLocations" ng-model="selected.eLocations"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="location in availableNotUsedLocations" value="{{location}}"
+                                                                        class="list-group-item">{{location.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eLocations.length" ng-click="moveSelectedLocations()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedLocations.length" ng-click="moveAllAvailableLocations()" style="width: 50px; height: 20px; padding: 0">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedLocations" class="w-100  card-header alert-primary">Selected Locations</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedLocations" ng-model="selected.locations"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                                                <option ng-repeat="location in configLocations" value="{{location}}"
+                                                                        class="list-group-item">{{location.name}}</option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.locations.length" ng-click="removeSelectedLocations()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="3" heading="Providers">
                                         <div class="row col-md-12">
-                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Provider</strong>
-                                            </div>
-                                            <div class="col-sm-5" style="margin-top: 8px">
-                                                <input type="text" class="form-control" ng-model="search.providers" placeholder="Search provider by name ..." autocomplete="off"
-                                                       uib-typeahead="provider as provider.name for provider in providers | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
-                                            </div>
-                                        </div>
-                                        <div class="row col-md-12">
-                                            <select class="col-md-10 selectClass" size="8">
-                                                <option ng-click="chosenProvider(provider.uuid)" ng-repeat="provider in configProviders">{{provider.name}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.provider" ng-click="removeProvider()" class="btn btn-sm">Remove Provider</button>
+                                            <table class="col-md-12 table-borderless">
+                                                <tr align="center">
+                                                    <td align="left" class="wizard-search-container">
+                                                        <input type="text" class="form-control" id="muzimaProvider" ng-model="search.providers"
+                                                               placeholder="Search provider by name ..." autocomplete="off"
+                                                               uib-typeahead="provider as provider.name for provider in providers | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedProviders" style="">Available providers</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedProviders" ng-model="selected.eProviders"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="provider in availableNotUsedProviders" value="{{provider}}"
+                                                                        class="list-group-item">{{provider.name}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eProviders.length" ng-click="moveSelectedProviders()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedProviders.length" ng-click="moveAllAvailableProviders()" style="width: 50px; height: 20px; padding: 0">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedProviders" class="w-100  card-header alert-primary">Selected Providers</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedProviders" ng-model="selected.providers"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                                                <option ng-repeat="provider in configProviders" value="{{provider}}"
+                                                                        class="list-group-item">{{provider.name}}</option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.providers.length" ng-click="removeSelectedProviders()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="4" heading="Concepts">
                                         <div class="row col-md-12">
                                             <table class="col-md-12 table-borderless">
                                                 <tr align="center">
-                                                    <td width="45%" align="left">
-                                                        <label for="selectedConcepts" style="margin-top: 10px">Selected Concepts</label>
-                                                        <input type="text" class="form-control" ng-model="search.concepts" placeholder="Add from the Server ..." autocomplete="off"
+                                                    <td align="left" class="wizard-search-container">
+                                                        <input type="text" class="form-control" ng-model="search.concepts" placeholder="Search from the Server ..." autocomplete="off"
                                                                uib-typeahead="concept as concept.name.name for concept in concepts | filter:$viewValue | limitTo:15"
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addConcept($item)" uib-typeahead-editable="false"/>
-                                                        <select class="selectClass" size="10" id="selectedConcepts" ng-model="selected.concepts"style="width: 100%; font-size: 11px" multiple="multiple">
-                                                            <option ng-repeat="concept in configConcepts" value="{{concept}}">{{concept.name}}</option>
-                                                        </select>
-                                                        <button type="submit" ng-disabled="!selected.concepts.length" ng-click="removeSelected()" class="btn btn-sm">Remove Selected</button>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Concepts extracted from forms</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}"
+                                                                        class="list-group-item">{{concept.name}}</option>
+                                                            </select>
+                                                        </div>
                                                     </td>
                                                     <td width="10%" align="center">
-                                                        <button title="Move Selected" class="btn btn-sm" ng-disabled="!selected.eConcepts.length" ng-click="moveSelected()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">&lt;</button><br><br>
-                                                        <button title="Move All" class="btn btn-sm" ng-disabled="!extractedNotUsedConcepts.length" ng-click="moveAll()" style="width: 50px; height: 20px; padding: 0">&lt;&lt;</button>
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eConcepts.length" ng-click="moveSelected()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!extractedNotUsedConcepts.length" ng-click="moveAll()" style="width: 50px; height: 20px; padding: 0">>></button>
                                                     </td>
                                                     <td width="45%" align="left" valign="top">
-                                                        <label for="extractedNotUsedConcepts" style="margin-top: 10px">Form Concepts</label>
-                                                        <select class="selectClass" ng-disabled="specialFields.extractingMeta" size="14" id="extractedNotUsedConcepts" ng-model="selected.eConcepts" style="width: 100% ; font-size: 11px" multiple="multiple">
-                                                            <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}">{{concept.name}}</option>
-                                                        </select>
+                                                        <div class="card">
+                                                            <label for="selectedConcepts" class="w-100  card-header alert-primary">Selected Concepts</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedConcepts" ng-model="selected.concepts"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                                                <option ng-repeat="concept in configConcepts" value="{{concept}}"
+                                                                        class="list-group-item">{{concept.name}}</option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.concepts.length" ng-click="removeSelected()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -171,22 +242,50 @@
                                     </uib-tab>
                                     <uib-tab index="5" heading="Settings">
                                         <div class="row col-md-12">
-                                            <div class="col-sm-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Setting</strong>
-                                            </div>
-                                            <div class="col-sm-5" style="margin-top: 8px">
-                                                <input type="text" class="form-control" ng-model="search.settings" placeholder="Search settings by name ..." autocomplete="off"
-                                                       uib-typeahead="setting as setting.name for setting in settings | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addSetting($item)" uib-typeahead-editable="false"/>
-                                            </div>
-                                        </div>
-                                        <div class="row col-md-12">
-                                            <select class="col-md-10 selectClass" size="8">
-                                                <option ng-click="chosenSetting(setting.uuid)" ng-repeat="setting in configSettings">{{formatSettingDisplay(setting)}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.setting" ng-click="removeSetting()" class="btn btn-sm">Remove Setting</button>
-                                            <br/>
-                                            <button type="submit" ng-disabled="!selected.setting" ng-click="editSettingValue()" class="btn btn-sm">Edit Setting Value</button>
+                                            <table class="col-md-12 table-borderless">
+                                                <tr align="center">
+                                                    <td align="left" class="wizard-search-container">
+                                                        <input type="text" class="form-control" ng-model="search.settings"
+                                                               placeholder="Search settings by name ..." autocomplete="off"
+                                                               uib-typeahead="setting as setting.name for setting in settings | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addSetting($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedSettings" ng-model="selected.eSettings"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="setting in availableNotUsedSettings" value="{{setting}}"
+                                                                        class="list-group-item">
+                                                                    <div>{{formatSettingDisplay(setting)}}</div>
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eSettings.length" ng-click="moveSelectedSettings()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedSettings.length" ng-click="moveAllAvailableSettings()" style="width: 50px; height: 20px; padding: 0">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedSettings" class="w-100  card-header alert-primary">Selected Config settings</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedSettings" ng-model="selected.settings"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                                                <option ng-repeat="setting in configSettings" value="{{setting}}"
+                                                                        class="list-group-item">
+                                                                    <div>H {{formatSettingDisplay(setting)}}</div>
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.settings.length" ng-click="removeSelectedSettings()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                            <button type="submit" ng-show="selected.settings.length == 1" ng-click="editSettingValue()" class="btn btn-sm btn-outline-primary">Edit value</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                 </uib-tabset>
