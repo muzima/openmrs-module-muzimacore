@@ -117,7 +117,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
             $('.messages').hide();
         });
 
-        $('.icon-edit').click(function(){
+        $('.fa-edit').click(function(){
             $('#editJsonSection').show();
             $( "#btnQueue" ).prop( "disabled", true );
             $( "#btnCancelQueue" ).prop( "disabled", true );
