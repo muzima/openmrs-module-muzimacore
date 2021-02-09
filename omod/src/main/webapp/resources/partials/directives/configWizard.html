@@ -655,7 +655,7 @@
             <config-wizard-side-nav wizard-stage="8"></config-wizard-side-nav>
         </div>
         <div class="col-md-9">
-            <div style="width:100%">
+            <div style="width:100%; max-height: 50%">
                 <label class="alert alert-success w-100">
                     Please review your preferences before saving
                 </label>
@@ -692,7 +692,7 @@
                            aria-controls="settings" aria-selected="false">Settings</a>
                     </li>
                 </ul>
-                <div class="tab-content" id="myTabContent">
+                <div class="tab-content" id="wizard-review-content">
                     <div class="tab-pane fade show active" id="forms" role="tabpanel" aria-labelledby="forms-tab">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item review-list-group-item table-hover" ng-repeat="form in configForms">
@@ -755,6 +755,7 @@
                         </div>
                     </div>
                 </div>
+                <hr>
             </div>
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
