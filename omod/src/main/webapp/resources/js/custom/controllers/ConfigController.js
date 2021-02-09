@@ -14,6 +14,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.extractedConcepts = [];
     $scope.extractedNotUsedConcepts = [];
     $scope.availableNotUsedLocations = [];
+    $scope.availableNotUsedForms = [];
     $scope.configConcepts = [];
     $scope.configSettings = [];
     $scope.retire_config = false;
@@ -24,6 +25,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     // initialize the view to be read only
     $scope.mode = "view";
     $scope.uuid = $routeParams.uuid;
+
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
         $('#wait').hide();
@@ -69,6 +71,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $scope.specialFields.stillLoading=false;
     });
 
+    $scope.isConfigNameEmpty = function(){
+        return $scope.config.name == null || $scope.config.name.trim() === ''
+    }
+
     $scope.loadForms = function() {
         return new Promise((resolve, reject) => {
             FormService.all().then(function (response) {
@@ -84,7 +90,9 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             });
         });
     }
-    $scope.loadForms();
+    $scope.loadForms().then(()=>{
+        $scope.availableNotUsedForms = $scope.muzimaforms;
+    });
 
 
     $scope.save = function (config) {
@@ -888,6 +896,37 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     var launchWizard = $routeParams.launchWizard;
     if(launchWizard != undefined && launchWizard == true){
         $scope.launchWizard();
+    }
+
+    $scope.uploadNewFormInModal = function(){
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: '../../moduleResources/muzimacore/partials/directives/formUploadInModal.html',
+            size: 'xl',
+            scope: $scope,
+            resolve: {
+                items: function () {
+                    return true;
+                }
+            }
+        });
+
+        $scope.dismiss = function(){
+            modalInstance.close();
+        }
+    }
+
+    $scope.hasMuzimaForms = function(){
+        console.log("Muzima forms: "+$scope.muzimaforms.length);
+        return $scope.muzimaforms.length > 0
+    }
+
+    $scope.createNewFormDefinition = function(){
+
+    }
+
+    $scope.createNewFormInConfigWizard = function(){
+        $scope.goToNextWizardTab('create-form-definition')
     }
 
     /****************************************************************************************

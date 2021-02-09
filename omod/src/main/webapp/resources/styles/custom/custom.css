@@ -374,18 +374,9 @@ body{
 #wizard-review-content{
     height:300px;overflow-y:scroll;margin-bottom:60px;
 }
-
-/*.tab-pane {*/
-
-/*    border-left: 1px solid #ddd;*/
-/*    border-right: 1px solid #ddd;*/
-/*    border-bottom: 1px solid #ddd;*/
-/*    border-radius: 0px 0px 5px 5px;*/
-/*    padding: 10px;*/
-/*}*/
-
-/*.nav-tabs {*/
-/*    margin-bottom: 0;*/
-/*}*/
+.no-config-data-message{
+    color:#000;
+    font-size: 1.5em;
+}
 
 

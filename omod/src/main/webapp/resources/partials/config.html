@@ -11,7 +11,7 @@
                     <tr>
                         <td>
                             <div class="col-md-12">
-                                <input class="form-control" placeholder="Configuration name ..." type="text" disabled="" ng-model="config.name">
+                                <input class="form-control" ng-required="true" placeholder="Configuration name ..." type="text" disabled="" ng-model="config.name">
                             </div>
                             <div class="col-md-12">
 									<textarea class="form-control" placeholder="Configuration description ..." rows="4" disabled="" ng-model="config.description">
@@ -57,7 +57,8 @@
                     <tr>
                         <td>
                             <div class=" col-md-12">
-                                <input class="form-control" placeholder="Configuration name ..." type="text" ng-model="config.name">
+                                <input class="form-control" placeholder="Configuration name (Required) ..."
+                                       type="text" ng-model="config.name">
                             </div>
                             <div class="col-md-12">
                                 <textarea class="form-control" placeholder="Configuration description ..." rows="4" ng-model="config.description"></textarea>
@@ -69,30 +70,55 @@
                             <div class="card card-body col-md-12">
                                 <uib-tabset active="active">
                                     <uib-tab index="0" heading="Forms">
-                                        <div class="row">
-                                            <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
-                                                <table class="table table-hover table-striped">
-                                                    <tr ng-repeat="muzimaform in muzimaforms">
-                                                        <td>
-                                                            <label class="w-100" title="{{muzimaform.form.discriminator}}">{{muzimaform.form.name}}
-                                                                <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
-                                                                       ng-click="toggleFormSelection(muzimaform.form)" type="checkbox"></label>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                                <label ng-show="!hasNonRegistrationForms() && !hasRegistrationForms()" class="alert alert-error">
-                                                    There are no mUzima forms available. Please click on
-                                                    <i><u>Upload new form</u></i> button to upload a form.
-                                                </label>
-                                            </div>
-                                            <div class="col-md-5">
-                                                <button class="btn btn-primary" ng-click="goToNextWizardTab('form-upload')">Upload new form</button>
-                                            </div>
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
+                                                <tr align="center">
+                                                    <td align="left" class="">
+                                                        <input type="text" class="form-control" id="muzimaForm" ng-model="search.forms"
+                                                               placeholder="Search form by name ..." autocomplete="off"
+                                                               uib-typeahead="form as form.name for form in forms | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addForm($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td style="margin:auto"><button class="btn btn-primary" ng-click="uploadNewFormInModal()">Upload new form</button></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedForms" style="">Available Forms</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedForms" ng-model="selected.eForms"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="form in availableNotUsedForms" value="{{form}}"
+                                                                        class="list-group-item">{{form.form.name}}</option>
+                                                                <option ng-hide="hasMuzimaForms()" disabled class="no-config-data-message">
+                                                                    There are no forms available. Please click on
+                                                                    <i><u>Upload new form</u></i> button to upload a form.
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eForms.length" ng-click="moveSelectedForms()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedForms.length" ng-click="moveAllAvailableForms()" style="width: 50px; height: 20px; padding: 0">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedForms" class="w-100  card-header alert-primary">Selected Forms</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedForms" ng-model="selected.forms"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                                                <option ng-repeat="form in configForms" value="{{form}}"
+                                                                        class="list-group-item">{{form.name}}</option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.forms.length" ng-click="removeSelectedForms()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="1" heading="Cohorts">
                                         <div class="row">
-                                            <div class="col-md-7" style="max-height: 285px; overflow-y:scroll">
+                                            <div class="col-md-10" style="max-height: 285px; overflow-y:scroll">
                                                 <table class="table table-hover table-striped">
                                                     <tr ng-repeat="cohort in cohorts">
                                                         <td>
@@ -107,7 +133,7 @@
                                                     <i><u>Define new cohort</u></i> button to create a new one.
                                                 </label>
                                             </div>
-                                            <div class="col-md-5">
+                                            <div class="col-md-2" style="margin:auto">
                                                 <button class="btn btn-primary" ng-click="goToNextWizardTab('create-cohort-definition')">Define new cohort</button>
                                             </div>
                                         </div>
@@ -116,14 +142,14 @@
                                         <div class="row col-md-12">
                                             <table class="col-md-12 table-borderless">
                                                 <tr align="center">
-                                                    <td align="left" class="wizard-search-container">
+                                                    <td align="left" class="">
                                                         <input type="text" class="form-control" id="muzimaLocation" ng-model="search.locations"
                                                                placeholder="Search location by name ..." autocomplete="off"
                                                                uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
                                                     </td>
                                                     <td></td>
-                                                    <td></td>
+                                                    <td style="margin:auto"><button class="btn btn-primary" ng-click="createNewLocationInModal()">Create new location</button></td>
                                                 </tr>
                                                 <tr align="center">
                                                     <td width="45%" align="left">
@@ -159,14 +185,14 @@
                                         <div class="row col-md-12">
                                             <table class="col-md-12 table-borderless">
                                                 <tr align="center">
-                                                    <td align="left" class="wizard-search-container">
+                                                    <td align="left" class="">
                                                         <input type="text" class="form-control" id="muzimaProvider" ng-model="search.providers"
                                                                placeholder="Search provider by name ..." autocomplete="off"
                                                                uib-typeahead="provider as provider.name for provider in providers | filter:$viewValue | limitTo:8"
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
                                                     </td>
                                                     <td></td>
-                                                    <td></td>
+                                                    <td style="margin:auto"><button class="btn btn-primary" ng-click="createNewProviderInModal()">Create new provider</button></td>
                                                 </tr>
                                                 <tr align="center">
                                                     <td width="45%" align="left">
@@ -202,7 +228,7 @@
                                         <div class="row col-md-12">
                                             <table class="col-md-12 table-borderless">
                                                 <tr align="center">
-                                                    <td align="left" class="wizard-search-container">
+                                                    <td align="left" class="">
                                                         <input type="text" class="form-control" ng-model="search.concepts" placeholder="Search from the Server ..." autocomplete="off"
                                                                uib-typeahead="concept as concept.name.name for concept in concepts | filter:$viewValue | limitTo:15"
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addConcept($item)" uib-typeahead-editable="false"/>
@@ -244,7 +270,7 @@
                                         <div class="row col-md-12">
                                             <table class="col-md-12 table-borderless">
                                                 <tr align="center">
-                                                    <td align="left" class="wizard-search-container">
+                                                    <td align="left" class="">
                                                         <input type="text" class="form-control" ng-model="search.settings"
                                                                placeholder="Search settings by name ..." autocomplete="off"
                                                                uib-typeahead="setting as setting.name for setting in settings | filter:$viewValue | limitTo:8"
@@ -302,7 +328,7 @@
                         <td>
                             <div class="pull-right">
                                 <button ng-click="launchWizard($event)" class="btn btn-dark">Edit via config Wizard</button>
-                                <button type="submit" ng-click="save(config)" class="btn btn-success">Save</button>
+                                <button ng-disabled="isConfigNameEmpty()" type="submit" ng-click="save(config)" class="btn btn-success">Save</button>
                                 <button type="submit" ng-click="toggleRetireConfig()" class="btn btn-danger" ng-show="!retire_config && config.uuid">Retire</button>
                                 <button type="submit" ng-click="delete(config)" class="btn btn-danger" ng-show="retire_config">Retire</button>
                                 <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
