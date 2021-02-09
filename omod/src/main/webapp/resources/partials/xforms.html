@@ -1,17 +1,5 @@
 <div id="wide-sidebar" class="row" ng-init="init()">
-    <div class="col-lg-2">
-        <ul class="nav nav-tabs nav-stacked">
-            <li><a href="#/sources">Data Source</a></li>
-            <li><a href="#/configs">Setup Configurations</a></li>
-            <li><a href="#/queues">Queue Data</a></li>
-            <li><a href="#/registrations">Registrations</a></li>
-            <li class="navigation-active"><a href="#/forms">Muzima Forms</a></li>
-            <li><a href="#/errors">Error Data</a></li>
-            <li><a href="#/reportConfigs">Patient Reports</a></li>
-            <li><a href="#/settings">Settings</a></li>
-            <li><a href="#/cohortDefinitions">Cohort Definitions</a></li>
-        </ul>
-    </div>
+    <side-navigation menu-item="forms"></side-navigation>
     <div class="col-lg-9">
         <div class="clearfix">
             <div class="row navbar navbar-inverse navbar-custom">
@@ -23,12 +11,12 @@
 						</form>
                     </span>
                     <span class="nav navbar-nav" style="margin-right: 5px">
-                        <button type="button" class="btn btn-success dropdown-toggle navbar-btn" data-toggle="dropdown">
-                          Import <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#/import/forms" style="color: #323232 ;text-decoration: none">Upload</a></li>
-                        </ul>
+                        <a href="#/xforms" class="btn btn-success">
+                            Import x-forms
+                        </a>&nbsp;
+                        <a href="#/import/forms" class="btn btn-success">
+                            Upload
+                        </a>
 					</span>
                 </div>
             </div>

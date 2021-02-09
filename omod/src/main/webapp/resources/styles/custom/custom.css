@@ -371,4 +371,19 @@ body{
     color:#666;
 }
 
+ul.dropdown-menu.show > li > a {
+   margin-left: 1em;
+}
 
+ul.dropdown-menu.show > li : hover {
+   background:grey;
+}
+
+.navbar-nav {
+    display: -ms-flexbox;
+    -ms-flex-direction: inherit;
+    flex-direction: inherit;
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
