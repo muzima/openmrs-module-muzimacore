@@ -15,6 +15,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.extractedNotUsedConcepts = [];
     $scope.availableNotUsedLocations = [];
     $scope.availableNotUsedForms = [];
+    $scope.availableNotUsedCohorts = [];
     $scope.configConcepts = [];
     $scope.configSettings = [];
     $scope.retire_config = false;
@@ -46,6 +47,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                     $scope.configConcepts = configString.config["concepts"];
                 if (configString.config["settings"] != undefined)
                     $scope.configSettings = configString.config["settings"];
+                $scope.loadForms();
+                $scope.loadCohorts();
+                $scope.loadLocations();
+                $scope.loadProviders();
             }
         }).then(function () {
             $scope.bindData();
@@ -76,9 +81,14 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     }
 
     $scope.loadForms = function() {
+        $scope.availableNotUsedForms = [];
         return new Promise((resolve, reject) => {
-            FormService.all().then(function (response) {
-                $scope.muzimaforms = _.map(response.data.results, function (form) {
+            $configs.searchMuzimaForms().then(function (response) {
+                $scope.muzimaforms = _.map(response.data.objects, function (form) {
+                    if(!$scope.formExistsInConfig(form.uuid)){
+                        $scope.availableNotUsedForms.push(form);
+                        return false;//break from loop
+                    }
                     return {
                         form: form,
                         newTag: "",
@@ -90,9 +100,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             });
         });
     }
-    $scope.loadForms().then(()=>{
-        $scope.availableNotUsedForms = $scope.muzimaforms;
-    });
 
 
     $scope.save = function (config) {
@@ -152,7 +159,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     }, true);
 
 
-    var formExistsInConfig = function(formUuid){
+    $scope.formExistsInConfig = function(formUuid){
         return !!_.find($scope.configForms, function (configForm) {
             return configForm.uuid == formUuid;
         });
@@ -207,7 +214,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     }
 
     $scope.addForm = function(form) {
-        var formExists = formExistsInConfig(form.uuid);
+        var formExists = $scope.formExistsInConfig(form.uuid);
         if (!formExists) {
             addFormToConfig(form);
         }
@@ -230,6 +237,51 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         removeFormFromConfig($scope.selected.form);
     };
 
+
+    $scope.removeSelectedForms = function () {
+        if ($scope.selected.forms != undefined && $scope.selected.forms != null) {
+            angular.forEach($scope.selected.forms, function (form) {
+                var selectedForm = JSON.parse(form);
+                var formIndex = _.findIndex($scope.configForms, function (configForm) {
+                    return configForm.uuid == selectedForm.uuid
+                });
+
+                if (formIndex >= 0) {
+                    $scope.configForms.splice(formIndex, 1);
+                    $scope.availableNotUsedForms.push(selectedForm);
+                }
+            });
+            $scope.selected.forms = [];
+        }
+    };
+
+    $scope.moveAllAvailableForms = function () {
+        angular.forEach($scope.availableNotUsedForms, function (eForm) {
+            var formExists = _.find($scope.configForms, function (configForm) {
+                return configForm.uuid == eForm.uuid
+            });
+
+            if (!formExists)
+                $scope.configForms.push(eForm);
+        });
+        $scope.availableNotUsedForms = [];
+    };
+
+    $scope.moveSelectedForms = function () {
+        if ($scope.selected.eForms != undefined && $scope.selected.eForms != null) {
+            angular.forEach($scope.selected.eForms, function (eForm) {
+                var selectedForm = JSON.parse(eForm);
+                $scope.configForms.push(selectedForm);
+
+                angular.forEach($scope.availableNotUsedForms, function (form, index) {
+                    if (form.uuid === selectedForm.uuid) {
+                        $scope.availableNotUsedForms.splice(index, 1);
+                    }
+                });
+            });
+            $scope.selected.eForms = [];
+        }
+    };
     /****************************************************************************************
      ***** Group of methods to manipulate Cohorts
      *****************************************************************************************/
@@ -238,11 +290,17 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         return new Promise((resolve, reject) => {
             $cohortDefinitionService.getAllCohorts().then(function (response) {
                 $scope.cohorts = response.data.objects;
+                $scope.availableNotUsedCohorts = [];
+                $.each(response.data.objects, function(k,cohort){
+                    console.log("Comparing: "+cohort.name);
+                    if(!$scope.cohortExistsInConfig(cohort)){
+                        $scope.availableNotUsedCohorts.push(cohort);
+                    }
+                });
             });
             resolve($scope.cohorts);
         });
     }
-    $scope.loadCohorts();
 
     $scope.$watch('search.cohorts', function (newValue, oldValue) {
         if (newValue != oldValue) {
@@ -287,6 +345,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         return $scope.cohorts.length > 0
     }
 
+    $scope.hasCohorts = function(){
+        return $scope.availableNotUsedCohorts.length > 0
+    }
+
     $scope.configHasCohorts = function(){
         return $scope.configCohorts.length > 0;
     }
@@ -311,6 +373,51 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }
 
+    $scope.removeSelectedCohorts = function () {
+        if ($scope.selected.cohorts != undefined && $scope.selected.cohorts != null) {
+            angular.forEach($scope.selected.cohorts, function (cohort) {
+                var selectedCohort = JSON.parse(cohort);
+                var cohortIndex = _.findIndex($scope.configCohorts, function (configCohort) {
+                    return configCohort.uuid == selectedCohort.uuid
+                });
+
+// remove it from configs
+                if (cohortIndex >= 0) {
+                    $scope.configCohorts.splice(cohortIndex, 1);
+                    $scope.availableNotUsedCohorts.push(selectedCohort);
+                }
+            });
+            $scope.selected.cohorts = [];
+        }
+    };
+
+    $scope.moveAllAvailableCohorts = function () {
+        angular.forEach($scope.availableNotUsedCohorts, function (eCohort) {
+            var cohortExists = _.find($scope.configCohorts, function (configCohort) {
+                return configCohort.uuid == eCohort.uuid
+            });
+
+            if (!cohortExists)
+                $scope.configCohorts.push(eCohort);
+        });
+        $scope.availableNotUsedCohorts = [];
+    };
+
+    $scope.moveSelectedCohorts = function () {
+        if ($scope.selected.eCohorts != undefined && $scope.selected.eCohorts != null) {
+            angular.forEach($scope.selected.eCohorts, function (eCohort) {
+                var selectedCohort = JSON.parse(eCohort);
+                $scope.configCohorts.push(selectedCohort);
+
+                angular.forEach($scope.availableNotUsedCohorts, function (cohort, index) {
+                    if (cohort.uuid === selectedCohort.uuid) {
+                        $scope.availableNotUsedCohorts.splice(index, 1);
+                    }
+                });
+            });
+            $scope.selected.eCohorts = [];
+        }
+    };
     /****************************************************************************************
      ***** Group of methods to manipulate locations
      *****************************************************************************************/
@@ -326,17 +433,25 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.loadLocations = function() {
         return new Promise((resolve, reject) => {
             $configs.searchConfigLocations().then(function (response) {
-                $scope.availableNotUsedLocations = response.data.objects;
+                $scope.availableNotUsedLocations = [];
+                $.each(response.data.objects, function(k,location){
+                    if(!$scope.locationExistsInConfig(location)){
+                        $scope.availableNotUsedLocations.push(location);
+                    }
+                });
                 resolve($scope.availableNotUsedLocations);
             });
         });
     }
-    $scope.loadLocations();
 
-    $scope.addLocation = function(location) {
-        var locationExists = _.find($scope.configLocations, function (configLocation) {
+    $scope.locationExistsInConfig = function(location){
+        return !!_.find($scope.configLocations, function (configLocation) {
             return configLocation.uuid == location.uuid
         });
+    }
+
+    $scope.addLocation = function(location) {
+        var locationExists = $scope.locationExistsInConfig(location)
         if (!locationExists) {
             $scope.configLocations.push(location);
             $scope.search.locations = '';
@@ -409,6 +524,9 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     };
 
+    $scope.configHasLocations = function(){
+        return $scope.configLocations.length > 0;
+    }
     /****************************************************************************************
      ***** Group of methods to manipulate providers
      *****************************************************************************************/
@@ -425,17 +543,24 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.loadProviders = function() {
         return new Promise((resolve, reject) => {
             $configs.searchConfigProviders().then(function (response) {
-                $scope.availableNotUsedProviders = response.data.results;
+                $scope.availableNotUsedProviders = [];
+                $.each(response.data.results, function(k,provider){
+                    if(!$scope.providerExistsInConfig(provider)){
+                        $scope.availableNotUsedProviders.push(provider);
+                    }
+                });
                 resolve($scope.availableNotUsedProviders);
             });
         });
     }
-    $scope.loadProviders();
 
-    $scope.addProvider = function(provider) {
-        var providerExists = _.find($scope.configProviders, function (configProvider) {
+    $scope.providerExistsInConfig = function(provider){
+        return !!_.find($scope.configProviders, function (configProvider) {
             return configProvider.uuid == provider.uuid
         });
+    }
+    $scope.addProvider = function(provider) {
+        var providerExists = $scope.providerExistsInConfig(provider)
         if (!providerExists) {
             $scope.configProviders.push(provider);
             $scope.search.providers = '';
@@ -506,6 +631,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             $scope.selected.eProviders = [];
         }
     };
+
+    $scope.configHasProviders = function(){
+        return $scope.configProviders.length > 0;
+    }
 
     /****************************************************************************************
      ***** Group of methods to manipulate concepts
@@ -590,6 +719,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     };
 
 
+    $scope.configHasConcepts = function(){
+        return $scope.configConcepts.length > 0;
+    }
+
     /****************************************************************************************
      ***** Group of methods to manipulate settings
      *****************************************************************************************/
@@ -605,7 +738,12 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.loadSettings = function() {
         return new Promise((resolve, reject) => {
             $configs.searchConfigSettings().then(function (response) {
-                $scope.availableNotUsedSettings = response.data.objects;
+                $scope.availableNotUsedSettings = [];
+                $.each(response.data.objects, function(k,setting){
+                    if(!$scope.settingExistsInConfig(setting)){
+                        $scope.availableNotUsedSettings.push(setting);
+                    }
+                });
                 resolve($scope.availableNotUsedSettings);
             });
         });
@@ -627,7 +765,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         return setting.name + ' : ' + value;
     }
     var showSettingEditModal = function(setting) {
-        console.log("showSettingEditModal: "+setting.name);
         $scope.setting = setting;
         var modalInstance = $uibModal.open({
             animation: true,
@@ -657,7 +794,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     };
 
     $scope.chosenSetting = function (value) {
-        console.log("Set chosen setting: "+value);
         $scope.selected.setting = value;
     };
 
@@ -678,8 +814,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         angular.forEach($scope.configSettings, function (configSetting, index) {
             if (configSetting.uuid === $scope.selected.setting) {
                 showSettingEditModal(configSetting);
-            } else {
-                console.log("Not equal: "+configSetting.uuid+" != "+$scope.selected.setting);
             }
         });
     };
@@ -701,12 +835,15 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     };
 
+    $scope.settingExistsInConfig = function(setting){
+        return !!_.find($scope.configSettings, function (configSetting) {
+            return configSetting.uuid == setting.uuid;
+        });
+    }
+
     $scope.moveAllAvailableSettings = function () {
         angular.forEach($scope.availableNotUsedSettings, function (eSetting) {
-            var settingExists = _.find($scope.configSettings, function (configSetting) {
-                return configSetting.uuid == eSetting.uuid
-            });
-
+            var settingExists = $scope.settingExistsInConfig(eSetting);
             if (!settingExists)
                 $scope.configSettings.push(eSetting);
         });
@@ -729,6 +866,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     };
 
+    $scope.configHasSettings = function(){
+        return $scope.configSettings.length > 0;
+    }
+
     /****************************************************************************************
      ***** Group of methods to manipulate config wizard
      *****************************************************************************************/
@@ -749,10 +890,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
 
         var loadWizardTab = function (nextWizardTab, isBackNavigation) {
+            $scope.setupModalCaller = 'setupWizard';
             if(nextWizardTab == "registration-form-selection" || nextWizardTab == "other-forms-selection"){
                 $scope.loadForms().then(()=>{
                     $scope.activeTab = nextWizardTab;
                 });
+            } else if (nextWizardTab == "form-upload"){
+                $scope.activeTab = nextWizardTab;
             } else if (nextWizardTab == "cohorts-selection"){
                 $scope.loadCohorts().then(()=>{
                     $scope.activeTab = nextWizardTab;
@@ -792,24 +936,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             loadWizardTab(nextWizardTab,false);
         }
 
-        $scope.selectedForms = []
-
-        $scope.setSelectedForm = function (form) {
-            $scope.selectedForms.push(form.uuid);
-            //add to config
-            addFormToConfig(form);
-        }
-
-        $scope.unsetDeselectedForm = function(form){
-            var index = $scope.selectedForms.indexOf(form.uuid);
-            if(index > -1) {
-                $scope.selectedForms.splice(index, 1);
-                removeFormFromConfig(form.uuid);
-            }
-        }
-
         $scope.toggleFormSelection = function(form){
-            if(formExistsInConfig(form.uuid)){
+            if($scope.formExistsInConfig(form.uuid)){
                 removeFormFromConfig(form.uuid);
             } else {
                 addFormToConfig(form);
@@ -817,7 +945,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
 
         $scope.isFormSelected = function(formUuid){
-            return $scope.selectedForms.includes(formUuid) || formExistsInConfig(formUuid);
+            return $scope.selectedForms.includes(formUuid) || $scope.formExistsInConfig(formUuid);
         }
 
         $scope.isRegistrationForm = function(muzimaform){
@@ -858,16 +986,21 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             $scope.config.willAddCohorts = true;
         }
 
-        $scope.setNewFormMetadata = function (name, version, description,encounterType) {
-            $scope.newFormMetaData = {
-                name:name,
-                version:version,
-                description:description,
-                encounterType:encounterType,
-                uuid:'newFormMetadata'
-            }
-            $scope.goToPreviousWizardTab();
-        };
+        if($scope.configHasConcepts()){
+            $scope.config.willAddConcepts = true;
+        }
+
+        if($scope.configHasLocations()){
+            $scope.config.willAddLocations = true;
+        }
+
+        if($scope.configHasProviders()){
+            $scope.config.willAddProviders = true;
+        }
+
+        if($scope.configHasSettings()){
+            $scope.config.willAddSettings = true;
+        }
 
         var modalInstance = $uibModal.open({
             animation: true,
@@ -886,6 +1019,46 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
     }
 
+    $scope.selectedForms = []
+
+    $scope.setSelectedForm = function (form) {
+        $scope.selectedForms.push(form.uuid);
+        //add to config
+        addFormToConfig(form);
+    }
+
+    $scope.unsetDeselectedForm = function(form){
+        var index = $scope.selectedForms.indexOf(form.uuid);
+        if(index > -1) {
+            $scope.selectedForms.splice(index, 1);
+            removeFormFromConfig(form.uuid);
+        }
+    }
+
+    $scope.setNewFormMetadata = function (name, version, description,encounterType) {
+        $scope.newFormMetaData = {
+            name:name,
+            version:version,
+            description:description,
+            encounterType:encounterType,
+            uuid:'newFormMetadata'
+        }
+
+        if($scope.setupModalCaller == 'vanillaSetupCreator'){
+            $scope.loadVanillaSetupModal('form-upload');
+        } else if($scope.setupModalCaller == 'setupWizard'){
+            $scope.goToPreviousWizardTab();
+        }
+    };
+
+    $scope.resetNewFormCreationFields = function(){
+        $scope.name='';
+        $scope.description = '';
+        $scope.version = '';
+        $scope.encounterType = '';
+        $scope.newFormMetaData = {}
+    }
+
     $scope.launchWizard = function (e) {
         if(e != undefined) {
             e.preventDefault();
@@ -898,26 +1071,88 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $scope.launchWizard();
     }
 
-    $scope.uploadNewFormInModal = function(){
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: '../../moduleResources/muzimacore/partials/directives/formUploadInModal.html',
-            size: 'xl',
-            scope: $scope,
-            resolve: {
-                items: function () {
-                    return true;
-                }
-            }
-        });
+    $scope.uploadNewFormInModal = function() {
+        $scope.loadVanillaSetupModal('form-upload');
+    }
+    $scope.createNewCohortInModal = function() {
+        $scope.loadVanillaSetupModal('create-cohort-definition');
+    }
 
-        $scope.dismiss = function(){
-            modalInstance.close();
+    $scope.isVanillaSetupModalLoaded = false;
+
+    $scope.loadVanillaSetupModal = function(activeTab){
+        $scope.activeVanillaSetupModalTab = activeTab;
+        $scope.setupModalCaller = 'vanillaSetupCreator';
+
+        if(!$scope.isVanillaSetupModalLoaded) {
+            var vanillaModalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: '../../moduleResources/muzimacore/partials/directives/vanillaSetupModal.html',
+                size: 'xl',
+                scope: $scope,
+                resolve: {
+                    items: function () {
+                        return true;
+                    }
+                }
+            });
+            vanillaModalInstance.result.then(function(){
+                //Get triggers when modal is closed
+                $scope.isVanillaSetupModalLoaded = false;
+            }, function(){
+                //gets triggers when modal is dismissed
+                $scope.isVanillaSetupModalLoaded = false;
+            });
+            $scope.isVanillaSetupModalLoaded = true;
+
+            $scope.dismissVanillaSetupModal = function(){
+                vanillaModalInstance.close();
+                $scope.isVanillaSetupModalLoaded = false;
+            }
+        }
+    }
+
+    $scope.isActiveVanillaSetupModalTab = function (tabName) {
+        return $scope.activeVanillaSetupModalTab == tabName;
+    }
+
+    $scope.isVanillaSetupModalCaller = function(){
+        return $scope.setupModalCaller == 'vanillaSetupCreator';
+    }
+
+    $scope.isSetupWizardModalCaller = function(){
+        return $scope.setupModalCaller == 'setupWizard';
+    }
+
+    $scope.goToFormCreatorTab = function(){
+        if($scope.isVanillaSetupModalCaller()){
+            $scope.loadVanillaSetupModal('create-form-definition');
+        } else if($scope.isSetupWizardModalCaller()){
+            $scope.goToNextWizardTab('create-form-definition')
+        }
+    }
+
+    $scope.exitFormUploadTab = function(){
+        if($scope.setupModalCaller == 'vanillaSetupCreator'){
+            $scope.loadForms().then(()=>{
+                $scope.dismissVanillaSetupModal();
+            });
+        } else if($scope.setupModalCaller == 'setupWizard'){
+            $scope.goToPreviousWizardTab();
+        }
+    }
+
+    $scope.exitCohortCreationTab = function(){
+        if($scope.isVanillaSetupModalCaller()){
+            $scope.loadCohorts().then(()=>{
+                $scope.dismissVanillaSetupModal();
+            });
+        } else if($scope.isSetupWizardModalCaller()){
+            $scope.goToPreviousWizardTab();
         }
     }
 
     $scope.hasMuzimaForms = function(){
-        console.log("Muzima forms: "+$scope.muzimaforms.length);
         return $scope.muzimaforms.length > 0
     }
 

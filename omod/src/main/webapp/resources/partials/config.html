@@ -89,7 +89,7 @@
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedForms" ng-model="selected.eForms"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
                                                                 <option ng-repeat="form in availableNotUsedForms" value="{{form}}"
-                                                                        class="list-group-item">{{form.form.name}}</option>
+                                                                        class="list-group-item">{{form.name}}</option>
                                                                 <option ng-hide="hasMuzimaForms()" disabled class="no-config-data-message">
                                                                     There are no forms available. Please click on
                                                                     <i><u>Upload new form</u></i> button to upload a form.
@@ -117,25 +117,50 @@
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="1" heading="Cohorts">
-                                        <div class="row">
-                                            <div class="col-md-10" style="max-height: 285px; overflow-y:scroll">
-                                                <table class="table table-hover table-striped">
-                                                    <tr ng-repeat="cohort in cohorts">
-                                                        <td>
-                                                            <label class="w-100" title="{{cohort.description}}">{{cohort.name}}
-                                                                <input class="pull-right" ng-checked="cohortExistsInConfig(cohort)"
-                                                                       ng-click="toggleCohortSelection(cohort)" type="checkbox"></label>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                                <label ng-hide="hasDefinedCohorts()" class="alert alert-error">
-                                                    There are no Cohorts available. Please click on
-                                                    <i><u>Define new cohort</u></i> button to create a new one.
-                                                </label>
-                                            </div>
-                                            <div class="col-md-2" style="margin:auto">
-                                                <button class="btn btn-primary" ng-click="goToNextWizardTab('create-cohort-definition')">Define new cohort</button>
-                                            </div>
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
+                                                <tr align="center">
+                                                    <td align="left" class="">
+                                                        <input type="text" class="form-control" id="muzimaCohort" ng-model="search.cohorts"
+                                                               placeholder="Search cohort by name ..." autocomplete="off"
+                                                               uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addCohort($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td style="margin:auto"><button class="btn btn-primary" ng-click="createNewCohortInModal()">Define new cohort</button></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedCohorts" style="">Available Cohorts</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedCohorts" ng-model="selected.eCohorts"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="cohort in availableNotUsedCohorts" value="{{cohort}}"
+                                                                        class="list-group-item">{{cohort.name}}</option>
+                                                                <option ng-hide="hasCohorts()" disabled class="no-config-data-message">
+                                                                    There are no cohorts available. Please click on
+                                                                    <i><u>Define new cohort</u></i> button to create a cohort.
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eCohorts.length" ng-click="moveSelectedCohorts()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedCohorts.length" ng-click="moveAllAvailableCohorts()" style="width: 50px; height: 20px; padding: 0">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedCohorts" class="w-100  card-header alert-primary">Selected Cohorts</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedCohorts" ng-model="selected.cohorts"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                                                <option ng-repeat="cohort in configCohorts" value="{{cohort}}"
+                                                                        class="list-group-item">{{cohort.name}}</option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.cohorts.length" ng-click="removeSelectedCohorts()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="2" heading="Locations">
@@ -149,7 +174,7 @@
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
                                                     </td>
                                                     <td></td>
-                                                    <td style="margin:auto"><button class="btn btn-primary" ng-click="createNewLocationInModal()">Create new location</button></td>
+                                                    <td style="margin:auto"><button ng-hide="true" class="btn btn-primary" ng-click="createNewLocationInModal()">Create new location</button></td>
                                                 </tr>
                                                 <tr align="center">
                                                     <td width="45%" align="left">
@@ -192,7 +217,7 @@
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
                                                     </td>
                                                     <td></td>
-                                                    <td style="margin:auto"><button class="btn btn-primary" ng-click="createNewProviderInModal()">Create new provider</button></td>
+                                                    <td style="margin:auto"><button ng-hide="true" class="btn btn-primary" ng-click="createNewProviderInModal()">Create new provider</button></td>
                                                 </tr>
                                                 <tr align="center">
                                                     <td width="45%" align="left">
@@ -303,7 +328,7 @@
                                                                     style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
                                                                 <option ng-repeat="setting in configSettings" value="{{setting}}"
                                                                         class="list-group-item">
-                                                                    <div>H {{formatSettingDisplay(setting)}}</div>
+                                                                    <div>{{formatSettingDisplay(setting)}}</div>
                                                                 </option>
                                                             </select>
                                                             <button type="submit" ng-show="selected.settings.length" ng-click="removeSelectedSettings()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
