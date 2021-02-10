@@ -14,6 +14,7 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.service.ReportConfigurationService;
 import org.openmrs.module.muzima.model.ReportConfiguration;
 import org.openmrs.module.muzima.web.utils.WebConverter;
@@ -29,10 +30,9 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/module/muzimacore/reportConfigs.json")
 public class ReportConfigurationsController {
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/reportConfigs.json", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getReportConfigurations(final @RequestParam(value = "search") String search,
                                           final @RequestParam(value = "pageNumber") Integer pageNumber,
@@ -49,5 +49,12 @@ public class ReportConfigurationsController {
             response.put("objects", objects);
         }
       return response;
+    }
+
+    @RequestMapping(value = "/module/muzimacore/countReportConfigurations.json", method = RequestMethod.GET)
+    @ResponseBody
+    public int countReportConfigurations() {
+        ReportConfigurationService reportConfigurationService = Context.getService(ReportConfigurationService.class);
+        return reportConfigurationService.countReportConfigurations().intValue();
     }
 }

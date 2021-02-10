@@ -34,6 +34,7 @@ muzimaCoreModule.
             when('/reportConfig/:uuid', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
             when('/reportConfigs', {controller: ReportConfigurationsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfigurations.html'}).
             when('/createReportConfig/', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
+            when('/dashboard', {controller: DashboardCtrl, templateUrl: '../../moduleResources/muzimacore/partials/dashboard.html'}).
             otherwise({redirectTo: '/sources'});
     }]
 );
@@ -440,5 +441,42 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
         getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition,
         deleteCohortDefinition : deleteCohortDefinition,
         processCohortDefinition : processCohortDefinition
+    }
+});
+
+muzimaCoreModule.factory('$dashboardService', function ($http) {
+
+    var getSetupConfigCount = function () {
+        return $http.get("configCount.json");
+    };
+
+    var getMuzimaFormCountGroupedByDiscriminator = function () {
+        return $http.get("../../module/muzimacore/muzimaFormCountGroupedByDiscriminator.json");
+    };
+
+    var getQueueDataCountGroupedByDiscriminator = function () {
+        return $http.get("../../module/muzimacore/queueDataCountGroupedByDiscriminator.json");
+    };
+
+    var getErrorDataCountGroupedByDiscriminator = function(){
+        return $http.get("../../module/muzimacore/errorDataCountGroupedByDiscriminator.json");
+    };
+
+    var getCohortDefinitionCount = function(){
+        return $http.get("countCohortDefinations.json");
+    };
+
+    var getReportConfigurationCount = function(){
+        return $http.get("countReportConfigurations.json");
+    };
+
+
+    return {
+        getSetupConfigCount: getSetupConfigCount,
+        getMuzimaFormCountGroupedByDiscriminator: getMuzimaFormCountGroupedByDiscriminator,
+        getQueueDataCountGroupedByDiscriminator: getQueueDataCountGroupedByDiscriminator,
+        getErrorDataCountGroupedByDiscriminator: getErrorDataCountGroupedByDiscriminator,
+        getCohortDefinitionCount: getCohortDefinitionCount,
+        getReportConfigurationCount: getReportConfigurationCount
     }
 });

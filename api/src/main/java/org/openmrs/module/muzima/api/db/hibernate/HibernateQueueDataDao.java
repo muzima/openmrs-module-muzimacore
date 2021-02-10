@@ -15,8 +15,13 @@ package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.openmrs.module.muzima.api.db.QueueDataDao;
 import org.openmrs.module.muzima.model.QueueData;
+
+import java.util.List;
 
 /**
  */
@@ -29,5 +34,17 @@ public class HibernateQueueDataDao extends HibernateDataDao<QueueData> implement
      */
     protected HibernateQueueDataDao() {
         super(QueueData.class);
+    }
+
+    @Override
+    public List<Object[]> queueDataCountGroupedByDiscriminator() {
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(QueueData.class);
+        ProjectionList projectionList = Projections.projectionList();
+        projectionList.add(Projections.groupProperty("discriminator"));
+        projectionList.add(Projections.rowCount());
+        criteria.setProjection(projectionList);
+        List<Object[]> results = criteria.list();
+
+        return results;
     }
 }

@@ -37,6 +37,7 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/ReportConfigurationController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/CohortDefinitionController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/MergeController.js"/>
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/DashboardController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/fileUpload.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/sideNav.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/directives/configWizard.js"/>

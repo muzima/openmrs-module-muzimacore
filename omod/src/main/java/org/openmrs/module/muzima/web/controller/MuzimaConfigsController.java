@@ -32,10 +32,9 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Controller
-@RequestMapping(value = "/module/muzimacore/configs.json")
 public class MuzimaConfigsController {
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/configs.json", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getConfigs(final @RequestParam(value = "search") String search,
                                          final @RequestParam(value = "pageNumber") Integer pageNumber,
@@ -55,5 +54,12 @@ public class MuzimaConfigsController {
             response.put("objects", objects);
         }
         return response;
+    }
+
+    @RequestMapping(value = "/module/muzimacore/configCount.json", method = RequestMethod.GET)
+    @ResponseBody
+    public int getConfigCount() {
+        MuzimaConfigService configService = Context.getService(MuzimaConfigService.class);
+        return configService.countConfigs("").intValue();
     }
 }

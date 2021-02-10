@@ -525,4 +525,8 @@ public interface DataService extends OpenmrsService {
      * @should return with status 'unknown' if form data with given formDataUuid cannot be traced
      */
     FormDataStatus getFormDataStatusByFormDataUuid(String formDataUuid);
+
+    List<Object[]> queueDataCountGroupedByDiscriminator();
+
+    List<Object[]> errorDataCountGroupedByDiscriminator();
 }

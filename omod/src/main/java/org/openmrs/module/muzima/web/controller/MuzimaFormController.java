@@ -84,4 +84,15 @@ public class MuzimaFormController {
     private String readStream(final InputStream stream) throws IOException {
         return new Scanner(stream, "UTF-8").useDelimiter("\\A").next();
     }
+
+    @ResponseBody
+    @RequestMapping(value = "muzimaFormCountGroupedByDiscriminator.json", method = RequestMethod.GET)
+    public Map<String, Object> getMuzimaFormCountGroupedByDiscriminator() {
+        MuzimaFormService service = Context.getService(MuzimaFormService.class);
+        List<Object[]> results = service.getFormCountGroupedByDiscriminator();
+        Map<String, Object> convertedMap = new HashMap<String, Object>();
+        convertedMap.put("results",WebConverter.convertList(results));
+        System.out.println(convertedMap);
+        return convertedMap;
+    }
 }

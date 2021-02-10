@@ -361,4 +361,15 @@ public class WebConverter {
         }
         return map;
     }
+
+    public static List<Map<String,Object>>  convertList(List<Object[]> results) {
+         List<Map<String,Object>> mapList = new ArrayList<Map<String, Object>>();
+         for (Object[] result : results) {
+             Map<String, Object> map = new HashMap<String, Object>();
+             map.put("discriminator", result[0]);
+             map.put("count",result[1]);
+             mapList.add(map);
+        }
+         return mapList;
+    }
 }

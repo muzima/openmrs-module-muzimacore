@@ -35,12 +35,11 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Controller
-@RequestMapping(value = "/module/muzimacore/queues.json")
 public class QueuesController {
 
     protected Log log = LogFactory.getLog(getClass());
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/queues.json", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getQueues(final @RequestParam(value = "search") String search,
                                          final @RequestParam(value = "pageNumber") Integer pageNumber,
@@ -63,7 +62,7 @@ public class QueuesController {
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/module/muzimacore/queues.json", method = RequestMethod.POST)
     public void deleteQueue(final @RequestBody Map<String, Object> map) {
         if (Context.isAuthenticated()) {
             List<String> uuidList = (List<String>) map.get("uuidList");
@@ -73,5 +72,15 @@ public class QueuesController {
                 dataService.purgeQueueData(queueData);
             }
         }
+    }
+
+    @RequestMapping(value = "/module/muzimacore/queueDataCountGroupedByDiscriminator.json", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getQueueDataCountGroupedByDiscriminator(){
+        DataService dataService = Context.getService(DataService.class);
+        List<Object[]> results = dataService.queueDataCountGroupedByDiscriminator();
+        Map<String, Object> convertedMap = new HashMap<String, Object>();
+        convertedMap.put("results",WebConverter.convertList(results));
+        return convertedMap;
     }
 }

@@ -56,5 +56,7 @@ public interface MuzimaFormService extends OpenmrsService {
 
     List<Form> getNonMuzimaForms();
 
+    List<Object[]> getFormCountGroupedByDiscriminator();
+
     ValidationMessages validateODK(String xml) throws Exception;
 }
