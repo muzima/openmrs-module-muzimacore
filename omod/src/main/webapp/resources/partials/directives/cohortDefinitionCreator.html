@@ -14,7 +14,7 @@
 </div>
 <div class="row">
     <div class="col-sm-3">
-        Description:
+        Description <span class="required">*</span>:
     </div>
     <div class="col-sm-9">
         <textarea class="form-control" ng-model="cohortDefinition.description" placeholder="Cohort Description"></textarea>
@@ -27,7 +27,7 @@
 </div>
 <div class="row" ng-show="enableDynamicCohort == undefined || enableDynamicCohort == false">
     <div class="col-sm-12">
-        <label class="alert alert-info">
+        <label class="alert alert-info w-100">
         mUzima supports the dynamic feature of cohorts so as to automatically update cohort membership.
         </label>
         <label class="alert alert-success w-100">Do you want to enable the dynamic feature for this cohort? <span class="required">*</span></label>
@@ -68,7 +68,7 @@
 </div>
 <div class="row" ng-show="enableDynamicCohort == true && (enableCohortFilters == undefined || enableCohortFilters == false)">
     <div class="col-sm-12">
-        <label class="alert alert-info">
+        <label class="alert alert-info w-100">
         With Cohort filters, only a subet of a cohort may be downloaded to the mobile app based on whether it matches the
         Provider and/or default Location of the device.
         </label>
@@ -112,7 +112,7 @@
     <div class="col-sm-3">
     </div>
     <div class="col-sm-9">
-        <button class="btn btn-primary btn-md pull-right" ng-disabled="enableDynamicCohort !== false && enableCohortFilters == undefined"
+        <button class="btn btn-primary btn-md pull-right" ng-disabled="!isAllRequiredFieldsEntered()"
         ng-click="saveCohortAndCohortDefinition(cohortDefinition)">
             Validate & Save
         </button>

@@ -375,7 +375,7 @@ ul.dropdown-menu.show > li > a {
    margin-left: 1em;
 }
 
-ul.dropdown-menu.show > li : hover {
+ul.dropdown-menu.show > li :hover {
    background:grey;
 }
 
