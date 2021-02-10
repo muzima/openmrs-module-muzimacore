@@ -13,11 +13,12 @@
                     that best suits their needs.
                 </label>
                 <label class="alert alert-success w-100">Please provide a name and a description of your setup configuration.</label>
-                <input class="form-control" placeholder="Setup Name" ng-model="config.name">
+                <input class="form-control" placeholder="Setup Name" ng-required="true" ng-model="config.name">
                 <textarea class="form-control" placeholder="Setup Description" rows="4" ng-model="config.description"></textarea>
             </div>
             <div class="wizard-nav-bar">
-                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('registration-form-option')">
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('registration-form-option')"
+                        ng-disabled="isConfigNameEmpty()">
                     Next <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
@@ -101,7 +102,7 @@
                     <label class="alert alert-success w-100">Please provide details of the form to be uploaded</label>
                 </div>
             </div>
-            <m-uzima-form-upload upload-return-fn="setSelectedRegistrationForm"></m-uzima-form-upload>
+            <m-uzima-form-upload upload-return-fn="setSelectedRegistrationForm" create-new-form-fn="createNewFormInConfigWizard()"></m-uzima-form-upload>
 
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
@@ -420,7 +421,7 @@
                                    uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
                         </td>
                         <td></td>
-                        <td></td>
+                        <td><a class="link">Create New</a></td>
                     </tr>
                     <tr align="center">
                         <td width="45%" align="left">
@@ -511,7 +512,7 @@
                                    uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
                         </td>
                         <td></td>
-                        <td></td>
+                        <td><a class="link">Create New</a></td>
                     </tr>
                     <tr align="center">
                         <td width="45%" align="left">
