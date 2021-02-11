@@ -7,6 +7,8 @@ muzimaCoreModule.directive('openmrsFormCreator', function(FormService,) {
                 scope.encounterTypes = response.data.results;
             });
 
+            scope.resetNewFormCreationFields();
+
             var showErrorMessage = function (content, cl, time) {
                 $('<div/>')
                     .addClass('alert')
@@ -17,6 +19,10 @@ muzimaCoreModule.directive('openmrsFormCreator', function(FormService,) {
                     .appendTo('#error-alert')
                     .text(content);
             };
+
+            scope.isRequiredNewFormFieldsEntered = function(){
+                return scope.name.trim() != '' && scope.version.trim() != '' && scope.encounterType != '';
+            }
 
             scope.saveFormMetaData = function () {
 

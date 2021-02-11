@@ -13,7 +13,7 @@
                     that best suits their needs.
                 </label>
                 <label class="alert alert-success w-100">Please provide a name and a description of your setup configuration.</label>
-                <input class="form-control" placeholder="Setup Name" ng-required="true" ng-model="config.name">
+                <input class="form-control" placeholder="Setup Name... (Required)" ng-required="true" ng-model="config.name">
                 <textarea class="form-control" placeholder="Setup Description" rows="4" ng-model="config.description"></textarea>
             </div>
             <div class="wizard-nav-bar">
@@ -102,7 +102,7 @@
                     <label class="alert alert-success w-100">Please provide details of the form to be uploaded</label>
                 </div>
             </div>
-            <m-uzima-form-upload upload-return-fn="setSelectedRegistrationForm" create-new-form-fn="createNewFormInConfigWizard()"></m-uzima-form-upload>
+            <m-uzima-form-upload></m-uzima-form-upload>
 
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
@@ -421,7 +421,7 @@
                                    uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
                         </td>
                         <td></td>
-                        <td><a class="link">Create New</a></td>
+                        <td><a ng-hide="true" class="link">Create New</a></td>
                     </tr>
                     <tr align="center">
                         <td width="45%" align="left">
@@ -512,7 +512,7 @@
                                    uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
                         </td>
                         <td></td>
-                        <td><a class="link">Create New</a></td>
+                        <td><a ng-hide="true" class="link">Create New</a></td>
                     </tr>
                     <tr align="center">
                         <td width="45%" align="left">
@@ -615,7 +615,7 @@
                                          style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="setting in availableNotUsedSettings" value="{{setting}}"
                                             class="list-group-item">
-                                        <div>H {{formatSettingDisplay(setting)}}</div>
+                                        <div>{{formatSettingDisplay(setting)}}</div>
                                     </option>
                                 </select>
                             </div>
@@ -756,7 +756,6 @@
                         </div>
                     </div>
                 </div>
-                <hr>
             </div>
             <div class="wizard-nav-bar">
                 <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">

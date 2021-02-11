@@ -41,7 +41,8 @@
     <div class="col-sm-3">
     </div>
     <div class="col-sm-9">
-        <button class="btn btn-primary" ng-click="setNewFormMetadata(name, version, description,encounterType)">
+        <button class="btn btn-primary pull-right" ng-disabled="!isRequiredNewFormFieldsEntered()"
+                ng-click="setNewFormMetadata(name, version, description,encounterType)">
             Save
         </button>
     </div>

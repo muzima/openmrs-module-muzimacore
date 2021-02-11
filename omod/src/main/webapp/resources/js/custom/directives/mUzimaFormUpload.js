@@ -79,7 +79,7 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                         if(response.hasOwnProperty('uuid')) {
                             form.uuid = response.uuid;
                             scope.setSelectedForm(form);
-                            scope.goToPreviousWizardTab();
+                            scope.exitFormUploadTab();
                             clearFormUploadFields();
                         }
                     }).error(function () {
@@ -95,7 +95,7 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                         if(response.hasOwnProperty('uuid')) {
                             form.uuid = response.uuid;
                             scope.setSelectedForm(form);
-                            scope.goToPreviousWizardTab();
+                            scope.exitFormUploadTab();
                             clearFormUploadFields();
                         }
                     }).error(function (error) {

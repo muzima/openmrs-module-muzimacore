@@ -415,6 +415,7 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
     var saveCohortAndCohortDefinition = function (name, description, definition, isScheduledForExecution,
                                                   isMemberAdditionEnabled, isMemberRemovalEnabled, isFilterByProviderEnabled,
                                                   isFilterByLocationEnabled, filterQuery) {
+        console.log("Saving :"+name);
         return $http.post("saveCohortAndCohortDefinition.json", {"name": name, "description":description, "definition": definition,
             "isScheduledForExecution": isScheduledForExecution, "isMemberAdditionEnabled":isMemberAdditionEnabled,
             "isMemberRemovalEnabled": isMemberRemovalEnabled,"isFilterByProviderEnabled":isFilterByProviderEnabled,
