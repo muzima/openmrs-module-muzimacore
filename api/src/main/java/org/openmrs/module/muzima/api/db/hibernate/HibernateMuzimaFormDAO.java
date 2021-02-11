@@ -17,8 +17,10 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.openmrs.Form;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
@@ -132,6 +134,18 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
             criteria1.add(Restrictions.not(Restrictions.in("uuid",formUuids)));
 
         return criteria1.list();
+    }
+
+    @Override
+    public List<Object[]> getFormCountGroupedByDiscriminator() {
+        Criteria criteria = session().createCriteria(MuzimaForm.class);
+        criteria.add(Restrictions.eq("retired", false));
+        ProjectionList projectionList = Projections.projectionList();
+        projectionList.add(Projections.groupProperty("discriminator"));
+        projectionList.add(Projections.rowCount());
+        criteria.setProjection(projectionList);
+        List<Object[]> results = criteria.list();
+        return  results;
     }
 
     public List<MuzimaForm> getFormByName(final String name, final Date syncDate) {

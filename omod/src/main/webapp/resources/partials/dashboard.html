@@ -1,0 +1,152 @@
+<div id="wide-sidebar" class="row">
+    <side-navigation menu-item="errors"></side-navigation>
+    <div class="col-lg-8">
+        <div class="panels">
+            <div class="panels__container">
+                <a href="#" class="panel">
+                    <div class="panel__content">
+                        <h3>mUzima Forms</h3>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Total Forms</td>
+                                    <td>{{encounterForms+demographicsUpdateForms+genericRegistrationForms}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Encounter</td>
+                                    <td>{{encounterForms}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Demographic Update</td>
+                                    <td>{{demographicsUpdateForms+personDemographicUpdateForms}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Registration</td>
+                                    <td>{{genericRegistrationForms+registrationForms}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Relationship</td>
+                                    <td>{{relationshipForms}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+                <a href="#" class="panel">
+                    <div class="panel__content">
+                        <h3>Queue Data</h3>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>Total Data</td>
+                                <td>{{encounterQueue+demographicsUpdateQueue+genericRegistrationQueue+personDemographicUpdateQueue+registrationQueue+
+                                    relationshipQueue+individualObsQueue}}</td>
+                            </tr>
+                            <tr>
+                                <td>Encounter</td>
+                                <td>{{encounterQueue}}</td>
+                            </tr>
+                            <tr>
+                                <td>Demographic Update</td>
+                                <td>{{demographicsUpdateQueue+personDemographicUpdateQueue}}</td>
+                            </tr>
+                            <tr>
+                                <td>Registration</td>
+                                <td>{{genericRegistrationQueue+registrationQueue}}</td>
+                            </tr>
+                            <tr>
+                                <td>Relationship</td>
+                                <td>{{relationshipQueue}}</td>
+                            </tr>
+                            <tr>
+                                <td>Individual Obs</td>
+                                <td>{{individualObsQueue}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+                <a href="#" class="panel">
+                    <div class="panel__content">
+                        <h3>Error Data</h3>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>Total Data</td>
+                                <td>{{encounterError+demographicsUpdateError+genericRegistrationError+personDemographicUpdateError+registrationError+
+                                    relationshipError+individualObsError}}</td>
+                            </tr>
+                            <tr>
+                                <td>Encounter</td>
+                                <td>{{encounterError}}</td>
+                            </tr>
+                            <tr>
+                                <td>Demographic Update</td>
+                                <td>{{demographicsUpdateError+personDemographicUpdateError}}</td>
+                            </tr>
+                            <tr>
+                                <td>Registration</td>
+                                <td>{{genericRegistrationError+registrationError}}</td>
+                            </tr>
+                            <tr>
+                                <td>Relationship</td>
+                                <td>{{relationshipError}}</td>
+                            </tr>
+                            <tr>
+                                <td>Individual Obs</td>
+                                <td>{{individualObsError}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+            </div>
+            <br/>
+            <div class="panels__container">
+                <a href="#" class="panel">
+                    <div class="panel__content">
+                        <h3>Setup Configs</h3>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>Total Setup Configs</td>
+                                <td>{{configs}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+                <a href="#" class="panel">
+                    <div class="panel__content">
+                        <h3>Cohort Definitions</h3>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>Total Definitions</td>
+                                <td>{{cohortdefinations}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+                <a href="#" class="panel">
+                    <div class="panel__content">
+                        <h3>Report Configs</h3>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>Total Report Configs</td>
+                                <td>{{reportConfigs}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

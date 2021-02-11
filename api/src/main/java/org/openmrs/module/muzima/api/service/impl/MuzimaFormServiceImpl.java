@@ -172,4 +172,9 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
     public List<Form> getNonMuzimaForms(){
         return dao.getNonMuzimaForms();
     }
+
+    @Override
+    public List<Object[]> getFormCountGroupedByDiscriminator() {
+        return dao.getFormCountGroupedByDiscriminator();
+    }
 }

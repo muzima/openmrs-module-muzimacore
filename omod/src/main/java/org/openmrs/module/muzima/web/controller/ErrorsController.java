@@ -34,10 +34,9 @@ import java.util.Map;
  * TODO: Write brief description about the class here.
  */
 @Controller
-@RequestMapping(value = "/module/muzimacore/errors.json")
 public class ErrorsController {
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/errors.json", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getErrors(final @RequestParam(value = "search") String search,
                                          final @RequestParam(value = "pageNumber") Integer pageNumber,
@@ -56,7 +55,7 @@ public class ErrorsController {
     }
 
     @SuppressWarnings("unchecked")
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/module/muzimacore/errors.json", method = RequestMethod.POST)
     public void reQueue(final @RequestBody Map<String, Object> map) {
         if (Context.isAuthenticated()) {
             List<String> uuidList = (List<String>) map.get("uuidList");
@@ -68,5 +67,15 @@ public class ErrorsController {
                 dataService.purgeErrorData(errorData);
             }
         }
+    }
+
+    @RequestMapping(value = "/module/muzimacore/errorDataCountGroupedByDiscriminator.json", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getQueueDataCountByDiscriminator(){
+        DataService dataService = Context.getService(DataService.class);
+        List<Object[]> results =  dataService.errorDataCountGroupedByDiscriminator();
+        Map<String, Object> convertedMap = new HashMap<String, Object>();
+        convertedMap.put("results",WebConverter.convertList(results));
+        return convertedMap;
     }
 }

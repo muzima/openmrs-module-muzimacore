@@ -395,3 +395,48 @@ ul.dropdown-menu.show > li :hover {
     margin-bottom: 0;
     list-style: none;
 }
+
+.panels {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: @overlayColor;
+  pointer-events: none;
+}
+
+.panels__container {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  height: 30vh;
+  width: unit( 100 + (@offsetSize * 2),%);
+  margin: 0 -(@offsetSize);
+  visibility: hidden;
+}
+
+.panel {
+  display: inline-block;
+  height: 100%;
+  visibility: visible;
+  position: relative;
+  flex: 1;
+  cursor: pointer;
+  text-decoration: none;
+  margin: 4px;
+  pointer-events: auto;
+}
+
+.panel__content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: center center no-repeat;
+  background-size: cover;
+  margin-top: 10px;
+  border: beige solid;
+  a{
+    text-decoration: none;
+  }
+}
