@@ -68,13 +68,13 @@ ul.sidenav{
 
 
 .sidenav .brand {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
   line-height: 20px;
 }
 
 ul.sidenav li:first-child{
-  margin-bottom: 50px;
+  margin-bottom: 20px;
   line-height: 17px;
   margin-top: 10px;
 }

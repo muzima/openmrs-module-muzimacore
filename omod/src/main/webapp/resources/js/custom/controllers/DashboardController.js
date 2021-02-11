@@ -33,7 +33,6 @@ function DashboardCtrl($scope, $location, $dashboardService) {
     $dashboardService.getCohortDefinitionCount().
     then(function (response) {
         var serverData = response.data;
-        console.log(serverData);
         $scope.cohortdefinations = serverData;
     });
 
@@ -47,7 +46,6 @@ function DashboardCtrl($scope, $location, $dashboardService) {
     $dashboardService.getMuzimaFormCountGroupedByDiscriminator().
     then(function (results) {
         var serverData = results.data.results;
-        console.log(serverData);
         for(var i = 0; i < serverData.length; i++) {
             var obj = serverData[i];
             if(obj.discriminator === "json-encounter"){
@@ -70,7 +68,6 @@ function DashboardCtrl($scope, $location, $dashboardService) {
     $dashboardService.getQueueDataCountGroupedByDiscriminator().
     then(function (results) {
         var serverData = results.data.results;
-        console.log(serverData);
         for(var i = 0; i < serverData.length; i++) {
             var obj = serverData[i];
             if(obj.discriminator === "json-encounter"){
@@ -94,7 +91,6 @@ function DashboardCtrl($scope, $location, $dashboardService) {
     $dashboardService.getErrorDataCountGroupedByDiscriminator().
     then(function (results) {
         var serverData = results.data.results;
-        console.log(serverData);
         for(var i = 0; i < serverData.length; i++) {
             var obj = serverData[i];
             if(obj.discriminator === "json-encounter"){
