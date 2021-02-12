@@ -39,8 +39,6 @@ muzimaCoreModule.directive('cohortDefinitionCreator', function($cohortDefinition
             scope.isAllRequiredFieldsEntered = function(){
                 console.log("scope.enableDynamicCohort: "+scope.enableDynamicCohort);
                 console.log("scope.enableCohortFilters: "+scope.enableCohortFilters);
-                console.log("scope.name.trim(): "+scope.cohortDefinition.name.trim());
-                console.log("scope.description.trim(): "+scope.cohortDefinition.description.trim());
                 return (scope.enableDynamicCohort == false || scope.enableDynamicCohort !== false
                     && scope.enableCohortFilters != undefined) && scope.cohortDefinition != undefined
                     && scope.cohortDefinition.name.trim() != '' && scope.cohortDefinition.description.trim() != '';

@@ -372,4 +372,14 @@ public class WebConverter {
         }
          return mapList;
     }
+
+    public static Map<String, Object>  convertProvider(Provider provider) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (provider != null) {
+            map.put("uuid", provider.getUuid());
+            map.put("name", provider.getName());
+            map.put("identifier", provider.getIdentifier());
+        }
+        return map;
+    }
 }

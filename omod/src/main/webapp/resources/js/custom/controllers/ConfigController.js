@@ -22,6 +22,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.retire_reason = false;
 
     $scope.muzimaforms = [];
+    $scope.location = {};
 
     // initialize the view to be read only
     $scope.mode = "view";
@@ -526,6 +527,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
     $scope.configHasLocations = function(){
         return $scope.configLocations.length > 0;
+    }
+
+    $scope.setSelectedLocations = [];
+    $scope.setSelectedLocation = function (location) {
+        $scope.setSelectedLocations.push(location.uuid);
+        //add to config
+        $scope.addLocation(location);
     }
     /****************************************************************************************
      ***** Group of methods to manipulate providers
@@ -1078,6 +1086,11 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $scope.loadVanillaSetupModal('create-cohort-definition');
     }
 
+    $scope.createNewLocationInModal = function() {
+        $scope.loadVanillaSetupModal('create-location');
+    }
+
+
     $scope.isVanillaSetupModalLoaded = false;
 
     $scope.loadVanillaSetupModal = function(activeTab){
@@ -1145,6 +1158,16 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.exitCohortCreationTab = function(){
         if($scope.isVanillaSetupModalCaller()){
             $scope.loadCohorts().then(()=>{
+                $scope.dismissVanillaSetupModal();
+            });
+        } else if($scope.isSetupWizardModalCaller()){
+            $scope.goToPreviousWizardTab();
+        }
+    }
+
+    $scope.exitLocationCreationTab = function(){
+        if($scope.isVanillaSetupModalCaller()){
+            $scope.loadLocations().then(()=>{
                 $scope.dismissVanillaSetupModal();
             });
         } else if($scope.isSetupWizardModalCaller()){
@@ -1221,7 +1244,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         $scope.isManageFormsPrivilegeGranted = serverData;
     });
 
-    $configs.checkManageProviderPrivilege().
+    $configs.checkAddCohortsPrivilege().
     then(function (response) {
         var serverData = response.data;
         $scope.isAddCohortsPrivilegeGranted = serverData;

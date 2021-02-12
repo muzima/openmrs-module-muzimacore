@@ -26,7 +26,6 @@ function DashboardCtrl($scope, $location, $dashboardService) {
     $dashboardService.getSetupConfigCount().
     then(function (response) {
         var serverData = response.data;
-        console.log(serverData);
         $scope.configs = serverData;
     });
 
@@ -39,7 +38,6 @@ function DashboardCtrl($scope, $location, $dashboardService) {
     $dashboardService.getReportConfigurationCount().
     then(function (response) {
         var serverData = response.data;
-        console.log(serverData);
         $scope.reportConfigs = serverData;
     });
 

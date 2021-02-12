@@ -201,7 +201,7 @@ public class MuzimaConfigController {
     }
 
     @RequestMapping(value = "/module/muzimacore/saveLocation.json", method = RequestMethod.POST)
-    public void saveLocation(final @RequestBody Map<String, Object> map) {
+    public Map<String, Object> saveLocation(final @RequestBody Map<String, Object> map) {
         if (Context.isAuthenticated()) {
             String name = (String) map.get("name");
             String description = (String) map.get("description");
@@ -212,12 +212,18 @@ public class MuzimaConfigController {
             location.setRetired(false);
 
             LocationService locationService = Context.getService(LocationService.class);
-            locationService.saveLocation(location);
+            Location savedLocation = locationService.saveLocation(location);
+
+            return WebConverter.convertMuzimaLocation(savedLocation);
+        }else {
+             Map<String, Object> response = new HashMap<String, Object>();
+             response.put("error", "User not authenticated");
+             return response;
         }
     }
 
     @RequestMapping(value = "/module/muzimacore/saveProvider.json", method = RequestMethod.POST)
-    public void saveProvider(final @RequestBody Map<String, Object> map) {
+    public Map<String, Object> saveProvider(final @RequestBody Map<String, Object> map) {
         if (Context.isAuthenticated()) {
             Integer personID = (Integer) map.get("person_id");
             String name = (String) map.get("name");
@@ -231,7 +237,12 @@ public class MuzimaConfigController {
             provider.setIdentifier(identifier);
 
             ProviderService providerService = Context.getService(ProviderService.class);
-            providerService.saveProvider(provider);
+            Provider savedProvider = providerService.saveProvider(provider);
+            return WebConverter.convertProvider(savedProvider);
+        }else {
+            Map<String, Object> response = new HashMap<String, Object>();
+            response.put("error", "User not authenticated");
+            return response;
         }
     }
 }
