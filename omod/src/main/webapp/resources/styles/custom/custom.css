@@ -408,7 +408,7 @@ ul.dropdown-menu.show > li :hover {
   display: flex;
   justify-content: center;
   align-items: stretch;
-  height: 30vh;
+  height: auto;
   width: unit( 100 + (@offsetSize * 2),%);
   margin: 0 -(@offsetSize);
   visibility: hidden;
@@ -416,7 +416,7 @@ ul.dropdown-menu.show > li :hover {
 
 .panel {
   display: inline-block;
-  height: 100%;
+  height: auto;
   visibility: visible;
   position: relative;
   flex: 1;

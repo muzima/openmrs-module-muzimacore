@@ -127,7 +127,7 @@
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addCohort($item)" uib-typeahead-editable="false"/>
                                                     </td>
                                                     <td></td>
-                                                    <td style="margin:auto"><button class="btn btn-primary" ng-click="createNewCohortInModal()">Define new cohort</button></td>
+                                                    <td style="margin:auto"><button class="btn btn-primary" ng-hide="!isAddCohortsPrivilegeGranted" ng-click="createNewCohortInModal()">Define new cohort</button></td>
                                                 </tr>
                                                 <tr align="center">
                                                     <td width="45%" align="left">
@@ -174,7 +174,7 @@
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
                                                     </td>
                                                     <td></td>
-                                                    <td style="margin:auto"><button ng-hide="true" class="btn btn-primary" ng-click="createNewLocationInModal()">Create new location</button></td>
+                                                    <td style="margin:auto"><button ng-hide="!isViewLocationPrivilegeGranted" class="btn btn-primary" ng-click="createNewLocationInModal()">Create new location</button></td>
                                                 </tr>
                                                 <tr align="center">
                                                     <td width="45%" align="left">

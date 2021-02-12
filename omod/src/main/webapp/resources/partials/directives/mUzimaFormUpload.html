@@ -12,7 +12,7 @@
                    uib-typeahead-wait-ms="500" typeahead-on-select="selectForm($item)" uib-typeahead-editable="false"/>
         </div>
         <div class="col-sm-3">
-            <a class="link" ng-click="goToFormCreatorTab()">Create New</a>
+            <a class="link" ng-hide="!isManageFormsPrivilegeGranted" ng-click="goToFormCreatorTab()">Create New</a>
         </div>
     </div>
     <div class="row">
