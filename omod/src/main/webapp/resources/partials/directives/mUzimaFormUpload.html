@@ -1,4 +1,9 @@
 <form role="form" ng-submit="upload(file, uploadCandidateForm)" name="formUpload">
+    <div class="row" style="max-height: 100px;overflow-y: scroll;">
+        <div class="row" ng-repeat="validation in validations.list" style="height: 30px;">
+                <pre class="alert-danger" ng-class="style(validation.type)">{{validation.message}}</pre>
+        </div>
+    </div>
     <div class="row">
         <div class="form-group col-sm-2">
             <label for="xFormFormDefinition">Form Name </label>
@@ -47,7 +52,9 @@
             <file-upload message="Click here to select file"></file-upload>
         </div>
         <div class="col-sm-4">
-            <button type="submit" class="btn btn-primary">Validate & upload</button>
+            <input type="button" ng-click="validate(file,'html')" class="btn btn-primary" ng-disabled="!areAllFormFieldsEntered()" value="Validate">
+            <button type="submit" class="btn btn-primary" ng-disabled = "!isValidXForm()">Upload</button>
+
         </div>
     </div>
     <label class="alert alert-error" id="error-alert"></label>
