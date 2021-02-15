@@ -88,7 +88,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 $scope.muzimaforms = _.map(response.data.objects, function (form) {
                     if(!$scope.formExistsInConfig(form.uuid)){
                         $scope.availableNotUsedForms.push(form);
-                        return false;//break from loop
+                        //return false;//break from loop
                     }
                     return {
                         form: form,
@@ -101,7 +101,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             });
         });
     }
-
 
     $scope.save = function (config) {
         $configs.saveConfiguration(config.uuid, config.name, config.description, createJson(config)).
@@ -168,13 +167,15 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
     $scope.configHasRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
-            return configForm.discriminator!= undefined && configForm.discriminator.includes("registration");
+            return configForm.discriminator != undefined && (muzimaform.form.discriminator.includes("json-registration")
+             || muzimaform.form.discriminator.includes("json-generic-registration"));;
         });
     }
 
     $scope.configHasNonRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
-            return !(configForm.discriminator!=undefined && configForm.discriminator.includes("registration"));
+            return !(configForm.discriminator!=undefined && (muzimaform.form.discriminator.includes("json-registration")
+            || muzimaform.form.discriminator.includes("json-generic-registration")));
         });
     }
 
@@ -957,7 +958,8 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         }
 
         $scope.isRegistrationForm = function(muzimaform){
-            return muzimaform.form.discriminator.includes("registration");
+            return muzimaform.form.discriminator != undefined && (muzimaform.form.discriminator.includes("json-registration")
+            || muzimaform.form.discriminator.includes("json-generic-registration"));
         }
 
         $scope.isNonRegistrationForm = function(muzimaform){

@@ -43,6 +43,26 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                 scope.loadFormsList();
             }, true);
 
+            scope.areAllFormFieldsEntered= function(){
+               return scope.uploadCandidateForm != ''  && scope.discriminator != '' && scope.hasFile();
+            }
+
+            scope.hasFile = function () {
+                return (scope.file) ? true : false;
+            };
+
+            scope.isValidXForm = function(){
+                return scope.isValidated() && !hasValidationMessages();
+            }
+
+            var hasValidationMessages = function () {
+                return !_.isEmpty(scope.validations.list);
+            };
+
+            scope.isValidated = function () {
+                return (scope.validations) ? true : false;
+            };
+
             var showErrorMessage = function (content, cl, time) {
                 $('<div/>')
                     .addClass('alert')
@@ -59,7 +79,7 @@ muzimaCoreModule.directive('mUzimaFormUpload', function(FileUploadService, FormS
                     url: 'validateMuzimaForm.form',
                     file: file
                 }).then(function (result) {
-                    $scope.validations = result.data;
+                    scope.validations = result.data;
                 });
             };
 
