@@ -20,25 +20,20 @@ muzimaCoreModule.directive('cohortDefinitionCreator', function($cohortDefinition
                 $cohortDefinitionService.saveCohortAndCohortDefinition(cohort.name, cohort.description, cohort.definition, cohort.isScheduledForExecution,
                     cohort.isMemberAdditionEnabled, cohort.isMemberRemovalEnabled, cohort.isFilterByProviderEnabled, cohort.isFilterByLocationEnabled,
                     cohort.filterQuery).success(function (response) {
-                        console.log("Save response success: "+JSON.stringify(response));
                     if(response.hasOwnProperty('uuid')) {
                         cohort.uuid = response.uuid;
                         scope.setSelectedCohort(cohort);
                         scope.exitCohortCreationTab();
                         cohortDefinition = {};
                     } else if(response.hasOwnProperty('error')) {
-                        console.log(response.error)
                         console.log("Save response error: "+JSON.stringify(response));
                     }
                 }).error(function (response) {
-                    console.log(response)
                     console.log("Save response error2: "+JSON.stringify(response));
                 });
             };
 
             scope.isAllRequiredFieldsEntered = function(){
-                console.log("scope.enableDynamicCohort: "+scope.enableDynamicCohort);
-                console.log("scope.enableCohortFilters: "+scope.enableCohortFilters);
                 return (scope.enableDynamicCohort == false || scope.enableDynamicCohort !== false
                     && scope.enableCohortFilters != undefined) && scope.cohortDefinition != undefined
                     && scope.cohortDefinition.name.trim() != '' && scope.cohortDefinition.description.trim() != ''
