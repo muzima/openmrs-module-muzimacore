@@ -24,20 +24,6 @@
                     </tr>
                     <tr>
                         <td>
-                            <input type="checkbox" ng-model="specialFields.showConfigJson"/>
-                            <span>View Configuration</span>
-                        </td>
-                    </tr>
-                    <tr ng-show="specialFields.showConfigJson">
-                        <td>
-                            <div class="tree well">
-                                <ul id='treeul'>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
                             <div class="pull-right">
                                 <button type="submit" ng-click="edit()" ng-disabled="specialFields.stillLoading" class="btn btn-primary">
                                     <span ng-hide="specialFields.stillLoading">Edit</span>

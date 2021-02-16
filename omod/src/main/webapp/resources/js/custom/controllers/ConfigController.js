@@ -31,6 +31,12 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
         $('#wait').hide();
+        $configs.searchMuzimaForms().then(function (response){
+            $scope.loadForms();
+            $scope.loadCohorts();
+            $scope.loadLocations();
+            $scope.loadProviders();
+        });
     } else {
         $configs.getConfiguration($scope.uuid).then(function (response) {
             $scope.config = response.data;
@@ -167,21 +173,27 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
     $scope.configHasRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
-            return configForm.discriminator != undefined && (muzimaform.form.discriminator.includes("json-registration")
-             || muzimaform.form.discriminator.includes("json-generic-registration"));;
+            return configForm.discriminator != undefined && (configForm.discriminator.includes("json-registration")
+             || configForm.discriminator.includes("json-generic-registration"));;
         });
     }
 
     $scope.configHasNonRegistrationForms = function(){
         return !!_.find($scope.configForms, function (configForm) {
-            return !(configForm.discriminator!=undefined && (muzimaform.form.discriminator.includes("json-registration")
-            || muzimaform.form.discriminator.includes("json-generic-registration")));
+            return !(configForm.discriminator!=undefined && (configForm.discriminator.includes("json-registration")
+            || configForm.discriminator.includes("json-generic-registration")));
         });
     }
 
     var addFormToConfig = function(form){
         form = {'uuid':form.uuid,'name':form.name,'discriminator':form.discriminator};
         $scope.configForms.push(form);
+        //remove form from available list
+        angular.forEach($scope.availableNotUsedForms, function (availableForms, index) {
+            if (availableForms.uuid === form.uuid) {
+                $scope.availableNotUsedForms.splice(index, 1);
+            }
+        });
         $scope.search.forms = '';
         $scope.specialFields.extractingMeta=true;
 
@@ -294,7 +306,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 $scope.cohorts = response.data.objects;
                 $scope.availableNotUsedCohorts = [];
                 $.each(response.data.objects, function(k,cohort){
-                    console.log("Comparing: "+cohort.name);
                     if(!$scope.cohortExistsInConfig(cohort)){
                         $scope.availableNotUsedCohorts.push(cohort);
                     }
@@ -324,6 +335,11 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         if (!$scope.cohortExistsInConfig(cohort)) {
             cohort = {'uuid':cohort.uuid,'name':cohort.name};
             $scope.configCohorts.push(cohort);
+            angular.forEach($scope.availableNotUsedCohorts, function (availableCohorts, index) {
+                if (availableCohorts.uuid === cohort.uuid) {
+                    $scope.availableNotUsedCohorts.splice(index, 1);
+                }
+            });
             $scope.search.cohorts = '';
         }
     };
@@ -666,6 +682,13 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             jsonConcept["uuid"] = concept.uuid;
             jsonConcept["name"] = concept.name.name;
             $scope.configConcepts.push(jsonConcept);
+
+            //and remove it from extractedNotUsedConcepts
+            angular.forEach($scope.extractedNotUsedConcepts, function (availableConcepts, index) {
+                if (availableConcepts.uuid === concept.uuid) {
+                    $scope.extractedNotUsedConcepts.splice(index, 1);
+                }
+            });
             $scope.search.concepts = '';
         }
     };
@@ -797,6 +820,11 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         });
         if (!settingExists) {
             $scope.configSettings.push(setting);
+            angular.forEach($scope.availableNotUsedSettings, function (availableSettings, index) {
+                if (availableSettings.uuid === setting.uuid) {
+                    $scope.availableNotUsedSettings.splice(index, 1);
+                }
+            });
             $scope.search.settings = '';
         }
         showSettingEditModal(setting);

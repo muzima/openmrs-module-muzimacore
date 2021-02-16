@@ -5,7 +5,7 @@
             <tbody>
             <tr>
             <td width="50%">
-                <table class="table">
+                <table class="table table-striped table-bordered table-hover">
                     <tbody>
                         <tr>
                             <td>Sender</td>
@@ -47,13 +47,13 @@
                 </table>
             </td>
             <td width="50%">
-                <div id = 'errorList'>
+                <div id = 'errorList' style="height:38vh;">
                     <h6>Error list</h6>
 
                     <div class="messages">
                         <div ng-hide="isValid" class="alert alert-danger">Please correct the errors below.</div>
                     </div>
-                    <div class="tree well errorlist">
+                    <div class="tree well errorlist" style="height: inherit;">
                         <ul id='treeError'>
                         </ul>
                     </div>
