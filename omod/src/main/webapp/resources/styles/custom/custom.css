@@ -315,12 +315,6 @@ body{
     min-width: 950px;
 }
 
-.col-lg-8 {
-    flex: 0 0 80%;
-    max-width: 80%;
-    overflow-x: auto;
-}
-
 .navbar-right {
     float: right !important;
     margin-right: -15px;
@@ -398,4 +392,18 @@ ul.dropdown-menu.show > li :hover {
 
 .modal-header{
     display: block !important;
+}
+
+.tour-tip whiteLink,
+.tour-tip .whiteLink {
+    color: #ffffff;
+}
+
+.card {
+    border: 1px solid #a99f9f;
+    border-radius: 0.15rem;
+}
+
+.list-group-item{
+    white-space: break-spaces;
 }
