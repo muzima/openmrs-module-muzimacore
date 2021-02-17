@@ -340,6 +340,9 @@
                                          style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}"
                                             class="list-group-item">{{concept.name}}</option>
+                                    <option ng-hide="hasAvailableNotUsedConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no concepts available that were extracted from the forms. Please use the search by concept name option.
+                                    </option>
                                 </select>
                             </div>
                         </td>
@@ -430,6 +433,9 @@
                                          style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="location in availableNotUsedLocations" value="{{location}}"
                                             class="list-group-item">{{location.name}}</option>
+                                    <option ng-hide="hasAvailableNotUsedLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no locations available.
+                                    </option>
                                 </select>
                             </div>
                         </td>
@@ -533,6 +539,9 @@
                                          style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="provider in availableNotUsedProviders" value="{{provider}}"
                                             class="list-group-item">{{provider.name}}</option>
+                                    <option ng-hide="hasAvailableNotUsedProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no providers available.
+                                    </option>
                                 </select>
                             </div>
                         </td>
@@ -627,6 +636,9 @@
                                     <option ng-repeat="setting in availableNotUsedSettings" value="{{setting}}"
                                             class="list-group-item" title="{{setting.description}}">
                                         <div>{{formatSettingDisplay(setting)}}</div>
+                                    </option>
+                                    <option ng-hide="hasAvailableNotUsedSettings()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no settings available.
                                     </option>
                                 </select>
                             </div>

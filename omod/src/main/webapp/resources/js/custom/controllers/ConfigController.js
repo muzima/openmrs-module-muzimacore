@@ -552,6 +552,11 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         //add to config
         $scope.addLocation(location);
     }
+
+    $scope.hasAvailableNotUsedLocations = function(){
+        return $scope.availableNotUsedLocations.length > 0;
+    }
+
     /****************************************************************************************
      ***** Group of methods to manipulate providers
      *****************************************************************************************/
@@ -661,6 +666,9 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         return $scope.configProviders.length > 0;
     }
 
+    $scope.hasAvailableNotUsedProviders = function(){
+        return $scope.availableNotUsedProviders.length > 0;
+    }
     /****************************************************************************************
      ***** Group of methods to manipulate concepts
      *****************************************************************************************/
@@ -753,6 +761,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
     $scope.configHasConcepts = function(){
         return $scope.configConcepts.length > 0;
+    }
+
+    $scope.hasAvailableNotUsedConcepts = function(){
+        return $scope.extractedNotUsedConcepts.length > 0;
     }
 
     /****************************************************************************************
@@ -905,6 +917,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
 
     $scope.configHasSettings = function(){
         return $scope.configSettings.length > 0;
+    }
+
+    $scope.hasavailableNotUsedSettings = function(){
+        return $scope.availableNotUsedSettings.length > 0;
     }
 
     /****************************************************************************************
@@ -1206,7 +1222,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     }
 
     $scope.hasMuzimaForms = function(){
-        return $scope.muzimaforms.length > 0
+        return $scope.availableNotUsedForms.length > 0
     }
 
     $scope.createNewFormDefinition = function(){
