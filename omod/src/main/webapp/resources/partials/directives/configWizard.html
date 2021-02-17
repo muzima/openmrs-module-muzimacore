@@ -13,8 +13,8 @@
                     that best suits their needs.
                 </label>
                 <label class="alert alert-success w-100">Please provide a name and a description of your setup configuration.</label>
-                <input class="form-control" placeholder="Setup Name... (Required)" ng-required="true" ng-model="config.name">
-                <textarea class="form-control" placeholder="Setup Description" rows="4" ng-model="config.description"></textarea>
+                <input class="form-control" placeholder="Enter setup name... (Required)" ng-required="true" ng-model="config.name">
+                <textarea class="form-control" placeholder="Enter the setup description... (Optional)" rows="4" ng-model="config.description"></textarea>
             </div>
             <div class="wizard-nav-bar">
                 <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('registration-form-option')"
@@ -293,7 +293,7 @@
             <div>
                 <label class="alert alert-info w-100">
                     mUzima uses Concepts to determine the kinds of historical data that should be downloaded and retained
-                    on the mobile devices after form filling. <br> <a class="learn-more">Learn more</a>
+                    on the mobile devices after form filling.
                 </label>
                 <label class="alert alert-success w-100">
                     Do you want to include Concepts as part of the data that should be downloaded to the mobile application?
@@ -337,21 +337,21 @@
                             <div class="card">
                                 <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Concepts extracted from forms</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
-                                         style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                         style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}"
                                             class="list-group-item">{{concept.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td width="10%" align="center">
-                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eConcepts.length" ng-click="moveSelected()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
-                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!extractedNotUsedConcepts.length" ng-click="moveAll()" style="width: 50px; height: 20px; padding: 0">>></button>
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eConcepts.length" ng-click="moveSelected()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!extractedNotUsedConcepts.length" ng-click="moveAll()" style="width: 3rem; padding: 0.25rem;">>></button>
                         </td>
                         <td width="45%" align="left" valign="top">
                             <div class="card">
                                 <label for="selectedConcepts" class="w-100  card-header alert-primary">Selected Concepts</label>
                                 <select class="list-group list-group-flush" size="15" id="selectedConcepts" ng-model="selected.concepts"
-                                        style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                        style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                     <option ng-repeat="concept in configConcepts" value="{{concept}}"
                                     class="list-group-item">{{concept.name}}</option>
                                 </select>
@@ -382,8 +382,7 @@
                     We recognize that many implementations cannot download all locations to the devices for listing as
                     the care location.
                     mUzima provides the options for selecting a subset of these locations to the device. These will be
-                    locations that appear as the Encounter Location for patients.<br>
-                    <a class="learn-more">Learn more</a>
+                    locations that appear as the Encounter Location for patients.
                 </label>
                 <label class="alert alert-success w-100">
                     Do you want to add Location(s) to be downloaded to mUzima for this program.
@@ -421,28 +420,28 @@
                                    uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
                         </td>
                         <td></td>
-                        <td><button class="btn btn-primary" ng-hide="!isViewLocationPrivilegeGranted" ng-click="goToNextWizardTab('create-location')">Create New Location</button></td>
+                        <td><button class="btn btn-primary" ng-hide="true" ng-click="goToNextWizardTab('create-location')">Create New Location</button></td>
                     </tr>
                     <tr align="center">
                         <td width="45%" align="left">
                             <div class="card">
                                 <label class="card-header alert-info" for="availableNotUsedLocations" style="">Available locations</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedLocations" ng-model="selected.eLocations"
-                                         style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                         style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="location in availableNotUsedLocations" value="{{location}}"
                                             class="list-group-item">{{location.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td width="10%" align="center">
-                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eLocations.length" ng-click="moveSelectedLocations()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
-                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedLocations.length" ng-click="moveAllAvailableLocations()" style="width: 50px; height: 20px; padding: 0">>></button>
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eLocations.length" ng-click="moveSelectedLocations()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedLocations.length" ng-click="moveAllAvailableLocations()" style="width: 3rem; padding: 0.25rem;">>></button>
                         </td>
                         <td width="45%" align="left" valign="top">
                             <div class="card">
                                 <label for="selectedLocations" class="w-100  card-header alert-primary">Selected Locations</label>
                                 <select class="list-group list-group-flush" size="15" id="selectedLocations" ng-model="selected.locations"
-                                        style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                        style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                     <option ng-repeat="location in configLocations" value="{{location}}"
                                             class="list-group-item">{{location.name}}</option>
                                 </select>
@@ -486,8 +485,7 @@
                     We recognize that many implementations cannot download all providers to the devices for listing as
                     the care provider.
                     mUzima provides the options for selecting a subset of these providers to the device. These will be
-                    providers that appear as the Encounter providers for patients.<br>
-                    <a class="learn-more">Learn more</a>
+                    providers that appear as the Encounter providers for patients.
                 </label>
                 <label class="alert alert-success w-100">
                     Do you want to include Encounter Provider(s) to be downloaded to mUzima for this program.
@@ -532,21 +530,21 @@
                             <div class="card">
                                 <label class="card-header alert-info" for="availableNotUsedProviders" style="">Available providers</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedProviders" ng-model="selected.eProviders"
-                                         style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                         style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="provider in availableNotUsedProviders" value="{{provider}}"
                                             class="list-group-item">{{provider.name}}</option>
                                 </select>
                             </div>
                         </td>
                         <td width="10%" align="center">
-                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eProviders.length" ng-click="moveSelectedProviders()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
-                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedProviders.length" ng-click="moveAllAvailableProviders()" style="width: 50px; height: 20px; padding: 0">>></button>
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eProviders.length" ng-click="moveSelectedProviders()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedProviders.length" ng-click="moveAllAvailableProviders()" style="width: 3rem; padding: 0.25rem;">>></button>
                         </td>
                         <td width="45%" align="left" valign="top">
                             <div class="card">
                                 <label for="selectedProviders" class="w-100  card-header alert-primary">Selected Providers</label>
                                 <select class="list-group list-group-flush" size="15" id="selectedProviders" ng-model="selected.providers"
-                                        style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                        style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                     <option ng-repeat="provider in configProviders" value="{{provider}}"
                                             class="list-group-item">{{provider.name}}</option>
                                 </select>
@@ -623,28 +621,28 @@
                     <tr align="center">
                         <td width="45%" align="left">
                             <div class="card">
-                                <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings H</label>
+                                <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedSettings" ng-model="selected.eSettings"
-                                         style="width: 100% ; font-size: 11px;max-height:200px" multiple="multiple" class="list-group list-group-flush">
+                                         style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="setting in availableNotUsedSettings" value="{{setting}}"
-                                            class="list-group-item">
+                                            class="list-group-item" title="{{setting.description}}">
                                         <div>{{formatSettingDisplay(setting)}}</div>
                                     </option>
                                 </select>
                             </div>
                         </td>
                         <td width="10%" align="center">
-                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eSettings.length" ng-click="moveSelectedSettings()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">></button><br><br>
-                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedSettings.length" ng-click="moveAllAvailableSettings()" style="width: 50px; height: 20px; padding: 0">>></button>
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eSettings.length" ng-click="moveSelectedSettings()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedSettings.length" ng-click="moveAllAvailableSettings()" style="width: 3rem; padding: 0.25rem;">>></button>
                         </td>
                         <td width="45%" align="left" valign="top">
                             <div class="card">
                                 <label for="selectedSettings" class="w-100  card-header alert-primary">Selected Config settings</label>
                                 <select class="list-group list-group-flush" size="15" id="selectedSettings" ng-model="selected.settings"
-                                        style="width: 100%; font-size: 11px;max-height:200px" multiple="multiple">
+                                        style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                     <option ng-repeat="setting in configSettings" value="{{setting}}"
-                                            class="list-group-item">
-                                        <div>H {{formatSettingDisplay(setting)}}</div>
+                                            class="list-group-item" title="{{setting.description}}">
+                                        <div>{{formatSettingDisplay(setting)}}</div>
                                     </option>
                                 </select>
                                 <button type="submit" ng-show="selected.settings.length" ng-click="removeSelectedSettings()" class="btn btn-sm btn-outline-warning">Remove Selected</button>

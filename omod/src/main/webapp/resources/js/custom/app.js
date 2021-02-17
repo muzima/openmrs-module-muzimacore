@@ -35,7 +35,7 @@ muzimaCoreModule.
             when('/reportConfigs', {controller: ReportConfigurationsCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfigurations.html'}).
             when('/createReportConfig/', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
             when('/dashboard', {controller: DashboardCtrl, templateUrl: '../../moduleResources/muzimacore/partials/dashboard.html'}).
-            otherwise({redirectTo: '/sources'});
+            otherwise({redirectTo: '/dashboard'});
     }]
 );
 

@@ -6,7 +6,7 @@ muzimaCoreModule.directive("sideNavigation", function () {
         },
         link: function(scope, element, attrs) {
           scope.closeTour = function() {
-             scope.currentStep = 5;
+             scope.currentStep = 25;
           };
 
           scope.openTour = function() {
@@ -14,11 +14,11 @@ muzimaCoreModule.directive("sideNavigation", function () {
           };
 
           scope.postTourCallback = function() {
-            scope.currentStep = 5;
+            scope.currentStep = 25;
           };
 
           if(scope.currentStep == undefined || scope.currentStep == null || scope.currentStep ==''){
-            scope.currentStep = 5;
+            scope.currentStep = 25;
           }
         },
         templateUrl: '../../moduleResources/muzimacore/partials/directives/_side_nav.html'
