@@ -147,7 +147,7 @@
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedCohorts" ng-model="selected.eCohorts"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                                                 <option ng-repeat="cohort in availableNotUsedCohorts" value="{{cohort}}"
-                                                                        class="list-group-item">{{cohort.name}}</option>
+                                                                        class="list-group-item" title="{{cohort.description}}">{{cohort.name}}</option>
                                                                 <option ng-hide="hasCohorts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no cohorts available. Please click on
                                                                     <i><u>Define new cohort</u></i> button to create a cohort.
@@ -165,7 +165,7 @@
                                                             <select class="list-group list-group-flush" size="15" id="selectedCohorts" ng-model="selected.cohorts"
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                                                 <option ng-repeat="cohort in configCohorts" value="{{cohort}}"
-                                                                        class="list-group-item">{{cohort.name}}</option>
+                                                                        class="list-group-item" title="{{cohort.description}}">{{cohort.name}}</option>
                                                                 <option ng-hide="configHasCohorts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no selected cohorts.
                                                                 </option>

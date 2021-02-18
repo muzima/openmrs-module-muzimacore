@@ -6,39 +6,39 @@
         <li id="e0" ng-class="{'navigation-active': menuItem === 'configs' || menuItem === 'config'}" title="With Setup Configurations, it is easy to create packages for the initial setup  of mUzima mobile app.
 Setup configurations are used to define the specific forms, cohorts, concepts, locations, providers as well as settings to be downloaded to the mobile application during initial setup.">
             <a href="#/configs"><i class="fa fa-wrench"></i> Setup Configurations</a></li>
-        <li id="e1" ng-class="{'navigation-active': menuItem === 'queues' || menuItem === 'queue'}" title="The queue data is used for the purpose of queuing submitted form payloads while waiting to be processed.">
+        <li id="e1" ng-class="{'navigation-active': menuItem === 'queues' || menuItem === 'queue'}" title="Queue data shows the list of form data sent from mUzima mobile app and is pending processing.">
             <a href="#/queues"><i class="fa fa-th-list"></i> Queue Data</a></li>
-        <li id="e2" ng-class="{'navigation-active': menuItem === 'errors' || menuItem === 'error'}" title="The error data is used displays a list of all submitted payloads/forms that could not be processed successfully due to some errors mainly associated with the form templates.
-The errors need to be resolved and forms requeued for processing.">
+        <li id="e2" ng-class="{'navigation-active': menuItem === 'errors' || menuItem === 'error'}"
+            title="The error data shows the list of form data that were submitted from the mobile app, and could not be processed successfully due to some errors in the data. The errors need to be resolved and the data subsequently requeued for processing.">
             <a href="#/errors"><i class="fa fa-pencil"></i> Error Data</a>
         </li>
-        <li id="e3" ng-class="{'navigation-active': menuItem === 'duplicates' || menuItem === 'duplicate'}" title="This feature is used to resolve duplication errors that arise as a result of patient registration details looking similar to a patient record already in the system.
-This error needs to be resolved by either merging the new registration to the existing record or creating new patient record.">
+        <li id="e3" ng-class="{'navigation-active': menuItem === 'duplicates' || menuItem === 'duplicate'}" title="While processing registration form data, mUzima checks for similarities between the new registration records and existing patient records. If similar, the new records will be flagged as potential duplicates.
+This feature is therefore used to resolve the potential duplicate errors. The user interface enables one to resolve such errors by either merging the new registration record to the existing record or or processing it as a new patient record.">
             <a href="#/duplicates"><i class="fa fa-clone"></i> Potential Duplicates</a>
         </li>
         <li id="e4" ng-class="{'navigation-active': menuItem === 'forms'}" title="mUzima can be adapted to enable registration of patients and collect various kinds of patient data(encounters) through data collection forms.
 mUzima forms are programmed using HTML, CSS and Javascript.">
             <a href="#/forms"><i class="fa fa-file-text"></i> mUzima Forms</a></li>
-        <li id="e5" ng-class="{'navigation-active': menuItem === 'patientReports' || menuItem === 'patientReport'}" title="The clinical summaries feature of mUzima health applications is built to bring patient level reports and summaries to the mUzima mobile app.
-The feature utilizes the OpenMRS reporting module to design and generate HTML reports that are then rendered on the mobile application.">
+        <li id="e5" ng-class="{'navigation-active': menuItem === 'patientReports' || menuItem === 'patientReport'}" title="The clinical summaries feature of mUzima health applications is built to bring patient level reports and summaries to the mUzima mobile app. The feature utilizes OpenMRS reporting module to design and generate HTML reports that are then rendered on the mobile application.">
             <a href="#/reportConfigs"><i class="fa fa-th-large"></i> Patient Reports</a>
         </li>
-        <li id="e6" ng-class="{'navigation-active': menuItem === 'cohortDefinitions' || menuItem === 'cohortDefinition'}" title="Cohorts comprise patient lists that can be downloaded to mobile applications.
-mUzima supports both static(cohort membership remain the same once the cohort is created) and dynamic(cohort membership changes based on a given criteria) cohorts.">
+        <li id="e6" ng-class="{'navigation-active': menuItem === 'cohortDefinitions' || menuItem === 'cohortDefinition'}"
+            title="Cohorts comprise patient lists that can be downloaded to mobile applications.
+mUzima supports both static cohorts (cohort membership remain the same once the cohort is created) and dynamic cohorts (cohort membership changes based on a given criteria).">
             <a href="#/cohortDefinitions"><i class="fa fa-group"></i> Cohort Definitions</a>
         </li>
-        <li id="e7" ng-class="{'navigation-active': menuItem === 'registrations' || menuItem === 'registration'}" title="This page is used to list the patients whose gets assigned a new uuid on the server side.
-It maps the assigned uuid to the temporal uuid generated on the mobile for the purpose of consolidating the records coming from the mobile before the temporal uuid is updated to the assigned uuid on the mobile application">
+        <li id="e7" ng-class="{'navigation-active': menuItem === 'registrations' || menuItem === 'registration'}"
+            title="While registering patients on the mobile app, mUzima assigns a temporary UUID to the new records so as to enable filling of other forms against the new record. When the registration data gets processed at the server side, there may be few cases encountered where the temporary UUID is similar to an already registered patient on the server. For such cases, a new UUID will be generated for the new registration record. Otherwise the temporary UUID from the mobile app will be used. This page will list the patient records that were assigned new UUIDs at the server side. The records are maintained to enable resolving correct UUIDs during processing of subsequent form data associated with the registration records whose UUIDs were reassigned.">
             <a href="#/registrations"><i class="fa fa-user-plus"></i> Registrations</a>
         </li>
-        <li id="e8" ng-class="{'navigation-active': menuItem === 'sources' || menuItem === 'source'}" title="Data Source is used to configure the mUzima clients connected to your mUzima OpenMRS  instance.
+        <li id="e8" ng-class="{'navigation-active': menuItem === 'sources' || menuItem === 'source'}" title="Data source is used to configure the mUzima clients connected to your mUzima OpenMRS  instance.
 There must be at least one data source in order for the application to be able to submit forms.">
             <a href="#/sources"><i class="fa fa-database"></i> Data Source</a>
         </li>
         <li id="e9" ng-class="{'navigation-active': menuItem === 'settings' || menuItem === 'setting'}" title="mUzima is a flexible app that can be configured through settings to suit the implementation needs.
 Setting will be used to:
-1. Enable or disable application features i.e implementations will decide which features will be available on the mobile.
-2. Provide information needed for some features on the mobile app to function properly e.g setting of map key if geomapping feature will be used on the app.">
+(1) Enable or disable application features i.e implementations will decide which features will be available on the mobile.
+(2) Provide information needed for some features on the mobile app to function properly e.g setting of map key if geomapping feature will be used on the app.">
             <a href="#/settings"><i class="fa fa-cogs"></i> Settings</a>
         </li>
         <li id="e10">
@@ -69,7 +69,7 @@ Setting will be used to:
             tourtip-margin="5"
             tourtip-element="#e0"></virtual-step>
     <virtual-step
-            tourtip="The queue data is used for the purpose of queuing submitted form payloads while waiting to be processed.
+            tourtip="Queue data shows the list of form data sent from mUzima mobile app and is pending processing.
             <br/><br/>
 <a class='whiteLink' href='https://wiki.muzima.org/display/muzima/Queue+Data' target='_blank'>Learn More</a>"
             tourtip-next-label="Next"
@@ -78,8 +78,8 @@ Setting will be used to:
             tourtip-margin="5"
             tourtip-element="#e1"></virtual-step>
     <virtual-step
-            tourtip="The error data is used displays a list of all submitted payloads/forms that could not be processed successfully due to some errors mainly associated with the form templates.<br/>
-The errors need to be resolved and forms requeued for processing.
+            tourtip="Error data shows the list of form data that were submitted from the mobile app,
+            and could not be processed successfully due to some errors in the data.<br/> The errors need to be resolved and the data subsequently requeued for processing.
             <br/><br/>
 <a class='whiteLink' href='https://wiki.muzima.org/display/muzima/Error+Data' target='_blank'>Learn More</a><br/><br/>"
             tourtip-next-label="Next"
@@ -88,7 +88,10 @@ The errors need to be resolved and forms requeued for processing.
             tourtip-margin="5"
             tourtip-element="#e2"></virtual-step>
     <virtual-step
-            tourtip="This feature is used to resolve duplication errors that arise as a result of patient registration details looking similar to a patient record already in the system. This error needs to be resolved by either merging the new registration to the existing record or creating new patient record.
+            tourtip="While registering patients on the mobile app, mUzima assigns a temporary UUID to the new records so as to enable filling of other forms against the new record.
+            When the registration data gets processed at the server side, there may be few cases encountered where the temporary UUID is similar to an already registered patient on the server.
+            For such cases, a new UUID will be generated for the new registration record. Otherwise the temporary UUID from the mobile app will be used. This page will list the patient records that were assigned new UUIDs at the server side.
+            The records are maintained to enable resolving correct UUIDs during processing of subsequent form data associated with the registration records whose UUIDs were reassigned.
             <br/><br/>
 <a class='whiteLink' href='https://wiki.muzima.org/display/muzima/Potential+Duplicates' target='_blank'>Learn More</a><br/><br/>"
             tourtip-next-label="Next"
@@ -118,7 +121,7 @@ The errors need to be resolved and forms requeued for processing.
             tourtip-element="#e5"></virtual-step>
     <virtual-step
      tourtip="Cohorts comprise patient lists that can be downloaded to mobile applications.<br/>
-mUzima supports both static(cohort membership remain the same once the cohort is created) and dynamic(cohort membership changes based on a given criteria) cohorts.
+mUzima supports both static cohorts (cohort membership remain the same once the cohort is created) and dynamic cohorts (cohort membership changes based on a given criteria).
 <br/><br/>
 <a class='whiteLink' href='https://wiki.muzima.org/display/muzima/Cohort+Definitions' target='_blank'>Learn More</a>
 <br/><br/>"
@@ -129,8 +132,11 @@ mUzima supports both static(cohort membership remain the same once the cohort is
             tourtip-element="#e6"></virtual-step>
 
     <virtual-step
-            tourtip="This page is used to list the patients whose gets assigned a new uuid on the server side.<br/>
-It maps the assigned uuid to the temporal uuid generated on the mobile for the purpose of consolidating the records coming from the mobile before the temporal uuid is updated to the assigned uuid on the mobile application.
+            tourtip=" While registering patients on the mobile app, mUzima assigns a temporary UUID to the new records so as to enable filling of other forms against the new record.
+            When th eregistration data gets processed at the srever side, there may be few cases where the temporary UUID is similar to an already registered patient on the server. For such
+            cases, a new UUID will be generated for the new registration record. Otherwise the temporary UUID from the mobile app will be used.
+            This page will list the patient records that were assigned new uuid at the server side.<br/>
+The records are used for resolving correct UUIDs for other form data associated with the registration records whose UUIDs were reassigned.
 <br/><br/>
 <a class='whiteLink' href='https://wiki.muzima.org/display/muzima/Registration' target='_blank'>Learn More</a>
 <br/><br/>"
@@ -140,7 +146,7 @@ It maps the assigned uuid to the temporal uuid generated on the mobile for the p
             tourtip-margin="5"
             tourtip-element="#e7"></virtual-step>
     <virtual-step
-            tourtip="Data Source is used to configure the mUzima clients connected to your mUzima OpenMRS  instance.<br/>
+            tourtip="Data source is used to configure the mUzima clients connected to your mUzima OpenMRS  instance.<br/>
 There must be at least one data source in order for the application to be able to submit forms.
 <br/><br/>
 <a class='whiteLink' href='https://wiki.muzima.org/display/muzima/Data+Source' target='_blank'>Learn More</a>
