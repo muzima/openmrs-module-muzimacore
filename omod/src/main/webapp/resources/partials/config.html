@@ -103,6 +103,9 @@
                                                                     style="width: 100%; font-size: 11px; max-height:200px; border:none;" multiple="multiple">
                                                                 <option ng-repeat="form in configForms" value="{{form}}"
                                                                         class="list-group-item">{{form.name}}</option>
+                                                                <option ng-hide="hasconfigForms()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected forms.
+                                                                </option>
                                                             </select>
                                                             <button type="submit" ng-show="selected.forms.length" ng-click="removeSelectedForms()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
                                                         </div>
@@ -163,6 +166,9 @@
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                                                 <option ng-repeat="cohort in configCohorts" value="{{cohort}}"
                                                                         class="list-group-item">{{cohort.name}}</option>
+                                                                <option ng-hide="configHasCohorts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected cohorts.
+                                                                </option>
                                                             </select>
                                                             <button type="submit" ng-show="selected.cohorts.length" ng-click="removeSelectedCohorts()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
                                                         </div>
@@ -221,6 +227,9 @@
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                                                 <option ng-repeat="location in configLocations" value="{{location}}"
                                                                         class="list-group-item">{{location.name}}</option>
+                                                                <option ng-hide="configHasLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected locations.
+                                                                </option>
                                                             </select>
                                                             <button type="submit" ng-show="selected.locations.length" ng-click="removeSelectedLocations()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
                                                         </div>
@@ -279,6 +288,9 @@
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                                                 <option ng-repeat="provider in configProviders" value="{{provider}}"
                                                                         class="list-group-item">{{provider.name}}</option>
+                                                                <option ng-hide="configHasProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected providers.
+                                                                </option>
                                                             </select>
                                                             <button type="submit" ng-show="selected.providers.length" ng-click="removeSelectedProviders()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
                                                         </div>
@@ -336,6 +348,9 @@
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                                                 <option ng-repeat="concept in configConcepts" value="{{concept}}"
                                                                         class="list-group-item">{{concept.name}}</option>
+                                                                <option ng-hide="configHasConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected concepts.
+                                                                </option>
                                                             </select>
                                                             <button type="submit" ng-show="selected.concepts.length" ng-click="removeSelected()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
                                                         </div>
@@ -397,6 +412,9 @@
                                                                 <option ng-repeat="setting in configSettings" value="{{setting}}"
                                                                         class="list-group-item" title="{{setting.description}}">
                                                                     <div>{{formatSettingDisplay(setting)}}</div>
+                                                                </option>
+                                                                <option ng-hide="configHasSettings()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected settings.
                                                                 </option>
                                                             </select>
                                                             <button type="submit" ng-show="selected.settings.length" ng-click="removeSelectedSettings()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
