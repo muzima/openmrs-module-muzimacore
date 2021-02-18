@@ -1,6 +1,7 @@
 function ErrorCtrl($scope, $routeParams, $location, $data) {
     // page parameter
     $scope.uuid = $routeParams.uuid;
+    $scope.divHeight = {"height" :"96%" };
 
     // get the current notification
     $data.getError($scope.uuid).
@@ -147,9 +148,11 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
                     $( "#btnUpdate" ).prop( "disabled", false );
                     $( "#btnSaveAndProcess" ).prop( "disabled", false );
                     $scope.isValid = true;
+                    $scope.divHeight = {"height" :"96%" };
                 }
                 else{
                     $scope.isValid = false;
+                    $scope.divHeight = {"height" :"75%" };
                     $('html,body').animate({scrollTop: $('#errorList').offset().top},1000);
                 }
                 $('.messages').show();
@@ -159,6 +162,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
             $('#wait').hide();
             var jsonFormDataError = JSON.parse('{"Errors":{"001":"Invalid Json Payload"}}');
             $scope.isValid = false;
+            $scope.divHeight = {"height" :"75%" };
             $('html,body').animate({scrollTop: $('#errorList').offset().top},1000);
             $scope.ul_li_Data = '';
             $scope.to_ul(jsonFormDataError,'treeError');

@@ -296,6 +296,10 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             $scope.selected.eForms = [];
         }
     };
+
+    $scope.hasconfigForms = function (){
+        return $scope.configForms.length > 0;
+    }
     /****************************************************************************************
      ***** Group of methods to manipulate Cohorts
      *****************************************************************************************/
@@ -919,7 +923,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         return $scope.configSettings.length > 0;
     }
 
-    $scope.hasavailableNotUsedSettings = function(){
+    $scope.hasAvailableNotUsedSettings = function(){
         return $scope.availableNotUsedSettings.length > 0;
     }
 

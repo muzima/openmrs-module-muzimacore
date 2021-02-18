@@ -405,5 +405,5 @@ ul.dropdown-menu.show > li :hover {
 }
 
 .list-group-item{
-    white-space: break-spaces;
+    white-space: initial;
 }

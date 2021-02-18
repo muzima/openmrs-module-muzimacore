@@ -5,46 +5,48 @@
             <tbody>
             <tr>
             <td width="50%">
-                <table class="table table-striped table-bordered table-hover">
-                    <tbody>
-                        <tr>
-                            <td>Sender</td>
-                            <td>{{error.source}}</td>
-                        </tr>
-                        <tr>
-                            <td>Provider</td>
-                            <td>{{error.providerId}} - {{error.providerName}}</td>
-                        </tr>
-                        <tr>
-                            <td>Location Id</td>
-                            <td>{{error.locationId}} - {{error.locationName}}</td>
-                        </tr>
-                        <tr>
-                            <td>Form Name</td>
-                            <td>{{error.formName}}</td>
-                        </tr>
-                        <tr>
-                            <td>Kind</td>
-                            <td>{{error.discriminator}}</td>
-                        </tr>
-                        <tr>
-                            <td>Patient Uuid</td>
-                            <td>{{error.patientUuid}}</td>
-                        </tr>
-                        <tr ng-hide = "error.regErrorUuid == ''">
-                            <td>Registration Error</td>
-                            <td><a href="#/error/{{error.regErrorUuid}}">Registration Error</a></td>
-                        </tr>
-                        <tr>
-                            <td>Submitted On</td>
-                            <td>{{error.submitted}}</td>
-                        </tr>
-                        <tr>
-                            <td>Processed On</td>
-                            <td>{{error.processed}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div  style="height:40vh;border: 1px solid #999999; border-radius: 4px; overflow-y: auto;">
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            <tr>
+                                <td>Sender</td>
+                                <td>{{error.source}}</td>
+                            </tr>
+                            <tr>
+                                <td>Provider</td>
+                                <td>{{error.providerId}} - {{error.providerName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Location Id</td>
+                                <td>{{error.locationId}} - {{error.locationName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Form Name</td>
+                                <td>{{error.formName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Kind</td>
+                                <td>{{error.discriminator}}</td>
+                            </tr>
+                            <tr>
+                                <td>Patient Uuid</td>
+                                <td>{{error.patientUuid}}</td>
+                            </tr>
+                            <tr ng-hide = "error.regErrorUuid == ''">
+                                <td>Registration Error</td>
+                                <td><a href="#/error/{{error.regErrorUuid}}">Registration Error</a></td>
+                            </tr>
+                            <tr>
+                                <td>Submitted On</td>
+                                <td>{{error.submitted}}</td>
+                            </tr>
+                            <tr>
+                                <td>Processed On</td>
+                                <td>{{error.processed}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </td>
             <td width="50%">
                 <div id = 'errorList' style="height:38vh;">
@@ -53,7 +55,7 @@
                     <div class="messages">
                         <div ng-hide="isValid" class="alert alert-danger">Please correct the errors below.</div>
                     </div>
-                    <div class="tree well errorlist" style="height: inherit;">
+                    <div class="tree well errorlist" ng-style="divHeight">
                         <ul id='treeError'>
                         </ul>
                     </div>
