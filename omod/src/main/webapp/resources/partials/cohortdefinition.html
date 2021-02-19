@@ -55,10 +55,12 @@
                 <div class="row" ng-show = "cohortDefinitionExecuted && !isProcessingSuccessfull">
                     <div class="alert alert-success w-100">Cohort definition execution failed.</div>
                 </div>
-                <div class="row">
-                    <button type="submit" ng-click="edit()" class="btn btn-success">Edit</button>&nbsp;
-                    <button type="submit" ng-click="cancel()" class="btn btn-warning">Close</button>&nbsp;
-                    <button type="submit" ng-click="processDefinition(cohortDefinition)" ng-show="cohortDefinition.uuid" class="btn btn-primary">Run now</button>
+                <div class="row d-flex">
+                    <div class="ml-auto">
+                        <button type="submit" ng-click="edit()" class="btn btn-primary">Edit</button>&nbsp;
+                        <button type="submit" ng-click="cancel()" class="btn btn-warning">Close</button>&nbsp;
+                        <button type="submit" ng-click="processDefinition(cohortDefinition)" ng-show="cohortDefinition.uuid" class="btn btn-success">Run now</button>
+                    </div>
                 </div>
                 <span></span>
             </div>
@@ -112,11 +114,13 @@
                     <div class="row">
                         <input class="form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="cohortDefinition.retireReason" ng-show="retireCohortDefinition" ng-required="retireCohortDefinition"/>
                     </div>
-                    <div class="row">
-                        <button type="submit" ng-disabled="definitionsavingdisabled(cohortDefinition.definition)" ng-click="save(cohortDefinition)" class="btn btn-primary">Save</button>&nbsp;
-                        <button ng-click="toggleRetireCohortDefinition()" ng-show="!retireCohortDefinition && cohortDefinition.uuid" class="btn btn-danger">Retire</button>
-                        <button type="submit" ng-show="retireCohortDefinition" ng-click="definition.$valid && delete(cohortDefinition)" class="btn btn-danger">Retire</button>&nbsp;
-                        <button type="submit" ng-click="cancel()" class="btn btn-warning">Cancel</button>
+                    <div class="row d-flex">
+                        <div class="ml-auto">
+                            <button type="submit" ng-disabled="definitionsavingdisabled(cohortDefinition.definition)" ng-click="save(cohortDefinition)" class="btn btn-success">Save</button>&nbsp;
+                            <button ng-click="toggleRetireCohortDefinition()" ng-show="!retireCohortDefinition && cohortDefinition.uuid" class="btn btn-danger">Retire</button>
+                            <button type="submit" ng-show="retireCohortDefinition" ng-click="definition.$valid && delete(cohortDefinition)" class="btn btn-danger">Retire</button>&nbsp;
+                            <button type="submit" ng-click="cancel()" class="btn btn-warning">Cancel</button>
+                        </div>
                     </div>
                     <span></span>
                 </form>
