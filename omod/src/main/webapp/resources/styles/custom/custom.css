@@ -113,7 +113,7 @@
 /*==============================================*/
 body{
     background-color: #ffffff;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 .content{
     background-color: #ffffff;
@@ -154,6 +154,7 @@ body{
 
 .navbar-custom {
     background-color: #34495e;
+    margin-bottom: 20px;
 }
 
 .white-text {
@@ -407,4 +408,8 @@ ul.dropdown-menu.show > li :hover {
 
 .list-group-item{
     white-space: initial;
+}
+
+label{
+    font-weight: bold;
 }

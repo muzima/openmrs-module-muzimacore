@@ -33,6 +33,8 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
     // initialize the view to be read only
     $scope.mode = "view";
     $scope.uuid = $routeParams.uuid;
+    $scope.cohortDefinitionExecuted = false;
+    $scope.isProcessingSuccessfull = false;
 
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
@@ -41,16 +43,12 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
                 var serverData = response.data;
                 $scope.cohorts = serverData.objects;
                 $('#wait').hide();
-                $('#processingFailure').hide();
-                $('#processingSuccessful').hide();
             });
     } else {
         $cohortDefinitionService.getCohortDefinition($scope.uuid).
             then(function (response) {
                 $scope.cohortDefinition = response.data;
             $('#wait').hide();
-            $('#processingFailure').hide();
-            $('#processingSuccessful').hide();
             });
         $cohortDefinitionService.getAllCohorts().
             then(function (response) {
@@ -60,10 +58,14 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
     }
 
     $scope.edit = function () {
+        $scope.cohortDefinitionExecuted = false;
+        $scope.isProcessingSuccessfull = false;
         $scope.mode = "edit";
     };
 
     $scope.cancel = function () {
+        $scope.cohortDefinitionExecuted = false;
+        $scope.isProcessingSuccessfull = false;
         if ($scope.mode == "edit") {
             if ($scope.uuid === undefined) {
                 $location.path("/cohortDefinitions");
@@ -145,10 +147,12 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
          $cohortDefinitionService.processCohortDefinition(cohortDefinition.uuid).
             then(function (response) {
                 $('#wait').hide();
-                $('#processingSuccessful').show();
+                $scope.cohortDefinitionExecuted = true;
+                $scope.isProcessingSuccessfull = true;
             },function (response) {
                 $('#wait').hide();
-                $('#processingFailure').show();
+                $scope.cohortDefinitionExecuted = true;
+                $scope.isProcessingSuccessfull = false;
             });
     };
 }
