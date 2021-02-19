@@ -92,7 +92,6 @@ public class MuzimaFormController {
         List<Object[]> results = service.getFormCountGroupedByDiscriminator();
         Map<String, Object> convertedMap = new HashMap<String, Object>();
         convertedMap.put("results",WebConverter.convertList(results));
-        System.out.println(convertedMap);
         return convertedMap;
     }
 }

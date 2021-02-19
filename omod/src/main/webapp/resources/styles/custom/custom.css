@@ -113,7 +113,7 @@
 /*==============================================*/
 body{
     background-color: #ffffff;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 .content{
     background-color: #ffffff;
@@ -403,6 +403,11 @@ ul.dropdown-menu.show > li :hover {
 .card {
     border: 1px solid #a99f9f;
     border-radius: 0.15rem;
+}
+
+.dashboard-card{
+    width: 100%;
+    border-color: #34495e;
 }
 
 .list-group-item{

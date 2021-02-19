@@ -83,7 +83,7 @@
                                                             <label class="card-header alert-info" for="availableNotUsedForms" style="">Available Forms</label>
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedForms" ng-model="selected.eForms"
                                                     white-space                 style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                                                <option ng-repeat="form in availableNotUsedForms" value="{{form}}"
+                                                                <option ng-repeat="form in availableNotUsedForms" value="{{form}}" title="{{form.description}}"
                                                                         class="list-group-item">{{form.name}}</option>
                                                                 <option ng-hide="hasMuzimaForms()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no forms available. Please click on
@@ -101,7 +101,7 @@
                                                             <label for="selectedForms" class="w-100  card-header alert-primary">Selected Forms</label>
                                                             <select class="list-group list-group-flush" size="15" id="selectedForms" ng-model="selected.forms"
                                                                     style="width: 100%; font-size: 11px; max-height:200px; border:none;" multiple="multiple">
-                                                                <option ng-repeat="form in configForms" value="{{form}}"
+                                                                <option ng-repeat="form in configForms" value="{{form}}" title="{{form.description}}"
                                                                         class="list-group-item">{{form.name}}</option>
                                                                 <option ng-hide="hasconfigForms()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no selected forms.
