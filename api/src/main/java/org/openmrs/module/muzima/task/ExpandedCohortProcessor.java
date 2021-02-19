@@ -54,8 +54,12 @@ public class ExpandedCohortProcessor {
             ExpandedCohortProcessorService expandedCohortProcessorService = Context.getRegisteredComponent("muzima.ExpandedCohortProcessorService",ExpandedCohortProcessorService.class);
             Iterator<CohortDefinitionData> cohortCriteriaDataIterator = cohortDefinitionDataList.iterator();
             while(cohortCriteriaDataIterator.hasNext()){
-                CohortDefinitionData cohortCriteriaData=cohortCriteriaDataIterator.next();
-                expandedCohortProcessorService.process(cohortCriteriaData);
+                try {
+                    CohortDefinitionData cohortCriteriaData = cohortCriteriaDataIterator.next();
+                    expandedCohortProcessorService.process(cohortCriteriaData);
+                }catch (Exception e){
+                    log.error("Could not process cohort definition: ",e);
+                }
             }
         } finally {
             isRunning = false;
