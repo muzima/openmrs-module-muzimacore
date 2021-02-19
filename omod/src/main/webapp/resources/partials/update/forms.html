@@ -15,69 +15,65 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-7">
+                <div id="error-alert"></div>
+                <form role="form" ng-submit="update(file, muzimaforms.form, formType )" style="width: 100%;">
+                    <div class="card" style="padding:15px;">
 
-                    <div id="error-alert"></div>
-                    <form role="form" ng-submit="update(file, muzimaforms.form, formType )">
-                        <div class="panel panel-default panel-body">
+                        <div class="form-group">
+                            <label>Name : </label> {{muzimaforms.form.name}}
+                        </div>
 
-                            <div class="form-group">
-                                <label >Name : </label> {{muzimaforms.form.name}}
+                        <div class="form-group">
+                            <label>Version : </label> {{muzimaforms.form.version || ""}}
+                        </div>
+
+                        <div>
+                            <label>Description : </label> {{muzimaforms.form.description || ""}}
+                        </div>
+
+                        <div>
+                            <label>Discriminator : </label> {{muzimaforms.form.discriminator || ""}}
+                        </div>
+                    </div>
+                    <div class = "card" style="margin-top: 15px; padding: 15px;">
+                        <div class="form-group">
+                            <file-upload message="Click here to update the form template"/>
+                        </div>
+                        <div class="form-group" ng-hide="isValidated()">
+                            <div ng-show="hasFile()">
+                                <label for="formType">Select the FormType: </label>
+                                <select id="formType" ng-model="formType" name="formType">
+                                    <option value="odk">ODK</option>
+                                    <option value="html">HTML</option>
+                                    <option value="javarosa">JavaRosa</option>
+                                </select>
                             </div>
-
-                            <div class="form-group">
-                                <label>Version : </label> {{muzimaforms.form.version || ""}}
-                            </div>
-
-                            <div>
-                                <label>Description : </label> {{muzimaforms.form.description || ""}}
-                            </div>
-
-                            <div>
-                                <label>Discriminator : </label> {{muzimaforms.form.discriminator || ""}}
+                            <div ng-show="hasFile()">
+                                <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
+                                <input type="button" ng-click="validate(file,formType)" class="btn btn-success" value="Validate">
                             </div>
                         </div>
-                        <div class = "panel panel-default panel-body">
-                            <div class="form-group">
-                                <file-upload message="Click here to update the form template"/>
-                            </div>
-                            <div class="form-group" ng-hide="isValidated()">
-                                <div ng-show="hasFile()">
-                                    <label for="formType">Select the FormType: </label>
-                                    <select id="formType" ng-model="formType" name="formType">
-                                        <option value="odk">ODK</option>
-                                        <option value="html">HTML</option>
-                                        <option value="javarosa">JavaRosa</option>
-                                    </select>
-                                </div>
-                                <div ng-show="hasFile()">
-                                    <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
-                                    <input type="button" ng-click="validate(file,formType)" class="btn btn-success" value="Validate">
+                        <div ng-show = "isValidXForm()">
+                            <div class="alert alert-success w-100">The Form is valid! Use the upload button to import it.</div>
+                        </div>
+                        <div ng-show="isInvalidXForm()">
+                            <div class="row">
+                                <div class="col-lg-12 well-small">
+                                    <button ng-click="validate(file, formType)" class="btn btn-success">Re-Validate</button>
                                 </div>
                             </div>
-                            <div ng-show = "isValidXForm()">
-                                <div class="alert alert-success w-100">The Form is valid! Use the upload button to import it.</div>
-                            </div>
-                            <div ng-show="isInvalidXForm()">
-                                <div class="row">
-                                    <div class="col-lg-12 well-small">
-                                        <button ng-click="validate(file, formType)" class="btn btn-success">Re-Validate</button>
-                                    </div>
-                                </div>
-                                <div class="row" ng-repeat="validation in validations.list">
-                                    <div class="col-lg-12 panel">
-                                        <pre class="alert" ng-class="style(validation.type)">{{validation.message}}</pre>
-                                    </div>
+                            <div class="row" ng-repeat="validation in validations.list">
+                                <div class="col-lg-12 panel">
+                                    <pre class="alert" ng-class="style(validation.type)">{{validation.message}}</pre>
                                 </div>
                             </div>
                         </div>
-                        <div class="well-small">
-                            <button ng-click="cancelUpdate()" class="btn btn-danger">Cancel</button>
-                            <button type="submit" class="btn btn-success" ng-disabled = "!isValidXForm()">Update</button>
-                        </div>
-                    </form>
-
-                </div>
+                    </div>
+                    <div class="well-small" style="margin-top: 7px;">
+                        <button ng-click="cancelUpdate()" class="btn btn-danger">Cancel</button>
+                        <button type="submit" class="btn btn-success" ng-disabled = "!isValidXForm()">Update</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
