@@ -64,7 +64,7 @@
             <div class="row">
                 <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
                     <table class="table table-hover table-striped">
-                    <tr ng-repeat="muzimaform in muzimaforms | filter:isRegistrationForm">
+                    <tr ng-repeat="muzimaform in muzimaforms | filter:isRegistrationForm| orderBy: 'form.name'">
                         <td>
                             <label class="w-100">{{muzimaform.form.name}}
                                 <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
@@ -175,7 +175,7 @@
             <div class="row">
                 <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
                     <table class="table table-hover table-striped">
-                        <tr ng-repeat="muzimaform in muzimaforms | filter:isNonRegistrationForm | orderBy: 'name'">
+                        <tr ng-repeat="muzimaform in muzimaforms | filter:isNonRegistrationForm | orderBy: 'form.name'">
                             <td>
                                 <label class="w-100" title="{{muzimaform.form.discriminator}}">{{muzimaform.form.name}}
                                     <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
