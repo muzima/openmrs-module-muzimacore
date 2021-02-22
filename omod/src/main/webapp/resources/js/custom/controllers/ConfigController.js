@@ -827,6 +827,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         });
         $scope.dismiss = function(){
             modalInstance.close();
+            $scope.selected.settings = [];
         }
     }
 
