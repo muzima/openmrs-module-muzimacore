@@ -64,7 +64,7 @@
             <div class="row">
                 <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
                     <table class="table table-hover table-striped">
-                    <tr ng-repeat="muzimaform in muzimaforms | filter:isRegistrationForm">
+                    <tr ng-repeat="muzimaform in muzimaforms | filter:isRegistrationForm| orderBy: 'form.name'">
                         <td>
                             <label class="w-100">{{muzimaform.form.name}}
                                 <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
@@ -175,7 +175,7 @@
             <div class="row">
                 <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
                     <table class="table table-hover table-striped">
-                        <tr ng-repeat="muzimaform in muzimaforms | filter:isNonRegistrationForm">
+                        <tr ng-repeat="muzimaform in muzimaforms | filter:isNonRegistrationForm | orderBy: 'form.name'">
                             <td>
                                 <label class="w-100" title="{{muzimaform.form.discriminator}}">{{muzimaform.form.name}}
                                     <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
@@ -244,7 +244,7 @@
             <div class="row">
                 <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
                     <table class="table table-hover table-striped">
-                        <tr ng-repeat="cohort in cohorts">
+                        <tr ng-repeat="cohort in cohorts  | orderBy: 'name'">
                             <td>
                                 <label class="w-100" title="{{cohort.description}}">{{cohort.name}}
                                     <input class="pull-right" ng-checked="cohortExistsInConfig(cohort)"
@@ -338,7 +338,7 @@
                                 <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Concepts extracted from forms</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
                                          style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                    <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}"
+                                    <option ng-repeat="concept in extractedNotUsedConcepts | orderBy: 'name'" value="{{concept}}"
                                             class="list-group-item">{{concept.name}}</option>
                                     <option ng-hide="hasAvailableNotUsedConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                         There are no concepts available that were extracted from the forms. Please use the search by concept name option.
@@ -355,7 +355,7 @@
                                 <label for="selectedConcepts" class="w-100  card-header alert-primary">Selected Concepts</label>
                                 <select class="list-group list-group-flush" size="15" id="selectedConcepts" ng-model="selected.concepts"
                                         style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                    <option ng-repeat="concept in configConcepts" value="{{concept}}"
+                                    <option ng-repeat="concept in configConcepts | orderBy: 'name'" value="{{concept}}"
                                     class="list-group-item">{{concept.name}}</option>
                                     <option ng-hide="configHasConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                         There are no selected concepts.
@@ -434,7 +434,7 @@
                                 <label class="card-header alert-info" for="availableNotUsedLocations" style="">Available locations</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedLocations" ng-model="selected.eLocations"
                                          style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                    <option ng-repeat="location in availableNotUsedLocations" value="{{location}}"
+                                    <option ng-repeat="location in availableNotUsedLocations | orderBy: 'name'" value="{{location}}"
                                             class="list-group-item">{{location.name}}</option>
                                     <option ng-hide="hasAvailableNotUsedLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                         There are no locations available.
@@ -451,7 +451,7 @@
                                 <label for="selectedLocations" class="w-100  card-header alert-primary">Selected Locations</label>
                                 <select class="list-group list-group-flush" size="15" id="selectedLocations" ng-model="selected.locations"
                                         style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                    <option ng-repeat="location in configLocations" value="{{location}}"
+                                    <option ng-repeat="location in configLocations | orderBy: 'name'" value="{{location}}"
                                             class="list-group-item">{{location.name}}</option>
                                     <option ng-hide="configHasLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                         There are no selected locations.
@@ -543,7 +543,7 @@
                                 <label class="card-header alert-info" for="availableNotUsedProviders" style="">Available providers</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedProviders" ng-model="selected.eProviders"
                                          style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                    <option ng-repeat="provider in availableNotUsedProviders" value="{{provider}}"
+                                    <option ng-repeat="provider in availableNotUsedProviders | orderBy: 'name'" value="{{provider}}"
                                             class="list-group-item">{{provider.name}}</option>
                                     <option ng-hide="hasAvailableNotUsedProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                         There are no providers available.
@@ -560,7 +560,7 @@
                                 <label for="selectedProviders" class="w-100  card-header alert-primary">Selected Providers</label>
                                 <select class="list-group list-group-flush" size="15" id="selectedProviders" ng-model="selected.providers"
                                         style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                    <option ng-repeat="provider in configProviders" value="{{provider}}"
+                                    <option ng-repeat="provider in configProviders | orderBy: 'name'" value="{{provider}}"
                                             class="list-group-item">{{provider.name}}</option>
                                     <option ng-hide="configHasProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                         There are no selected providers.
@@ -642,7 +642,7 @@
                                 <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedSettings" ng-model="selected.eSettings"
                                          style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                    <option ng-repeat="setting in availableNotUsedSettings" value="{{setting}}"
+                                    <option ng-repeat="setting in availableNotUsedSettings | orderBy: 'name'" value="{{setting}}"
                                             class="list-group-item" title="{{setting.description}}">
                                         <div>{{formatSettingDisplay(setting)}}</div>
                                     </option>
@@ -661,7 +661,7 @@
                                 <label for="selectedSettings" class="w-100  card-header alert-primary">Selected Config settings</label>
                                 <select class="list-group list-group-flush" size="15" id="selectedSettings" ng-model="selected.settings"
                                         style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                    <option ng-repeat="setting in configSettings" value="{{setting}}"
+                                    <option ng-repeat="setting in configSettings | orderBy: 'name'" value="{{setting}}"
                                             class="list-group-item" title="{{setting.description}}">
                                         <div>{{formatSettingDisplay(setting)}}</div>
                                     </option>
@@ -731,7 +731,7 @@
                 <div class="tab-content" id="wizard-review-content">
                     <div class="tab-pane fade show active" id="forms" role="tabpanel" aria-labelledby="forms-tab">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="form in configForms">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="form in configForms | orderBy: 'name'">
                                 {{form.name}}
                             </li>
                         </ul>
@@ -742,7 +742,7 @@
                     </div>
                     <div class="tab-pane fade" id="cohorts" role="tabpanel" aria-labelledby="cohorts-tab">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="cohort in configCohorts">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="cohort in configCohorts | orderBy: 'name'">
                                 {{cohort.name}}
                             </li>
                         </ul>
@@ -752,7 +752,7 @@
                     </div>
                     <div class="tab-pane fade" id="concepts" role="tabpanel" aria-labelledby="concepts-tab">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="concept in configConcepts">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="concept in configConcepts | orderBy: 'name'">
                                 {{concept.name}}
                             </li>
                         </ul>
@@ -762,7 +762,7 @@
                     </div>
                     <div class="tab-pane fade" id="locations" role="tabpanel" aria-labelledby="locations-tab">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="location in configLocations">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="location in configLocations | orderBy: 'name'">
                                 {{location.name}}
                             </li>
                         </ul>
@@ -772,7 +772,7 @@
                     </div>
                     <div class="tab-pane fade" id="providers" role="tabpanel" aria-labelledby="providers-tab">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="provider in configProviders">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="provider in configProviders | orderBy: 'name'">
                                 {{provider.name}}
                             </li>
                         </ul>
@@ -782,7 +782,7 @@
                     </div>
                     <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="setting in configSettings">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="setting in configSettings | orderBy: 'name'">
                                 {{formatSettingDisplay(setting)}}
                             </li>
                         </ul>

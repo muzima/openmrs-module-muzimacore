@@ -88,7 +88,7 @@
                                                             <label class="card-header alert-info" for="availableNotUsedForms" style="">Available Forms</label>
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedForms" ng-model="selected.eForms"
                                                     white-space                 style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                                                <option ng-repeat="form in availableNotUsedForms" value="{{form}}" title="{{form.description}}"
+                                                                <option ng-repeat="form in availableNotUsedForms | orderBy: 'name'" value="{{form}}" title="{{form.description}}"
                                                                         class="list-group-item">{{form.name}}</option>
                                                                 <option ng-hide="hasMuzimaForms()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no forms available. Please click on
@@ -106,7 +106,7 @@
                                                             <label for="selectedForms" class="w-100  card-header alert-primary">Selected Forms</label>
                                                             <select class="list-group list-group-flush" size="15" id="selectedForms" ng-model="selected.forms"
                                                                     style="width: 100%; font-size: 11px; max-height:200px; border:none;" multiple="multiple">
-                                                                <option ng-repeat="form in configForms" value="{{form}}" title="{{form.description}}"
+                                                                <option ng-repeat="form in configForms | orderBy: 'name'" value="{{form}}" title="{{form.description}}"
                                                                         class="list-group-item">{{form.name}}</option>
                                                                 <option ng-hide="hasconfigForms()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no selected forms.
@@ -155,7 +155,7 @@
                                                             <label class="card-header alert-info" for="availableNotUsedCohorts" style="">Available Cohorts</label>
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedCohorts" ng-model="selected.eCohorts"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                                                <option ng-repeat="cohort in availableNotUsedCohorts" value="{{cohort}}"
+                                                                <option ng-repeat="cohort in availableNotUsedCohorts | orderBy: 'name'" value="{{cohort}}"
                                                                         class="list-group-item" title="{{cohort.description}}">{{cohort.name}}</option>
                                                                 <option ng-hide="hasCohorts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no cohorts available. Please click on
@@ -173,7 +173,7 @@
                                                             <label for="selectedCohorts" class="w-100  card-header alert-primary">Selected Cohorts</label>
                                                             <select class="list-group list-group-flush" size="15" id="selectedCohorts" ng-model="selected.cohorts"
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                                                <option ng-repeat="cohort in configCohorts" value="{{cohort}}"
+                                                                <option ng-repeat="cohort in configCohorts | orderBy: 'name'" value="{{cohort}}"
                                                                         class="list-group-item" title="{{cohort.description}}">{{cohort.name}}</option>
                                                                 <option ng-hide="configHasCohorts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no selected cohorts.
@@ -221,7 +221,7 @@
                                                             <label class="card-header alert-info" for="availableNotUsedLocations" style="">Available locations</label>
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedLocations" ng-model="selected.eLocations"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                                                <option ng-repeat="location in availableNotUsedLocations" value="{{location}}"
+                                                                <option ng-repeat="location in availableNotUsedLocations | orderBy: 'name'" value="{{location}}"
                                                                         class="list-group-item">{{location.name}}</option>
                                                                 <option ng-hide="hasAvailableNotUsedLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no locations available.
@@ -238,7 +238,7 @@
                                                             <label for="selectedLocations" class="w-100  card-header alert-primary">Selected Locations</label>
                                                             <select class="list-group list-group-flush" size="15" id="selectedLocations" ng-model="selected.locations"
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                                                <option ng-repeat="location in configLocations" value="{{location}}"
+                                                                <option ng-repeat="location in configLocations | orderBy: 'name'" value="{{location}}"
                                                                         class="list-group-item">{{location.name}}</option>
                                                                 <option ng-hide="configHasLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no selected locations.
@@ -285,7 +285,7 @@
                                                             <label class="card-header alert-info" for="availableNotUsedProviders" style="">Available providers</label>
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedProviders" ng-model="selected.eProviders"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                                                <option ng-repeat="provider in availableNotUsedProviders" value="{{provider}}"
+                                                                <option ng-repeat="provider in availableNotUsedProviders | orderBy: 'name'" value="{{provider}}"
                                                                         class="list-group-item">{{provider.name}}</option>
                                                                 <option ng-hide="hasAvailableNotUsedProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no providers available.
@@ -302,7 +302,7 @@
                                                             <label for="selectedProviders" class="w-100  card-header alert-primary">Selected Providers</label>
                                                             <select class="list-group list-group-flush" size="15" id="selectedProviders" ng-model="selected.providers"
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                                                <option ng-repeat="provider in configProviders" value="{{provider}}"
+                                                                <option ng-repeat="provider in configProviders | orderBy: 'name'" value="{{provider}}"
                                                                         class="list-group-item">{{provider.name}}</option>
                                                                 <option ng-hide="configHasProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no selected providers.
@@ -346,7 +346,7 @@
                                                             <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Concepts extracted from forms</label>
                                                             <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                                                <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}"
+                                                                <option ng-repeat="concept in extractedNotUsedConcepts | orderBy: 'name'" value="{{concept}}"
                                                                         class="list-group-item">{{concept.name}}</option>
                                                                 <option ng-hide="hasAvailableNotUsedConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no concepts available that were extracted from the forms. Please use the search by concept name option.
@@ -363,7 +363,7 @@
                                                             <label for="selectedConcepts" class="w-100  card-header alert-primary">Selected Concepts</label>
                                                             <select class="list-group list-group-flush" size="15" id="selectedConcepts" ng-model="selected.concepts"
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                                                <option ng-repeat="concept in configConcepts" value="{{concept}}"
+                                                                <option ng-repeat="concept in configConcepts | orderBy: 'name'" value="{{concept}}"
                                                                         class="list-group-item">{{concept.name}}</option>
                                                                 <option ng-hide="configHasConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
                                                                     There are no selected concepts.
@@ -411,7 +411,7 @@
                                                             <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings</label>
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedSettings" ng-model="selected.eSettings"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
-                                                                <option ng-repeat="setting in availableNotUsedSettings" value="{{setting}}"
+                                                                <option ng-repeat="setting in availableNotUsedSettings | orderBy: 'name'" value="{{setting}}"
                                                                         class="list-group-item" title="{{setting.description}}">
                                                                     <div>{{formatSettingDisplay(setting)}}</div>
                                                                 </option>
@@ -430,7 +430,7 @@
                                                             <label for="selectedSettings" class="w-100  card-header alert-primary">Selected Config settings</label>
                                                             <select class="list-group list-group-flush" size="15" id="selectedSettings" ng-model="selected.settings"
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
-                                                                <option ng-repeat="setting in configSettings" value="{{setting}}"
+                                                                <option ng-repeat="setting in configSettings | orderBy: 'name'" value="{{setting}}"
                                                                         class="list-group-item" title="{{setting.description}}">
                                                                     <div>{{formatSettingDisplay(setting)}}</div>
                                                                 </option>
@@ -469,9 +469,6 @@
                     </tr>
                     </tbody>
                 </table>
-                <div ng-show="specialFields.extractingMeta" class='loader'>
-                    &nbsp;
-                </div>
             </div>
         </div>
     </div>
