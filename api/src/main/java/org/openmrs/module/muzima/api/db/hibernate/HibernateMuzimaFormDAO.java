@@ -20,7 +20,6 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.Transformers;
 import org.openmrs.Form;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
@@ -119,7 +118,7 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
     }
 
     @Override
-    public List<Form> getNonMuzimaForms() {
+    public List<Form> getNonMuzimaForms(String search) {
         Criteria criteria = session().createCriteria(MuzimaForm.class);
         criteria.add(Restrictions.eq("retired", false));
         List<MuzimaForm> muzimaForms = criteria.list();
@@ -132,6 +131,12 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
         criteria1.add(Restrictions.eq("retired", false));
         if(formUuids.size()>0)
             criteria1.add(Restrictions.not(Restrictions.in("uuid",formUuids)));
+
+        if(StringUtils.isNotEmpty(search)){
+            Disjunction disjunction = Restrictions.disjunction();
+            disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
+            criteria.add(disjunction);
+        }
 
         return criteria1.list();
     }

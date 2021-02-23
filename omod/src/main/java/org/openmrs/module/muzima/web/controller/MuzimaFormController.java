@@ -71,7 +71,7 @@ public class MuzimaFormController {
         Map<String, Object> response = new HashMap<String, Object>();
 
         MuzimaFormService service = Context.getService(MuzimaFormService.class);
-        List<Form> forms = service.getNonMuzimaForms();
+        List<Form> forms = service.getNonMuzimaForms("");
         response.put("results",WebConverter.convertForms(forms));
         return response;
     }
@@ -93,5 +93,16 @@ public class MuzimaFormController {
         Map<String, Object> convertedMap = new HashMap<String, Object>();
         convertedMap.put("results",WebConverter.convertList(results));
         return convertedMap;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "searchNonMuzimaForms.json", method = RequestMethod.GET)
+    public Map<String, Object>  searchNonMuzimaForms(final @RequestParam(value = "search") String search) throws Exception {
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        MuzimaFormService service = Context.getService(MuzimaFormService.class);
+        List<Form> forms = service.getNonMuzimaForms(search);
+        response.put("results",WebConverter.convertForms(forms));
+        return response;
     }
 }
