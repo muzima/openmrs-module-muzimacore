@@ -169,8 +169,8 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         return dao.getMuzimaFormByForm(form, includeRetired);
     }
 
-    public List<Form> getNonMuzimaForms(){
-        return dao.getNonMuzimaForms();
+    public List<Form> getNonMuzimaForms(String search){
+        return dao.getNonMuzimaForms(search);
     }
 
     @Override

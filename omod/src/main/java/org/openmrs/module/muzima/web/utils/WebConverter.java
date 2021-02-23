@@ -350,6 +350,7 @@ public class WebConverter {
             map.put("name", form.getName());
             map.put("version", form.getVersion());
             map.put("description", form.getDescription());
+            map.put("retired",form.getRetired());
         }
         return map;
     }

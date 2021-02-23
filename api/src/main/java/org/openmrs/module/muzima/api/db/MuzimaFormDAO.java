@@ -27,7 +27,7 @@ public interface MuzimaFormDAO {
 
     List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired);
 
-    List<Form> getNonMuzimaForms();
+    List<Form> getNonMuzimaForms(String search);
 
     List<Object[]> getFormCountGroupedByDiscriminator();
 }

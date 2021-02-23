@@ -149,7 +149,7 @@ muzimaCoreModule.factory('FormService', function ($http) {
         return $http.get('../../ws/rest/v1/muzima/form', {cache: false});
     };
     var getForms = function() {
-        return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description)');
+        return $http.get('../../module/muzimacore/nonMuzimaForms.json');
     };
     var getNonMuzimaForms = function() {
         return $http.get('../../module/muzimacore/nonMuzimaForms.json');
@@ -161,7 +161,7 @@ muzimaCoreModule.factory('FormService', function ($http) {
         return $http.get('../../module/muzimacore/discriminator.json', {cache: false});
     };
     var searchForms = function(search) {
-        return $http.get('../../ws/rest/v1/form?v=custom:(name,uuid,version,description,retired)&q=' + (search === undefined ? '' : search));
+        return $http.get('../../module/muzimacore/searchNonMuzimaForms.json?search=' + (search === undefined ? '' : search));
     };
     var getEncounterTypes = function () {
         return $http.get('../../ws/rest/v1/encountertype', {cache: false});
