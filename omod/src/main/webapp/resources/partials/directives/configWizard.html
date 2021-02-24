@@ -335,7 +335,7 @@
                     <tr align="center">
                         <td width="45%" align="left">
                             <div class="card">
-                                <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Concepts extracted from forms</label>
+                                <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Extracted Form Concepts</label>
                                 <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
                                          style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                     <option ng-repeat="concept in extractedNotUsedConcepts | orderBy: 'name'" value="{{concept}}"

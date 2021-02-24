@@ -324,8 +324,8 @@
                                                             mUzima app will download observations(s) for concepts added to the configuration. To add a concept(s), use any o fthe following options: <br/>
                                                             <ol>
                                                                 <li>Search for the concept by name, then select from the list that pops up.</li>
-                                                                <li>Select one or more concept(s) from <b>Available Concepts</b> list and then click on the button with single >.</li>
-                                                                <li>To add all concepts on the <b>Available Concepts</b> card, click on the button with double >>.</li>
+                                                                <li>Select one or more concept(s) from <b>Extracted Form Concepts</b> list and then click on the button with single >.</li>
+                                                                <li>To add all concepts on the <b>Extracted Form Concepts</b> card, click on the button with double >>.</li>
                                                             </ol>
                                                             To remove concept(s) from the configuration, select the concept(s) on the <b>Selected Concepts</b> list and then click on <b>Remove Selected</b>
                                                         </label>
@@ -343,7 +343,7 @@
                                                 <tr align="center">
                                                     <td width="45%" align="left">
                                                         <div class="card">
-                                                            <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Concepts extracted from forms</label>
+                                                            <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Extracted Form Concepts</label>
                                                             <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                                                 <option ng-repeat="concept in extractedNotUsedConcepts | orderBy: 'name'" value="{{concept}}"
