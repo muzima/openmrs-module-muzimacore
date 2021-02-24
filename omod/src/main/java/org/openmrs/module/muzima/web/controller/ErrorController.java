@@ -15,6 +15,7 @@ package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
+import org.openmrs.module.muzima.model.ArchiveData;
 import org.openmrs.module.muzima.model.ErrorData;
 import org.openmrs.module.muzima.model.ErrorMessage;
 import org.openmrs.module.muzima.model.QueueData;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -135,5 +137,24 @@ public class ErrorController {
         DataService dataService = Context.getService(DataService.class);
         int countOfErrors = dataService.countErrorData(patientUuid).intValue();
         return dataService.getPagedErrorData(patientUuid, 1, countOfErrors);
+    }
+
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/module/muzimacore/removeErrors.json", method = RequestMethod.POST)
+    public void deleteErrors(final @RequestBody Map<String, Object> map) {
+        if (Context.isAuthenticated()) {
+            List<String> uuidList = (List<String>) map.get("uuidList");
+            String removeReason = (String) map.get("removeReason");
+            DataService dataService = Context.getService(DataService.class);
+            for (String uuid : uuidList) {
+                ErrorData errorData = dataService.getErrorDataByUuid(uuid);
+                ArchiveData archiveData = new ArchiveData(errorData);
+                archiveData.setMessage(removeReason);
+                archiveData.setDateArchived(new Date());
+                archiveData.setCreator(Context.getAuthenticatedUser());
+                Context.getService(DataService.class).saveArchiveData(archiveData);
+                dataService.purgeErrorData(errorData);
+            }
+        }
     }
 }

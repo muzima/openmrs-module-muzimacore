@@ -16,6 +16,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.availableNotUsedLocations = [];
     $scope.availableNotUsedForms = [];
     $scope.availableNotUsedCohorts = [];
+    $scope.availableNotUsedSettings = [];
     $scope.configConcepts = [];
     $scope.configSettings = [];
     $scope.retire_config = false;

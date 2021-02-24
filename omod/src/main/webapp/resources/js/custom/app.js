@@ -47,8 +47,8 @@ muzimaCoreModule.factory('$data', function ($http) {
         }
         return $http.get("queues.json?search=" + search + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
     };
-    var deleteQueues = function (uuidList) {
-        return $http.post("queues.json", {"uuidList": uuidList});
+    var deleteQueues = function (uuidList, removeReason) {
+        return $http.post("queues.json", {"uuidList": uuidList, "removeReason": removeReason});
     };
     var getQueue = function (uuid) {
         return $http.get("queue.json?uuid=" + uuid);
@@ -111,6 +111,11 @@ muzimaCoreModule.factory('$data', function ($http) {
     var getPatientByIdentifier = function (identifier) {
         return $http.get('../../ws/rest/v1/patient?identifier=' + identifier + "&v=full");
     };
+
+    var deleteErrors = function (uuidList, removeReason) {
+        return $http.post("removeErrors.json", {"uuidList": uuidList, "removeReason": removeReason});
+    };
+
     return {
         getQueues: getQueues,
         getQueue: getQueue,
@@ -119,6 +124,7 @@ muzimaCoreModule.factory('$data', function ($http) {
         getErrors: getErrors,
         getError: getError,
         reQueueErrors: reQueueErrors,
+        deleteErrors: deleteErrors,
 
         getSources: getSources,
         getSource: getSource,

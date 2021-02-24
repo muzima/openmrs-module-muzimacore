@@ -1,6 +1,9 @@
 function QueueCtrl($scope, $routeParams, $location, $data) {
     // page parameter
     $scope.uuid = $routeParams.uuid;
+    $scope.remove_queue_data = false;
+    $scope.remove_reason = false;
+    $scope.removeReasonError = false;
     // get the current notification
     $data.getQueue($scope.uuid).
     then(function (response) {
@@ -9,11 +12,19 @@ function QueueCtrl($scope, $routeParams, $location, $data) {
     });
 
     $scope.delete = function () {
-        var uuidList = [$scope.uuid];
-        $data.deleteQueue(uuidList).
-        then(function () {
-            $location.path("/queues");
-        })
+        if(!$scope.removeReason){
+             $scope.removeReasonError = true;
+        }else{
+            var uuidList = [$scope.uuid];
+            $data.deleteQueue(uuidList, $scope.removeReason).
+            then(function () {
+                $location.path("/queues");
+            });
+        }
+    };
+
+    $scope.toggleRemoveQueue = function(){
+        $scope.remove_queue_data = true;
     };
 
     $scope.cancel = function () {
@@ -29,6 +40,9 @@ function QueuesCtrl($scope, $location, $data) {
     $scope.pageSize = 10;
     $scope.currentPage = 1;
     $scope.totalItems = 0;
+    $scope.remove_queue_data = false;
+    $scope.remove_reason = false;
+    $scope.removeReasonError = false;
     $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
@@ -45,16 +59,21 @@ function QueuesCtrl($scope, $location, $data) {
                 uuidList.push(key);
             }
         });
-        $data.deleteQueue(uuidList).
-        then(function () {
-            $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
-            then(function (response) {
-                var serverData = response.data;
-                $scope.queues = serverData.objects;
-                $scope.noOfPages = serverData.pages;
-                $scope.totalItems = serverData.totalItems;
+        if(!$scope.removeReason){
+             $scope.removeReasonError = true;
+        }else{
+            $data.deleteQueue(uuidList, $scope.removeReason).
+            then(function () {
+                $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
+                then(function (response) {
+                    var serverData = response.data;
+                    $scope.queues = serverData.objects;
+                    $scope.noOfPages = serverData.pages;
+                    $scope.totalItems = serverData.totalItems;
+                    $scope.remove_queue_data = false;
+                });
             });
-        })
+        }
     };
 
     $scope.$watch('currentPage', function (newValue, oldValue) {
@@ -81,4 +100,8 @@ function QueuesCtrl($scope, $location, $data) {
             });
         }
     }, true);
+
+    $scope.toggleRemoveQueue = function(){
+        $scope.remove_queue_data = true;
+    };
 }

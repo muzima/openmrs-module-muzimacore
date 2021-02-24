@@ -48,8 +48,14 @@
                     </tbody>
                 </table>
             </div>
+            <div class="row col-lg-12">
+                <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_error_data" ng-required="remove_error_data"/>
+                <div ng-show="removeReasonError" style="color:red">Retire reason is required</div>
+            </div>
             <div ng-show="errors.length" class="row col-lg-12">
-                <button type="submit" ng-click="queue()" class="btn btn-primary" style="margin-top: 20px">Queue</button>
+                <button type="submit" ng-click="toggleRemoveError()" class="btn btn-danger" ng-show="!remove_error_data" style="margin-bottom: 20px;">Remove</button>
+                <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_error_data" style="margin-bottom: 20px;">Remove</button>&nbsp;
+                <button type="submit" ng-click="queue()" class="btn btn-primary" style="margin-bottom: 20px; margin-right:15px;">Queue</button>
                 <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
             </div>
         </div>
