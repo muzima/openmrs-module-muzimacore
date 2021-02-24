@@ -44,8 +44,15 @@
                     </tbody>
                 </table>
             </div>
+            <tr>
+                <td>
+                    <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="queue.removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
+                    <div ng-show="queue.removeReasonError" style="color:red">Retire reason is required</div>
+                </td>
+            </tr>
             <div ng-show="queues.length" class="row col-lg-12">
-                <button type="submit" ng-click="delete()" class="btn btn-danger" style="margin-top: 20px">Delete</button>
+                <button type="submit" ng-click="toggleRemoveQueue()" class="btn btn-danger" ng-show="!remove_queue_data">Remove</button>
+                <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_queue_data">Remove</button>
                 <ul ng-show="noOfPages > 1" uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
             </div>
         </div>

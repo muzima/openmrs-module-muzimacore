@@ -47,8 +47,8 @@ muzimaCoreModule.factory('$data', function ($http) {
         }
         return $http.get("queues.json?search=" + search + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize);
     };
-    var deleteQueues = function (uuidList) {
-        return $http.post("queues.json", {"uuidList": uuidList});
+    var deleteQueues = function (uuidList, removeReason) {
+        return $http.post("queues.json", {"uuidList": uuidList, "removeReason": removeReason});
     };
     var getQueue = function (uuid) {
         return $http.get("queue.json?uuid=" + uuid);

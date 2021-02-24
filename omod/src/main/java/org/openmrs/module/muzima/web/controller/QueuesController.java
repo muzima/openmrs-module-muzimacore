@@ -17,6 +17,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.DataService;
+import org.openmrs.module.muzima.model.ArchiveData;
 import org.openmrs.module.muzima.model.QueueData;
 import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,9 +68,16 @@ public class QueuesController {
     public void deleteQueue(final @RequestBody Map<String, Object> map) {
         if (Context.isAuthenticated()) {
             List<String> uuidList = (List<String>) map.get("uuidList");
+            String removeReason = (String) map.get("removeReason");
             DataService dataService = Context.getService(DataService.class);
             for (String uuid : uuidList) {
                 QueueData queueData = dataService.getQueueDataByUuid(uuid);
+
+                ArchiveData archiveData = new ArchiveData(queueData);
+                archiveData.setMessage(removeReason);
+                archiveData.setDateArchived(new Date());
+                Context.getService(DataService.class).saveArchiveData(archiveData);
+
                 dataService.purgeQueueData(queueData);
             }
         }
