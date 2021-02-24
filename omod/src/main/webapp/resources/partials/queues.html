@@ -44,12 +44,10 @@
                     </tbody>
                 </table>
             </div>
-            <tr>
-                <td>
-                    <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="queue.removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
-                    <div ng-show="queue.removeReasonError" style="color:red">Retire reason is required</div>
-                </td>
-            </tr>
+            <div class="row col-lg-12">
+                    <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
+                    <div ng-show="removeReasonError" style="color:red">Retire reason is required</div>
+            </div>
             <div ng-show="queues.length" class="row col-lg-12">
                 <button type="submit" ng-click="toggleRemoveQueue()" class="btn btn-danger" ng-show="!remove_queue_data">Remove</button>
                 <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_queue_data">Remove</button>

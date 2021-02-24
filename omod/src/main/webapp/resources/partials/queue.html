@@ -34,6 +34,12 @@
                 <td colspan="3"><p>{{queue.payload}}</p></td>
                 <td>&nbsp;</td>
             </tr>
+            <tr ng-show="remove_queue_data">
+                <td colspan="4">
+                    <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
+                    <div ng-show="removeReasonError" style="color:red">Retire reason is required</div>
+                </td>
+            </tr>
             <tr>
                 <td colspan="4">
                     <button type="submit" ng-click="toggleRemoveQueue()" class="btn btn-danger" ng-show="!remove_queue_data">Remove</button>

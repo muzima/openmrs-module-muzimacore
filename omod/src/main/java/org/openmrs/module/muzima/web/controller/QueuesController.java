@@ -76,6 +76,7 @@ public class QueuesController {
                 ArchiveData archiveData = new ArchiveData(queueData);
                 archiveData.setMessage(removeReason);
                 archiveData.setDateArchived(new Date());
+                archiveData.setCreator(Context.getAuthenticatedUser());
                 Context.getService(DataService.class).saveArchiveData(archiveData);
 
                 dataService.purgeQueueData(queueData);

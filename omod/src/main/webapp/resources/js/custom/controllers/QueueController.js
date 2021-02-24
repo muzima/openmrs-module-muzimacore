@@ -3,6 +3,7 @@ function QueueCtrl($scope, $routeParams, $location, $data) {
     $scope.uuid = $routeParams.uuid;
     $scope.remove_queue_data = false;
     $scope.remove_reason = false;
+    $scope.removeReasonError = false;
     // get the current notification
     $data.getQueue($scope.uuid).
     then(function (response) {
@@ -11,11 +12,11 @@ function QueueCtrl($scope, $routeParams, $location, $data) {
     });
 
     $scope.delete = function () {
-        if(!queue.removeReason){
-             $scope.queue.removeReasonError = true;
+        if(!$scope.removeReason){
+             $scope.removeReasonError = true;
         }else{
             var uuidList = [$scope.uuid];
-            $data.deleteQueue(uuidList, queue.removeReason).
+            $data.deleteQueue(uuidList, $scope.removeReason).
             then(function () {
                 $location.path("/queues");
             });
@@ -41,6 +42,7 @@ function QueuesCtrl($scope, $location, $data) {
     $scope.totalItems = 0;
     $scope.remove_queue_data = false;
     $scope.remove_reason = false;
+    $scope.removeReasonError = false;
     $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
@@ -57,10 +59,10 @@ function QueuesCtrl($scope, $location, $data) {
                 uuidList.push(key);
             }
         });
-        if(!queue.removeReason){
-             $scope.queue.removeReasonError = true;
+        if(!$scope.removeReason){
+             $scope.removeReasonError = true;
         }else{
-            $data.deleteQueue(uuidList, queue.removeReason).
+            $data.deleteQueue(uuidList, $scope.removeReason).
             then(function () {
                 $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
                 then(function (response) {
@@ -68,6 +70,7 @@ function QueuesCtrl($scope, $location, $data) {
                     $scope.queues = serverData.objects;
                     $scope.noOfPages = serverData.pages;
                     $scope.totalItems = serverData.totalItems;
+                    $scope.remove_queue_data = false;
                 });
             });
         }
