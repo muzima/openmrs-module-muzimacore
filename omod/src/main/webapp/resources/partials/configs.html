@@ -7,14 +7,24 @@
 
         <div class="clearfix">
             <div class="row">
-                <div class="col-lg-4 pull-left">
-                    <a href="#/createConfig">Create Configuration</a>
+                <div class="col-lg-4 navbar navbar-inverse">
+                    <ul class="nav navbar-nav pull-right">
+                        <li>
+                            <button type="button" class="btn btn-success dropdown-toggle navbar-btn" data-toggle="dropdown">
+                                Create Configuration <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" style="margin-top: -1.7rem; background: #209F85;">
+                                <li><a href="#/configWizard/1" style="color: #323232 ;text-decoration: none">Launch Wizard</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#/createConfig" style="color: #323232 ;text-decoration: none">Advanced</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
-                <div class="col-lg-4 pull-left">
-                    <a href="#/configWizard/1">Launch wizard</a>
+                <div class="col-lg-4 pull-right">
                 </div>
-                <div class="col-lg-3 pull-right">
-                    <input type="text" class="form-control" ng-model="search" placeholder="search..." style="padding-left: 10px;"/>
+                <div class="col-lg-3 pull-right" style="padding: 1.5rem;">
+                    <input type="text" class="form-control" ng-model="search" placeholder="search..." style="padding-left: 10px;" />
                 </div>
             </div>
             <div class="row">

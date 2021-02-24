@@ -10,7 +10,7 @@
 .navigation-active {
     font-weight: bold;
     text-decoration: none;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.40);
     border-right: 8px solid #eeeeee;
 }
 
