@@ -74,12 +74,12 @@
                 <td width="50%">
                     <div  id = "editJsonSection">
                         <h6>Edit Form Data <i class="fa fa-check"></i>
-                            <div class="messages">
-                                <div ng-show="isValid" class="alert alert-success w-100">Validation is successful! Use the save button to update form data.</div>
-                            </div>
                         </h6>
                         <div class="well edit">
                             <textarea id="editJson" ></textarea>
+                            <div class="messages">
+                                <div ng-show="isValid" class="alert alert-success w-100">Validation is successful! Use the save button to update form data.</div>
+                            </div>
                             <button id = "btnValidate" type="submit"  class="btn btn-primary">Validate</button>
                             <button id = "btnUpdate" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Save</button>
                             <button id = "btnSaveAndProcess" type="button" class="btn btn-warning" data-toggle="modal" data-target="#saveAndProcessModal">Save & Process</button>
