@@ -1,9 +1,12 @@
 package org.openmrs.module.muzima.web.controller;
 
+import net.minidev.json.JSONObject;
 import org.javarosa.xform.parse.ValidationMessages;
+import org.openmrs.Form;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
 import org.openmrs.module.muzima.model.MuzimaForm;
+import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +20,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -59,6 +65,17 @@ public class MuzimaFormController {
         }
     }
 
+    @ResponseBody
+    @RequestMapping(value = "nonMuzimaForms.json", method = RequestMethod.GET)
+    public Map<String, Object>  getNonMuzimaForms() throws Exception {
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        MuzimaFormService service = Context.getService(MuzimaFormService.class);
+        List<Form> forms = service.getNonMuzimaForms("");
+        response.put("results",WebConverter.convertForms(forms));
+        return response;
+    }
+
     private String extractFile(final MultipartHttpServletRequest request) throws Exception {
         MultipartFile file = request.getFile("file");
         return readStream(file.getInputStream());
@@ -66,5 +83,26 @@ public class MuzimaFormController {
 
     private String readStream(final InputStream stream) throws IOException {
         return new Scanner(stream, "UTF-8").useDelimiter("\\A").next();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "muzimaFormCountGroupedByDiscriminator.json", method = RequestMethod.GET)
+    public Map<String, Object> getMuzimaFormCountGroupedByDiscriminator() {
+        MuzimaFormService service = Context.getService(MuzimaFormService.class);
+        List<Object[]> results = service.getFormCountGroupedByDiscriminator();
+        Map<String, Object> convertedMap = new HashMap<String, Object>();
+        convertedMap.put("results",WebConverter.convertList(results));
+        return convertedMap;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "searchNonMuzimaForms.json", method = RequestMethod.GET)
+    public Map<String, Object>  searchNonMuzimaForms(final @RequestParam(value = "search") String search) throws Exception {
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        MuzimaFormService service = Context.getService(MuzimaFormService.class);
+        List<Form> forms = service.getNonMuzimaForms(search);
+        response.put("results",WebConverter.convertForms(forms));
+        return response;
     }
 }

@@ -3,6 +3,7 @@ package org.openmrs.module.muzima.api.service.impl;
 import org.dom4j.DocumentException;
 import org.javarosa.xform.parse.ValidationMessages;
 import org.javarosa.xform.parse.XFormParser;
+import org.openmrs.Form;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
@@ -166,5 +167,14 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
 
     public List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired){
         return dao.getMuzimaFormByForm(form, includeRetired);
+    }
+
+    public List<Form> getNonMuzimaForms(String search){
+        return dao.getNonMuzimaForms(search);
+    }
+
+    @Override
+    public List<Object[]> getFormCountGroupedByDiscriminator() {
+        return dao.getFormCountGroupedByDiscriminator();
     }
 }

@@ -3,8 +3,10 @@
     <div class="col-lg-8">
         <div class="clearfix">
             <div class="row">
-                <div class="col-lg-3 pull-right">
-                    <input type="text" class="form-control" ng-model="search" placeholder="search..." style="padding-left: 10px;"/>
+                <div class="col-lg-12">
+                    <div class="col-lg-3 pull-right">
+                        <input type="text" class="form-control" ng-model="search" placeholder="search..." style="padding-left: 10px;"/>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -26,7 +28,7 @@
                         <td colspan="8">Hooray! You have no potential duplicates.</td>
                     </tr>
                     <tr ng-repeat="error in errors | orderBy:'submitted':true">
-                        <td><a href="#/merge/{{error.uuid}}"  style="text-decoration: none"><i class=icon-edit icon-edit></i></a></td>
+                        <td><a href="#/merge/{{error.uuid}}"  style="text-decoration: none"><i class="fa fa-pencil-square-o"></i></a></td>
                         <td>{{error.providerId}} - {{error.providerName}}</td>
                         <td>{{error.locationId}} - {{error.locationName}}</td>
                         <td>{{error.formName}}</td>
@@ -45,3 +47,4 @@
         &nbsp;
     </div>
 </div>
+<footer></footer>

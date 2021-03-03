@@ -6,11 +6,13 @@
         </div>
         <div class="clearfix">
             <div class="row">
-                <div class="col-lg-4 pull-left">
-                    <a href="#/createSource">Create Source</a>
-                </div>
-                <div class="col-lg-3 pull-right">
-                    <input type="text" ng-model="search" class="form-control" placeholder="search..." style="padding-left: 10px;"/>
+                <div class="col-lg-12">
+                    <div class="col-lg-4 pull-left">
+                        <a href="#/createSource">Create Source</a>
+                    </div>
+                    <div class="col-lg-3 pull-right">
+                        <input type="text" ng-model="search" class="form-control" placeholder="search..." style="padding-left: 10px;"/>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -28,7 +30,7 @@
                         <td colspan="4">No sources created in the system.</td>
                     </tr>
                     <tr ng-repeat="source in sources | filter:filterSource() | orderBy:'created':true">
-                        <td><a href="#/source/{{source.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
+                        <td><a href="#/source/{{source.uuid}}" style="text-decoration: none"><i class="fa fa-pencil-square-o"></i></a></td>
                         <td>{{source.name}}</td>
                         <td>{{source.uuid}}</td>
                         <td>{{source.created}}</td>
@@ -44,3 +46,4 @@
         </div>
     </div>
 </div>
+<footer></footer>

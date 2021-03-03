@@ -17,14 +17,17 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.Form;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaXForm;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -112,6 +115,42 @@ public class HibernateMuzimaFormDAO implements MuzimaFormDAO {
         if (!includeRetired)
             criteria.add(Restrictions.eq("retired", false));
         return (List<MuzimaForm>) criteria.list();
+    }
+
+    @Override
+    public List<Form> getNonMuzimaForms(String search) {
+        Criteria criteria = session().createCriteria(MuzimaForm.class);
+        criteria.add(Restrictions.eq("retired", false));
+        List<MuzimaForm> muzimaForms = criteria.list();
+        List<String> formUuids = new ArrayList<String>();
+        for(MuzimaForm muzimaForm : muzimaForms){
+            formUuids.add(muzimaForm.getForm());
+        }
+
+        Criteria criteria1 = session().createCriteria(Form.class);
+        criteria1.add(Restrictions.eq("retired", false));
+        if(formUuids.size()>0)
+            criteria1.add(Restrictions.not(Restrictions.in("uuid",formUuids)));
+
+        if(StringUtils.isNotEmpty(search)){
+            Disjunction disjunction = Restrictions.disjunction();
+            disjunction.add(Restrictions.ilike("name", search, MatchMode.ANYWHERE));
+            criteria.add(disjunction);
+        }
+
+        return criteria1.list();
+    }
+
+    @Override
+    public List<Object[]> getFormCountGroupedByDiscriminator() {
+        Criteria criteria = session().createCriteria(MuzimaForm.class);
+        criteria.add(Restrictions.eq("retired", false));
+        ProjectionList projectionList = Projections.projectionList();
+        projectionList.add(Projections.groupProperty("discriminator"));
+        projectionList.add(Projections.rowCount());
+        criteria.setProjection(projectionList);
+        List<Object[]> results = criteria.list();
+        return  results;
     }
 
     public List<MuzimaForm> getFormByName(final String name, final Date syncDate) {

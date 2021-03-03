@@ -1,5 +1,6 @@
 package org.openmrs.module.muzima.api.db;
 
+import org.openmrs.Form;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaXForm;
 
@@ -25,4 +26,8 @@ public interface MuzimaFormDAO {
     List<MuzimaForm> getFormByName(final String name, final Date syncDate);
 
     List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired);
+
+    List<Form> getNonMuzimaForms(String search);
+
+    List<Object[]> getFormCountGroupedByDiscriminator();
 }

@@ -1,6 +1,10 @@
 function ErrorCtrl($scope, $routeParams, $location, $data) {
     // page parameter
     $scope.uuid = $routeParams.uuid;
+    $scope.divHeight = {"height" :"96%" };
+    $scope.remove_error_data = false;
+    $scope.remove_reason = false;
+    $scope.removeReasonError = false;
 
     // get the current notification
     $data.getError($scope.uuid).
@@ -117,7 +121,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
             $('.messages').hide();
         });
 
-        $('.icon-edit').click(function(){
+        $('.fa-edit').click(function(){
             $('#editJsonSection').show();
             $( "#btnQueue" ).prop( "disabled", true );
             $( "#btnCancelQueue" ).prop( "disabled", true );
@@ -147,9 +151,11 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
                     $( "#btnUpdate" ).prop( "disabled", false );
                     $( "#btnSaveAndProcess" ).prop( "disabled", false );
                     $scope.isValid = true;
+                    $scope.divHeight = {"height" :"96%" };
                 }
                 else{
                     $scope.isValid = false;
+                    $scope.divHeight = {"height" :"75%" };
                     $('html,body').animate({scrollTop: $('#errorList').offset().top},1000);
                 }
                 $('.messages').show();
@@ -159,6 +165,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
             $('#wait').hide();
             var jsonFormDataError = JSON.parse('{"Errors":{"001":"Invalid Json Payload"}}');
             $scope.isValid = false;
+            $scope.divHeight = {"height" :"75%" };
             $('html,body').animate({scrollTop: $('#errorList').offset().top},1000);
             $scope.ul_li_Data = '';
             $scope.to_ul(jsonFormDataError,'treeError');
@@ -217,11 +224,30 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
     $('#btnSaveAndProcessNoButton').click(function(){
 
     });
+
+    $scope.delete = function () {
+        if(!$scope.removeReason){
+             $scope.removeReasonError = true;
+        }else{
+            var uuidList = [$scope.uuid];
+            $data.deleteErrors(uuidList, $scope.removeReason).
+            then(function () {
+                $location.path("/errors");
+            });
+        }
+    };
+
+    $scope.toggleRemoveError = function(){
+        $scope.remove_error_data = true;
+    };
 }
 
 function ErrorsCtrl($scope, $location, $data) {
     $scope.isErrorLoadingCompleted = false;
     $scope.allErrorsSelected = false;
+    $scope.remove_error_data = false;
+    $scope.remove_reason = false;
+    $scope.removeReasonError = false;
     // initialize selected error data for re-queueing
     $scope.selected = {};
     // initialize the paging structure
@@ -301,6 +327,37 @@ function ErrorsCtrl($scope, $location, $data) {
             var error = $scope.errors[i];
             $scope.selected[error.uuid] = $scope.allErrorsSelected;
         }
+    };
+
+    $scope.delete = function () {
+        $('#wait').show();
+        var uuidList = [];
+        angular.forEach($scope.selected, function (value, key) {
+            if (value) {
+                uuidList.push(key);
+            }
+        });
+        if(!$scope.removeReason){
+             $scope.removeReasonError = true;
+             $('#wait').hide();
+        }else{
+            $data.deleteErrors(uuidList, $scope.removeReason).
+            then(function () {
+                $data.getErrors($scope.search, $scope.currentPage, $scope.pageSize).
+                then(function (response) {
+                    var serverData = response.data;
+                    $scope.errors = serverData.objects;
+                    $scope.noOfPages = serverData.pages;
+                    $scope.totalItems = serverData.totalItems;
+                    $scope.remove_error_data = false;
+                    $('#wait').hide();
+                });
+            });
+        }
+    };
+
+    $scope.toggleRemoveError = function(){
+        $scope.remove_error_data = true;
     };
 }
 

@@ -12,14 +12,12 @@
                 </div>
             </div>
             <div class="row">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover table-bordered">
                     <thead>
                     <tr>                  
                         <th>Open</th>
-                        <th>Cohort Name</th>
+                        <th>Cohort</th>
                         <th>Description</th>
-                        <th>Criteria</th>
-                        <th>Filter Query</th>
                         <th title="Whether this cohort definition shall be executed when scheduler task runs next.">Scheduled</th>
                         <th title="Whether new members who meet criteria can be added to the cohort.">Add members</th>
                         <th title="Whether members who no longer meet criteria should be removed from the cohort
@@ -30,14 +28,12 @@
                     </thead>
                     <tbody>
                     <tr ng-hide="cohortDefinitions.length">
-                        <td colspan="5">No cohort definitions created.</td>
+                        <td colspan="8">No cohort definitions created.</td>
                     </tr>
                     <tr ng-repeat="cohortDefinition in cohortDefinitions | orderBy:'submitted':true">
-                        <td><a href="#/cohortDefinition/{{cohortDefinition.uuid}}"><i class=icon-edit></i></a></td>
+                        <td><a href="#/cohortDefinition/{{cohortDefinition.uuid}}"><i class="fa fa-pencil-square-o"></i></a></td>
                         <td>{{cohortDefinition.name}}</td>
                         <td>{{cohortDefinition.description}}</td>
-                        <td><pre>{{cohortDefinition.definition}}</pre></td>
-                        <td><pre>{{cohortDefinition.filterQuery}}</pre></td>
                         <td align="center">{{cohortDefinition.isScheduledForExecution}}</td>
                         <td align="center">{{cohortDefinition.isMemberAdditionEnabled}}</td>
                         <td align="center">{{cohortDefinition.isMemberRemovalEnabled}}</td>
@@ -54,3 +50,4 @@
         </div>
     </div>
 </div>
+<footer></footer>

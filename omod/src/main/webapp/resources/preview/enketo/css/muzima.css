@@ -1893,7 +1893,7 @@ table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="sp
     background-position: -24px 0;
 }
 
-.icon-search {
+.fa-search {
     background-position: -48px 0;
 }
 
@@ -1933,11 +1933,11 @@ table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="sp
     background-position: -264px 0;
 }
 
-.icon-ok {
+.fa-check {
     background-position: -288px 0;
 }
 
-.icon-remove {
+.fa-remove {
     background-position: -312px 0;
 }
 
@@ -1965,7 +1965,7 @@ table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="sp
     background-position: -456px 0;
 }
 
-.icon-home {
+.fa-home {
     background-position: 0 -24px;
 }
 
@@ -2045,11 +2045,11 @@ table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="sp
     background-position: -456px -24px;
 }
 
-.icon-tag {
+.fa-tag {
     background-position: 0 -48px;
 }
 
-.icon-tags {
+.fa-tags {
     background-position: -25px -48px;
 }
 
@@ -2141,7 +2141,7 @@ table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="sp
     background-position: -72px -72px;
 }
 
-.icon-edit {
+.fa-edit {
     background-position: -96px -72px;
 }
 
@@ -2149,7 +2149,7 @@ table td[class*="span"], table th[class*="span"], .row-fluid table td[class*="sp
     background-position: -120px -72px;
 }
 
-.icon-check {
+.fa-check {
     background-position: -144px -72px;
 }
 
@@ -3794,8 +3794,9 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 }
 
 .navbar {
-    overflow: visible;
     margin-bottom: 22px;
+    min-height: 50px;
+    border: 1px solid transparent;
     *position: relative;
     *z-index: 2;
 }

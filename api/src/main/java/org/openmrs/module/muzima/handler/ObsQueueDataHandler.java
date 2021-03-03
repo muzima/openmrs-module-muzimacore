@@ -49,6 +49,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import static org.openmrs.module.muzima.utils.PersonCreationUtils.createPersonPayloadStubFromIndexPatientStub;
@@ -69,6 +70,7 @@ public class ObsQueueDataHandler implements QueueDataHandler {
     private QueueProcessorException queueProcessorException;
     private List<Obs> individualObsList;
     private boolean isPersonObs = false;
+    private String deviceTimeZone;
 
     /**
      * 
@@ -152,8 +154,8 @@ public class ObsQueueDataHandler implements QueueDataHandler {
                 queueProcessorException.addException(new Exception("Unable to find user using the User Id: " + userString));
             }
 
-            String jsonPayloadTimezone = JsonUtils.readAsString(payload, "$['encounter']['encounter.device_time_zone']");
-            Date encounterDatetime = JsonUtils.readAsDateTime(payload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat,jsonPayloadTimezone);
+            deviceTimeZone = JsonUtils.readAsString(payload, "$['encounter']['encounter.device_time_zone']");
+            Date encounterDatetime = JsonUtils.readAsDateTime(payload, "$['encounter']['encounter.encounter_datetime']",dateTimeFormat, deviceTimeZone);
             for(Obs obs:individualObsList){
                 if(obs.getObsDatetime() == null){
                     obs.setObsDatetime(encounterDatetime);
@@ -399,7 +401,16 @@ public class ObsQueueDataHandler implements QueueDataHandler {
     private Date parseDate(final String dateValue) {
         Date date = null;
         try {
-            date = dateFormat.parse(dateValue);
+            String dateAsString = dateValue;
+            if(dateValue.length()==10){
+                dateAsString = dateValue+" 00:00";
+            }
+            if(deviceTimeZone != null) {
+                dateTimeFormat.setTimeZone(TimeZone.getTimeZone(deviceTimeZone));
+                date = dateTimeFormat.parse(dateAsString);
+            }else{
+                date = dateTimeFormat.parse(dateAsString);
+            }
         } catch (ParseException e) {
             log.error("Unable to parse date data for encounter!", e);
         }

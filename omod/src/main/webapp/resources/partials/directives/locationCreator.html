@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-sm-12">
+        <label class="alert alert-success w-100">Provide a name and description of the location to be created</label>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-sm-3">
+        Location Name <span class="required">*</span> :
+    </div>
+    <div class="col-sm-9">
+        <input class="form-control" ng-model="location.name" placeholder="Location name">
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+        Location Description <span class="required">*</span>:
+    </div>
+    <div class="col-sm-9">
+        <textarea class="form-control" ng-model="location.description" placeholder="Location Description"></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-9">
+        <button class="btn btn-primary btn-md pull-right" ng-disabled="!areAllRequiredLocationFieldsEntered()"
+        ng-click="saveLocation(location)">
+            Save
+        </button>
+    </div>
+</div>

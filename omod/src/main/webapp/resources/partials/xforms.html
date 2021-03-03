@@ -1,34 +1,22 @@
 <div id="wide-sidebar" class="row" ng-init="init()">
-    <div class="col-lg-2">
-        <ul class="nav nav-tabs nav-stacked">
-            <li><a href="#/sources">Data Source</a></li>
-            <li><a href="#/configs">Setup Configurations</a></li>
-            <li><a href="#/queues">Queue Data</a></li>
-            <li><a href="#/registrations">Registrations</a></li>
-            <li class="navigation-active"><a href="#/forms">Muzima Forms</a></li>
-            <li><a href="#/errors">Error Data</a></li>
-            <li><a href="#/reportConfigs">Patient Reports</a></li>
-            <li><a href="#/settings">Settings</a></li>
-            <li><a href="#/cohortDefinitions">Cohort Definitions</a></li>
-        </ul>
-    </div>
+    <side-navigation menu-item="forms"></side-navigation>
     <div class="col-lg-9">
         <div class="clearfix">
             <div class="row navbar navbar-inverse navbar-custom">
-                <a class="navbar-brand" href="#/forms" style="color: #ffffff; font-size: 20px"><i class="icon-home"></i></a>
-                <div class="container-fluid navbar-right">
+                <a class="navbar-brand" href="#/forms" style="color: #ffffff; font-size: 20px"><i class="fa fa-home"></i></a>
+                <div class="container-fluid navbar-right" style="float: right !important;margin-right: -20px;">
 					<span class="nav navbar-nav form-group" ng-hide="!hasXForms() && searchIsEmpty()" style="margin-right: 5px">
 						<form>
 							<input type="text" class="form-control navbar-btn" ng-model="search" placeholder="Search..." style="padding-left: 5px; padding-right: 5px; margin-right: 5px">
 						</form>
                     </span>
                     <span class="nav navbar-nav" style="margin-right: 5px">
-                        <button type="button" class="btn btn-success dropdown-toggle navbar-btn" data-toggle="dropdown">
-                          Import <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#/import/forms" style="color: #323232 ;text-decoration: none">Upload</a></li>
-                        </ul>
+                        <a href="#/xforms" class="btn btn-success" style="text-decoration: none;">
+                            Import x-forms
+                        </a>&nbsp;
+                        <a href="#/import/forms" class="btn btn-success" style="text-decoration: none;">
+                            Upload
+                        </a>
 					</span>
                 </div>
             </div>
@@ -94,3 +82,4 @@
         </div>
     </div>
 </div>
+<footer></footer>

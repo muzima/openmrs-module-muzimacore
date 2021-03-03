@@ -35,17 +35,20 @@
             </div>
         </div>
         <span ng-repeat="category in categoryMap">
-            <div style="margin:0 auto; text-align:center"><strong>{{category}}</strong></div>
-            <div class="well">
-            <div ng-repeat="rowData in tableData|filter:{category:category}">
-                <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="col-md-4">{{rowData.label}}</label>
-                        <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
-                            <input type="text" class="form-control" ng-model="rowData.emrPatient" disabled>
+            <div style="border: 1px solid; padding: 3px; margin-bottom: 15px;">
+                <div style="margin:0 auto; text-align:center; background-color: #34495e; color: #ffffff; padding: 2px;"><strong>{{category}}</strong></div>
+                <div class="well">
+                    <div ng-repeat="rowData in tableData|filter:{category:category}">
+                        <div class="row">
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label class="">{{rowData.label}}</label>
+                                <div class="" ng-class="{ 'has-error': rowData.isConflict }">
+                                    <input type="text" class="form-control" ng-model="rowData.emrPatient" disabled>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-lg-1" style="margin-top: 2.8rem;">
                             <div class="checkbox" ng-show="rowData.isConflict">
                                 <label>
                                     <input ng-model="emr_checkbox[rowData.key]" type="checkbox" value="option1" aria-label="..."
@@ -53,11 +56,7 @@
                                 </label>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <div class="col-md-1">
+                        <div class="col-lg-1" style="margin-top: 2.8rem;">
                             <div class="checkbox" ng-show="rowData.isConflict">
                                 <label>
                                     <input ng-model="queue_checkbox[rowData.key]" type="checkbox" value="option1"
@@ -65,16 +64,19 @@
                                 </label>
                             </div>
                         </div>
-                        <label class="col-md-4">{{rowData.label}}</label>
-                        <div class="col-md-7" ng-class="{ 'has-error': rowData.isConflict }">
-                            <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient"
-                                   ng-change="updatePage(rowData)" ng-disabled="!isEditableField(rowData.key)">
+                        <div class="col-lg-5">
+                            <div class="form-group">
+                                <label class="">{{rowData.label}}</label>
+                                <div class="" ng-class="{ 'has-error': rowData.isConflict }">
+                                    <input type="text" id="queue_{{rowData}}" class="form-control" ng-model="rowData.queuePatient"
+                                           ng-change="updatePage(rowData)" ng-disabled="!isEditableField(rowData.key)">
+                                </div>
+                            </div>
                         </div>
+                        </div>
+                        <hr>
                     </div>
                 </div>
-                </div>
-                <hr>
-            </div>
             </div>
         </span>
         <div class="row">
@@ -109,3 +111,4 @@
         </div>
     </div>
 </div>
+<footer></footer>

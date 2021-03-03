@@ -4,103 +4,102 @@
         <table class="table">
             <tbody>
             <tr>
-                <td>Sender</td>
-                <td>{{error.source}}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Provider</td>
-                <td>{{error.providerId}} - {{error.providerName}}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Location Id</td>
-                <td>{{error.locationId}} - {{error.locationName}}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Form Name</td>
-                <td>{{error.formName}}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Kind</td>
-                <td>{{error.discriminator}}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Patient Uuid</td>
-                <td>{{error.patientUuid}}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr ng-hide = "error.regErrorUuid == ''">
-                <td>Registration Error</td>
-                <td><a href="#/error/{{error.regErrorUuid}}">Registration Error</a></td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Submitted On</td>
-                <td>{{error.submitted}}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Processed On</td>
-                <td>{{error.processed}}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td id = 'errorList' colspan="4">
+            <td width="50%">
+                <div  style="height:40vh;border: 1px solid #999999; border-radius: 4px; overflow-y: auto;">
+                    <table class="table table-striped table-bordered table-hover">
+                        <tbody>
+                            <tr>
+                                <td>Sender</td>
+                                <td>{{error.source}}</td>
+                            </tr>
+                            <tr>
+                                <td>Provider</td>
+                                <td>{{error.providerId}} - {{error.providerName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Location Id</td>
+                                <td>{{error.locationId}} - {{error.locationName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Form Name</td>
+                                <td>{{error.formName}}</td>
+                            </tr>
+                            <tr>
+                                <td>Kind</td>
+                                <td>{{error.discriminator}}</td>
+                            </tr>
+                            <tr>
+                                <td>Patient Uuid</td>
+                                <td>{{error.patientUuid}}</td>
+                            </tr>
+                            <tr ng-hide = "error.regErrorUuid == ''">
+                                <td>Registration Error</td>
+                                <td><a href="#/error/{{error.regErrorUuid}}">Registration Error</a></td>
+                            </tr>
+                            <tr>
+                                <td>Submitted On</td>
+                                <td>{{error.submitted}}</td>
+                            </tr>
+                            <tr>
+                                <td>Processed On</td>
+                                <td>{{error.processed}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+            <td width="50%">
+                <div id = 'errorList' style="height:38vh;">
                     <h6>Error list</h6>
 
                     <div class="messages">
                         <div ng-hide="isValid" class="alert alert-danger">Please correct the errors below.</div>
                     </div>
-                    <div class="tree well errorlist">
+                    <div class="tree well errorlist" ng-style="divHeight">
                         <ul id='treeError'>
                         </ul>
                     </div>
-                </td>
+                </div>
+            </td>
             </tr>
             <tr>
-                <td colspan="4">
-                    <h6>Uploaded Form Data <i  class="icon-edit"></i></h6>
+                <td width="50%">
+                    <h6>Uploaded Form Data <i  class="fa fa-edit"></i></h6>
 
                     <div  class="tree well" >
                         <ul id = 'treeul'>
                         </ul>
                     </div>
                 </td>
-            </tr>
-            <tr id = "editJsonSection">
-                <td colspan="4" >
-                    <h6>Edit Form Data <i class="icon-ok"></i>
-                        <div class="messages">
-                            <div ng-show="isValid" class="alert alert-success">Validation is successful! Use the save button to update form data.</div>
+                <td width="50%">
+                    <div  id = "editJsonSection">
+                        <h6>Edit Form Data <i class="fa fa-check"></i>
+                        </h6>
+                        <div class="well edit">
+                            <textarea id="editJson" ></textarea>
+                            <div class="messages">
+                                <div ng-show="isValid" class="alert alert-success w-100">Validation is successful! Use the save button to update form data.</div>
+                            </div>
+                            <button id = "btnValidate" type="submit"  class="btn btn-primary">Validate</button>
+                            <button id = "btnUpdate" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Save</button>
+                            <button id = "btnSaveAndProcess" type="button" class="btn btn-warning" data-toggle="modal" data-target="#saveAndProcessModal">Save & Process</button>
+                            <button id = "btnCancel" type="submit"  class="btn btn-danger">Close</button>
                         </div>
-                    </h6>
-                    <div class="well edit">
-                        <textarea id="editJson" ></textarea>
-                        <button id = "btnValidate" type="submit"  class="btn btn-primary">Validate</button>
-                        <button id = "btnUpdate" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Save</button>
-                        <button id = "btnSaveAndProcess" type="button" class="btn btn-warning" data-toggle="modal" data-target="#saveAndProcessModal">Save & Process</button>
-                        <button id = "btnCancel" type="submit"  class="btn btn-danger">Close</button>
                     </div>
-
+                </td>
+            </tr>
+            <tr ng-show="remove_error_data">
+                <td colspan="4">
+                    <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_error_data" ng-required="remove_error_data"/>
+                    <div ng-show="removeReasonError" style="color:red">Retire reason is required</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
                     <button type="submit"  ng-click="queue()" id = "btnQueue" class="btn btn-primary">Queue</button>
-                    <button type="submit"  ng-click="cancel()" id = "btnCancelQueue" class="btn btn-danger">Close</button>
+                    <button type="submit" ng-click="toggleRemoveError()" class="btn btn-danger" ng-show="!remove_error_data">Remove</button>
+                    <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_error_data">Remove</button>
+                    <button type="submit"  ng-click="cancel()" id = "btnCancelQueue" class="btn btn-warning">Close</button>
                     <a class="btn" id="editData" href="#/edit/e38d2d5b-877a-4e9f-a9dd-6874e45a7b79" style="display: none;">Edit Data</a>
                 </td>
             </tr>
@@ -147,3 +146,4 @@
         </div>
     </div>
 </div>
+<footer></footer>

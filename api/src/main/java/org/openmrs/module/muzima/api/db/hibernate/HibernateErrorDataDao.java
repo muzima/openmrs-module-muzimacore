@@ -21,6 +21,7 @@ import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.module.muzima.api.db.ErrorDataDao;
@@ -100,5 +101,16 @@ public class HibernateErrorDataDao extends HibernateDataDao<ErrorData> implement
         }
 
         return criteria;
+    }
+
+    @Override
+    public List<Object[]> errorDataCountGroupedByDiscriminator() {
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(ErrorData.class);
+        ProjectionList projectionList = Projections.projectionList();
+        projectionList.add(Projections.groupProperty("discriminator"));
+        projectionList.add(Projections.rowCount());
+        criteria.setProjection(projectionList);
+        List<Object[]> results = criteria.list();
+        return results;
     }
 }

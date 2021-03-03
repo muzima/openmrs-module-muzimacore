@@ -10,11 +10,13 @@
         </div>
         <div class="clearfix">
             <div class="row">
-                <div class="col-lg-4 pull-left">
-                    <a href="#/createReportConfig">Add Configuration</a>
-                </div>
-                <div class="col-lg-3 pull-right">
-                    <input type="text" ng-model="search" class="form-control" placeholder="search..." style="padding-left: 10px;"/>
+                <div class="col-lg-12">
+                    <div class="col-lg-4 pull-left">
+                        <a href="#/createReportConfig">Add Configuration</a>
+                    </div>
+                    <div class="col-lg-3 pull-right">
+                        <input type="text" ng-model="search" class="form-control" placeholder="search..." style="padding-left: 10px;"/>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -31,12 +33,12 @@
                         <td colspan="4">No reportConfigurations created in the system.</td>
                     </tr>
                     <tr ng-repeat="reportConfiguration in reportConfigurations | filter:filterReportConfiguration() | orderBy:'created':true">
-                        <td><a href="#/reportConfig/{{reportConfiguration.uuid}}" style="text-decoration: none"><i class=icon-edit></i></a></td>
+                        <td><a href="#/reportConfig/{{reportConfiguration.uuid}}" style="text-decoration: none"><i class="fa fa-pencil-square-o"></i></a></td>
                         <td>{{reportConfiguration.cohort}}</td>
                         <td>
                             <table>
                                 <tr ng-repeat="report in reportConfiguration.reports">
-                                    <td><i class=icon-caret-right></i> {{report.name}}</td>
+                                    <td><i class="fa fa-caret-right"></i> {{report.name}}</td>
                                 </tr>
                             </table>
                         </td>
@@ -52,3 +54,4 @@
         </div>
     </div>
 </div>
+<footer></footer>

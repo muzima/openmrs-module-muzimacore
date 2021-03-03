@@ -1,0 +1,806 @@
+<div>
+    <div class='ng-modal-close' ng-click='dismiss()'>X</div>
+    <div class='ng-modal-dialog-content container-fluid h-100' id="config-wizard-dialog">
+    <div class="row fill-height" ng-show="isActiveTab('description')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="1"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <label class="alert alert-info w-100">
+                    Upon login for the first time, mUzima mobile app displays the list of available
+                setup configurations, and the user will need to select a setup configuration
+                    that best suits their needs.
+                </label>
+                <label class="alert alert-success w-100">Please provide a name and a description of your setup configuration.</label>
+                <input class="form-control" placeholder="Enter setup name... (Required)" ng-required="true" ng-model="config.name">
+                <textarea class="form-control" placeholder="Enter the setup description... (Optional)" rows="4" ng-model="config.description"></textarea>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('registration-form-option')"
+                        ng-disabled="isConfigNameEmpty()">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('registration-form-option')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <label class="alert alert-info w-100">
+                    mUzima can be adapted to enable registration of patients and to collect various other kinds of
+                    patient data through forms.
+                </label>
+                <label class="alert alert-success w-100">Do you plan on registering patients on the mobile application?</label>
+                <label class="w-25 offset-2">
+                    <input type="radio" ng-checked="config.willRegisteringPatients" ng-value="true"
+                           ng-model="config.willRegisteringPatients" ng-click="goToNextWizardTab('registration-form-selection')"> Yes
+                </label>
+                <label  class="w-25"><input type="radio" ng-value="false"
+                                            ng-model="config.willRegisteringPatients"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willRegisteringPatients ? goToNextWizardTab('registration-form-selection'):goToNextWizardTab('other-forms-option')"
+                ng-disabled = "config.willRegisteringPatients == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('registration-form-selection')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <label class="alert alert-success w-100">Please select a registration form to be used for registering patients
+                on the mobile application.</label>
+            <div class="row">
+                <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
+                    <table class="table table-hover table-striped">
+                    <tr ng-repeat="muzimaform in muzimaforms | filter:isRegistrationForm| orderBy: 'form.name'">
+                        <td>
+                            <label class="w-100">{{muzimaform.form.name}}
+                                <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
+                                       ng-click="toggleFormSelection(muzimaform.form)" type="checkbox"></label>
+                        </td>
+                    </tr>
+                    </table>
+                    <label ng-show="!hasRegistrationForms()" class="alert alert-error">
+                        There are no registration forms available. Please click on
+                        <i><u>Upload new form</u></i> button to upload a registration form.
+                    </label>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary" ng-click="goToNextWizardTab('form-upload')">Upload new form</button>
+                </div>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('other-forms-option')"
+                ng-disabled="!configHasRegistrationForms()">
+                    Use selected <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('form-upload')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="alert alert-success w-100">Please provide details of the form to be uploaded</label>
+                </div>
+            </div>
+            <m-uzima-form-upload></m-uzima-form-upload>
+
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" disabled>
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('create-form-definition')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <openmrs-form-creator></openmrs-form-creator>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" disabled>
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('other-forms-option')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <label class="alert alert-info w-100">
+                    Besides registration forms, mUzima supports other kinds of forms that include:
+                    <ol>
+                        <li>Patient demographics update form</li>
+                        <li>Person creation/relationship form</li>
+                        <li>Person demographics update form</li>
+                        <li>Tele-consultation form</li>
+                        <li>Patient encounter form</li>
+                    </ol>
+                </label>
+                <label class="alert alert-success w-100">Do you have any form to be downloaded to the mobile application?</label>
+                <label class="w-25 offset-2">
+                    <input type="radio" ng-checked="config.willFillOtherForms" ng-value="true"
+                           ng-model="config.willFillOtherForms" ng-click="goToNextWizardTab('other-forms-selection')"> Yes
+                </label>
+                <label  class="w-25"><input type="radio" ng-value="false"
+                                            ng-model="config.willFillOtherForms"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willFillOtherForms ? goToNextWizardTab('other-forms-selection'):goToNextWizardTab('cohorts')"
+                        ng-disabled="config.willFillOtherForms == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('other-forms-selection')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="2"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <label class="alert alert-success w-100">Please select from available non-registration forms or upload a new one below:</label>
+            <div class="row">
+                <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
+                    <table class="table table-hover table-striped">
+                        <tr ng-repeat="muzimaform in muzimaforms | filter:isNonRegistrationForm | orderBy: 'form.name'">
+                            <td>
+                                <label class="w-100" title="{{muzimaform.form.discriminator}}">{{muzimaform.form.name}}
+                                    <input class="pull-right" ng-checked="isFormSelected(muzimaform.form.uuid)"
+                                           ng-click="toggleFormSelection(muzimaform.form)" type="checkbox"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <label ng-show="!hasNonRegistrationForms()" class="alert alert-error">
+                        There are no non-registration forms available. Please click on
+                        <i><u>Upload new form</u></i> button to upload a form.
+                    </label>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary" ng-click="goToNextWizardTab('form-upload')">Upload new form</button>
+                </div>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('cohorts')"
+                ng-disabled="!configHasNonRegistrationForms()">
+                    Use selected <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('cohorts')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="3"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <label class="alert alert-info w-100">
+                    mUzima supports the use of Cohorts to group patient with common characteristics.
+                </label>
+                <label class="alert alert-success w-100">
+                    Do you want to add Cohorts as part of the information that should be downloaded to the mobile application?
+                </label>
+                <label class="w-25">
+                    <input type="radio" ng-checked="config.willAddCohorts" ng-value="true"
+                           ng-model="config.willAddCohorts" ng-click="goToNextWizardTab('cohorts-selection')"> Yes
+                </label>
+                <label  class="w-25">
+                    <input type="radio" ng-value="false" ng-model="config.willAddCohorts"> No
+                </label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willAddCohorts ? goToNextWizardTab('cohorts-selection'):goToNextWizardTab('concepts')"
+                        ng-disabled="config.willAddCohorts == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('cohorts-selection')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="3"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <label class="alert alert-success w-100">Please select or define new cohorts to be added to the mobile application:</label>
+            <div class="row">
+                <div class="col-md-7" style="margin-bottom: 70px; max-height: 285px; overflow-y:scroll">
+                    <table class="table table-hover table-striped">
+                        <tr ng-repeat="cohort in cohorts  | orderBy: 'name'">
+                            <td>
+                                <label class="w-100" title="{{cohort.description}}">{{cohort.name}}
+                                    <input class="pull-right" ng-checked="cohortExistsInConfig(cohort)"
+                                           ng-click="toggleCohortSelection(cohort)" type="checkbox"></label>
+                            </td>
+                        </tr>
+                    </table>
+                    <label ng-hide="hasDefinedCohorts()" class="alert alert-error">
+                        There are no Cohorts available. Please click on
+                        <i><u>Define new cohort</u></i> button to create a new one.
+                    </label>
+                </div>
+                <div class="col-md-5">
+                    <button class="btn btn-primary" ng-click="goToNextWizardTab('create-cohort-definition')">Define new cohort</button>
+                </div>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('concepts')"
+                        ng-disabled="configHasCohorts() == false">
+                    Use selected <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('create-cohort-definition')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="3"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <cohort-definition-creator></cohort-definition-creator>
+            <div class="half-wizard-nav-bar" >
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('concepts')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="4"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <label class="alert alert-info w-100">
+                    mUzima uses Concepts to determine the kinds of historical data that should be downloaded and retained
+                    on the mobile devices after form filling.
+                </label>
+                <label class="alert alert-success w-100">
+                    Do you want to include Concepts as part of the data that should be downloaded to the mobile application?
+                </label>
+                <label class="w-25"><input type="radio" name="willAddConcepts"
+                                           ng-value="true" ng-model="config.willAddConcepts"
+                                           ng-click="goToNextWizardTab('add-concepts')"> Yes</label>
+                <label  class="w-25"><input type="radio" name="willAddConcepts" ng-value="false" ng-model="config.willAddConcepts"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willAddConcepts ? goToNextWizardTab('add-concepts'):goToNextWizardTab('locations')"
+                        ng-disabled="config.willAddConcepts == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('add-concepts')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="4"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row col-md-12"  style="margin-bottom: 75px">
+                <label class="alert alert-success w-100">Please select Concepts to be downloaded to the mobile application:</label>
+                <table class="col-md-12 table-borderless">
+                    <tr align="center">
+                        <td align="left" class="wizard-search-container">
+                            <input type="text" class="form-control" ng-model="search.concepts" placeholder="Search from the Server ..." autocomplete="off"
+                                   uib-typeahead="concept as concept.name.name for concept in concepts | filter:$viewValue | limitTo:15"
+                                   uib-typeahead-wait-ms="500" typeahead-on-select="addConcept($item)" uib-typeahead-editable="false"/>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr align="center">
+                        <td width="45%" align="left">
+                            <div class="card">
+                                <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Extracted Form Concepts</label>
+                                <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
+                                         style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                    <option ng-repeat="concept in extractedNotUsedConcepts | orderBy: 'name'" value="{{concept}}"
+                                            class="list-group-item">{{concept.name}}</option>
+                                    <option ng-hide="hasAvailableNotUsedConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no concepts available that were extracted from the forms. Please use the search by concept name option.
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td width="10%" align="center">
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eConcepts.length" ng-click="moveSelected()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!extractedNotUsedConcepts.length" ng-click="moveAll()" style="width: 3rem; padding: 0.25rem;">>></button>
+                        </td>
+                        <td width="45%" align="left" valign="top">
+                            <div class="card">
+                                <label for="selectedConcepts" class="w-100  card-header alert-primary">Selected Concepts</label>
+                                <select class="list-group list-group-flush" size="15" id="selectedConcepts" ng-model="selected.concepts"
+                                        style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                    <option ng-repeat="concept in configConcepts | orderBy: 'name'" value="{{concept}}"
+                                    class="list-group-item">{{concept.name}}</option>
+                                    <option ng-hide="configHasConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no selected concepts.
+                                    </option>
+                                </select>
+                                <button type="submit" ng-show="selected.concepts.length" ng-click="removeSelected()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('locations')"
+                        ng-disabled="!configConcepts.length">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('locations')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="5"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <label class="alert alert-info w-100">
+                    We recognize that many implementations cannot download all locations to the devices for listing as
+                    the care location.
+                    mUzima provides the options for selecting a subset of these locations to the device. These will be
+                    locations that appear as the Encounter Location for patients.
+                </label>
+                <label class="alert alert-success w-100">
+                    Do you want to add Location(s) to be downloaded to mUzima for this program.
+                </label>
+                <label class="w-25"><input type="radio" name="willAddLocations"
+                                           ng-value="true" ng-model="config.willAddLocations"
+                                           ng-click="goToNextWizardTab('add-locations')"> Yes</label>
+                <label  class="w-25"><input type="radio" name="willAddLocations" ng-value="false" ng-model="config.willAddLocations"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willAddLocations ? goToNextWizardTab('add-locations'):goToNextWizardTab('providers')"
+                        ng-disabled="config.willAddLocations == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('add-locations')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="5"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row col-md-12"  style="margin-bottom: 75px">
+                <label class="alert alert-success w-100">Please search and select Encounter Location(s) you want downloaded to mUzima for this program.</label>
+                <table class="col-md-12 table-borderless">
+                    <tr align="center">
+                        <td align="left" class="wizard-search-container">
+                            <input type="text" class="form-control" id="muzimaLocation" ng-model="search.locations"
+                                   placeholder="Search location by name ..." autocomplete="off"
+                                   uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
+                                   uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
+                        </td>
+                        <td></td>
+                        <td><button class="btn btn-primary" ng-hide="true" ng-click="goToNextWizardTab('create-location')">Create New Location</button></td>
+                    </tr>
+                    <tr align="center">
+                        <td width="45%" align="left">
+                            <div class="card">
+                                <label class="card-header alert-info" for="availableNotUsedLocations" style="">Available locations</label>
+                                <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedLocations" ng-model="selected.eLocations"
+                                         style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                    <option ng-repeat="location in availableNotUsedLocations | orderBy: 'name'" value="{{location}}"
+                                            class="list-group-item">{{location.name}}</option>
+                                    <option ng-hide="hasAvailableNotUsedLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no locations available.
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td width="10%" align="center">
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eLocations.length" ng-click="moveSelectedLocations()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedLocations.length" ng-click="moveAllAvailableLocations()" style="width: 3rem; padding: 0.25rem;">>></button>
+                        </td>
+                        <td width="45%" align="left" valign="top">
+                            <div class="card">
+                                <label for="selectedLocations" class="w-100  card-header alert-primary">Selected Locations</label>
+                                <select class="list-group list-group-flush" size="15" id="selectedLocations" ng-model="selected.locations"
+                                        style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                    <option ng-repeat="location in configLocations | orderBy: 'name'" value="{{location}}"
+                                            class="list-group-item">{{location.name}}</option>
+                                    <option ng-hide="configHasLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no selected locations.
+                                    </option>
+                                </select>
+                                <button type="submit" ng-show="selected.locations.length" ng-click="removeSelectedLocations()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('providers')"
+                        ng-disabled="!configLocations.length">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('create-location')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="5"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <location-creator></location-creator>
+            <div class="half-wizard-nav-bar" >
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('providers')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="6"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div>
+                <label class="alert alert-info w-100">
+                    We recognize that many implementations cannot download all providers to the devices for listing as
+                    the care provider.
+                    mUzima provides the options for selecting a subset of these providers to the device. These will be
+                    providers that appear as the Encounter providers for patients.
+                </label>
+                <label class="alert alert-success w-100">
+                    Do you want to include Encounter Provider(s) to be downloaded to mUzima for this program.
+                </label>
+                <label class="w-25"><input type="radio" name="willAddProviders"
+                                           ng-value="true" ng-model="config.willAddProviders"
+                                           ng-click="goToNextWizardTab('add-providers')"> Yes</label>
+                <label  class="w-25"><input type="radio" name="willAddProviders" ng-value="false" ng-model="config.willAddProviders"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willAddProviders ? goToNextWizardTab('add-providers'):goToNextWizardTab('settings')"
+                        ng-disabled="config.willAddProviders == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('add-providers')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="6"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row col-md-12"  style="margin-bottom: 75px">
+                <label class="alert alert-success w-100">Please search and select Encounter Provider(s) you want downloaded to mUzima for this program.</label>
+                <table class="col-md-12 table-borderless">
+                    <tr align="center">
+                        <td align="left" class="wizard-search-container">
+                            <input type="text" class="form-control" id="muzimaProvider" ng-model="search.providers"
+                                   placeholder="Search provider by name ..." autocomplete="off"
+                                   uib-typeahead="provider as provider.name for provider in providers | filter:$viewValue | limitTo:8"
+                                   uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
+                        </td>
+                        <td></td>
+                        <td><a ng-hide="true" class="link">Create New</a></td>
+                    </tr>
+                    <tr align="center">
+                        <td width="45%" align="left">
+                            <div class="card">
+                                <label class="card-header alert-info" for="availableNotUsedProviders" style="">Available providers</label>
+                                <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedProviders" ng-model="selected.eProviders"
+                                         style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                    <option ng-repeat="provider in availableNotUsedProviders | orderBy: 'name'" value="{{provider}}"
+                                            class="list-group-item">{{provider.name}}</option>
+                                    <option ng-hide="hasAvailableNotUsedProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no providers available.
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td width="10%" align="center">
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eProviders.length" ng-click="moveSelectedProviders()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedProviders.length" ng-click="moveAllAvailableProviders()" style="width: 3rem; padding: 0.25rem;">>></button>
+                        </td>
+                        <td width="45%" align="left" valign="top">
+                            <div class="card">
+                                <label for="selectedProviders" class="w-100  card-header alert-primary">Selected Providers</label>
+                                <select class="list-group list-group-flush" size="15" id="selectedProviders" ng-model="selected.providers"
+                                        style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                    <option ng-repeat="provider in configProviders | orderBy: 'name'" value="{{provider}}"
+                                            class="list-group-item">{{provider.name}}</option>
+                                    <option ng-hide="configHasProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no selected providers.
+                                    </option>
+                                </select>
+                                <button type="submit" ng-show="selected.providers.length" ng-click="removeSelectedProviders()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="goToNextWizardTab('settings')"
+                        ng-disabled="!configProviders.length">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" style="min-width:860px" ng-show="isActiveTab('settings')">
+        <div class="col-md-3">
+            <config-wizard-side-nav wizard-stage="7"></config-wizard-side-nav>
+        </div>
+        <div class="col-md-9">
+            <div>
+                <label class="alert alert-info w-100">
+                    Settings in mUzima enable customization of mUzima implementation to suit implementation needs.
+                    These settings can be configured via mUzima Core module, and values specified with the settings
+                    are either used by the module or synced to the mobile application for use by the app.<br>
+                    <a class="learn-more" href="https://wiki.muzima.org/display/muzima/mUzima+Settings" target="_blank">Learn more</a>
+                </label>
+                <label class="alert alert-success w-100">
+                    Do you want to configure settings to be downloaded to mUzima for this program?
+                </label>
+                <label class="w-25"><input type="radio" name="willAddSettings"
+                                           ng-value="true" ng-model="config.willAddSettings"
+                                           ng-click="goToNextWizardTab('add-settings')"> Yes</label>
+                <label  class="w-25"><input type="radio" name="willAddSettings" ng-value="false" ng-model="config.willAddSettings"> No</label>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"
+                        ng-click="config.willAddSettings ? goToNextWizardTab('add-settings'):goToNextWizardTab('review')"
+                        ng-disabled="config.willAddSettings == undefined">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('add-settings')">
+        <div class="col-sm-3">
+            <config-wizard-side-nav wizard-stage="7"></config-wizard-side-nav>
+        </div>
+        <div class="col-sm-9">
+            <div class="row col-md-12"  style="margin-bottom: 75px">
+                <label class="alert alert-success w-100">
+                    Please review and update settings below to suit your implementation for this setup config.
+                </label>
+                <table class="col-md-12 table-borderless">
+                    <tr align="center">
+                        <td align="left" class="wizard-search-container">
+                            <input type="text" class="form-control" ng-model="search.settings"
+                                   placeholder="Search settings by name ..." autocomplete="off"
+                                   uib-typeahead="setting as setting.name for setting in settings | filter:$viewValue | limitTo:8"
+                                   uib-typeahead-wait-ms="500" typeahead-on-select="addSetting($item)" uib-typeahead-editable="false"/>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr align="center">
+                        <td width="45%" align="left">
+                            <div class="card">
+                                <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings</label>
+                                <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedSettings" ng-model="selected.eSettings"
+                                         style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                    <option ng-repeat="setting in availableNotUsedSettings | orderBy: 'name'" value="{{setting}}"
+                                            class="list-group-item" title="{{setting.description}}">
+                                        <div>{{formatSettingDisplay(setting)}}</div>
+                                    </option>
+                                    <option ng-hide="hasAvailableNotUsedSettings()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no settings available.
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td width="10%" align="center">
+                            <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eSettings.length" ng-click="moveSelectedSettings()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                            <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedSettings.length" ng-click="moveAllAvailableSettings()" style="width: 3rem; padding: 0.25rem;">>></button>
+                        </td>
+                        <td width="45%" align="left" valign="top">
+                            <div class="card">
+                                <label for="selectedSettings" class="w-100  card-header alert-primary">Selected Config settings</label>
+                                <select class="list-group list-group-flush" size="15" id="selectedSettings" ng-model="selected.settings"
+                                        style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                    <option ng-repeat="setting in configSettings | orderBy: 'name'" value="{{setting}}"
+                                            class="list-group-item" title="{{setting.description}}">
+                                        <div>{{formatSettingDisplay(setting)}}</div>
+                                    </option>
+                                    <option ng-hide="configHasSettings()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                        There are no selected settings.
+                                    </option>
+                                </select>
+                                <button type="submit" ng-show="selected.settings.length" ng-click="removeSelectedSettings()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                <button type="submit" ng-show="selected.settings.length == 1" ng-click="editSettingValue()" class="btn btn-sm btn-outline-primary">Edit value</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right" ng-click="goToNextWizardTab('review')">
+                    Next <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row fill-height" ng-show="isActiveTab('review')">
+        <div class="col-md-3">
+            <config-wizard-side-nav wizard-stage="8"></config-wizard-side-nav>
+        </div>
+        <div class="col-md-9">
+            <div style="width:100%; max-height: 50%">
+                <label class="alert alert-success w-100">
+                    Please review your preferences before saving
+                </label>
+                <label class="w-100">
+                    {{config.name}}
+                </label>
+                <label class="w-100">
+                    {{config.description}}
+                </label>
+                <hr>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="forms-tab" data-toggle="tab" href="#forms" role="tab"
+                           aria-controls="forms" aria-selected="true">Forms</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="cohorts-tab" data-toggle="tab" href="#cohorts" role="tab"
+                           aria-controls="cohorts" aria-selected="false">Cohorts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#concepts" role="tab"
+                           aria-controls="concepts" aria-selected="false">Concepts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="locations-tab" data-toggle="tab" href="#locations" role="tab"
+                           aria-controls="locations" aria-selected="false">Locations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="providers-tab" data-toggle="tab" href="#providers" role="tab"
+                           aria-controls="providers" aria-selected="false">Providers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
+                           aria-controls="settings" aria-selected="false">Settings</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="wizard-review-content">
+                    <div class="tab-pane fade show active" id="forms" role="tabpanel" aria-labelledby="forms-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="form in configForms | orderBy: 'name'">
+                                {{form.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configForms.length">
+                            No forms added for this config
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="cohorts" role="tabpanel" aria-labelledby="cohorts-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="cohort in configCohorts | orderBy: 'name'">
+                                {{cohort.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configCohorts.length">
+                            No cohorts added for this config
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="concepts" role="tabpanel" aria-labelledby="concepts-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="concept in configConcepts | orderBy: 'name'">
+                                {{concept.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configConcepts.length">
+                            No Concepts added for this config
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="locations" role="tabpanel" aria-labelledby="locations-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="location in configLocations | orderBy: 'name'">
+                                {{location.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configLocations.length">
+                            No Locations added for this config
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="providers" role="tabpanel" aria-labelledby="providers-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="provider in configProviders | orderBy: 'name'">
+                                {{provider.name}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configProviders.length">
+                            No Providers added for this config
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item review-list-group-item table-hover" ng-repeat="setting in configSettings | orderBy: 'name'">
+                                {{formatSettingDisplay(setting)}}
+                            </li>
+                        </ul>
+                        <div ng-hide="configSettings.length">
+                            No Settings added for this config
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="wizard-nav-bar">
+                <button class="btn btn-default btn-md pull-left" ng-click="goToPreviousWizardTab()">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+                <button class="btn btn-success btn-md pull-right"   ng-click="save(config)">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

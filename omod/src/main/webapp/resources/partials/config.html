@@ -1,48 +1,32 @@
 <div id="wide-sidebar" class="row">
     <side-navigation menu-item="config"></side-navigation>
-    <div class="col-lg-8">
-        <div id='wait' class='loader'>
-            &nbsp;
-        </div>
+    <div class="col-md-8">
         <div ng-switch="mode">
             <div ng-switch-when="view">
                 <table class="table table-borderless">
                     <tbody>
                     <tr>
                         <td>
-                            <div class="col-lg-8 row">
-                                <input class="form-control" placeholder="Configuration name ..." type="text" disabled="" ng-model="config.name">
+                            <div class="col-md-12">
+                                <input class="form-control" ng-required="true" placeholder="Configuration name ..." type="text" disabled="" ng-model="config.name">
                             </div>
-                            <div class="col-lg-8 row">
+                            <div class="col-md-12">
 									<textarea class="form-control" placeholder="Configuration description ..." rows="4" disabled="" ng-model="config.description">
 									</textarea>
                             </div>
-                            <div class="col-lg-8 row">
+                            <div class="col-md-12">
                                 <input class="form-control" placeholder="Configuration uuid ..." type="text" disabled="" ng-model="config.uuid">
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input type="checkbox" ng-model="specialFields.showConfigJson"/>
-                            <span>View Configuration</span>
-                        </td>
-                    </tr>
-                    <tr ng-show="specialFields.showConfigJson">
-                        <td>
-                            <div class="tree well">
-                                <ul id='treeul'>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div>
+                            <div class="pull-right">
                                 <button type="submit" ng-click="edit()" ng-disabled="specialFields.stillLoading" class="btn btn-primary">
                                     <span ng-hide="specialFields.stillLoading">Edit</span>
-                                    <span ng-show="specialFields.stillLoading"><i class="icon-refresh icon-spin"></i> Preparing... </span>
+                                    <span ng-show="specialFields.stillLoading"><i class="fa fa-refresh fa-spin"></i> Preparing... </span>
                                 </button>
+                                <button ng-click="launchWizard($event)" class="btn btn-dark">Edit via config Wizard</button>
                                 <button type="submit" ng-click="cancel()" class="btn btn-danger">Close</button>
                             </div>
                         </td>
@@ -55,137 +39,411 @@
                     <tbody>
                     <tr>
                         <td>
-                            <div class=" col-lg-8 row">
-                                <input class="form-control" placeholder="Configuration name ..." type="text" ng-model="config.name">
+                            <div class=" col-md-12">
+                                <input class="form-control" placeholder="Enter configuration name (Required) ..."
+                                       type="text" ng-model="config.name">
                             </div>
-                            <div class="col-lg-8 row">
-                                <textarea class="form-control" placeholder="Configuration description ..." rows="4" ng-model="config.description"></textarea>
+                            <div class="col-md-12">
+                                <textarea class="form-control" placeholder="Enter configuration description (Optional)..." rows="4" ng-model="config.description"></textarea>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <div class="panel panel-default panel-body col-lg-12">
+                            <div class="card card-body col-md-12">
                                 <uib-tabset active="active">
                                     <uib-tab index="0" heading="Forms">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Form</strong>
-                                            </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
-                                                <input type="text" class="form-control" ng-model="search.forms" placeholder="Search form by name ..." autocomplete="off"
-                                                       uib-typeahead="form as form.name for form in forms | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addForm($item)" uib-typeahead-editable="false"/>
-                                            </div>
-                                        </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
-                                                <option ng-click="chosenForm(form.uuid)" ng-repeat="form in configForms">{{form.name}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.form" ng-click="removeForm()" class="btn btn-sm">Remove Form</button>
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <label style="font-weight: normal" class="alert alert-info w-100">
+                                                            During initial setup, mUzima app downloads forms included in the setup
+                                                            configuration. To add form(s) that will be downloaded as part of this setup configuration
+                                                            use any of the following options:
+                                                            <p>
+                                                                <ol>
+                                                                    <li>Search for the form by name, then select from the list.</li>
+                                                                    <li>Select one or more forms from <b>Available Forms</b> list below, then click on the button with single >.</li>
+                                                                    <li>To add all forms from the <b>Available Forms</b> list, click on the button with double >>.</li>
+                                                                </ol>
+                                                                To remove form(s) from the configuration, select the form(s) from the <b>Selected Forms</b> list and then click on <b>Remove Selected</b> button.
+                                                            </p>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td align="left" class="">
+                                                        <input type="text" class="form-control" id="muzimaForm" ng-model="search.forms"
+                                                               placeholder="Search form by name ..." autocomplete="off"
+                                                               uib-typeahead="form as form.name for form in forms | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addForm($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td style="margin:auto; float:right;"><button class="btn btn-primary" ng-click="uploadNewFormInModal()">Upload new form</button></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedForms" style="">Available Forms</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedForms" ng-model="selected.eForms"
+                                                    white-space                 style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="form in availableNotUsedForms | orderBy: 'name'" value="{{form}}" title="{{form.description}}"
+                                                                        class="list-group-item">{{form.name}}</option>
+                                                                <option ng-hide="hasMuzimaForms()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no forms available. Please click on
+                                                                    <i><u>Upload new form</u></i> button to upload a form.
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center" style="vertical-align: middle;">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eForms.length" ng-click="moveSelectedForms()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedForms.length" ng-click="moveAllAvailableForms()" style="width: 3rem; padding: 0.25rem;">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedForms" class="w-100  card-header alert-primary">Selected Forms</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedForms" ng-model="selected.forms"
+                                                                    style="width: 100%; font-size: 11px; max-height:200px; border:none;" multiple="multiple">
+                                                                <option ng-repeat="form in configForms | orderBy: 'name'" value="{{form}}" title="{{form.description}}"
+                                                                        class="list-group-item">{{form.name}}</option>
+                                                                <option ng-hide="hasconfigForms()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected forms.
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.forms.length" ng-click="removeSelectedForms()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="1" heading="Cohorts">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Cohort</strong>
-                                            </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
-                                                <input type="text" ng-model="search.cohorts" class="form-control" placeholder="Search cohort by name ..." autocomplete="off"
-                                                       uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addCohort($item)" uib-typeahead-editable="false"/>
-                                            </div>
-                                        </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
-                                                <option ng-click="chosenCohort(cohort.uuid)" ng-repeat="cohort in configCohorts">{{cohort.name}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.cohort" ng-click="removeCohort()" class="btn btn-sm">Remove Cohort</button>
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <label style="font-weight: normal" class="alert alert-info w-100">
+                                                            A cohort is a grouping of patients with similar characteristics e.g diabetic patients.
+                                                            mUzima app will download records for patient(s) who belong to the cohort(s) added to this configuration. To add a cohort(s)
+                                                            to the setup configration:
+                                                            <p>
+                                                                <ol>
+                                                                    <li>Search for the cohort by name, then select from the list that pops up.</li>
+                                                                    <li>Select one or more cohort(s) from <b>Available Cohorts</b> list and click on the button with single >.</li>
+                                                                    <li>To add all cohorts from the <b>Available Cohorts</b> list, click on the button with double >>.</li>
+                                                                </ol>
+                                                                To remove cohort(s) from the configuration, select the cohort(s) from the <b>Selected Cohorts</b> list and then click on <b>Remove Selected</b> button.
+                                                            </p>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td align="left" class="">
+                                                        <input type="text" class="form-control" id="muzimaCohort" ng-model="search.cohorts"
+                                                               placeholder="Search cohort by name ..." autocomplete="off"
+                                                               uib-typeahead="cohort as cohort.name for cohort in cohorts | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addCohort($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td style="margin:auto; float:right;"><button class="btn btn-primary" ng-hide="!isAddCohortsPrivilegeGranted" ng-click="createNewCohortInModal()">Define new cohort</button></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedCohorts" style="">Available Cohorts</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedCohorts" ng-model="selected.eCohorts"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="cohort in availableNotUsedCohorts | orderBy: 'name'" value="{{cohort}}"
+                                                                        class="list-group-item" title="{{cohort.description}}">{{cohort.name}}</option>
+                                                                <option ng-hide="hasCohorts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no cohorts available. Please click on
+                                                                    <i><u>Define new cohort</u></i> button to create a cohort.
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center" style="vertical-align: middle;">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eCohorts.length" ng-click="moveSelectedCohorts()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedCohorts.length" ng-click="moveAllAvailableCohorts()" style="width: 3rem; padding: 0.25rem;">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedCohorts" class="w-100  card-header alert-primary">Selected Cohorts</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedCohorts" ng-model="selected.cohorts"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                                                <option ng-repeat="cohort in configCohorts | orderBy: 'name'" value="{{cohort}}"
+                                                                        class="list-group-item" title="{{cohort.description}}">{{cohort.name}}</option>
+                                                                <option ng-hide="configHasCohorts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected cohorts.
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.cohorts.length" ng-click="removeSelectedCohorts()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="2" heading="Locations">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Location</strong>
-                                            </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
-                                                <input type="text" class="form-control" id="muzimaLocation" ng-model="search.locations"
-                                                       placeholder="Search location by name ..." autocomplete="off"
-                                                       uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
-                                            </div>
-                                        </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
-                                                <option ng-click="chosenLocation(location.uuid)" ng-repeat="location in configLocations">{{location.name}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.location" ng-click="removeLocation()" class="btn btn-sm">Remove Cohort</button>
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <label style="font-weight: normal" class="alert alert-info w-100">
+                                                            mUzima app will download location(s) added to the configuration. The location downloaded will be used as the encounter
+                                                            location for encounter(s) recorded via the app. To add a location, use any of the following options: <br/>
+                                                            <p>
+                                                                <ol>
+                                                                    <li>Search for the location by name, then select from the list.</li>
+                                                                    <li>Select one or more location(s) from <b>Available Locations</b> list and click on the button with single >.</li>
+                                                                    <li>To add all locations on the <b>Available Locations</b> list, click on the button with double >>.</li>
+                                                                </ol>
+                                                                To remove location(s) from the configuration, select the location(s) from the <b>Selected Locations</b> list and then click on <b>Remove Selected</b>
+                                                            </p>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td align="left" class="">
+                                                        <input type="text" class="form-control" id="muzimaLocation" ng-model="search.locations"
+                                                               placeholder="Search location by name ..." autocomplete="off"
+                                                               uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addLocation($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td style="margin:auto"><button ng-hide="true" class="btn btn-primary" ng-click="createNewLocationInModal()">Create new location</button></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedLocations" style="">Available locations</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedLocations" ng-model="selected.eLocations"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="location in availableNotUsedLocations | orderBy: 'name'" value="{{location}}"
+                                                                        class="list-group-item">{{location.name}}</option>
+                                                                <option ng-hide="hasAvailableNotUsedLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no locations available.
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center" style="vertical-align: middle;">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eLocations.length" ng-click="moveSelectedLocations()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedLocations.length" ng-click="moveAllAvailableLocations()" style="width: 3rem; padding: 0.25rem;">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedLocations" class="w-100  card-header alert-primary">Selected Locations</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedLocations" ng-model="selected.locations"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                                                <option ng-repeat="location in configLocations | orderBy: 'name'" value="{{location}}"
+                                                                        class="list-group-item">{{location.name}}</option>
+                                                                <option ng-hide="configHasLocations()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected locations.
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.locations.length" ng-click="removeSelectedLocations()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="3" heading="Providers">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Provider</strong>
-                                            </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
-                                                <input type="text" class="form-control" ng-model="search.providers" placeholder="Search provider by name ..." autocomplete="off"
-                                                       uib-typeahead="provider as provider.name for provider in providers | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
-                                            </div>
-                                        </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
-                                                <option ng-click="chosenProvider(provider.uuid)" ng-repeat="provider in configProviders">{{provider.name}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.provider" ng-click="removeProvider()" class="btn btn-sm">Remove Provider</button>
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <label style="font-weight: normal" class="alert alert-info w-100">
+                                                            mUzima app will download provider(s) added to the configuration. The provider downloaded will be used as the encounter provider for encounter(s) added on the app. To add a provider, use any of the following options: <br/>
+                                                            <p>
+                                                                <ol>
+                                                                    <li>Search for the provider by name, then select from the list.</li>
+                                                                    <li>Select one or more provider(s) from <b>Available Providers</b> list and then click on the button with single >.</li>
+                                                                    <li>To add all providers on the <b>Available Providers</b> list, click on the button with double >>.</li>
+                                                                </ol>
+                                                                To remove provider(s) from the configuration, select the provider(s) on the <b>Selected Providers</b> list and then click on <b>Remove Selected</b>
+                                                            </p>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td align="left" class="">
+                                                        <input type="text" class="form-control" id="muzimaProvider" ng-model="search.providers"
+                                                               placeholder="Search provider by name ..." autocomplete="off"
+                                                               uib-typeahead="provider as provider.name for provider in providers | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addProvider($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td style="margin:auto"><button ng-hide="true" class="btn btn-primary" ng-click="createNewProviderInModal()">Create new provider</button></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedProviders" style="">Available providers</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedProviders" ng-model="selected.eProviders"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="provider in availableNotUsedProviders | orderBy: 'name'" value="{{provider}}"
+                                                                        class="list-group-item">{{provider.name}}</option>
+                                                                <option ng-hide="hasAvailableNotUsedProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no providers available.
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center" style="vertical-align: middle;">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eProviders.length" ng-click="moveSelectedProviders()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedProviders.length" ng-click="moveAllAvailableProviders()" style="width: 3rem; padding: 0.25rem;">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedProviders" class="w-100  card-header alert-primary">Selected Providers</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedProviders" ng-model="selected.providers"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                                                <option ng-repeat="provider in configProviders | orderBy: 'name'" value="{{provider}}"
+                                                                        class="list-group-item">{{provider.name}}</option>
+                                                                <option ng-hide="configHasProviders()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected providers.
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.providers.length" ng-click="removeSelectedProviders()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="4" heading="Concepts">
-                                        <div class="row col-lg-12">
-                                            <table class="col-lg-12 table-borderless">
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <label style="font-weight: normal" class="alert alert-info w-100">
+                                                            mUzima app will download observations(s) for concepts added to the configuration. To add a concept(s), use any o fthe following options: <br/>
+                                                            <ol>
+                                                                <li>Search for the concept by name, then select from the list that pops up.</li>
+                                                                <li>Select one or more concept(s) from <b>Extracted Form Concepts</b> list and then click on the button with single >.</li>
+                                                                <li>To add all concepts on the <b>Extracted Form Concepts</b> card, click on the button with double >>.</li>
+                                                            </ol>
+                                                            To remove concept(s) from the configuration, select the concept(s) on the <b>Selected Concepts</b> list and then click on <b>Remove Selected</b>
+                                                        </label>
+                                                    </td>
+                                                </tr>
                                                 <tr align="center">
-                                                    <td width="45%" align="left">
-                                                        <label for="selectedConcepts" style="margin-top: 10px">Selected Concepts</label>
-                                                        <input type="text" class="form-control" ng-model="search.concepts" placeholder="Add from the Server ..." autocomplete="off"
+                                                    <td align="left" class="">
+                                                        <input type="text" class="form-control" ng-model="search.concepts" placeholder="Search by concept name ..." autocomplete="off"
                                                                uib-typeahead="concept as concept.name.name for concept in concepts | filter:$viewValue | limitTo:15"
                                                                uib-typeahead-wait-ms="500" typeahead-on-select="addConcept($item)" uib-typeahead-editable="false"/>
-                                                        <select class="selectClass" size="10" id="selectedConcepts" ng-model="selected.concepts"style="width: 100%; font-size: 11px" multiple="multiple">
-                                                            <option ng-repeat="concept in configConcepts" value="{{concept}}">{{concept.name}}</option>
-                                                        </select>
-                                                        <button type="submit" ng-disabled="!selected.concepts.length" ng-click="removeSelected()" class="btn btn-sm">Remove Selected</button>
                                                     </td>
-                                                    <td width="10%" align="center">
-                                                        <button title="Move Selected" class="btn btn-sm" ng-disabled="!selected.eConcepts.length" ng-click="moveSelected()" style="width: 50px; height: 20px; padding: 0; margin-bottom: 2px">&lt;</button><br><br>
-                                                        <button title="Move All" class="btn btn-sm" ng-disabled="!extractedNotUsedConcepts.length" ng-click="moveAll()" style="width: 50px; height: 20px; padding: 0">&lt;&lt;</button>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="extractedNotUsedConcepts" style="">Extracted Form Concepts</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="10" id="extractedNotUsedConcepts" ng-model="selected.eConcepts"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="concept in extractedNotUsedConcepts | orderBy: 'name'" value="{{concept}}"
+                                                                        class="list-group-item">{{concept.name}}</option>
+                                                                <option ng-hide="hasAvailableNotUsedConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no concepts available that were extracted from the forms. Please use the search by concept name option.
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center" style="vertical-align: middle;">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eConcepts.length" ng-click="moveSelected()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!extractedNotUsedConcepts.length" ng-click="moveAll()" style="width: 3rem; padding: 0.25rem;">>></button>
                                                     </td>
                                                     <td width="45%" align="left" valign="top">
-                                                        <label for="extractedNotUsedConcepts" style="margin-top: 10px">Form Concepts</label>
-                                                        <select class="selectClass" ng-disabled="specialFields.extractingMeta" size="14" id="extractedNotUsedConcepts" ng-model="selected.eConcepts" style="width: 100% ; font-size: 11px" multiple="multiple">
-                                                            <option ng-repeat="concept in extractedNotUsedConcepts" value="{{concept}}">{{concept.name}}</option>
-                                                        </select>
+                                                        <div class="card">
+                                                            <label for="selectedConcepts" class="w-100  card-header alert-primary">Selected Concepts</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedConcepts" ng-model="selected.concepts"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                                                <option ng-repeat="concept in configConcepts | orderBy: 'name'" value="{{concept}}"
+                                                                        class="list-group-item">{{concept.name}}</option>
+                                                                <option ng-hide="configHasConcepts()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected concepts.
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.concepts.length" ng-click="removeSelected()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </table>
                                         </div>
                                     </uib-tab>
                                     <uib-tab index="5" heading="Settings">
-                                        <div class="row col-lg-12">
-                                            <div class="col-md-2" style="margin-top: 14px; padding: 0">
-                                                <strong>Add Setting</strong>
-                                            </div>
-                                            <div class="col-md-5" style="margin-top: 8px">
-                                                <input type="text" class="form-control" ng-model="search.settings" placeholder="Search settings by name ..." autocomplete="off"
-                                                       uib-typeahead="setting as setting.name for setting in settings | filter:$viewValue | limitTo:8"
-                                                       uib-typeahead-wait-ms="500" typeahead-on-select="addSetting($item)" uib-typeahead-editable="false"/>
-                                            </div>
-                                        </div>
-                                        <div class="row col-lg-12">
-                                            <select class="col-lg-10 selectClass" size="8">
-                                                <option ng-click="chosenSetting(setting.uuid)" ng-repeat="setting in configSettings">{{formatSettingDisplay(setting)}}</option>
-                                            </select>
-                                            <button type="submit" ng-disabled="!selected.setting" ng-click="removeSetting()" class="btn btn-sm">Remove Setting</button>
-                                            <br/>
-                                            <button type="submit" ng-disabled="!selected.setting" ng-click="editSettingValue()" class="btn btn-sm">Edit Setting Value</button>
+                                        <div class="row col-md-12">
+                                            <table class="col-md-12 table-borderless">
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <label style="font-weight: normal" class="alert alert-info w-100">
+                                                            mUzima app will download settings and use them to customize the application. If a setting is not added to the configuration, the application will use corresponding setting
+                                                            from the global settings. To add a setting(s), use any of the following options: <br/>
+                                                            <p>
+                                                            <ol>
+                                                                <li>Search for the setting by name, then select from the list, then select it on the <b>Selected Config settings</b> and click on edit to change the value.</li>
+                                                                <li>Select one or more setting(s) from <b>Global Settings</b> list and click on the button with single >, then select it on the <b>Selected Config settings</b> and click on edit to change the value.</li>
+                                                                <li>To add all concepts on the <b>Global Settings</b> list, click on the button with double >>, then edit the settings to the required values.</li>
+                                                            </ol>
+
+                                                            To remove setting(s) from the configuration, select the setting(s) from the <b>Selected Config settings</b> list and then click on <b>Remove Selected</b>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td align="left" class="">
+                                                        <input type="text" class="form-control" ng-model="search.settings"
+                                                               placeholder="Search settings by name ..." autocomplete="off"
+                                                               uib-typeahead="setting as setting.name for setting in settings | filter:$viewValue | limitTo:8"
+                                                               uib-typeahead-wait-ms="500" typeahead-on-select="addSetting($item)" uib-typeahead-editable="false"/>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr align="center">
+                                                    <td width="45%" align="left">
+                                                        <div class="card">
+                                                            <label class="card-header alert-info" for="availableNotUsedSettings" style="">Global settings</label>
+                                                            <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedSettings" ng-model="selected.eSettings"
+                                                                     style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
+                                                                <option ng-repeat="setting in availableNotUsedSettings | orderBy: 'name'" value="{{setting}}"
+                                                                        class="list-group-item" title="{{setting.description}}">
+                                                                    <div>{{formatSettingDisplay(setting)}}</div>
+                                                                </option>
+                                                                <option ng-hide="hasAvailableNotUsedSettings()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no settings available.
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td width="10%" align="center" style="vertical-align: middle;">
+                                                        <button title="Move Selected" class="btn btn-sm btn-outline-dark" ng-disabled="!selected.eSettings.length" ng-click="moveSelectedSettings()" style="width: 3rem; padding: 0.25rem; margin-bottom: 2px">></button><br><br>
+                                                        <button title="Move All" class="btn btn-sm btn-outline-dark" ng-disabled="!availableNotUsedSettings.length" ng-click="moveAllAvailableSettings()" style="width: 3rem; padding: 0.25rem;">>></button>
+                                                    </td>
+                                                    <td width="45%" align="left" valign="top">
+                                                        <div class="card">
+                                                            <label for="selectedSettings" class="w-100  card-header alert-primary">Selected Config settings</label>
+                                                            <select class="list-group list-group-flush" size="15" id="selectedSettings" ng-model="selected.settings"
+                                                                    style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
+                                                                <option ng-repeat="setting in configSettings | orderBy: 'name'" value="{{setting}}"
+                                                                        class="list-group-item" title="{{setting.description}}">
+                                                                    <div>{{formatSettingDisplay(setting)}}</div>
+                                                                </option>
+                                                                <option ng-hide="configHasSettings()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
+                                                                    There are no selected settings.
+                                                                </option>
+                                                            </select>
+                                                            <button type="submit" ng-show="selected.settings.length" ng-click="removeSelectedSettings()" class="btn btn-sm btn-outline-warning">Remove Selected</button>
+                                                            <button type="submit" ng-show="selected.settings.length == 1" ng-click="editSettingValue()" class="btn btn-sm btn-outline-primary">Edit value</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </uib-tab>
                                 </uib-tabset>
@@ -194,24 +452,25 @@
                     </tr>
                     <tr>
                         <td>
-                            <input class="col-lg-10 form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="config.retireReason" ng-show="retire_config" ng-required="retire_config"/>
+                            <input class="col-md-10 form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="config.retireReason" ng-show="retire_config" ng-required="retire_config"/>
                             <div ng-show="config.retireReasonError" style="color:red">Retire reason is required</div>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <button type="submit" ng-click="save(config)" class="btn btn-success">Save</button>
-                            <button type="submit" ng-click="toggleRetireConfig()" class="btn btn-danger" ng-show="!retire_config && config.uuid">Retire</button>
-                            <button type="submit" ng-click="delete(config)" class="btn btn-danger" ng-show="retire_config">Retire</button>
-                            <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
+                            <div class="pull-right">
+                                <button ng-click="launchWizard($event)" class="btn btn-dark">Edit via config Wizard</button>
+                                <button ng-disabled="isConfigNameEmpty()" type="submit" ng-click="save(config)" class="btn btn-success">Save</button>
+                                <button type="submit" ng-click="toggleRetireConfig()" class="btn btn-danger" ng-show="!retire_config && config.uuid">Retire</button>
+                                <button type="submit" ng-click="delete(config)" class="btn btn-danger" ng-show="retire_config">Retire</button>
+                                <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
                 </table>
-                <div ng-show="specialFields.extractingMeta" class='loader'>
-                    &nbsp;
-                </div>
             </div>
         </div>
     </div>
 </div>
+<footer></footer>

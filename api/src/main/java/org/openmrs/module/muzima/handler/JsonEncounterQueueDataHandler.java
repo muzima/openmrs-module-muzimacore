@@ -65,6 +65,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import static org.openmrs.module.muzima.utils.Constants.MuzimaSettings.DEFAULT_MUZIMA_VISIT_TYPE_SETTING_PROPERTY;
@@ -91,6 +92,8 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
 
     private Encounter encounter;
 
+    private String deviceTimeZone;
+
     /**
      * 
      * @param queueData
@@ -104,6 +107,8 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
 
             encounter = new Encounter();
             String payload = queueData.getPayload();
+            String encounterPayload = payload.toString();
+            deviceTimeZone = JsonUtils.readAsString(encounterPayload, "$['encounter']['encounter.device_time_zone']");
 
             //Object patientObject = JsonUtils.readAsObject(queueData.getPayload(), "$['patient']");
             processPatient(encounter, payload);
@@ -608,7 +613,16 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
             date = new Date(timestamp);
         }else {
             try {
-                date = dateFormat.parse(dateValue);
+                String dateAsString = dateValue;
+                if(dateValue.length()==10){
+                    dateAsString = dateValue+" 00:00";
+                }
+                if(deviceTimeZone != null) {
+                    dateTimeFormat.setTimeZone(TimeZone.getTimeZone(deviceTimeZone));
+                    date = dateTimeFormat.parse(dateAsString);
+                }else{
+                    date = dateTimeFormat.parse(dateAsString);
+                }
             } catch (ParseException e) {
                 log.error("Unable to parse date data for encounter!", e);
             }

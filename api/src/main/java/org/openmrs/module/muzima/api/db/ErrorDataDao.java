@@ -15,8 +15,10 @@ package org.openmrs.module.muzima.api.db;
 
 import org.openmrs.module.muzima.model.ErrorData;
 
+import java.util.List;
+
 /**
  */
 public interface ErrorDataDao extends DataDao<ErrorData> {
-
+    List<Object[]> errorDataCountGroupedByDiscriminator();
 }

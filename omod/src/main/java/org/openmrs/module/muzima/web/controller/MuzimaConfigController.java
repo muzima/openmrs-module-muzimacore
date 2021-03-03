@@ -18,7 +18,12 @@ import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Form;
 import org.openmrs.Location;
+import org.openmrs.Person;
+import org.openmrs.Provider;
 import org.openmrs.api.CohortService;
+import org.openmrs.api.LocationService;
+import org.openmrs.api.PersonService;
+import org.openmrs.api.ProviderService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
 import org.openmrs.module.muzima.api.service.MuzimaConfigService;
@@ -125,7 +130,7 @@ public class MuzimaConfigController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/module/muzimacore/configForms.json", method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/mUzimaForms.json", method = RequestMethod.GET)
     public Map<String, Object> getForms(final @RequestParam(value = "search") String search) {
         Map<String, Object> response = new HashMap<String, Object>();
 
@@ -193,5 +198,51 @@ public class MuzimaConfigController {
             response.put("objects", objects);
         }
         return response;
+    }
+
+    @RequestMapping(value = "/module/muzimacore/saveLocation.json", method = RequestMethod.POST)
+    public Map<String, Object> saveLocation(final @RequestBody Map<String, Object> map) {
+        if (Context.isAuthenticated()) {
+            String name = (String) map.get("name");
+            String description = (String) map.get("description");
+
+            Location location = new Location();
+            location.setName(name);
+            location.setDescription(description);
+            location.setRetired(false);
+
+            LocationService locationService = Context.getService(LocationService.class);
+            Location savedLocation = locationService.saveLocation(location);
+
+            return WebConverter.convertMuzimaLocation(savedLocation);
+        }else {
+             Map<String, Object> response = new HashMap<String, Object>();
+             response.put("error", "User not authenticated");
+             return response;
+        }
+    }
+
+    @RequestMapping(value = "/module/muzimacore/saveProvider.json", method = RequestMethod.POST)
+    public Map<String, Object> saveProvider(final @RequestBody Map<String, Object> map) {
+        if (Context.isAuthenticated()) {
+            Integer personID = (Integer) map.get("person_id");
+            String name = (String) map.get("name");
+            String identifier = (String) map.get("identifier");
+
+            PersonService personService = Context.getPersonService();
+            Person person = personService.getPerson(personID);
+            Provider provider = new Provider();
+            provider.setName(name);
+            provider.setPerson(person);
+            provider.setIdentifier(identifier);
+
+            ProviderService providerService = Context.getService(ProviderService.class);
+            Provider savedProvider = providerService.saveProvider(provider);
+            return WebConverter.convertProvider(savedProvider);
+        }else {
+            Map<String, Object> response = new HashMap<String, Object>();
+            response.put("error", "User not authenticated");
+            return response;
+        }
     }
 }

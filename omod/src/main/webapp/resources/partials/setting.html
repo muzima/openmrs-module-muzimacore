@@ -7,42 +7,42 @@
         <div ng-switch="mode">
             <div ng-switch-when="view">
                 <div class="row">
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         Name:
                     </div>
-                    <div class="col-lg-11">
-                        <input class="col-lg-10 form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+                    <div class="col-lg-10">
+                        <input class="form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         Property:
                     </div>
-                    <div class="col-lg-11">
-                        <input class="col-lg-10 form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+                    <div class="col-lg-10">
+                        <input class="form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
 
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         Description:
                     </div>
-                    <div class="col-lg-11">
-                        <textarea class="col-lg-8 form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
+                    <div class="col-lg-10">
+                        <textarea class="form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
                         </textarea>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         Value:
                     </div>
-                    <div class="col-lg-11" ng-show="setting.datatype == 'STRING'">
-                        <input class="col-lg-10 form-control" placeholder="Setting value ..." type="text" disabled="" ng-model="setting.value">
+                    <div class="col-lg-10" ng-show="setting.datatype == 'STRING'">
+                        <input class="form-control" placeholder="Setting value ..." type="text" disabled="" ng-model="setting.value">
                     </div>
-                    <div class="col-lg-11" ng-show="setting.datatype == 'PASSWORD'">
-                        <input class="col-lg-10 form-control" placeholder="Setting value ..." type="password" disabled="" ng-model="setting.value">
+                    <div class="col-lg-10" ng-show="setting.datatype == 'PASSWORD'">
+                        <input class="form-control" placeholder="Setting value ..." type="password" disabled="" ng-model="setting.value">
                     </div>
-                    <div class="col-lg-11" ng-show="setting.datatype == 'BOOLEAN'">
+                    <div class="col-lg-10" ng-show="setting.datatype == 'BOOLEAN'">
                         <div class="col-lg-3">
                             <label class="label-input">
                                 <input type="radio" name="datatype" ng-model="setting.value" ng-value="true" disabled=""/> Enabled
@@ -56,20 +56,21 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         Uuid:
                     </div>
-                    <div class="col-lg-11">
-                        <input class="col-lg-10 form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
+                    <div class="col-lg-10">
+                        <input class="form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-lg-3 col-lg-offset-3">
-                        <button type="submit" ng-show="setting.uuid" ng-click="edit()" class="btn btn-primary btn-block">Edit</button>
+                    <div class="col-lg-2">
+
                     </div>
-                    <div class="col-lg-3">
-                        <button type="submit" ng-click="cancel()" class="btn btn-danger btn-block">Close</button>
+                    <div class="col-lg-10">
+                        <button type="submit" ng-show="setting.uuid" ng-click="edit()" class="btn btn-primary">Edit</button>&nbsp;
+                        <button type="submit" ng-click="cancel()" class="btn btn-warning">Close</button>
                     </div>
                 </div>
                 <span></span>
@@ -77,42 +78,42 @@
             <div ng-switch-when="edit">
                 <form id="consult">
                     <div class="row">
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             Name:
                         </div>
-                        <div class="col-lg-11">
-                            <input class="col-lg-10 form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+                        <div class="col-lg-10">
+                            <input class="form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             Property:
                         </div>
-                        <div class="col-lg-11">
-                            <input class="col-lg-10 form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+                        <div class="col-lg-10">
+                            <input class="form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
 
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             Description:
                         </div>
-                        <div class="col-lg-11">
-                        <textarea class="col-lg-8 form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
+                        <div class="col-lg-10">
+                        <textarea class="form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
                         </textarea>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             Value:
                         </div>
-                        <div class="col-lg-11" ng-show="setting.datatype == 'STRING'">
-                            <input class="col-lg-10 form-control" placeholder="Setting value ..." type="text" ng-model="setting.value">
+                        <div class="col-lg-10" ng-show="setting.datatype == 'STRING'">
+                            <input class="form-control" placeholder="Setting value ..." type="text" ng-model="setting.value">
                         </div>
-                        <div class="col-lg-11" ng-show="setting.datatype == 'PASSWORD'">
-                            <input class="col-lg-10 form-control" placeholder="Setting value ..." type="password" ng-model="setting.value">
+                        <div class="col-lg-10" ng-show="setting.datatype == 'PASSWORD'">
+                            <input class="form-control" placeholder="Setting value ..." type="password" ng-model="setting.value">
                         </div>
-                        <div class="col-lg-11" ng-show="setting.datatype == 'BOOLEAN'">
+                        <div class="col-lg-10" ng-show="setting.datatype == 'BOOLEAN'">
                             <div class="col-lg-3">
                                 <label class="label-input">
                                     <input type="radio" name="datatype" ng-model="setting.value" ng-value="true"/> Enabled
@@ -126,19 +127,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-1">
+                        <div class="col-lg-2">
                             Uuid:
                         </div>
-                        <div class="col-lg-11">
-                            <input class="col-lg-10 form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
+                        <div class="col-lg-10">
+                            <input class="form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-3 col-lg-offset-3">
-                            <button type="submit" ng-click="save(setting)" class="btn btn-primary btn-block">Save</button>
+                        <div class="col-lg-2">
+
                         </div>
-                        <div class="col-lg-3">
-                            <button type="submit" ng-click="cancel()" class="btn btn-danger btn-block">Cancel</button>
+                        <div class="col-lg-10">
+                            <button type="submit" ng-click="save(setting)" class="btn btn-primary">Save</button>&nbsp;
+                            <button type="submit" ng-click="cancel()" class="btn btn-warning">Cancel</button>
                         </div>
                     </div>
                     <span></span>
@@ -147,3 +149,4 @@
         </div>
     </div>
 </div>
+<footer></footer>

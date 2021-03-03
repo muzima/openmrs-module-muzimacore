@@ -1,0 +1,22 @@
+<div>
+    <div class='ng-modal-close' ng-click='dismissVanillaSetupModal()'>X</div>
+    <div class='ng-modal-dialog-content container-fluid h-100' id="config-wizard-dialog">
+        <div   ng-show="isActiveVanillaSetupModalTab('form-upload')">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="alert alert-success w-100">Please provide details of the form to be uploaded</label>
+                </div>
+            </div>
+            <m-uzima-form-upload></m-uzima-form-upload>
+        </div>
+        <div   ng-show="isActiveVanillaSetupModalTab('create-form-definition')">
+            <openmrs-form-creator></openmrs-form-creator>
+        </div>
+        <div   ng-show="isActiveVanillaSetupModalTab('create-cohort-definition')">
+            <cohort-definition-creator></cohort-definition-creator>
+        </div>
+        <div   ng-show="isActiveVanillaSetupModalTab('create-location')">
+            <location-creator></location-creator>
+        </div>
+    </div>
+</div>

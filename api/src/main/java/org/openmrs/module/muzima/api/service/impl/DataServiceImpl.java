@@ -806,4 +806,14 @@ public class DataServiceImpl extends BaseOpenmrsService implements DataService {
         }
         return formDataStatus;
     }
+
+    @Override
+    public List<Object[]> queueDataCountGroupedByDiscriminator() {
+        return queueDataDao.queueDataCountGroupedByDiscriminator();
+    }
+
+    @Override
+    public List<Object[]> errorDataCountGroupedByDiscriminator() {
+        return errorDataDao.errorDataCountGroupedByDiscriminator();
+    }
 }

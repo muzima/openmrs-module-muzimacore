@@ -17,6 +17,7 @@ import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.codehaus.jettison.json.JSONArray;
 import org.openmrs.Cohort;
 import org.openmrs.Form;
 import org.openmrs.Location;
@@ -40,6 +41,7 @@ import org.openmrs.module.reporting.report.ReportDesign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -248,6 +250,7 @@ public class WebConverter {
         Map<String, Object> map = new HashMap<String, Object>();
         if (form != null) {
             map.put("uuid", muzimaForm.getUuid());
+            map.put("discriminator", muzimaForm.getDiscriminator());
             map.put("name", form.getName());
         }
         return map;
@@ -336,6 +339,47 @@ public class WebConverter {
         if (reportDesign != null) {
             map.put("uuid", reportDesign.getUuid());
             map.put("name", reportDesign.getName());
+        }
+        return map;
+    }
+
+    public static Map<String, Object>  convertForm(Form form) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (form != null) {
+            map.put("uuid", form.getUuid());
+            map.put("name", form.getName());
+            map.put("version", form.getVersion());
+            map.put("description", form.getDescription());
+            map.put("retired",form.getRetired());
+        }
+        return map;
+    }
+
+    public static List<Map<String,Object>>  convertForms(List<Form> forms) {
+        List<Map<String,Object>> map = new ArrayList<Map<String, Object>>();
+        for (Form form:forms) {
+            map.add(convertForm(form));
+        }
+        return map;
+    }
+
+    public static List<Map<String,Object>>  convertList(List<Object[]> results) {
+         List<Map<String,Object>> mapList = new ArrayList<Map<String, Object>>();
+         for (Object[] result : results) {
+             Map<String, Object> map = new HashMap<String, Object>();
+             map.put("discriminator", result[0]);
+             map.put("count",result[1]);
+             mapList.add(map);
+        }
+         return mapList;
+    }
+
+    public static Map<String, Object>  convertProvider(Provider provider) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (provider != null) {
+            map.put("uuid", provider.getUuid());
+            map.put("name", provider.getName());
+            map.put("identifier", provider.getIdentifier());
         }
         return map;
     }

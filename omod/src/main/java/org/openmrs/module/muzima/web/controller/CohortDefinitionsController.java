@@ -30,9 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/module/muzimacore/cohortDefinitions.json")
 public class CohortDefinitionsController{
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/module/muzimacore/cohortDefinitions.json", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getAllExpandedCohortDefinitions(final @RequestParam(value = "pageNumber") Integer pageNumber,
                                                                final @RequestParam(value = "pageSize") Integer pageSize){
@@ -47,5 +46,12 @@ public class CohortDefinitionsController{
         response.put("pages", pages);
         response.put("totalItems",expandedCohortDataService.countCohortDefinitionData().intValue());
         return response;
+    }
+
+    @RequestMapping(value = "/module/muzimacore/countCohortDefinations.json", method = RequestMethod.GET)
+    @ResponseBody
+    public int countCohortDefinitions() {
+        CohortDefinitionDataService cohortDefinitionDataService = Context.getService(CohortDefinitionDataService.class);
+        return cohortDefinitionDataService.countCohortDefinitionData().intValue();
     }
 }
