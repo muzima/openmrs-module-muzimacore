@@ -95,7 +95,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
                 $scope.muzimaforms = _.map(response.data.objects, function (form) {
                     if(!$scope.formExistsInConfig(form.uuid)){
                         $scope.availableNotUsedForms.push(form);
-                        //return false;//break from loop
                     }
                     return {
                         form: form,
@@ -348,8 +347,6 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
             $scope.search.cohorts = '';
         }
     };
-
-
 
     $scope.chosenCohort = function (value) {
         $scope.selected.cohort = value;

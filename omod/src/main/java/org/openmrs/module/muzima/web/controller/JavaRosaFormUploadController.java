@@ -76,7 +76,7 @@ public class JavaRosaFormUploadController {
                 MuzimaFormService service = Context.getService(MuzimaFormService.class);
                 service.createHTMLForm(extractFile(request), form, discriminator);
 
-                MuzimaForm muzimaForm = service.getMuzimaFormByForm(form, true).get(0);
+                MuzimaForm muzimaForm = service.getMuzimaFormByForm(form, false).get(0);
                 Form openmrsForm = Context.getFormService().getFormByUuid(form);
                 return WebConverter.convertMuzimaForm(openmrsForm, muzimaForm);
             }
@@ -112,7 +112,7 @@ public class JavaRosaFormUploadController {
 
             MuzimaFormService service = Context.getService(MuzimaFormService.class);
             service.createHTMLForm(extractFile(request), formUuid, discriminator);
-            MuzimaForm muzimaForm = service.getMuzimaFormByForm(formUuid,true).get(0);
+            MuzimaForm muzimaForm = service.getMuzimaFormByForm(formUuid,false).get(0);
             return WebConverter.convertMuzimaForm(form,muzimaForm);
         }
         return new HashMap<String, Object>();
