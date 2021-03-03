@@ -28,7 +28,7 @@
                     </thead>
                     <tbody>
                     <tr ng-hide="cohortDefinitions.length">
-                        <td colspan="5">No cohort definitions created.</td>
+                        <td colspan="8">No cohort definitions created.</td>
                     </tr>
                     <tr ng-repeat="cohortDefinition in cohortDefinitions | orderBy:'submitted':true">
                         <td><a href="#/cohortDefinition/{{cohortDefinition.uuid}}"><i class="fa fa-pencil-square-o"></i></a></td>

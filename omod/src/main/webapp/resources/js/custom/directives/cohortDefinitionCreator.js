@@ -37,10 +37,10 @@ muzimaCoreModule.directive('cohortDefinitionCreator', function($cohortDefinition
                 return (scope.enableDynamicCohort == false || scope.enableDynamicCohort !== false
                     && scope.enableCohortFilters != undefined) && scope.cohortDefinition != undefined
                     && scope.cohortDefinition.name.trim() != '' && scope.cohortDefinition.description.trim() != ''
-                    && scope.validateDefinationQuery() && scope.validateFilterQuery();
+                    && scope.validateDefinitionQuery() && scope.validateFilterQuery();
             }
 
-            scope.validateDefinationQuery = function(){
+            scope.validateDefinitionQuery = function(){
                 if(scope.cohortDefinition.isMemberAdditionEnabled != undefined || scope.cohortDefinition.isMemberRemovalEnabled != undefined ){
                     return scope.cohortDefinition.definition !=undefined && scope.cohortDefinition.definition.trim() != '';
                 }else{
