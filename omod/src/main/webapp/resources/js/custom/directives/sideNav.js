@@ -1,10 +1,16 @@
-muzimaCoreModule.directive("sideNavigation", function () {
+muzimaCoreModule.directive("sideNavigation", function ($localeService, $translate) {
     return {
         restrict: 'E',
         scope: {
             menuItem: '@'
         },
         link: function(scope, element, attrs) {
+          $localeService.getUserLocale().
+          then(function (response) {
+              var serverData = response.data.locale;
+              $translate.use(serverData);
+          });
+
           scope.closeTour = function() {
              scope.currentStep = 25;
           };

@@ -23,6 +23,9 @@
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/filters.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/app.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/angular/angular-tour.min.js" />
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/angular/angular-translate.min.js" />
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/angular/angular-translate-interpolation-messageformat.min.js" />
+<openmrs:htmlInclude file="/moduleResources/muzimacore/js/angular/angular-translate-loader-static-files.min.js" />
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/EditController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/ErrorController.js"/>
 <openmrs:htmlInclude file="/moduleResources/muzimacore/js/custom/controllers/FormController.js"/>
