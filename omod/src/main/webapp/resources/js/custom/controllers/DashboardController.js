@@ -1,4 +1,4 @@
-function DashboardCtrl($scope, $location, $dashboardService) {
+function DashboardCtrl($scope, $location, $dashboardService, $translate) {
     $scope.configs = 0;
     $scope.cohortdefinations = 0;
     $scope.reportConfigs = 0;
@@ -22,6 +22,12 @@ function DashboardCtrl($scope, $location, $dashboardService) {
     $scope.registrationError = 0;
     $scope.relationshipError = 0;
     $scope.individualObsError = 0;
+
+    $dashboardService.getUserLocale().
+    then(function (response) {
+        var serverData = response.data.locale;
+        $translate.use(serverData);
+    });
 
     $dashboardService.getSetupConfigCount().
     then(function (response) {

@@ -1,0 +1,22 @@
+{
+  "general_setup_config": "Setup Configurations",
+  "general_error_data" : "Error Data.",
+  "general_queue_data": "Queue Data",
+  "general_potential_duplicate": "Potential Duplicates",
+  "general_muzima_forms": "mUzima Forms",
+  "general_patient_reports": "Patient Reports",
+  "general_cohort_definitions": "Cohort Definitions",
+  "general_registrations": "Registrations",
+  "general_data_source": "Data Source",
+  "general_settings": "Settings",
+  "general_take_tour": "Take a tour",
+  "general_encounter" : "Encounter",
+  "general_demographic_update": "Demographic Update",
+  "general_registration": "Registration",
+  "general_relationship": "Relationship",
+  "general_individual_obs": "Individual Obs",
+  "general_total_configs":"Total Setup Configs",
+  "general_total_definitions": "Total Definitions",
+  "general_report_configs": "Report Configs",
+  "general_total_report_configs": "Total Report Configs"
+}

@@ -1,0 +1,22 @@
+{
+  "general_setup_config": "Configuraçãos de instalação",
+  "general_error_data": "Dados de Erro.",
+  "general_queue_data": "Dados da fila",
+  "general_potential_duplicate": "Potenciais duplicados",
+  "general_muzima_forms": "Formulários mUzima",
+  "general_patient_reports": "Relatórios de Pacientes",
+  "general_cohort_definitions": "Definições de coorte",
+  "general_registrations": "Inscrições",
+  "general_data_source": "Fonte de dados",
+  "general_settings": "Configurações",
+  "general_take_tour": "Faça um tour",
+  "general_encounter" : "Encontro",
+  "general_demographic_update": "Atualização Demográfica",
+  "general_registration": "Inscriçõe",
+  "general_relationship": "Relação",
+  "general_individual_obs": "Obs individual",
+  "general_total_configs":"Configurações totais de configuração",
+  "general_total_definitions": "Definições totais",
+  "general_report_configs": "Configurações de relatório",
+  "general_total_report_configs": "Total de configurações de relatório"
+}
