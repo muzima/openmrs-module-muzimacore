@@ -33,5 +33,12 @@
   "tour_step_nine": "A fonte de dados é usada para configurar os clientes mUzima conectados à sua instância mUzima OpenMRS. \nDeve haver pelo menos uma fonte de dados para que o aplicativo possa enviar formulários.",
   "tour_step_ten": "mUzima é um aplicativo flexível que pode ser configurado por meio de configurações para atender às necessidades de implementação. A configuração será usada para: \n1. Habilite ou desabilite os recursos do aplicativo, ou seja, as implementações decidirão quais recursos estarão disponíveis no celular \n2. Forneça as informações necessárias para que alguns recursos do aplicativo móvel funcionem corretamente, por exemplo, configuração da chave do mapa se o recurso de geomapping for usado no aplicativo.",
   "tour_step_eleven": "Para mais informações, visite",
-  "general_finish": "Terminar"
+  "general_finish": "Terminar",
+  "general_create_configuration": "Criar configuração",
+  "general_advanced": "Avançado",
+  "general_search": "procurar...",
+  "general_name": "Nome",
+  "general_description": "Descrição",
+  "general_created_on": "Criado em",
+  "view_edit_config": "Ver/editar configuração"
 }

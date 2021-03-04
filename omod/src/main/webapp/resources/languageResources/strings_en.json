@@ -33,5 +33,12 @@
   "tour_step_nine": "Data source is used to configure the mUzima clients connected to your mUzima OpenMRS instance.\nThere must be at least one data source in order for the application to be able to submit forms.",
   "tour_step_ten": "mUzima is a flexible app that can be configured through settings to suit the implementation needs.  Setting will be used to:\n1. Enable or disable application features i.e implementations will decide which features will be available on the mobile \n2. Provide information needed for some features on the mobile app to function properly e.g setting of map key if geomapping feature will be used on the app.",
   "tour_step_eleven": "For more info, please visit",
-  "general_finish": "Finish"
+  "general_finish": "Finish",
+  "general_create_configuration": "Create Configuration",
+  "general_advanced": "Advanced",
+  "general_search": "search...",
+  "general_name": "Name",
+  "general_description": "Description",
+  "general_created_on": "Created on",
+  "view_edit_config": "View/Edit Configuration"
 }

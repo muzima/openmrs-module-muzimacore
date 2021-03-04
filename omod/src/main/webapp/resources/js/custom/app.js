@@ -500,3 +500,13 @@ muzimaCoreModule.factory('$dashboardService', function ($http) {
         getUserLocale: getUserLocale
     }
 });
+
+muzimaCoreModule.factory('$localeService', function ($http) {
+    var getUserLocale = function(){
+        return $http.get("getUserLocale.json");
+    };
+
+    return {
+        getUserLocale: getUserLocale
+    }
+});
