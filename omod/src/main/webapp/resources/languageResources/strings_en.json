@@ -105,5 +105,6 @@
   "general_setting_value": "Setting value ...",
   "general_value": "Value",
   "general_disabled": "Disabled",
-  "general_enabled": "Enabled"
+  "general_enabled": "Enabled",
+  "general_review": "Review"
 }
