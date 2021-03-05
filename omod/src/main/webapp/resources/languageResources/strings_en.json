@@ -100,5 +100,10 @@
   "general_retire": "Retire",
   "general_retire_reason": "Retire reason ...",
   "general_retire_reason_required": "Retire reason is required",
-  "general_cancel": "Cancel"
+  "general_cancel": "Cancel",
+  "info_specify_setting_value": "Please specify setting value",
+  "general_setting_value": "Setting value ...",
+  "general_value": "Value",
+  "general_disabled": "Disabled",
+  "general_enabled": "Enabled"
 }

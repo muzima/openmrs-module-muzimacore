@@ -100,5 +100,10 @@
   "general_retire": "Se aposentar",
   "general_retire_reason": "Motivo de aposentadoria ...",
   "general_retire_reason_required": "O motivo da aposentadoria é obrigatório",
-  "general_cancel": "Cancelar"
+  "general_cancel": "Cancelar",
+  "info_specify_setting_value": "Especifique o valor da configuração",
+  "general_setting_value": "Valor de configuração ...",
+  "general_value": "Valor",
+  "general_disabled": "Desabilitado",
+  "general_enabled": "Habilitado"
 }
