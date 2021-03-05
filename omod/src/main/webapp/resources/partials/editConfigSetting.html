@@ -1,51 +1,51 @@
 <div class="col-lg-14">
     <div class="modal-header alert-primary">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <label>Please specify setting value</label>
+        <label>{{'info_specify_setting_value' | translate}}</label>
     </div>
     <div class="modal-body">
         <div class="row">
             <div class="col-lg-3">
-                <label for="settingName">Name:</label>
+                <label for="settingName">{{'general_name' | translate}}:</label>
             </div>
             <div class="col-lg-9">
-                 <textarea id="settingName" class="form-control" placeholder="Setting name ..." rows="3" disabled="" ng-model="setting.name">
+                 <textarea id="settingName" class="form-control" rows="3" disabled="" ng-model="setting.name">
                  </textarea>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-3">
-                <label for="settingDescription">Description:</label>
+                <label for="settingDescription">{{'general_description' | translate}}:</label>
             </div>
             <div class="col-lg-9">
-                        <textarea id="settingDescription" class="form-control" placeholder="Setting description ..." rows="7" disabled="" ng-model="setting.description">
+                        <textarea id="settingDescription" class="form-control" rows="7" disabled="" ng-model="setting.description">
                         </textarea>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-3">
-                <label>Value:</label>
+                <label>{{'general_value' | translate}}:</label>
             </div>
             <div class="col-lg-9" ng-show="setting.datatype == 'STRING'">
-                <input class="form-control" placeholder="Setting value ..." type="text" ng-model="setting.value">
+                <input class="form-control" translate translate-attr-placeholder="general_setting_value" type="text" ng-model="setting.value">
             </div>
             <div class="col-lg-9" ng-show="setting.datatype == 'PASSWORD'">
-                <input class="form-control" placeholder="Setting value ..." type="password" ng-model="setting.value">
+                <input class="form-control" translate translate-attr-placeholder="general_setting_value" type="password" ng-model="setting.value">
             </div>
             <div class="col-lg-9" ng-show="setting.datatype == 'BOOLEAN'">
                 <div class="col-lg-9">
                     <label class="label-input">
-                        <input type="radio" name="datatype" ng-model="setting.value" ng-value="true"/> Enabled
+                        <input type="radio" name="datatype" ng-model="setting.value" ng-value="true"/> {{'general_enabled' | translate}}
                     </label>
                     <label class="label-input">
-                        <input type="radio" name="datatype" ng-model="setting.value" ng-value="false"/>  Disabled
+                        <input type="radio" name="datatype" ng-model="setting.value" ng-value="false"/>  {{'general_disabled' | translate}}
                     </label>
                 </div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <btn ng-click="dismiss()" class="btn btn-primary">Close</btn>
+        <btn ng-click="dismiss()" class="btn btn-primary">{{'general_close' | translate}}</btn>
     </div>
 </div>
 <footer></footer>

@@ -1,35 +1,35 @@
 <div class="row">
     <div class="col-sm-12">
-        <label class="alert alert-success w-100">Create new Form Metadata</label>
+        <label class="alert alert-success w-100">{{'modal_new_form_metadata' | translate}}</label>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-3">
-        Form Name <span class="required">*</span>:
+        {{'general_name' | translate}} <span class="required">*</span>:
     </div>
     <div class="col-sm-9">
-        <input class="form-control" ng-model="name" placeholder="Form name">
+        <input class="form-control" ng-model="name" translate translate-attr-placeholder="info_form_name">
     </div>
 </div>
 <div class="row">
     <div class="col-sm-3">
-        Description:
+        {{'general_description' | translate}}:
     </div>
     <div class="col-sm-9">
-        <textarea class="form-control" ng-model="description" placeholder="Form Description"></textarea>
+        <textarea class="form-control" ng-model="description" translate translate-attr-placeholder="info_form_description"></textarea>
     </div>
 </div>
 <div class="row">
     <div class="col-sm-3">
-        Version <span class="required">*</span>:
+        {{'info_version' | translate}} <span class="required">*</span>:
     </div>
     <div class="col-sm-9">
-        <input class="form-control" ng-model="version" placeholder="Version">
+        <input class="form-control" ng-model="version" translate translate-attr-placeholder="info_version">
     </div>
 </div>
 <div class="row">
     <div class="col-sm-3">
-        Encounter Type <span class="required">*</span>:
+        {{'general_encounter_type' | translate}} <span class="required">*</span>:
     </div>
     <div class="col-sm-9">
         <select class="form-control" ng-model="encounterType"
@@ -43,7 +43,7 @@
     <div class="col-sm-9">
         <button class="btn btn-primary pull-right" ng-disabled="!isRequiredNewFormFieldsEntered()"
                 ng-click="setNewFormMetadata(name, version, description,encounterType)">
-            Save
+           {{'general_save' | translate}}
         </button>
     </div>
 </div>
