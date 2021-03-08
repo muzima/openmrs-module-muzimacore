@@ -6,10 +6,10 @@
                 <a class="navbar-brand" href="#/forms" style="color: #ffffff; font-size: 20px"><i class="fa fa-home"></i></a>
                 <div class="container-fluid navbar-right" style="float: right !important;margin-right: -20px;">
                     <a href="#/xforms" class="btn btn-success" style="text-decoration: none;">
-                        Import x-forms
+                        {{'import_x_forms' | translate}}
                     </a>&nbsp;
                     <a href="#/import/forms" class="btn btn-success" style="text-decoration: none;">
-                        Upload
+                        {{'general_upload' | translate}}
                     </a>
                 </div>
             </div>
@@ -19,28 +19,28 @@
                     <div class="card" style="padding:15px;">
 
                         <div class="form-group">
-                            <label>Name : </label> {{muzimaforms.form.name}}
+                            <label>{{'general_name' | translate}} : </label> {{muzimaforms.form.name}}
                         </div>
 
                         <div class="form-group">
-                            <label>Version : </label> {{muzimaforms.form.version || ""}}
+                            <label>{{'info_version' | translate}} : </label> {{muzimaforms.form.version || ""}}
                         </div>
 
                         <div>
-                            <label>Description : </label> {{muzimaforms.form.description || ""}}
+                            <label>{{'general_description' | translate}} : </label> {{muzimaforms.form.description || ""}}
                         </div>
 
                         <div>
-                            <label>Discriminator : </label> {{muzimaforms.form.discriminator || ""}}
+                            <label>{{'general_discriminator' | translate}} : </label> {{muzimaforms.form.discriminator || ""}}
                         </div>
                     </div>
                     <div class = "card" style="margin-top: 15px; padding: 15px;">
                         <div class="form-group">
-                            <file-upload message="Click here to update the form template"/>
+                            <file-upload message="{{'general_file_button' | translate}}"/>
                         </div>
                         <div class="form-group" ng-hide="isValidated()">
                             <div ng-show="hasFile()">
-                                <label for="formType">Select the FormType: </label>
+                                <label for="formType">{{'message_select_form_type' | translate}}: </label>
                                 <select id="formType" ng-model="formType" name="formType">
                                     <option value="odk">ODK</option>
                                     <option value="html">HTML</option>
@@ -48,17 +48,17 @@
                                 </select>
                             </div>
                             <div ng-show="hasFile()">
-                                <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
-                                <input type="button" ng-click="validate(file,formType)" class="btn btn-success" value="Validate">
+                                <button ng-click="cancel()" class="btn btn-danger">{{'general_cancel' | translate}}</button>
+                                <input type="button" ng-click="validate(file,formType)" class="btn btn-success" value="{{'general_validate' | translate}}">
                             </div>
                         </div>
                         <div ng-show = "isValidXForm()">
-                            <div class="alert alert-success w-100">The Form is valid! Use the upload button to import it.</div>
+                            <div class="alert alert-success w-100">{{'message_form_valid' | translate}}</div>
                         </div>
                         <div ng-show="isInvalidXForm()">
                             <div class="row">
                                 <div class="col-lg-12 well-small">
-                                    <button ng-click="validate(file, formType)" class="btn btn-success">Re-Validate</button>
+                                    <button ng-click="validate(file, formType)" class="btn btn-success">{{'general_re_validate' | translate}}</button>
                                 </div>
                             </div>
                             <div class="row" ng-repeat="validation in validations.list">
@@ -69,8 +69,8 @@
                         </div>
                     </div>
                     <div class="well-small" style="margin-top: 7px;">
-                        <button ng-click="cancelUpdate()" class="btn btn-danger">Cancel</button>
-                        <button type="submit" class="btn btn-success" ng-disabled = "!isValidXForm()">Update</button>
+                        <button ng-click="cancelUpdate()" class="btn btn-danger">{{'general_cancel' | translate}}</button>
+                        <button type="submit" class="btn btn-success" ng-disabled = "!isValidXForm()">{{'general_update' | translate}}</button>
                     </div>
                 </form>
             </div>
