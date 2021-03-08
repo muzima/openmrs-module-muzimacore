@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="col-lg-3 pull-right">
-                        <input type="text" class="form-control" ng-model="search" ng-change="filterQueue()" placeholder="search..." style="padding-left: 10px;"/>
+                        <input type="text" class="form-control" ng-model="search" ng-change="filterQueue()" translate translate-attr-placeholder="general_search" style="padding-left: 10px;"/>
                     </div>
                 </div>
             </div>
@@ -18,16 +18,16 @@
                     <tr>
                         <th>&nbsp;</th>
                         <th>#</th>
-                        <th>Sender</th>
-                        <th>Kind</th>
-                        <th>Submitted On</th>
-                        <th>Patient Uuid</th>
-                        <th>Form Data</th>
+                        <th>{{'general_sender' | translate}}</th>
+                        <th>{{'general_kind' | translate}}</th>
+                        <th>{{'general_submitted_on' | translate}}</th>
+                        <th>{{'general_patient_uuid' | translate}}</th>
+                        <th>{{'general_form_data' | translate}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-hide="queues.length">
-                        <td colspan="8">Great! All your data has processed.</td>
+                        <td colspan="8">{{'message_no_queue_data' | translate}}</td>
                     </tr>
                     <tr ng-repeat="queue in queues | orderBy:'submitted':true">
                         <td>
@@ -45,12 +45,12 @@
                 </table>
             </div>
             <div class="row col-lg-12">
-                    <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
-                    <div ng-show="removeReasonError" style="color:red">Retire reason is required</div>
+                    <input class="col-md-10 form-control remove-reason" translate translate-attr-placeholder="general_remove_reason" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
+                    <div ng-show="removeReasonError" style="color:red">{{'general_remove_reason_required' | translate}}</div>
             </div>
             <div ng-show="queues.length" class="row col-lg-12">
-                <button type="submit" ng-click="toggleRemoveQueue()" class="btn btn-danger" ng-show="!remove_queue_data">Remove</button>
-                <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_queue_data">Remove</button>
+                <button type="submit" ng-click="toggleRemoveQueue()" class="btn btn-danger" ng-show="!remove_queue_data">{{'general_remove' | translate}}</button>
+                <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_queue_data">{{'general_remove' | translate}}</button>
                 <ul ng-show="noOfPages > 1" uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
             </div>
         </div>

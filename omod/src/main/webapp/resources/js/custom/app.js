@@ -37,7 +37,6 @@ muzimaCoreModule.
             when('/dashboard', {controller: DashboardCtrl, templateUrl: '../../moduleResources/muzimacore/partials/dashboard.html'}).
             otherwise({redirectTo: '/dashboard'});
 
-            //$translateProvider.useUrlLoader("../../moduleResources/muzimacore/languageResources/{lang}.json");
             $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
             $translateProvider.useStaticFilesLoader({
               prefix: '../../moduleResources/muzimacore/languageResources/strings_',

@@ -3,7 +3,7 @@
     <div class="col-lg-8">
         <div class="row">
             <div class="col-lg-1">
-                <a href="#/duplicates"><button class="btn btn-default">Back</button></a>
+                <a href="#/duplicates"><button class="btn btn-default">{{'general_back' | translate}}</button></a>
             </div>
             <div class="col-lg-10"></div>
             <div class="col-lg-1">
@@ -14,24 +14,24 @@
             <div class="col-lg-6">
                 <div class="checkbox pull-right">
                     <label>
-                        <input ng-model="emr_checkbox.select_all" type="checkbox" ng-change="toggleCheckboxes('emr')"> Select All
+                        <input ng-model="emr_checkbox.select_all" type="checkbox" ng-change="toggleCheckboxes('emr')"> {{'general_select_all' | translate}}
                     </label>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" ng-model="queue_checkbox.select_all" ng-change="toggleCheckboxes('queue')"> Select All
+                        <input type="checkbox" ng-model="queue_checkbox.select_all" ng-change="toggleCheckboxes('queue')"> {{'general_select_all' | translate}}
                     </label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
-                <strong>Existing Record</strong>
+                <strong>{{'general_existing_record' | translate}}</strong>
             </div>
             <div class="col-lg-6 text-right">
-                <strong>Queue Record</strong>
+                <strong>{{'general_queue_record' | translate}}</strong>
             </div>
         </div>
         <span ng-repeat="category in categoryMap">
@@ -81,10 +81,10 @@
         </span>
         <div class="row">
             <div class="col-lg-6">
-                <button class="btn btn-primary btn-block" ng-click="mergeDemographics()">MERGE AND REQUEUE</button>
+                <button class="btn btn-primary btn-block" ng-click="mergeDemographics()">{{'general_merge_requeue' | translate}}</button>
             </div>
             <div class="col-lg-6">
-                <button class="btn btn-primary btn-block" ng-click="createAndRequeue()">CREATE AND REQUEUE</button>
+                <button class="btn btn-primary btn-block" ng-click="createAndRequeue()">{{'general_create_requeue' | translate}}</button>
             </div>
         </div>
     </div>
@@ -99,13 +99,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Error!</h4>
+                    <h4 class="modal-title" id="myModalLabel">{{'general_error' | translate}}!</h4>
                 </div>
                 <div class="modal-body text-danger">
                     {{ popupMessage }}
                 </div>
                 <div class="modal-footer">
-                    <button id = "btnNo" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                    <button id = "btnNo" type="button" class="btn btn-primary" data-dismiss="modal">{{'general_ok' | translate}}</button>
                 </div>
             </div>
         </div>
