@@ -175,5 +175,14 @@
   "filter_by_provider_tooltip": "Check this to set cohort filter by provider",
   "filter_by_location_label": "Filter cohort by location",
   "filter_by_location_tooltip": "Check this to filter cohort by location",
-  "general_validate_save": "Validate & Save"
+  "general_validate_save": "Validate & Save",
+  "general_sender": "Sender",
+  "general_submitted_on": "Submitted On",
+  "general_kind": "Kind",
+  "general_patient_uuid": "Patient Uuid",
+  "general_form_data": "Form Data",
+  "message_no_queue_data": "Great! All your data has processed.",
+  "general_remove": "Remove",
+  "general_remove_reason": "Remove reason ...",
+  "general_remove_reason_required": "Remove reason is required"
 }

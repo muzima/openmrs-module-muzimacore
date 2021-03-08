@@ -176,5 +176,14 @@
   "filter_by_provider_tooltip": "Marque para definir o filtro de coorte por provedor",
   "filter_by_location_label": "Filtrar coorte por localização",
   "filter_by_location_tooltip": "Marque para filtrar coorte por localização",
-  "general_validate_save": "Validar e salvar"
+  "general_validate_save": "Validar e salvar",
+  "general_sender": "Remetente",
+  "general_submitted_on": "Enviado em",
+  "general_kind": "Gentil",
+  "general_patient_uuid": "Paciente Uuid",
+  "general_form_data": "Dados do formulário",
+  "message_no_queue_data": "Excelente! Todos os seus dados foram processados.",
+  "general_remove": "Retirar",
+  "general_remove_reason": "Remover motivo ...",
+  "general_remove_reason_required": "O motivo da remoção é obrigatório"
 }
