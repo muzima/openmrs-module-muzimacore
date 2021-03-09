@@ -11,7 +11,7 @@
                         {{'general_name' | translate}}:
                     </div>
                     <div class="col-lg-10">
-                        <input class="form-control" placeholder="{{'hint_setting_name' | translate}}" type="text" disabled="" ng-model="setting.name">
+                        <input class="form-control" translate translate-attr-placeholder="hint_setting_name" type="text" disabled="" ng-model="setting.name">
                     </div>
                 </div>
                 <div class="row">
@@ -19,7 +19,7 @@
                         {{'general_property' | translate}}:
                     </div>
                     <div class="col-lg-10">
-                        <input class="form-control" placeholder="{{'hint_setting_property' | translate}}." type="text" disabled="" ng-model="setting.property">
+                        <input class="form-control"  translate translate-attr-placeholder="hint_setting_property" type="text" disabled="" ng-model="setting.property">
 
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                         {{'general_description' | translate}}:
                     </div>
                     <div class="col-lg-10">
-                        <textarea class="form-control" placeholder="{{'general_setting_description' | translate}} ..." rows="10" disabled="" ng-model="setting.description">
+                        <textarea class="form-control"  translate translate-attr-placeholder="hint_setting_description" rows="10" disabled="" ng-model="setting.description">
                         </textarea>
                     </div>
                 </div>
@@ -37,10 +37,10 @@
                         {{'general_value' | translate}}:
                     </div>
                     <div class="col-lg-10" ng-show="setting.datatype == 'STRING'">
-                        <input class="form-control" placeholder="{{'hint_setting_value' | translate}}" type="text" disabled="" ng-model="setting.value">
+                        <input class="form-control"  translate translate-attr-placeholder="hint_setting_value" type="text" disabled="" ng-model="setting.value">
                     </div>
                     <div class="col-lg-10" ng-show="setting.datatype == 'PASSWORD'">
-                        <input class="form-control" placeholder="{{'hint_setting_value' | translate}}" type="password" disabled="" ng-model="setting.value">
+                        <input class="form-control"  translate translate-attr-placeholder="hint_setting_value" type="password" disabled="" ng-model="setting.value">
                     </div>
                     <div class="col-lg-10" ng-show="setting.datatype == 'BOOLEAN'">
                         <div class="col-lg-3">
@@ -62,7 +62,7 @@
                         Uuid:
                     </div>
                     <div class="col-lg-10">
-                        <input class="form-control" placeholder="{{'general_setting_uuid' | translate}} ..." type="text" disabled="" ng-model="setting.uuid">
+                        <input class="form-control"  translate translate-attr-placeholder="hint_setting_uuid" type="text" disabled="" ng-model="setting.uuid">
                     </div>
                 </div>
 
@@ -72,7 +72,7 @@
                     </div>
                     <div class="col-lg-10">
                         <button type="submit" ng-show="setting.uuid" ng-click="edit()" class="btn btn-primary">{{'general_edit' | translate}}</button>&nbsp;
-                        <button type="submit" ng-click="cancel()" class="btn btn-warning">{{'general_close' | tranlate}}</button>
+                        <button type="submit" ng-click="cancel()" class="btn btn-warning">{{'general_close' | translate}}</button>
                     </div>
                 </div>
                 <span></span>
@@ -84,7 +84,7 @@
                             {{'general_name' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                            <input class="form-control" placeholder="{{'hint_setting_name' | translate}}" type="text" disabled="" ng-model="setting.name">
+                            <input class="form-control" translate translate-attr-placeholder="hint_setting_name" type="text" disabled="" ng-model="setting.name">
                         </div>
                     </div>
                     <div class="row">
@@ -92,7 +92,7 @@
                             {{'general_property' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                            <input class="form-control" placeholder="{{'hint_setting_property' | translate}}" type="text" disabled="" ng-model="setting.property">
+                            <input class="form-control"  translate translate-attr-placeholder="hint_setting_property" type="text" disabled="" ng-model="setting.property">
 
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                             {{'general_description' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                        <textarea class="form-control" placeholder="{{'hint_setting_description' | translate}}" rows="10" disabled="" ng-model="setting.description">
+                        <textarea class="form-control"  translate translate-attr-placeholder="hint_setting_description" rows="10" disabled="" ng-model="setting.description">
                         </textarea>
                         </div>
                     </div>
@@ -110,10 +110,10 @@
                             {{'general_value' | translate}}:
                         </div>
                         <div class="col-lg-10" ng-show="setting.datatype == 'STRING'">
-                            <input class="form-control" placeholder="{{'hint_setting_value' | translate}}" type="text" ng-model="setting.value">
+                            <input class="form-control"  translate translate-attr-placeholder="hint_setting_value" type="text" ng-model="setting.value">
                         </div>
                         <div class="col-lg-10" ng-show="setting.datatype == 'PASSWORD'">
-                            <input class="form-control" placeholder="{{'hint_setting_value' | translate}}" type="password" ng-model="setting.value">
+                            <input class="form-control"  translate translate-attr-placeholder="hint_setting_value" type="password" ng-model="setting.value">
                         </div>
                         <div class="col-lg-10" ng-show="setting.datatype == 'BOOLEAN'">
                             <div class="col-lg-3">
@@ -133,7 +133,7 @@
                             {{'general_uuid' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                            <input class="form-control" placeholder="{{'hint_setting_uuid' | translate}}." type="text" disabled="" ng-model="setting.uuid">
+                            <input class="form-control"  translate translate-attr-placeholder="hint_setting_uuid" type="text" disabled="" ng-model="setting.uuid">
                         </div>
                     </div>
                     <div class="row">
