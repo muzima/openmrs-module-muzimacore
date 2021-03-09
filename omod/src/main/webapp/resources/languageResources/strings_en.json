@@ -331,5 +331,6 @@
   "general_resolved_patient": "Resolved Patient",
   "general_create_source": "Create Source",
   "general_uuid": "UUID",
-  "message_no_sources": "No sources created in the system."
+  "message_no_sources": "No sources created in the system.",
+  "general_property": "Property"
 }
