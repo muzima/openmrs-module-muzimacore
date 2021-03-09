@@ -247,5 +247,14 @@
   "info_no_available_xforms": "Por favor, crie e projete formulário usando o módulo XForms. Depois de salvos, os formulários ficarão visíveis aqui.",
   "message_no_results_xforms": "Sua pesquisa não retorna nenhum valor. Tente refinar sua pesquisa para obter resultados de filtro.",
   "message_no_xform_module": "Módulo XForms não está rodando",
-  "info_no_xform_module": "Você não instalou o <b> \"Módulo XForms\" </b> ou ele NÃO foi iniciado. Depois de instalado e iniciado, e de ter projetado e salvo alguns xForms, esses formulários ficarão visíveis aqui."
+  "info_no_xform_module": "Você não instalou o <b> \"Módulo XForms\" </b> ou ele NÃO foi iniciado. Depois de instalado e iniciado, e de ter projetado e salvo alguns xForms, esses formulários ficarão visíveis aqui.",
+  "general_add_report_config": "Adicionar configuração",
+  "general_action": "Açao",
+  "general_reports": "Relatórios",
+  "message_no_report_config": "Nenhum reportConfigurations criado no sistema.",
+  "general_remove_report": "Remover relatório",
+  "general_add_report": "Adicionar relatório",
+  "general_high_priority": "Prioridade máxima",
+  "general_search_report_by_name": "Relatório de pesquisa por nome ...",
+  "placeholder_report_configuration": "Configuração do relatório ..."
 }

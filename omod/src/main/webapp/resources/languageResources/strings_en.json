@@ -245,5 +245,14 @@
   "info_no_available_xforms": "Please create and design form using XForms module. Once saved, forms would be visible here.",
   "message_no_results_xforms": "Your search returns no values. Try refining your search to get filter results.",
   "message_no_xform_module": "XForms Module is not running",
-  "info_no_xform_module": "You have not installed <b>\"XForms Module\"</b> or it is NOT started. Once it is installed and started, and you have designed and saved some xForms, those forms will be visible here."
+  "info_no_xform_module": "You have not installed <b>\"XForms Module\"</b> or it is NOT started. Once it is installed and started, and you have designed and saved some xForms, those forms will be visible here.",
+  "general_add_report_config": "Add Configuration",
+  "general_action": "Action",
+  "general_reports": "Reports",
+  "message_no_report_config": "No reportConfigurations created in the system.",
+  "general_remove_report": "Remove Report",
+  "general_add_report": "Add Report",
+  "general_high_priority": "High Priority",
+  "general_search_report_by_name": "Search report by name ...",
+  "placeholder_report_configuration": "Report configuration ..."
 }
