@@ -70,6 +70,10 @@
         <lang>es</lang>
         <file>messages_es.properties</file>
     </messages>
+    <messages>
+        <lang>pt</lang>
+        <file>messages_pt.properties</file>
+    </messages>
     <!-- /Internationalization -->
 
 </module>

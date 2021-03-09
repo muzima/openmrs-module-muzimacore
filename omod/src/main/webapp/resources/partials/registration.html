@@ -4,34 +4,34 @@
         <table class="table table-striped table-bordered table-condensed table-hover">
             <tbody>
             <tr>
-                <td>Temporary UUID</td>
+                <td>{{'general_temporary_uuid' | translate}}</td>
                 <td colspan="2">{{registration.temporaryUuid}}</td>
             </tr>
             <tr>
-                <td>Assigned UUID</td>
+                <td>{{'general_assigned_uuid' | translate}}</td>
                 <td colspan="2">{{registration.assignedUuid}}</td>
             </tr>
             <tr>
-                <td rowspan="5">Resolved Patient</td>
+                <td rowspan="5">{{'general_resolved_patient' | translate}}</td>
             <tr>
-                <td>Name</td>
+                <td>{{'general_name' | translate}}</td>
                 <td>{{registration.patient.name}}</td>
             </tr>
             <tr>
-                <td>Gender</td>
+                <td>{{'general_gender' | translate}}</td>
                  <td>{{registration.patient.gender}}</td>
             </tr>
             <tr>
-                <td>Date of Birth</td>
+                <td>{{'general_birth_date' | translate}}</td>
                 <td>{{registration.patient.birthdate}}</td>
             </tr>
             <tr>
-                <td>Identifier</td>
+                <td>{{'general_identifiers' | translate}}</td>
                 <td>{{registration.patient.identifier}}</td>
             </tr>
             </tr>
             <tr>
-                <td>Submitted On</td>
+                <td>{{'general_submitted_on' | translate}}</td>
                 <td colspan="2">{{registration.submitted}}</td>
             </tr>
             </tbody>
@@ -39,7 +39,7 @@
     </div>
     <div class="col-lg-8">
         <hr>
-        <button type="submit" ng-click="cancel()" class="btn btn-danger">Close</button>
+        <button type="submit" ng-click="cancel()" class="btn btn-danger">{{'general_close' | translate}}</button>
     </div>
 </div>
 <footer></footer>

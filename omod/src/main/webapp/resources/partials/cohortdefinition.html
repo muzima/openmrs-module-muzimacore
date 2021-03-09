@@ -10,56 +10,56 @@
                     <input class="form-control" type="text" disabled=""  ng-model="cohortDefinition.name">
                 </div>
                 <div class="row">
-                    <textarea class="form-control" placeholder="Cohort description ..." rows="2"
+                    <textarea class="form-control" translate translate-attr-placeholder="info_cohort_description" rows="2"
                               disabled="" ng-model="cohortDefinition.description">
                     </textarea>
                 </div>
                 <div class="row">
-                    <textarea class="form-control" placeholder="SQL Definition ..." rows="9"
+                    <textarea class="form-control" translate translate-attr-placeholder="cohort_definition_query_info" rows="9"
                            disabled="" ng-model="cohortDefinition.definition">
                         </textarea>
                 </div>
                 <div class="row">
-                    <textarea class="form-control" placeholder="Filter SQL Query..." rows="9"
+                    <textarea class="form-control" translate translate-attr-placeholder="cohort_definition_filter_info" rows="9"
                         disabled="" ng-model="cohortDefinition.filterQuery">
                     </textarea>
                 </div>
                 <div class="row">
-                    <div class="" title="Check this to enable execution of this cohort definition when the scheduler task is run next.">
-                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isScheduledForExecution"> Enable scheduled task for this cohort definition &#9432;
+                    <div class="" title="{{'tooltip_scheduled' | translate}}">
+                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isScheduledForExecution"> {{'label_enable_scheduler_task' | translate}} &#9432;
                     </div>
                 </div>
                 <div class="row">
-                    <div class="" title="Check this to automatically add members who meet criteria">
-                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled" > Automatically add new members &#9432;
+                    <div class="" title="{{'add_member_tooltip_info' | translate}}">
+                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled" > {{'add_member_label' | translate}} &#9432;
                     </div>
                 </div>
                 <div class="row">
-                    <div class="" title="Check this to automatically remove members who no longer meet criteria (or mark as inactive members for OpenMRS versions 2.1.0 and above.)">
-                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> Automatically remove members &#9432;
+                    <div class="" title="{{'remove_member_tooltip_info' | translate}}">
+                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> {{'remove_member_label' | translate}} &#9432;
                     </div>
                 </div>
                 <div class="row">
-                    <div class="" title="Check this to set cohort filter by provider">
-                		<input  disabled="" type="checkbox"  ng-model="cohortDefinition.isFilterByProviderEnabled"> Filter cohort by provider &#9432;
+                    <div class="" title="{{'filter_by_provider_tooltip' | translate}}">
+                		<input  disabled="" type="checkbox"  ng-model="cohortDefinition.isFilterByProviderEnabled"> {{'filter_by_provider_label' | translate}} &#9432;
                     </div>
                 </div>
                 <div class="row">
-                     <div class="" title="Check this to filter cohort by location">
-                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isFilterByLocationEnabled"> Filter cohort by location &#9432;
+                     <div class="" title="{{'filter_by_location_tooltip' | translate}}">
+                        <input disabled="" type="checkbox"  ng-model="cohortDefinition.isFilterByLocationEnabled"> {{'filter_by_location_label' | translate}} &#9432;
                      </div>
                 </div>
                 <div class="row" ng-show="cohortDefinitionExecuted && isProcessingSuccessfull">
-                    <div class="alert alert-success w-100">Cohort definition execution successful.</div>
+                    <div class="alert alert-success w-100">{{'cohort_execution_successful' | translate}}</div>
                 </div>
                 <div class="row" ng-show = "cohortDefinitionExecuted && !isProcessingSuccessfull">
-                    <div class="alert alert-success w-100">Cohort definition execution failed.</div>
+                    <div class="alert alert-success w-100">{{'cohort_execution_failed' | translate}}</div>
                 </div>
                 <div class="row d-flex">
                     <div class="ml-auto">
-                        <button type="submit" ng-click="edit()" class="btn btn-primary">Edit</button>&nbsp;
-                        <button type="submit" ng-click="cancel()" class="btn btn-warning">Close</button>&nbsp;
-                        <button type="submit" ng-click="processDefinition(cohortDefinition)" ng-show="cohortDefinition.uuid" class="btn btn-success">Run now</button>
+                        <button type="submit" ng-click="edit()" class="btn btn-primary">{{'general_edit' | translate}}</button>&nbsp;
+                        <button type="submit" ng-click="cancel()" class="btn btn-warning">{{'general_close' | translate}}</button>&nbsp;
+                        <button type="submit" ng-click="processDefinition(cohortDefinition)" ng-show="cohortDefinition.uuid" class="btn btn-success">{{'general_run_now' | translate}}</button>
                     </div>
                 </div>
                 <span></span>
@@ -72,54 +72,54 @@
                         </select>
                     </div>
                     <div class="row">
-                    <textarea class="form-control" placeholder="Cohort description ..." rows="2"
+                    <textarea class="form-control" translate translate-attr-placeholder="info_cohort_description" rows="2"
                               disabled="" ng-model="cohortDefinition.description">
                     </textarea>
                     </div>
                     <div class="row">
-                    <textarea class="form-control" placeholder="Cohort Creteria SQL Query..." rows="9" required="required"
+                    <textarea class="form-control" translate translate-attr-placeholder="cohort_definition_query_info" rows="9" required="required"
                               ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" ng-model="cohortDefinition.definition">
                         </textarea>
                     </div>
                     <div class="row">
-                            <textarea class="form-control" placeholder="Filter SQL Query..." rows="9"
+                            <textarea class="form-control" translate translate-attr-placeholder="cohort_definition_filter_info" rows="9"
                                       ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" ng-model="cohortDefinition.filterQuery">
                             </textarea>
                     </div>
-                    <div class="row" title="Check this to enable execution of this cohort definition when the scheduler task is run next.">
+                    <div class="row" title="{{'tooltip_scheduled' | translate}}">
                         <div class="">
-                            <input ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isScheduledForExecution"> Enable scheduled task for this cohort definition &#9432;
+                            <input ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isScheduledForExecution"> {{'label_enable_scheduler_task' | translate}} &#9432;
                         </div>
                     </div>
                     <div class="row">
-                        <div class="" title="Check this to automatically add members who meet criteria">
-                            <input ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled"> Enable Addition of members &#9432;
+                        <div class="" title="{{'add_member_tooltip_info' | translate}}">
+                            <input ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isMemberAdditionEnabled"> {{'add_member_label' | translate}} &#9432;
                         </div>
                     </div>
                     <div class="row">
-                        <div class="" title="Check this to automatically remove members who no longer meet criteria">
-                            <input  ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> Enable Removal of members &#9432;
+                        <div class="" title="{{'remove_member_tooltip_info' | translate}}">
+                            <input  ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isMemberRemovalEnabled"> {{'remove_member_label' | translate}} &#9432;
                         </div>
                     </div>
                     <div class="row">
-                        <div class="" title="Check this to set cohort filter by provider">
-                            <input  ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isFilterByProviderEnabled"> Filter cohort by provider &#9432;
+                        <div class="" title="{{'filter_by_provider_tooltip' | translate}}">
+                            <input  ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isFilterByProviderEnabled"> {{'filter_by_provider_label' | translate}} &#9432;
                         </div>
                     </div>
                     <div class="row">
-                        <div class="" title="Check this to filter cohort by location">
-                            <input  ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isFilterByLocationEnabled"> Filter cohort by location &#9432;
+                        <div class="" title="{{'filter_by_location_tooltip' | translate}}">
+                            <input  ng-disabled="definitioninputdisabled(cohortDefinition.uuid)" type="checkbox"  ng-model="cohortDefinition.isFilterByLocationEnabled"> {{'filter_by_location_label' | translate}} &#9432;
                         </div>
                     </div>
                     <div class="row">
-                        <input class="form-control retire-reason" placeholder="Retire reason" name="retire_reason" type="text" ng-model="cohortDefinition.retireReason" ng-show="retireCohortDefinition" ng-required="retireCohortDefinition"/>
+                        <input class="form-control retire-reason" translate translate-attr-placeholder="general_retire_reason" name="retire_reason" type="text" ng-model="cohortDefinition.retireReason" ng-show="retireCohortDefinition" ng-required="retireCohortDefinition"/>
                     </div>
                     <div class="row d-flex">
                         <div class="ml-auto">
-                            <button type="submit" ng-disabled="definitionsavingdisabled(cohortDefinition.definition)" ng-click="save(cohortDefinition)" class="btn btn-success">Save</button>&nbsp;
-                            <button ng-click="toggleRetireCohortDefinition()" ng-show="!retireCohortDefinition && cohortDefinition.uuid" class="btn btn-danger">Retire</button>
-                            <button type="submit" ng-show="retireCohortDefinition" ng-click="definition.$valid && delete(cohortDefinition)" class="btn btn-danger">Retire</button>&nbsp;
-                            <button type="submit" ng-click="cancel()" class="btn btn-warning">Cancel</button>
+                            <button type="submit" ng-disabled="definitionsavingdisabled(cohortDefinition.definition)" ng-click="save(cohortDefinition)" class="btn btn-success">{{'general_save' | translate}}</button>&nbsp;
+                            <button ng-click="toggleRetireCohortDefinition()" ng-show="!retireCohortDefinition && cohortDefinition.uuid" class="btn btn-danger">{{'general_retire' | translate}}</button>
+                            <button type="submit" ng-show="retireCohortDefinition" ng-click="definition.$valid && delete(cohortDefinition)" class="btn btn-danger">{{'general_retire' | translate}}</button>&nbsp;
+                            <button type="submit" ng-click="cancel()" class="btn btn-warning">{{'general_cancel' | translate}}</button>
                         </div>
                     </div>
                     <span></span>
