@@ -8,49 +8,51 @@
             <div ng-switch-when="view">
                 <div class="row">
                     <div class="col-lg-2">
-                        Name:
+                        {{'general_name' | translate}}:
                     </div>
                     <div class="col-lg-10">
-                        <input class="form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+                        <input class="form-control" placeholder="{{'hint_setting_name' | translate}}" type="text" disabled="" ng-model="setting.name">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-2">
-                        Property:
+                        {{'general_property' | translate}}:
                     </div>
                     <div class="col-lg-10">
-                        <input class="form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+                        <input class="form-control" placeholder="{{'hint_setting_property' | translate}}." type="text" disabled="" ng-model="setting.property">
 
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-2">
-                        Description:
+                        {{'general_description' | translate}}:
                     </div>
                     <div class="col-lg-10">
-                        <textarea class="form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
+                        <textarea class="form-control" placeholder="{{'general_setting_description' | translate}} ..." rows="10" disabled="" ng-model="setting.description">
                         </textarea>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-2">
-                        Value:
+                        {{'general_value' | translate}}:
                     </div>
                     <div class="col-lg-10" ng-show="setting.datatype == 'STRING'">
-                        <input class="form-control" placeholder="Setting value ..." type="text" disabled="" ng-model="setting.value">
+                        <input class="form-control" placeholder="{{'hint_setting_value' | translate}}" type="text" disabled="" ng-model="setting.value">
                     </div>
                     <div class="col-lg-10" ng-show="setting.datatype == 'PASSWORD'">
-                        <input class="form-control" placeholder="Setting value ..." type="password" disabled="" ng-model="setting.value">
+                        <input class="form-control" placeholder="{{'hint_setting_value' | translate}}" type="password" disabled="" ng-model="setting.value">
                     </div>
                     <div class="col-lg-10" ng-show="setting.datatype == 'BOOLEAN'">
                         <div class="col-lg-3">
                             <label class="label-input">
-                                <input type="radio" name="datatype" ng-model="setting.value" ng-value="true" disabled=""/> Enabled
+                                <input type="radio" name="datatype" ng-model="setting.value" ng-value="true" disabled=""/>
+                                {{'general_enabled' | translate}}
                             </label>
                         </div>
                         <div class="col-lg-3">
                             <label class="label-input">
-                                <input type="radio" name="datatype" ng-model="setting.value" ng-value="false" disabled=""/>  Disabled
+                                <input type="radio" name="datatype" ng-model="setting.value" ng-value="false" disabled=""/>
+                                {{'general_disabled' | translate}}
                             </label>
                         </div>
                     </div>
@@ -60,7 +62,7 @@
                         Uuid:
                     </div>
                     <div class="col-lg-10">
-                        <input class="form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
+                        <input class="form-control" placeholder="{{'general_setting_uuid' | translate}} ..." type="text" disabled="" ng-model="setting.uuid">
                     </div>
                 </div>
 
@@ -69,8 +71,8 @@
 
                     </div>
                     <div class="col-lg-10">
-                        <button type="submit" ng-show="setting.uuid" ng-click="edit()" class="btn btn-primary">Edit</button>&nbsp;
-                        <button type="submit" ng-click="cancel()" class="btn btn-warning">Close</button>
+                        <button type="submit" ng-show="setting.uuid" ng-click="edit()" class="btn btn-primary">{{'general_edit' | translate}}</button>&nbsp;
+                        <button type="submit" ng-click="cancel()" class="btn btn-warning">{{'general_close' | tranlate}}</button>
                     </div>
                 </div>
                 <span></span>
@@ -79,59 +81,59 @@
                 <form id="consult">
                     <div class="row">
                         <div class="col-lg-2">
-                            Name:
+                            {{'general_name' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                            <input class="form-control" placeholder="Setting name ..." type="text" disabled="" ng-model="setting.name">
+                            <input class="form-control" placeholder="{{'hint_setting_name' | translate}}" type="text" disabled="" ng-model="setting.name">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2">
-                            Property:
+                            {{'general_property' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                            <input class="form-control" placeholder="Setting property ..." type="text" disabled="" ng-model="setting.property">
+                            <input class="form-control" placeholder="{{'hint_setting_property' | translate}}" type="text" disabled="" ng-model="setting.property">
 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2">
-                            Description:
+                            {{'general_description' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                        <textarea class="form-control" placeholder="Setting description ..." rows="10" disabled="" ng-model="setting.description">
+                        <textarea class="form-control" placeholder="{{'hint_setting_description' | translate}}" rows="10" disabled="" ng-model="setting.description">
                         </textarea>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2">
-                            Value:
+                            {{'general_value' | translate}}:
                         </div>
                         <div class="col-lg-10" ng-show="setting.datatype == 'STRING'">
-                            <input class="form-control" placeholder="Setting value ..." type="text" ng-model="setting.value">
+                            <input class="form-control" placeholder="{{'hint_setting_value' | translate}}" type="text" ng-model="setting.value">
                         </div>
                         <div class="col-lg-10" ng-show="setting.datatype == 'PASSWORD'">
-                            <input class="form-control" placeholder="Setting value ..." type="password" ng-model="setting.value">
+                            <input class="form-control" placeholder="{{'hint_setting_value' | translate}}" type="password" ng-model="setting.value">
                         </div>
                         <div class="col-lg-10" ng-show="setting.datatype == 'BOOLEAN'">
                             <div class="col-lg-3">
                                 <label class="label-input">
-                                    <input type="radio" name="datatype" ng-model="setting.value" ng-value="true"/> Enabled
+                                    <input type="radio" name="datatype" ng-model="setting.value" ng-value="true"/> {{'general_enabled' | translate}}
                                 </label>
                             </div>
                             <div class="col-lg-3">
                                 <label class="label-input">
-                                    <input type="radio" name="datatype" ng-model="setting.value" ng-value="false"/>  Disabled
+                                    <input type="radio" name="datatype" ng-model="setting.value" ng-value="false"/>  {{'general_disabled' | translate}}
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2">
-                            Uuid:
+                            {{'general_uuid' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                            <input class="form-control" placeholder="Setting uuid ..." type="text" disabled="" ng-model="setting.uuid">
+                            <input class="form-control" placeholder="{{'hint_setting_uuid' | translate}}." type="text" disabled="" ng-model="setting.uuid">
                         </div>
                     </div>
                     <div class="row">
@@ -139,8 +141,8 @@
 
                         </div>
                         <div class="col-lg-10">
-                            <button type="submit" ng-click="save(setting)" class="btn btn-primary">Save</button>&nbsp;
-                            <button type="submit" ng-click="cancel()" class="btn btn-warning">Cancel</button>
+                            <button type="submit" ng-click="save(setting)" class="btn btn-primary">{{'general_save' | translate}}</button>&nbsp;
+                            <button type="submit" ng-click="cancel()" class="btn btn-warning">{{'general_cancel' | translate}}</button>
                         </div>
                     </div>
                     <span></span>

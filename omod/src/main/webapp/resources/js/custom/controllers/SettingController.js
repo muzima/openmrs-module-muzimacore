@@ -44,7 +44,7 @@ function SettingCtrl($scope, $routeParams, $location, $muzimaSettings) {
     };
 }
 
-function SettingsCtrl($scope, $location, $muzimaSettings) {
+function SettingsCtrl($scope, $location, $muzimaSettings, $translate) {
     // initialize the paging structure
     $scope.maxSize = 10;
     $scope.pageSize = 10;
@@ -92,9 +92,9 @@ function SettingsCtrl($scope, $location, $muzimaSettings) {
             return str.replace(/./g, '*');
         } else if(setting.datatype == 'BOOLEAN'){
             if(setting.value == true){
-                return 'Enabled';
+                return $translate.instant('general_enabled');
             } else if(setting.value == false){
-                return 'Disabled';
+                return $translate.instant('general_disabled');
             }
             return setting.value
         }

@@ -10,7 +10,7 @@
                     <div class="col-lg-4 pull-left">
                     </div>
                     <div class="col-lg-3 pull-right">
-                        <input type="text" ng-model="search" class="form-control" placeholder="search..." style="padding-left: 10px;"/>
+                        <input type="text" ng-model="search" class="form-control" placeholder="{{'general_search' | translate}}" style="padding-left: 10px;"/>
                     </div>
                 </div>
             </div>
@@ -19,19 +19,19 @@
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Value</th>
+                        <th>{{'general_name' | translate}}</th>
+                        <th>{{'general_description' | translate}}</th>
+                        <th>{{'general_value' | translate}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-hide="settings.length">
-                        <td colspan="4">No settings created in the system.</td>
+                        <td colspan="4">{{'message_no_settings_available' | translate}}</td>
                     </tr>
                     <tr ng-repeat="setting in settings | filter:filterSource() | orderBy:'created':true">
                         <td><a href="#/setting/{{setting.uuid}}" style="text-decoration: none"><i class="fa fa-pencil-square-o"></i></a></td>
-                        <td>{{setting.name}}</td>
-                        <td>{{setting.description}}</td>
+                        <td>{{setting.property + '_setting_name' | translate}}</td>
+                        <td>{{setting.property + '_setting_description' | translate}}</td>
                         <td ng-bind-html="settingDisplayValue(setting)"></td>
                     </tr>
                     </tbody>
