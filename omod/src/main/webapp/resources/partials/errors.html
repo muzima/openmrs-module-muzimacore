@@ -56,7 +56,10 @@
                 <button type="submit" ng-click="toggleRemoveError()" class="btn btn-danger" ng-show="!remove_error_data" style="margin-bottom: 20px;">{{'general_remove' | translate}}</button>
                 <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_error_data" style="margin-bottom: 20px;">{{'general_remove' | translate}}</button>&nbsp;
                 <button type="submit" ng-click="queue()" class="btn btn-primary" style="margin-bottom: 20px; margin-right:15px;">{{'general_queue' | translate}}</button>
-                <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
+                <ul ng-if="loadPaginationStub" uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize"
+                    boundary-links="true" force-ellipses="true" class="pull-right"
+                    first-text="{{'pagination_first'|translate}}" previous-text="{{'pagination_previous'|translate}}"
+                    next-text="{{'pagination_next'|translate}}" last-text="{{'pagination_last'|translate}}"></ul>
             </div>
         </div>
     </div>

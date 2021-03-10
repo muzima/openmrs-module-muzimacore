@@ -51,7 +51,10 @@
             <div ng-show="queues.length" class="row col-lg-12">
                 <button type="submit" ng-click="toggleRemoveQueue()" class="btn btn-danger" ng-show="!remove_queue_data">{{'general_remove' | translate}}</button>
                 <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_queue_data">{{'general_remove' | translate}}</button>
-                <ul ng-show="noOfPages > 1" uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
+                <ul ng-if="loadPaginationStub" ng-show="noOfPages > 1" uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize"
+                    items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"
+                    first-text="{{'pagination_first'|translate}}" previous-text="{{'pagination_previous'|translate}}"
+                    next-text="{{'pagination_next'|translate}}" last-text="{{'pagination_last'|translate}}"></ul>
             </div>
         </div>
     </div>

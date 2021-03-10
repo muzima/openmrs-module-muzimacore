@@ -162,12 +162,21 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
 
 }
 
-function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations) {
+function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations, $localeService, $translate) {
     // initialize the paging structure
 
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
+
+    $scope.loadPaginationStub = false;
+    $localeService.getUserLocale().then(function (response) {
+        var serverData = response.data.locale;
+        $translate.use(serverData).then(function () {
+            $scope.loadPaginationStub = true;
+        });
+    });
+
     $muzimaReportConfigurations.getReportConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;

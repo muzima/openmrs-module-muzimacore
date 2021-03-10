@@ -125,7 +125,7 @@
   "wizard_cohort_question": "Do you want to add Cohorts as part of the information that should be downloaded to the mobile application?",
   "wizard_alert_cohorts": "Please select or define new cohorts to be added to the mobile application:",
   "wizard_info_concepts": "mUzima uses Concepts to determine the kinds of historical data that should be downloaded and retained on the mobile devices after form filling.",
-  "wizard_cohort_question": "Do you want to include Concepts as part of the data that should be downloaded to the mobile application?",
+  "wizard_concept_question": "Do you want to include Concepts as part of the data that should be downloaded to the mobile application?",
   "wizard_alert_concepts": "Please select Concepts to be downloaded to the mobile application:",
   "wizard_info_locations": "We recognize that many implementations cannot download all locations to the devices for listing as\n the care location.\n mUzima provides the options for selecting a subset of these locations to the device. These will be\n locations that appear as the Encounter Location for patients.",
   "wizard_location_question": "Do you want to add Location(s) to be downloaded to mUzima for this program?",
@@ -330,5 +330,9 @@
   "general_create_source": "Create Source",
   "general_uuid": "UUID",
   "message_no_sources": "No sources created in the system.",
+  "pagination_first": "First",
+  "pagination_next": "Next",
+  "pagination_previous": "Previous",
+  "pagination_last": "Last",
   "general_property": "Property"
 }

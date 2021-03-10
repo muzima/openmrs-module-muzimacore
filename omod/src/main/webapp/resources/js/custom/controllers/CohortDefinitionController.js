@@ -1,10 +1,19 @@
-function CohortDefinitionsCtrl($scope, $location, $cohortDefinitionService){
-// initialize the paging structure
-$scope.maxSize = 10;
-$scope.pageSize = 10;
-$scope.currentPage = 1;
-$scope.totalItems = 0;
-$cohortDefinitionService.getCohortDefinitions($scope.currentPage, $scope.pageSize).
+function CohortDefinitionsCtrl($scope, $location, $cohortDefinitionService, $localeService, $translate){
+    // initialize the paging structure
+    $scope.maxSize = 10;
+    $scope.pageSize = 10;
+    $scope.currentPage = 1;
+    $scope.totalItems = 0;
+
+    $scope.loadPaginationStub = false;
+    $localeService.getUserLocale().then(function (response) {
+        var serverData = response.data.locale;
+        $translate.use(serverData).then(function () {
+            $scope.loadPaginationStub = true;
+        });
+    });
+
+    $cohortDefinitionService.getCohortDefinitions($scope.currentPage, $scope.pageSize).
         then(function (response) {
             var serverData = response.data;
                 $scope.cohortDefinitions = serverData.objects;
@@ -13,7 +22,7 @@ $cohortDefinitionService.getCohortDefinitions($scope.currentPage, $scope.pageSiz
                 $('#wait').hide();
         });
 
-$scope.$watch('currentPage', function (newValue, oldValue) {
+    $scope.$watch('currentPage', function (newValue, oldValue) {
         if (newValue != oldValue) {
             $cohortDefinitionService.getCohortDefinitions($scope.currentPage, $scope.pageSize).
             then(function (response) {

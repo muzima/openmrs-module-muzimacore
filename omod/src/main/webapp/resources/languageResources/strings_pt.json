@@ -125,7 +125,7 @@
   "wizard_cohort_question": "Você deseja adicionar coortes como parte das informações que devem ser baixadas para o aplicativo móvel?",
   "wizard_alert_cohorts": "Selecione ou defina novos coortes a serem adicionados ao aplicativo móvel:",
   "wizard_info_concepts": "mUzima usa conceitos para determinar os tipos de dados históricos que devem ser baixados e retidos nos dispositivos móveis após o preenchimento do formulário.",
-  "wizard_cohort_question": "Você deseja incluir os conceitos como parte dos dados que devem ser baixados para o aplicativo móvel?",
+  "wizard_concept_question": "Você deseja incluir os conceitos como parte dos dados que devem ser baixados para o aplicativo móvel?",
   "wizard_alert_concepts": "Selecione os conceitos a serem baixados para o aplicativo móvel:",
   "wizard_info_locations": "Reconhecemos que muitas implementações não podem baixar todos os locais para os dispositivos para listar como\n o local de atendimento.\n mUzima fornece as opções para selecionar um subconjunto desses locais para o dispositivo. Estes serão\n locais que aparecem como o Local de encontro para os pacientes.",
   "wizard_location_question": "Você deseja adicionar locais a serem baixados no mUzima para este programa?",
@@ -330,5 +330,9 @@
   "general_create_source": "Criar fonte",
   "general_uuid": "UUID",
   "message_no_sources": "Nenhuma fonte criada no sistema.",
+  "pagination_first": "Primeiro",
+  "pagination_next": "Próximo",
+  "pagination_previous": "Anterior",
+  "pagination_last": "Último",
   "general_property": "Propriedade"
 }
