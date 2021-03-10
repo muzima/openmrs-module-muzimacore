@@ -332,5 +332,9 @@
   "general_create_source": "Criar fonte",
   "general_uuid": "UUID",
   "message_no_sources": "Nenhuma fonte criada no sistema.",
+  "pagination_first": "Primeiro",
+  "pagination_next": "Próximo",
+  "pagination_previous": "Anterior",
+  "pagination_last": "Último",
   "general_property": "Propriedade"
 }

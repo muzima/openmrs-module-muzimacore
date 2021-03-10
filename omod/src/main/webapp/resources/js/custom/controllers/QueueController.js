@@ -43,6 +43,15 @@ function QueuesCtrl($scope, $location, $data) {
     $scope.remove_queue_data = false;
     $scope.remove_reason = false;
     $scope.removeReasonError = false;
+
+    $scope.loadPaginationStub = false;
+    $localeService.getUserLocale().then(function (response) {
+        var serverData = response.data.locale;
+        $translate.use(serverData).then(function () {
+            $scope.loadPaginationStub = true;
+        });
+    });
+
     $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
