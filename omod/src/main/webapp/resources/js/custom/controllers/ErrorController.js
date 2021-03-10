@@ -242,7 +242,7 @@ function ErrorCtrl($scope, $routeParams, $location, $data) {
     };
 }
 
-function ErrorsCtrl($scope, $location, $data) {
+function ErrorsCtrl($scope, $location, $data, $localeService, $translate) {
     $scope.isErrorLoadingCompleted = false;
     $scope.allErrorsSelected = false;
     $scope.remove_error_data = false;

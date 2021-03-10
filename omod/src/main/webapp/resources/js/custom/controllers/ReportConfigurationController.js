@@ -162,7 +162,7 @@ function ReportConfigurationCtrl($scope, $routeParams, $location, $muzimaReportC
 
 }
 
-function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations) {
+function ReportConfigurationsCtrl($scope, $location, $muzimaReportConfigurations, $localeService, $translate) {
     // initialize the paging structure
 
     $scope.maxSize = 10;

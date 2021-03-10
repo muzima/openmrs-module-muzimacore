@@ -13,7 +13,7 @@ function ViewRegistrationCtrl($scope, $location, $routeParams, $registrations) {
     };
 }
 
-function ListRegistrationsCtrl($scope, $registrations) {
+function ListRegistrationsCtrl($scope, $registrations, $localeService, $translate) {
     // initialize the paging structure
     $scope.maxSize = 10;
     $scope.pageSize = 10;

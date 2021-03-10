@@ -32,7 +32,7 @@ function QueueCtrl($scope, $routeParams, $location, $data) {
     };
 }
 
-function QueuesCtrl($scope, $location, $data) {
+function QueuesCtrl($scope, $location, $data, $localeService, $translate) {
     // initialize selected error data for re-queueing
     $scope.selected = {};
     // initialize the paging structure

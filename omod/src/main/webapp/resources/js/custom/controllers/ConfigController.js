@@ -1323,7 +1323,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     };
 }
 
-function ConfigsCtrl($scope, $configs) {
+function ConfigsCtrl($scope, $configs, $localeService, $translate) {
     $scope.showConfigWizard = false;
     // initialize the paging structure
     $scope.maxSize = 10;

@@ -1,4 +1,4 @@
-function CohortDefinitionsCtrl($scope, $location, $cohortDefinitionService){
+function CohortDefinitionsCtrl($scope, $location, $cohortDefinitionService, $localeService, $translate){
     // initialize the paging structure
     $scope.maxSize = 10;
     $scope.pageSize = 10;

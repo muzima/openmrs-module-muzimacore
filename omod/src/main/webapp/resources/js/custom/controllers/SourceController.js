@@ -51,7 +51,7 @@ function SourceCtrl($scope, $routeParams, $location, $data) {
     };
 }
 
-function SourcesCtrl($scope, $data) {
+function SourcesCtrl($scope, $data, $localeService, $translate) {
     // initialize the paging structure
     $scope.maxSize = 10;
     $scope.pageSize = 10;
