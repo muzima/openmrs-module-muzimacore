@@ -19,6 +19,15 @@ function ListRegistrationsCtrl($scope, $registrations) {
     $scope.pageSize = 10;
     $scope.currentPage = 1;
     $scope.totalItems = 0;
+
+    $scope.loadPaginationStub = false;
+    $localeService.getUserLocale().then(function (response) {
+        var serverData = response.data.locale;
+        $translate.use(serverData).then(function () {
+            $scope.loadPaginationStub = true;
+        });
+    });
+
     $registrations.getRegistrations($scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;

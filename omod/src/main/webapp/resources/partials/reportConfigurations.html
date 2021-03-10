@@ -48,7 +48,9 @@
             </div>
             <div ng-show="noOfPages > 1" class="row">
                 <div class="col-lg-12 pull-left">
-                    <pagination num-pages="noOfPages" current-page="currentPage" max-size="maxSize" boundary-links="true"></pagination>
+                    <pagination ng-if="loadPaginationStub" num-pages="noOfPages" current-page="currentPage" max-size="maxSize" boundary-links="true"
+                                first-text="{{'pagination_first'|translate}}" previous-text="{{'pagination_previous'|translate}}"
+                                next-text="{{'pagination_next'|translate}}" last-text="{{'pagination_last'|translate}}"></pagination>
                 </div>
             </div>
         </div>
