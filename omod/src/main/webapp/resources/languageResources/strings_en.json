@@ -335,5 +335,6 @@
   "pagination_first": "First",
   "pagination_next": "Next",
   "pagination_previous": "Previous",
-  "pagination_last": "Last"
+  "pagination_last": "Last",
+  "general_property": "Property"
 }

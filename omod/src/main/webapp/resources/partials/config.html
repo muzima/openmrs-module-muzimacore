@@ -360,7 +360,7 @@
                                                             <select  ng-disabled="specialFields.extractingMeta" size="15" id="availableNotUsedSettings" ng-model="selected.eSettings"
                                                                      style="width: 100% ; font-size: 11px;max-height:200px; border:none;" multiple="multiple" class="list-group list-group-flush">
                                                                 <option ng-repeat="setting in availableNotUsedSettings | orderBy: 'name'" value="{{setting}}"
-                                                                        class="list-group-item" title="{{setting.description}}">
+                                                                        class="list-group-item" title="{{setting.property + '_setting_description' | translate}}">
                                                                     <div>{{formatSettingDisplay(setting)}}</div>
                                                                 </option>
                                                                 <option ng-hide="hasAvailableNotUsedSettings()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
@@ -379,7 +379,7 @@
                                                             <select class="list-group list-group-flush" size="15" id="selectedSettings" ng-model="selected.settings"
                                                                     style="width: 100%; font-size: 11px;max-height:200px; border:none;" multiple="multiple">
                                                                 <option ng-repeat="setting in configSettings | orderBy: 'name'" value="{{setting}}"
-                                                                        class="list-group-item" title="{{setting.description}}">
+                                                                        class="list-group-item" title="{{setting.property + '_setting_description' | translate}}">
                                                                     <div>{{formatSettingDisplay(setting)}}</div>
                                                                 </option>
                                                                 <option ng-hide="configHasSettings()" disabled class="no-config-data-message" style="white-space: break-spaces; font-size: 11px;">
