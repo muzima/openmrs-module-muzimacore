@@ -2,6 +2,7 @@
 function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
     $scope.init = function () {
         $scope.editMode = false;
+        $scope.formPreview = false;
         $scope.tagColorMap = {};
         $scope.activeTagFilters = [];
         $scope.xformToUpload = "";
@@ -49,11 +50,8 @@ function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
     };
 
     $scope.showFormPreview = function (formHTML, formModel, formJSON) {
-        var previewWindow = $window.open("../../moduleResources/muzimacore/preview/enketo/template.html");
-
-        previewWindow.formHTML = formHTML;
-        previewWindow.formModel = formModel;
-        previewWindow.formJSON = formJSON;
+        $scope.formPreview = true;
+        $scope.formHTML = formHTML;
     };
 
     $scope.editForm = function(muzimaform){
@@ -158,4 +156,33 @@ function FormsCtrl($location, $scope, $window, FormService, TagService, _) {
         });
         $scope.activeTagFilters = _.union($scope.activeTagFilters, [tag]);
     };
+
+    $scope.getBody = function (html) {
+        if(html !== undefined){
+            let start = html.indexOf('>', html.indexOf('<body ')) + 1;
+            let end = html.indexOf('</body>');
+            let res = html.substring(start, end);
+            return res;
+        }
+    }
+
+    $scope.toggleListForms = function(){
+        $scope.formPreview = false;
+    }
 }
+
+muzimaCoreModule.directive('bindUnsafeHtml', ['$compile', function ($compile) {
+    return function(scope, element, attrs) {
+        scope.$watch(
+          function(scope) {
+            // watch the 'bindUnsafeHtml' expression for changes
+            return scope.$eval(attrs.bindUnsafeHtml);
+          },
+          function(value) {
+            // when the 'bindUnsafeHtml' expression changes assign it into the current DOM
+            element.html(value);
+            $compile(element.contents())(scope);
+          }
+      );
+  };
+}]);
