@@ -402,14 +402,19 @@ public class ObsQueueDataHandler implements QueueDataHandler {
         Date date = null;
         try {
             String dateAsString = dateValue;
-            if(dateValue.length()==10){
-                dateAsString = dateValue+" 00:00";
-            }
             if(deviceTimeZone != null) {
-                dateTimeFormat.setTimeZone(TimeZone.getTimeZone(deviceTimeZone));
-                date = dateTimeFormat.parse(dateAsString);
-            }else{
-                date = dateTimeFormat.parse(dateAsString);
+                if(dateValue.length()==10){
+                    date = dateFormat.parse(dateAsString);
+                } else {
+                    dateTimeFormat.setTimeZone(TimeZone.getTimeZone(deviceTimeZone));
+                    date = dateTimeFormat.parse(dateAsString);
+                }
+            } else {
+                if(dateValue.length()==10){
+                    date = dateFormat.parse(dateAsString);
+                } else {
+                    date = dateTimeFormat.parse(dateAsString);
+                }
             }
         } catch (ParseException e) {
             log.error("Unable to parse date data for encounter!", e);
