@@ -42,7 +42,7 @@
                 </table>
             </div>
             <div ng-show="noOfPages > 1" class="row">
-                <ul ng-if="loadPaginationStub" uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize"
+                <ul ng-if="loadPaginationStub" uib-pagination total-items="totalItems" ng-model="$parent.currentPage" max-size="maxSize"
                     items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"
                     first-text="{{'pagination_first'|translate}}" previous-text="{{'pagination_previous'|translate}}"
                     next-text="{{'pagination_next'|translate}}" last-text="{{'pagination_last'|translate}}"></ul>

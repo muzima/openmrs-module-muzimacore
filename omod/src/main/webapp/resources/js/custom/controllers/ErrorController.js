@@ -370,7 +370,7 @@ function ErrorsCtrl($scope, $location, $data, $localeService, $translate) {
     };
 }
 
-function PotentialDuplicatesErrorsCtrl($scope, $data) {
+function PotentialDuplicatesErrorsCtrl($scope, $data, $localeService, $translate) {
     // initialize selected error data for re-queueing
     $scope.selected = {};
     // initialize the paging structure
@@ -378,6 +378,15 @@ function PotentialDuplicatesErrorsCtrl($scope, $data) {
     $scope.pageSize = 10;
     $scope.currentPage = 1;
     $scope.totalItems = 0;
+
+    $scope.loadPaginationStub = false;
+    $localeService.getUserLocale().then(function (response) {
+        var serverData = response.data.locale;
+        $translate.use(serverData).then(function () {
+            $scope.loadPaginationStub = true;
+        });
+    });
+
     var searchTerm = 'Found a patient with similar characteristic';
     $data.getErrors(searchTerm, $scope.currentPage, $scope.pageSize).then(function (response) {
         var serverData = response.data;
