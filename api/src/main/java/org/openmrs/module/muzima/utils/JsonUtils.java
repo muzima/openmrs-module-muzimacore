@@ -44,6 +44,8 @@ public class JsonUtils {
 
     private static final String DATE_PATTERN = "dd-MM-yyyy";
 
+    private static final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
     /**
      * Write boolean value into the json object. The method will only write the boolean value if the object passed
      * as the first argument is an instance of <code>{@link net.minidev.json.JSONObject}</code>.
@@ -336,18 +338,23 @@ public class JsonUtils {
      * @param path       the path inside the json object.
      * @return the date Time value in the json object. When the path is invalid, by default will return null.
      */
-    public static Date readAsDateTime(final String jsonObject, final String path, final DateFormat dateFormat, final String jsonPayloadTimezone) {
+    public static Date readAsDateTime(final String jsonObject, final String path, final DateFormat datetimeFormat, final String jsonPayloadTimezone) {
         Date returnedDate = null;
         try {
             String dateAsString = readAsString(jsonObject, path);
-            if(dateAsString.length()==10){
-                dateAsString = dateAsString+" 00:00";
-            }
             if(jsonPayloadTimezone != null) {
-                dateFormat.setTimeZone(TimeZone.getTimeZone(jsonPayloadTimezone));
-                returnedDate = dateFormat.parse(dateAsString);
+                if(dateAsString.length()==10){
+                    returnedDate = dateFormat.parse(dateAsString);
+                }else{
+                    datetimeFormat.setTimeZone(TimeZone.getTimeZone(jsonPayloadTimezone));
+                    returnedDate = datetimeFormat.parse(dateAsString);
+                }
             }else{
-                returnedDate = dateFormat.parse(dateAsString);
+                if(dateAsString.length()==10){
+                    returnedDate = dateFormat.parse(dateAsString);
+                } else {
+                    returnedDate = datetimeFormat.parse(dateAsString);
+                }
             }
         } catch (Exception e) {
                        logger.error("Unable to create date value from path: " + path + " from: " + String.valueOf(jsonObject));
