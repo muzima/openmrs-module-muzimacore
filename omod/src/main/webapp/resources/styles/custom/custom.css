@@ -418,3 +418,32 @@ ul.dropdown-menu.show > li :hover {
 label{
     font-weight: bold;
 }
+
+.form-preview {
+    overflow: auto;
+    height: 700px;
+    padding: 10px;
+  }
+  .tab-preview {
+    width: 50%;
+  }
+  /* this selector is important to fix a design issue in the tabs of the preview */
+.form-preview div ul li a {
+    text-align: center !important;
+    color: #004f47 !important;
+    text-decoration: none !important;
+}
+
+.section{
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    margin: 10px 5px;
+}
+
+.sub-section{
+    padding: 10px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    margin: 10px 5px;
+}

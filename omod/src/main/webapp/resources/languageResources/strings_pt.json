@@ -334,5 +334,7 @@
   "pagination_next": "Próximo",
   "pagination_previous": "Anterior",
   "pagination_last": "Último",
-  "general_property": "Propriedade"
+  "general_property": "Propriedade",
+  "html_preview":"Antevisão HTML",
+  "html_code": "Código HTML"
 }
