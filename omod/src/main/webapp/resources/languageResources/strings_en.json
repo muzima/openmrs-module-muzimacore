@@ -334,5 +334,7 @@
   "pagination_next": "Next",
   "pagination_previous": "Previous",
   "pagination_last": "Last",
-  "general_property": "Property"
+  "general_property": "Property",
+  "html_preview":"HTML Preview",
+  "html_code": "HTML Code"
 }

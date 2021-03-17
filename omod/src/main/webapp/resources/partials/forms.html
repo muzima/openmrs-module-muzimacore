@@ -3,7 +3,7 @@
     <div class="col-lg-9">
         <div class="clearfix">
             <div class="row navbar navbar-inverse navbar-custom">
-                <a class="navbar-brand" href="#/forms" style="color: #ffffff; font-size: 20px"><i class="fa fa-home"></i></a>
+                <a class="navbar-brand" ng-click="toggleListForms()" style="color: #ffffff; font-size: 20px"><i class="fa fa-home"></i></a>
                 <div class="container-fluid navbar-right" style="float: right !important;margin-right: -20px;">
 					<span class="nav navbar-nav form-group" style="margin-right: 5px">
 						<form>
@@ -20,95 +20,115 @@
 					</span>
                 </div>
             </div>
+            <div ng-show="!formPreview">
+                <div id='wait' class='loader' ng-show="fetchingForms">
+                    &nbsp;
+                </div>
 
-            <div id='wait' class='loader' ng-show="fetchingForms">
-                &nbsp;
-            </div>
-
-            <div ng-show="tagFilterActive() && !fetchingForms" class="well well-large">
-                <span>{{'general_filter_by' | translate}}: </span>
-                <span class="tag" ng-repeat="tag in activeTagFilters">
-                    <span class="label form-tag" ng-style="tagStyle(tag.id)">
-                        <span>{{tag.name}} </span>
-                        <span ng-click="removeTagFilter(tag)"><i class="fa fa-remove"></i></span>
+                <div ng-show="tagFilterActive() && !fetchingForms" class="well well-large">
+                    <span>{{'general_filter_by' | translate}}: </span>
+                    <span class="tag" ng-repeat="tag in activeTagFilters">
+                        <span class="label form-tag" ng-style="tagStyle(tag.id)">
+                            <span>{{tag.name}} </span>
+                            <span ng-click="removeTagFilter(tag)"><i class="fa fa-remove"></i></span>
+                        </span>
                     </span>
-                </span>
-            </div>
+                </div>
 
-            <div class="row" ng-show="hasForms()  && !fetchingForms">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>{{'general_name' | translate}}</th>
-                        <th>{{'info_version' | translate}}</th>
-                        <th>{{'general_discriminator' | translate}}</th>
-                        <th>{{'general_description' | translate}}</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody ng-repeat="muzimaform in muzimaforms | filter:searchQuery | tagFilter:activeTagFilters">
-                    <tr>
-                        <td nowrap>
+                <div class="row" ng-show="hasForms()  && !fetchingForms">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>{{'general_name' | translate}}</th>
+                            <th>{{'info_version' | translate}}</th>
+                            <th>{{'general_discriminator' | translate}}</th>
+                            <th>{{'general_description' | translate}}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody ng-repeat="muzimaform in muzimaforms | filter:searchQuery | tagFilter:activeTagFilters">
+                        <tr>
+                            <td nowrap>
+                                    <span>
+                                        <a title="{{'tooltip_preview_form' | translate}}" ng-click="showFormPreview(muzimaform.form.html, muzimaform.form.model, muzimaform.form.modelJson)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </span>
                                 <span>
-                                    <a title="{{'tooltip_preview_form' | translate}}" ng-click="showFormPreview(muzimaform.form.html, muzimaform.form.model, muzimaform.form.modelJson)">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                </span>
-                            <span>
-                                    <a title="{{'tooltip_add_tags' | translate}}" ng-click="editMode = !editMode">
-                                        <i class="fa fa-tags"></i>
-                                    </a>
-                                </span>
-                            <span>
-                                    <a title="{{'tooltip_update_form_template' | translate}}" ng-click="editForm(muzimaform)">
-                                        <i class="fa fa-pencil-square-o"></i>
-                                    </a>
-                                </span>
-                        </td>
-                        <td class="small">{{muzimaform.form.name}}</td>
-                        <td class="small">{{muzimaform.form.version || ""}}</td>
-                        <td class="small">{{muzimaform.form.discriminator || ""}}</td>
-                        <td class="small">{{muzimaform.form.description || ""}}</td>
-                        <td>
-                                <span class="retire-form">
-                                    <a title="{{'general_retire' | translate}}" ng-click="toggleRetireForm(muzimaform)" ng-show="!muzimaform.retired">
-                                        <i class="fa fa-remove"></i>
-                                    </a>
-                                </span>
-                        </td>
-                    </tr>
-                    <tr ng-show="muzimaform.retired || muzimaform.form.tags.length || editMode">
-                        <td></td>
-                        <td colspan=4>
-                                <span class="tag" ng-show="muzimaform.form.tags.length" ng-repeat="tag in muzimaform.form.tags">
-                                    <span class="label form-tag" ng-style="tagStyle(tag.id)">
-                                        <span ng-click="addTagFilter(tag);$event.stopPropagation()">{{tag.name}} </span>
-                                        <span ng-click="removeTag(muzimaform.form, tag)">
+                                        <a title="{{'tooltip_add_tags' | translate}}" ng-click="editMode = !editMode">
+                                            <i class="fa fa-tags"></i>
+                                        </a>
+                                    </span>
+                                <span>
+                                        <a title="{{'tooltip_update_form_template' | translate}}" ng-click="editForm(muzimaform)">
+                                            <i class="fa fa-pencil-square-o"></i>
+                                        </a>
+                                    </span>
+                            </td>
+                            <td class="small">{{muzimaform.form.name}}</td>
+                            <td class="small">{{muzimaform.form.version || ""}}</td>
+                            <td class="small">{{muzimaform.form.discriminator || ""}}</td>
+                            <td class="small">{{muzimaform.form.description || ""}}</td>
+                            <td>
+                                    <span class="retire-form">
+                                        <a title="{{'general_retire' | translate}}" ng-click="toggleRetireForm(muzimaform)" ng-show="!muzimaform.retired">
                                             <i class="fa fa-remove"></i>
+                                        </a>
+                                    </span>
+                            </td>
+                        </tr>
+                        <tr ng-show="muzimaform.retired || muzimaform.form.tags.length || editMode">
+                            <td></td>
+                            <td colspan=4>
+                                    <span class="tag" ng-show="muzimaform.form.tags.length" ng-repeat="tag in muzimaform.form.tags">
+                                        <span class="label form-tag" ng-style="tagStyle(tag.id)">
+                                            <span ng-click="addTagFilter(tag);$event.stopPropagation()">{{tag.name}} </span>
+                                            <span ng-click="removeTag(muzimaform.form, tag)">
+                                                <i class="fa fa-remove"></i>
+                                            </span>
                                         </span>
                                     </span>
-                                </span>
-                            <div ng-show="editMode">
-                                <form ng-submit="saveTag(muzimaform)">
-                                    <input name="newTag" ng-model="muzimaform.newTag" ng-trim="true" type="text" class="form-control" translate translate-attr-placeholder="tooltip_add_tags" style="margin-top: 15px; padding-left: 5px; padding-right: 5px"/>
-                                </form>
-                            </div>
+                                <div ng-show="editMode">
+                                    <form ng-submit="saveTag(muzimaform)">
+                                        <input name="newTag" ng-model="muzimaform.newTag" ng-trim="true" type="text" class="form-control" translate translate-attr-placeholder="tooltip_add_tags" style="margin-top: 15px; padding-left: 5px; padding-right: 5px"/>
+                                    </form>
+                                </div>
 
-                            <div class="retire-form" ng-show="muzimaform.retired">
-                                <input type="text" ng-class="retireReasonError? 'retire-reason-error' : 'retire-reason'" translate translate-attr-placeholder="general_retire_reason" ng-model="muzimaform.retireReason" ng-show="muzimaform.retired" style="margin-top: 15px;"/>
-                                <a class="btn btn-danger" ng-click="remove(muzimaform)" ng-show="muzimaform.retired">{{'general_retire' | translate}}</a>
-                                <a class="btn btn-default" ng-click="toggleRetireForm(muzimaform)" ng-show="muzimaform.retired">{{'general_cancel' | translate}}</a>
-                            </div>
-                        </td>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                </table>
+                                <div class="retire-form" ng-show="muzimaform.retired">
+                                    <input type="text" ng-class="retireReasonError? 'retire-reason-error' : 'retire-reason'" translate translate-attr-placeholder="general_retire_reason" ng-model="muzimaform.retireReason" ng-show="muzimaform.retired" style="margin-top: 15px;"/>
+                                    <a class="btn btn-danger" ng-click="remove(muzimaform)" ng-show="muzimaform.retired">{{'general_retire' | translate}}</a>
+                                    <a class="btn btn-default" ng-click="toggleRetireForm(muzimaform)" ng-show="muzimaform.retired">{{'general_cancel' | translate}}</a>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="close-box" ng-show="!hasForms() && !fetchingForms">
+                    <span data-ng-bind-html="'message_no_available_forms' | translate"></span>
+                </div>
             </div>
-
-            <div class="close-box" ng-show="!hasForms() && !fetchingForms">
-                <span data-ng-bind-html="'message_no_available_forms' | translate"></span>
+            <div ng-show="formPreview">
+                <div><a ng-click="toggleListForms()">{{'general_back' | translate}}</a></div>
+                <div class="form-preview">
+                    <uib-tabset active="active" ng-show="formPreview">
+                        <uib-tab index="0" heading="{{'html_preview' | translate}}" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
+                            <div bind-unsafe-html="getBody(formHTML)"></div>
+                        </uib-tab>
+                        <uib-tab index="1" heading="{{'html_code' | translate}}" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
+                            <div>
+                                <pre style="white-space: pre-wrap;" >
+                                  <code>
+                                      {{formHTML}}
+                                  </code>
+                                </pre>
+                            </div>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
             </div>
         </div>
     </div>
