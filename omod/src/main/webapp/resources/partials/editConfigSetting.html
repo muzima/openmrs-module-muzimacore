@@ -9,7 +9,7 @@
                 <label for="settingName">{{'general_name' | translate}}:</label>
             </div>
             <div class="col-lg-9">
-                 <textarea id="settingName" class="form-control" rows="3" disabled="" ng-model="setting.name">
+                 <textarea id="settingName" class="form-control" rows="3" disabled="">{{setting.property + '_setting_name' | translate}}
                  </textarea>
             </div>
         </div>
@@ -18,7 +18,7 @@
                 <label for="settingDescription">{{'general_description' | translate}}:</label>
             </div>
             <div class="col-lg-9">
-                        <textarea id="settingDescription" class="form-control" rows="7" disabled="" ng-model="setting.description">
+                        <textarea id="settingDescription" class="form-control" rows="7" disabled="">{{setting.property + '_setting_description' | translate}}
                         </textarea>
             </div>
         </div>

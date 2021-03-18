@@ -11,16 +11,7 @@
                         {{'general_name' | translate}}:
                     </div>
                     <div class="col-lg-10">
-                        <input class="form-control" translate translate-attr-placeholder="hint_setting_name" type="text" disabled="" ng-model="setting.name">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-2">
-                        {{'general_property' | translate}}:
-                    </div>
-                    <div class="col-lg-10">
-                        <input class="form-control"  translate translate-attr-placeholder="hint_setting_property" type="text" disabled="" ng-model="setting.property">
-
+                        <input class="form-control" translate translate-attr-placeholder="hint_setting_name" type="text" disabled="" value="{{setting.property + '_setting_name' | translate}}">
                     </div>
                 </div>
                 <div class="row">
@@ -28,7 +19,8 @@
                         {{'general_description' | translate}}:
                     </div>
                     <div class="col-lg-10">
-                        <textarea class="form-control"  translate translate-attr-placeholder="hint_setting_description" rows="10" disabled="" ng-model="setting.description">
+                        <textarea class="form-control"  translate translate-attr-placeholder="hint_setting_description" rows="10" disabled="">
+                            {{setting.property + '_setting_description' | translate}}
                         </textarea>
                     </div>
                 </div>
@@ -84,16 +76,7 @@
                             {{'general_name' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                            <input class="form-control" translate translate-attr-placeholder="hint_setting_name" type="text" disabled="" ng-model="setting.name">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            {{'general_property' | translate}}:
-                        </div>
-                        <div class="col-lg-10">
-                            <input class="form-control"  translate translate-attr-placeholder="hint_setting_property" type="text" disabled="" ng-model="setting.property">
-
+                            <input class="form-control" translate translate-attr-placeholder="hint_setting_name" type="text" disabled="" value="{{setting.property + '_setting_description' | translate}}">
                         </div>
                     </div>
                     <div class="row">
@@ -101,7 +84,8 @@
                             {{'general_description' | translate}}:
                         </div>
                         <div class="col-lg-10">
-                        <textarea class="form-control"  translate translate-attr-placeholder="hint_setting_description" rows="10" disabled="" ng-model="setting.description">
+                        <textarea class="form-control"  translate translate-attr-placeholder="hint_setting_description" rows="10" disabled="">
+                            {{setting.property + '_setting_description' | translate}}
                         </textarea>
                         </div>
                     </div>
