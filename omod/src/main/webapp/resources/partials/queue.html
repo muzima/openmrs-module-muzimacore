@@ -7,25 +7,25 @@
         <table class="table">
             <tbody>
             <tr>
-                <td>Sender</td>
+                <td>{{'general_sender' | translate}}</td>
                 <td>{{queue.source}}</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
-                <td>Kind</td>
+                <td>{{'general_kind' | translate}}</td>
                 <td>{{queue.discriminator}}</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
-                <td>Submitted On</td>
+                <td>{{'general_submitted_on' | translate}}</td>
                 <td>{{queue.submitted}}</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
-                <td>Patient Uuid</td>
+                <td>{{'general_patient_uuid' | translate}}</td>
                 <td>{{queue.patientUuid}}</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -36,15 +36,15 @@
             </tr>
             <tr ng-show="remove_queue_data">
                 <td colspan="4">
-                    <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
-                    <div ng-show="removeReasonError" style="color:red">Retire reason is required</div>
+                    <input class="col-md-10 form-control remove-reason" translate translate-attr-placeholder="general_remove_reason" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
+                    <div ng-show="removeReasonError" style="color:red">{{'general_remove_reason_required' | translate}}</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
-                    <button type="submit" ng-click="toggleRemoveQueue()" class="btn btn-danger" ng-show="!remove_queue_data">Remove</button>
-                    <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_queue_data">Remove</button>
-                    <button type="submit" ng-click="cancel()" class="btn btn-primary">Cancel</button>
+                    <button type="submit" ng-click="toggleRemoveQueue()" class="btn btn-danger" ng-show="!remove_queue_data">{{'general_remove' | translate}}</button>
+                    <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_queue_data">{{'general_remove' | translate}}</button>
+                    <button type="submit" ng-click="cancel()" class="btn btn-primary">{{'general_cancel' | translate}}</button>
                 </td>
             </tr>
             </tbody>

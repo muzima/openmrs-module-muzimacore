@@ -11,12 +11,12 @@
                     <ul class="nav navbar-nav pull-right">
                         <li>
                             <button type="button" class="btn btn-success dropdown-toggle navbar-btn" data-toggle="dropdown">
-                                Create Configuration <span class="caret"></span>
+                                {{'general_create_configuration' | translate}} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" style="margin-top: -4.4rem; background: #209F85; position: relative; margin-left: 11rem;">
-                                <li><a href="#/configWizard/1" style="color: #323232 ;text-decoration: none">Launch Wizard</a></li>
+                                <li><a href="#/configWizard/1" style="color: #ffffff ;text-decoration: none">{{'launch_wizard' |translate}}</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#/createConfig" style="color: #323232 ;text-decoration: none">Advanced</a></li>
+                                <li><a href="#/createConfig" style="color: #ffffff ;text-decoration: none">{{'general_advanced' | translate}}</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -24,7 +24,8 @@
                 <div class="col-lg-4 pull-right">
                 </div>
                 <div class="col-lg-3 pull-right" style="padding: 1.5rem;">
-                    <input type="text" class="form-control" ng-model="search" placeholder="search..." style="padding-left: 10px;" />
+                    <input type="text" class="form-control" ng-model="search" translate translate-attr-placeholder="general_search"
+                           style="padding-left: 10px;" />
                 </div>
             </div>
             <div class="row">
@@ -32,9 +33,9 @@
                     <thead>
                     <tr>
                         <th>&nbsp;</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Created On</th>
+                        <th>{{'general_name' | translate}}</th>
+                        <th>{{'general_description' | translate}}</th>
+                        <th>{{'general_created_on' | translate}}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,7 +43,7 @@
                         <td colspan="9">No configuration created in the system..</td>
                     </tr>
                     <tr ng-repeat="config in configs | orderBy:'created':true">
-                        <td><a title="View/Edit Configuraton" href="#/config/{{config.uuid}}" style="text-decoration: none"><i class="fa fa-edit"></i></a></td>
+                        <td><a title="{{'view_edit_config' | translate}}" href="#/config/{{config.uuid}}" style="text-decoration: none"><i class="fa fa-edit"></i></a></td>
                         <td>{{config.name}}</td>
                         <td>{{config.description}}</td>
                         <td>{{config.created}}</td>
@@ -51,7 +52,10 @@
                 </table>
             </div>
             <div ng-show="noOfPages > 1" class="row">
-                <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
+                <ul ng-if="loadPaginationStub" uib-pagination total-items="totalItems" ng-model="$parent.currentPage" max-size="maxSize" items-per-page="pageSize"
+                    boundary-links="true" force-ellipses="true" class="pull-right"
+                    first-text="{{'pagination_first'|translate}}" previous-text="{{'pagination_previous'|translate}}"
+                    next-text="{{'pagination_next'|translate}}" last-text="{{'pagination_last'|translate}}"></ul>
             </div>
         </div>
     </div>

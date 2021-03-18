@@ -44,12 +44,21 @@ function SettingCtrl($scope, $routeParams, $location, $muzimaSettings) {
     };
 }
 
-function SettingsCtrl($scope, $location, $muzimaSettings) {
+function SettingsCtrl($scope, $location, $muzimaSettings, $translate,$localeService) {
     // initialize the paging structure
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
     $scope.totalItems = 0;
+
+    $scope.loadPaginationStub = false;
+    $localeService.getUserLocale().then(function (response) {
+        var serverData = response.data.locale;
+        $translate.use(serverData).then(function () {
+            $scope.loadPaginationStub = true;
+        });
+    });
+
     $muzimaSettings.getSettings($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
@@ -92,9 +101,9 @@ function SettingsCtrl($scope, $location, $muzimaSettings) {
             return str.replace(/./g, '*');
         } else if(setting.datatype == 'BOOLEAN'){
             if(setting.value == true){
-                return 'Enabled';
+                return $translate.instant('general_enabled');
             } else if(setting.value == false){
-                return 'Disabled';
+                return $translate.instant('general_disabled');
             }
             return setting.value
         }

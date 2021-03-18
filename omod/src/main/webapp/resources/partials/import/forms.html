@@ -6,10 +6,10 @@
                 <a class="navbar-brand" href="#/forms" style="color: #ffffff; font-size: 20px"><i class="fa fa-home"></i></a>
                 <div class="container-fluid navbar-right" style="float: right !important;margin-right: -20px;">
                     <a href="#/xforms" class="btn btn-success" style="text-decoration: none;">
-                        Import x-forms
+                        {{'import_x_forms' | translate}}
                     </a>&nbsp;
                     <a href="#/import/forms" class="btn btn-success" style="text-decoration: none;">
-                        Upload
+                        {{'general_upload' | translate}}
                     </a>
                 </div>
             </div>
@@ -20,40 +20,40 @@
 
                     <div class="card" style="padding:15px;">
                         <div class="form-group">
-                            <label for="xFormFormDefinition">Form Definition</label>
+                            <label for="xFormFormDefinition">{{'general_form_definition' | translate}}</label>
                             <select ng-show="forms.length <= 10" class="form-control" id="xFormFormDefinition" ng-model="form" ng-options="form.name for form in forms" required="true" ng-change = loadData()>
                             </select>
-                            <input ng-show="forms.length > 10" type="text" class="form-control" ng-model="searchForm" placeholder="Search form by name ..." autocomplete="off"
+                            <input ng-show="forms.length > 10" type="text" class="form-control" ng-model="searchForm" translate translate-attr-placeholder="info_search_form_by_name" autocomplete="off"
                                    uib-typeahead="form as form.name for form in searchForms | filter:$viewValue |filter:retired=false | limitTo:10"
                                    uib-typeahead-wait-ms="500" typeahead-on-select="selectForm($item)" uib-typeahead-editable="false"/>
                         </div>
                         <div class="form-group">
-                            <label >Name</label>
-                            <input type="text" class="form-control" id="xFormName" ng-model="name" placeholder="Enter name" ng-readonly="true">
+                            <label >{{'general_name' | translate}}</label>
+                            <input type="text" class="form-control" id="xFormName" ng-model="name" translate translate-attr-placeholder="placeholder_enter_name"ng-readonly="true">
                             <!--The field is used to validate the xFormName field above-->
                             <input id="xFormNameHidden" ng-model="name" required style="height: 0; border: 0; margin-top:-15px;outline: none;width: 1px;"/>
                         </div>
                         <div class="form-group">
-                            <label for="xFormVersion">Version</label>
-                            <input type="text" class="form-control" id="xFormVersion" ng-model="version" placeholder="Enter Version" required="true" readonly>
+                            <label for="xFormVersion">{{'info_version' | translate}} </label>
+                            <input type="text" class="form-control" id="xFormVersion" ng-model="version" translate translate-attr-placeholder="placeholder_enter_version" required="true" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="xFormDescription">Description</label>
-                            <textarea class="form-control" id="xFormDescription" rows="3" placeholder="Enter description" ng-model="description" readonly></textarea>
+                            <label for="xFormDescription">{{'general_description'}}</label>
+                            <textarea class="form-control" id="xFormDescription" rows="3" translate translate-attr-placeholder="placeholder_enter_description" ng-model="description" readonly></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="xFormDiscriminator">Select Form Discriminator </label>
+                            <label for="xFormDiscriminator">{{'general_discriminator' | translate}} </label>
                             <select class="form-control" id="xFormDiscriminator" ng-model="discriminator" ng-options="discriminator for discriminator in discriminatorTypes" required="true" >
                             </select>
                         </div>
                     </div>
                     <div class = "card" style="margin-top: 15px; padding: 15px;">
                         <div class="form-group">
-                            <file-upload message="Click here to upload form." />
+                            <file-upload message="{{'general_file_button' | translate}}" />
                         </div>
                         <div class="form-group" ng-hide="isValidated()">
                             <div ng-show="hasFile()">
-                                <label for="formType">Select the FormType: </label>
+                                <label for="formType">{{'message_select_form_type' | translate}}: </label>
                                 <select id="formType" ng-model="formType" name="formType">
                                     <option value="odk">ODK</option>
                                     <option value="html">HTML</option>
@@ -61,17 +61,17 @@
                                 </select>
                             </div>
                             <div ng-show="hasFile()">
-                                <button ng-click="cancel()" class="btn btn-danger">Cancel</button>
-                                <input type="button" ng-click="validate(file,formType)" class="btn btn-success" value="Validate">
+                                <button ng-click="cancel()" class="btn btn-danger">{{'general_cancel' | translate}}</button>
+                                <input type="button" ng-click="validate(file,formType)" class="btn btn-success" value="{{'general_validate' | translate}}">
                             </div>
                         </div>
                         <div ng-show = "isValidXForm()">
-                            <div class="alert alert-success w-100">The Form is valid! Use the upload button to import it.</div>
+                            <div class="alert alert-success w-100">{{'message_form_valid' | translate}}</div>
                         </div>
                         <div ng-show="isInvalidXForm()">
                             <div class="row">
                                 <div class="col-lg-12 well-small">
-                                    <button ng-click="validate(file, formType)" class="btn btn-success">Re-Validate</button>
+                                    <button ng-click="validate(file, formType)" class="btn btn-success">{{'general_re_validate' | translate}}</button>
                                 </div>
                             </div>
                             <div class="row" ng-repeat="validation in validations.list">
@@ -82,8 +82,8 @@
                         </div>
                     </div>
                     <div class="well-small" style="margin-top: 7px;">
-                        <button ng-click="cancelUpload()" class="btn btn-danger">Cancel</button>
-                        <button type="submit" class="btn btn-success" ng-disabled = "!isValidXForm()">Upload</button>
+                        <button ng-click="cancelUpload()" class="btn btn-danger">{{'general_cancel' | translate}}</button>
+                        <button type="submit" class="btn btn-success" ng-disabled = "!isValidXForm()">{{'general_upload' | translate}}</button>
                     </div>
                 </form>
             </div>

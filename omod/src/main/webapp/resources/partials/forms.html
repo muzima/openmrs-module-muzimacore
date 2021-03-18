@@ -7,15 +7,15 @@
                 <div class="container-fluid navbar-right" style="float: right !important;margin-right: -20px;">
 					<span class="nav navbar-nav form-group" style="margin-right: 5px">
 						<form>
-							<input type="text" class="form-control navbar-btn" ng-model="searchQuery" placeholder="Search" style="padding-left: 5px; padding-right: 5px; margin-right: 5px">
+							<input type="text" class="form-control navbar-btn" ng-model="searchQuery" translate translate-attr-placeholder="general_search" style="padding-left: 5px; padding-right: 5px; margin-right: 5px">
 						</form>
                     </span>
                     <span class="nav navbar-nav" style="margin-right: 5px">
                         <a href="#/xforms" class="btn btn-success" style="text-decoration: none;">
-                            Import x-forms
+                            {{'import_x_forms' | translate}}
                         </a>&nbsp;
                         <a href="#/import/forms" class="btn btn-success" style="text-decoration: none;">
-                            Upload
+                            {{'general_upload' | translate}}
                         </a>
 					</span>
                 </div>
@@ -26,7 +26,7 @@
                 </div>
 
                 <div ng-show="tagFilterActive() && !fetchingForms" class="well well-large">
-                    <span>Filter by: </span>
+                    <span>{{'general_filter_by' | translate}}: </span>
                     <span class="tag" ng-repeat="tag in activeTagFilters">
                         <span class="label form-tag" ng-style="tagStyle(tag.id)">
                             <span>{{tag.name}} </span>
@@ -40,10 +40,10 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th>Name</th>
-                            <th>Version</th>
-                            <th>Discriminator</th>
-                            <th>Description</th>
+                            <th>{{'general_name' | translate}}</th>
+                            <th>{{'info_version' | translate}}</th>
+                            <th>{{'general_discriminator' | translate}}</th>
+                            <th>{{'general_description' | translate}}</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -51,17 +51,17 @@
                         <tr>
                             <td nowrap>
                                     <span>
-                                        <a title="Preview Form" ng-click="showFormPreview(muzimaform.form.html, muzimaform.form.model, muzimaform.form.modelJson)">
+                                        <a title="{{'tooltip_preview_form' | translate}}" ng-click="showFormPreview(muzimaform.form.html, muzimaform.form.model, muzimaform.form.modelJson)">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </span>
                                 <span>
-                                        <a title="Add Tags" ng-click="editMode = !editMode">
+                                        <a title="{{'tooltip_add_tags' | translate}}" ng-click="editMode = !editMode">
                                             <i class="fa fa-tags"></i>
                                         </a>
                                     </span>
                                 <span>
-                                        <a title="Update form template" ng-click="editForm(muzimaform)">
+                                        <a title="{{'tooltip_update_form_template' | translate}}" ng-click="editForm(muzimaform)">
                                             <i class="fa fa-pencil-square-o"></i>
                                         </a>
                                     </span>
@@ -72,7 +72,7 @@
                             <td class="small">{{muzimaform.form.description || ""}}</td>
                             <td>
                                     <span class="retire-form">
-                                        <a title="Retire" ng-click="toggleRetireForm(muzimaform)" ng-show="!muzimaform.retired">
+                                        <a title="{{'general_retire' | translate}}" ng-click="toggleRetireForm(muzimaform)" ng-show="!muzimaform.retired">
                                             <i class="fa fa-remove"></i>
                                         </a>
                                     </span>
@@ -91,14 +91,14 @@
                                     </span>
                                 <div ng-show="editMode">
                                     <form ng-submit="saveTag(muzimaform)">
-                                        <input name="newTag" ng-model="muzimaform.newTag" ng-trim="true" type="text" class="form-control" placeholder="Add tag" style="margin-top: 15px; padding-left: 5px; padding-right: 5px"/>
+                                        <input name="newTag" ng-model="muzimaform.newTag" ng-trim="true" type="text" class="form-control" translate translate-attr-placeholder="tooltip_add_tags" style="margin-top: 15px; padding-left: 5px; padding-right: 5px"/>
                                     </form>
                                 </div>
 
                                 <div class="retire-form" ng-show="muzimaform.retired">
-                                    <input type="text" ng-class="retireReasonError? 'retire-reason-error' : 'retire-reason'" placeholder="Retire reason" ng-model="muzimaform.retireReason" ng-show="muzimaform.retired" style="margin-top: 15px;"/>
-                                    <a class="btn btn-danger" ng-click="remove(muzimaform)" ng-show="muzimaform.retired">Retire</a>
-                                    <a class="btn btn-default" ng-click="toggleRetireForm(muzimaform)" ng-show="muzimaform.retired">Cancel</a>
+                                    <input type="text" ng-class="retireReasonError? 'retire-reason-error' : 'retire-reason'" translate translate-attr-placeholder="general_retire_reason" ng-model="muzimaform.retireReason" ng-show="muzimaform.retired" style="margin-top: 15px;"/>
+                                    <a class="btn btn-danger" ng-click="remove(muzimaform)" ng-show="muzimaform.retired">{{'general_retire' | translate}}</a>
+                                    <a class="btn btn-default" ng-click="toggleRetireForm(muzimaform)" ng-show="muzimaform.retired">{{'general_cancel' | translate}}</a>
                                 </div>
                             </td>
                             <td></td>
@@ -108,21 +108,17 @@
                 </div>
 
                 <div class="close-box" ng-show="!hasForms() && !fetchingForms">
-                    <h2>No Available Forms</h2>
-
-                    <p>Please import forms by clicking on the import button.</p>
-
-                    <p>You can import forms from Openmrs XForms module, from Formhub or from your file system.</p>
+                    <span data-ng-bind-html="'message_no_available_forms' | translate"></span>
                 </div>
             </div>
             <div ng-show="formPreview">
-                <div><a ng-click="toggleListForms()">Back</a></div>
+                <div><a ng-click="toggleListForms()">{{'general_back' | translate}}</a></div>
                 <div class="form-preview">
                     <uib-tabset active="active" ng-show="formPreview">
-                        <uib-tab index="0" heading="HTML Preview" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
+                        <uib-tab index="0" heading="{{'html_preview' | translate}}" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
                             <div bind-unsafe-html="getBody(formHTML)"></div>
                         </uib-tab>
-                        <uib-tab index="1" heading="HTML Code" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
+                        <uib-tab index="1" heading="{{'html_code' | translate}}" class="tab-preview" style="width: 50%; text-align: center !important; color: #004f47 !important;">
                             <div>
                                 <pre style="white-space: pre-wrap;" >
                                   <code>

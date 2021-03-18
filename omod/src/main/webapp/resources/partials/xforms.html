@@ -7,15 +7,15 @@
                 <div class="container-fluid navbar-right" style="float: right !important;margin-right: -20px;">
 					<span class="nav navbar-nav form-group" ng-hide="!hasXForms() && searchIsEmpty()" style="margin-right: 5px">
 						<form>
-							<input type="text" class="form-control navbar-btn" ng-model="search" placeholder="Search..." style="padding-left: 5px; padding-right: 5px; margin-right: 5px">
+							<input type="text" class="form-control navbar-btn" ng-model="search" translate translate-attr-placeholder="general_search" style="padding-left: 5px; padding-right: 5px; margin-right: 5px">
 						</form>
                     </span>
                     <span class="nav navbar-nav" style="margin-right: 5px">
                         <a href="#/xforms" class="btn btn-success" style="text-decoration: none;">
-                            Import x-forms
+                            {{'import_x_forms' | translate}}
                         </a>&nbsp;
                         <a href="#/import/forms" class="btn btn-success" style="text-decoration: none;">
-                            Upload
+                            {{'general_upload' | translate}}
                         </a>
 					</span>
                 </div>
@@ -23,7 +23,7 @@
 
             <div class="row" ng-hide="!hasXForms()">
                 <div class="col-lg-8">
-                    <h3>Import Xforms</h3>
+                    <h3>{{'import_x_forms' | translate}}</h3>
                 </div>
             </div>
             <div class="row" ng-repeat="form in xForms | filter:searchQuery">
@@ -45,38 +45,40 @@
             <div class="row" ng-show="!hasXForms() && xformsModuleStarted && searchIsEmpty()">
                 <div class="col-lg-12 panel panel-default">
                     <div class="row panel panel-heading content_wrap">
-                        <strong>No Available Forms in XForms Module</strong>
+                        <strong>{{'message_no_available_xforms' | translate}}</strong>
                     </div>
                     <div>
-                        <p>Please create and design form using XForms module. Once saved, forms would be visible here.</p>
+                        <p>{{'info_no_available_xforms' | translate}}</p>
                     </div>
                 </div>
             </div>
             <div class="row" ng-show="!hasXForms() && xformsModuleStarted && !searchIsEmpty()">
                 <div class="col-lg-12">
-                    <p>Your search returns no values. Try refining your search to get filter results.</p>
+                    <p>{{'message_no_results_xforms' | translate}}</p>
                 </div>
             </div>
             <div class="row" ng-hide="xformsModuleStarted">
                 <div class="col-lg-12 panel panel-danger">
                     <div class="row panel panel-heading content_wrap">
-                        <strong>XForms Module is not running</strong>
+                        <strong>{{'message_no_xform_module' | translate}}</strong>
                     </div>
                     <div>
-                        <p>You have not installed <b>"XForms Module"</b> or it is NOT started. Once it is installed and started, and you have designed and saved some xForms, those forms will be visible here.</p>
+                        <p>
+                            <span data-ng-bind-html="'info_no_xform_module' | translate"></span>
+                        </p>
                     </div>
                 </div>
             </div>
             <div class = "row panel panel-default" ng-show="totalItems > 1">
                 <div class="col-lg-5">
-                    <label for="xFormDiscriminator">Select Form Discriminator </label>
+                    <label for="xFormDiscriminator">{{'general_discriminator' | translate}} </label>
                     <select class="form-control" id="xFormDiscriminator" ng-model="discriminator" ng-options="discriminator for discriminator in discriminatorTypes" required="true" >
                     </select>
                 </div>
             </div>
             <div class="row col-lg-12">
-                <a href="#/forms" class="btn btn-danger" style="color: #ffffff; text-decoration: none; margin-top: 20px">Cancel</a>
-                <button type="submit" class="btn btn-success" ng-show="isValidSelection()" class="btn btn-success" ng-click="importXForm()" style="color: #ffffff; text-decoration: none; margin-top: 20px">Done</button>
+                <a href="#/forms" class="btn btn-danger" style="color: #ffffff; text-decoration: none; margin-top: 20px">{{'general_cancel' | translate}}</a>
+                <button type="submit" class="btn btn-success" ng-show="isValidSelection()" class="btn btn-success" ng-click="importXForm()" style="color: #ffffff; text-decoration: none; margin-top: 20px">{{'general_done' | translate}}</button>
                 <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
             </div>
         </div>

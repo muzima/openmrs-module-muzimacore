@@ -9,39 +9,39 @@
                     <table class="table table-striped table-bordered table-hover">
                         <tbody>
                             <tr>
-                                <td>Sender</td>
+                                <td>{{'general_sender' | translate}}</td>
                                 <td>{{error.source}}</td>
                             </tr>
                             <tr>
-                                <td>Provider</td>
+                                <td>{{'general_provider' | translate}}</td>
                                 <td>{{error.providerId}} - {{error.providerName}}</td>
                             </tr>
                             <tr>
-                                <td>Location Id</td>
+                                <td>{{'general_location' | translate}}</td>
                                 <td>{{error.locationId}} - {{error.locationName}}</td>
                             </tr>
                             <tr>
-                                <td>Form Name</td>
+                                <td>{{'info_form_name' | translate}}</td>
                                 <td>{{error.formName}}</td>
                             </tr>
                             <tr>
-                                <td>Kind</td>
+                                <td>{{'general_kind' | translate}}</td>
                                 <td>{{error.discriminator}}</td>
                             </tr>
                             <tr>
-                                <td>Patient Uuid</td>
+                                <td>{{'general_patient_uuid' | translate}}</td>
                                 <td>{{error.patientUuid}}</td>
                             </tr>
                             <tr ng-hide = "error.regErrorUuid == ''">
-                                <td>Registration Error</td>
-                                <td><a href="#/error/{{error.regErrorUuid}}">Registration Error</a></td>
+                                <td>{{'message_registration_error' | translate}}</td>
+                                <td><a href="#/error/{{error.regErrorUuid}}">{{'message_registration_error' | translate}}</a></td>
                             </tr>
                             <tr>
-                                <td>Submitted On</td>
+                                <td>{{'general_submitted_on' | translate}}</td>
                                 <td>{{error.submitted}}</td>
                             </tr>
                             <tr>
-                                <td>Processed On</td>
+                                <td>{{'general_processed_on' | translate}}</td>
                                 <td>{{error.processed}}</td>
                             </tr>
                         </tbody>
@@ -50,10 +50,10 @@
             </td>
             <td width="50%">
                 <div id = 'errorList' style="height:38vh;">
-                    <h6>Error list</h6>
+                    <h6>{{'general_error_list' | translate}}</h6>
 
                     <div class="messages">
-                        <div ng-hide="isValid" class="alert alert-danger">Please correct the errors below.</div>
+                        <div ng-hide="isValid" class="alert alert-danger">{{'alert_error_list' | translate}}</div>
                     </div>
                     <div class="tree well errorlist" ng-style="divHeight">
                         <ul id='treeError'>
@@ -64,7 +64,7 @@
             </tr>
             <tr>
                 <td width="50%">
-                    <h6>Uploaded Form Data <i  class="fa fa-edit"></i></h6>
+                    <h6>{{'uploaded_form_data' | translate}} <i  class="fa fa-edit"></i></h6>
 
                     <div  class="tree well" >
                         <ul id = 'treeul'>
@@ -73,34 +73,34 @@
                 </td>
                 <td width="50%">
                     <div  id = "editJsonSection">
-                        <h6>Edit Form Data <i class="fa fa-check"></i>
+                        <h6>{{'edit_form_data' | translate}} <i class="fa fa-check"></i>
                         </h6>
                         <div class="well edit">
                             <textarea id="editJson" ></textarea>
                             <div class="messages">
-                                <div ng-show="isValid" class="alert alert-success w-100">Validation is successful! Use the save button to update form data.</div>
+                                <div ng-show="isValid" class="alert alert-success w-100">{{'message_error_validation_successfull' | translate}}</div>
                             </div>
-                            <button id = "btnValidate" type="submit"  class="btn btn-primary">Validate</button>
-                            <button id = "btnUpdate" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Save</button>
-                            <button id = "btnSaveAndProcess" type="button" class="btn btn-warning" data-toggle="modal" data-target="#saveAndProcessModal">Save & Process</button>
-                            <button id = "btnCancel" type="submit"  class="btn btn-danger">Close</button>
+                            <button id = "btnValidate" type="submit"  class="btn btn-primary">{{'general_validate' | translate}}</button>
+                            <button id = "btnUpdate" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">{{'general_save' | translate}}</button>
+                            <button id = "btnSaveAndProcess" type="button" class="btn btn-warning" data-toggle="modal" data-target="#saveAndProcessModal">{{'general_save_and_process' | translate}}</button>
+                            <button id = "btnCancel" type="submit"  class="btn btn-danger">{{'general_close' | translate}}</button>
                         </div>
                     </div>
                 </td>
             </tr>
             <tr ng-show="remove_error_data">
                 <td colspan="4">
-                    <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_error_data" ng-required="remove_error_data"/>
-                    <div ng-show="removeReasonError" style="color:red">Retire reason is required</div>
+                    <input class="col-md-10 form-control remove-reason" translate translate-attr-placeholder="general_remove_reason" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_error_data" ng-required="remove_error_data"/>
+                    <div ng-show="removeReasonError" style="color:red">{{'general_remove_reason_required' | translate}}</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="4">
-                    <button type="submit"  ng-click="queue()" id = "btnQueue" class="btn btn-primary">Queue</button>
-                    <button type="submit" ng-click="toggleRemoveError()" class="btn btn-danger" ng-show="!remove_error_data">Remove</button>
-                    <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_error_data">Remove</button>
-                    <button type="submit"  ng-click="cancel()" id = "btnCancelQueue" class="btn btn-warning">Close</button>
-                    <a class="btn" id="editData" href="#/edit/e38d2d5b-877a-4e9f-a9dd-6874e45a7b79" style="display: none;">Edit Data</a>
+                    <button type="submit"  ng-click="queue()" id = "btnQueue" class="btn btn-primary">{{'general_queue' | translate}}</button>
+                    <button type="submit" ng-click="toggleRemoveError()" class="btn btn-danger" ng-show="!remove_error_data">{{'general_remove' | translate}}</button>
+                    <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_error_data">{{'general_remove' | translate}}</button>
+                    <button type="submit"  ng-click="cancel()" id = "btnCancelQueue" class="btn btn-warning">{{'general_close' | translate}}</button>
+                    <a class="btn" id="editData" href="#/edit/e38d2d5b-877a-4e9f-a9dd-6874e45a7b79" style="display: none;">{{'general_edit_date' | translate}}</a>
                 </td>
             </tr>
             </tbody>
@@ -114,15 +114,15 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Save changes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="{{'general_close' | translate}}"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{'error_modal_save_changes' | translate}}</h4>
                     </div>
                     <div class="modal-body">
-                        Confirm and save changes to the database?
+                        {{'error_modal_save_changes_question' | translate}}
                     </div>
                     <div class="modal-footer">
-                        <button id = "btnNo" type="button" class="btn btn-warning" data-dismiss="modal">No</button>
-                        <button id = "btnYes" type="button" class="btn btn-success" >Yes</button>
+                        <button id = "btnNo" type="button" class="btn btn-warning" data-dismiss="modal">{{'general_no' | translate}}</button>
+                        <button id = "btnYes" type="button" class="btn btn-success" >{{'general_yes' | translate}}</button>
                     </div>
                 </div>
             </div>
@@ -131,15 +131,15 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="modatLabel">Save and process changes</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="{{'general_close' | translate}}"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modatLabel">{{'error_modal_save_and_process_changes' | translate}}</h4>
                     </div>
                     <div class="modal-body">
-                        Confirm save and process changes?
+                        {{'error_modal_save_and_process_changes_question' | translate}}
                     </div>
                     <div class="modal-footer">
-                        <button id = "btnSaveAndProcessNoButton" type="button" class="btn btn-warning" data-dismiss="modal">No</button>
-                        <button id = "btnSaveAndProcessYesButton" type="button" class="btn btn-success" >Yes</button>
+                        <button id = "btnSaveAndProcessNoButton" type="button" class="btn btn-warning" data-dismiss="modal">{{'general_no' | translate}}</button>
+                        <button id = "btnSaveAndProcessYesButton" type="button" class="btn btn-success" >{{'general_yes' | translate}}</button>
                     </div>
                 </div>
             </div>

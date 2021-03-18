@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="col-lg-3 pull-right">
-                        <input type="text" class="form-control" ng-model="search" placeholder="search..." style="padding-left: 10px;"/>
+                        <input type="text" class="form-control" ng-model="search" translate translate-attr-placeholder="general_search" style="padding-left: 10px;"/>
                     </div>
                 </div>
             </div>
@@ -18,18 +18,18 @@
                     <tr>
                         <th><input type="checkbox" ng-model="allErrorsSelected" ng-change="selectAll()"></th>
                         <th>#</th>
-                        <th>Provider</th>
-                        <th>Location</th>
-                        <th>Form Name</th>
-                        <th>Kind</th>
-                        <th>Patient Uuid</th>
-                        <th>Submitted On</th>
-                        <th>Processed On</th>
+                        <th>{{'general_provider' | translate}}</th>
+                        <th>{{'general_location' | translate}}</th>
+                        <th>{{'info_form_name' | translate}}</th>
+                        <th>{{'general_kind' | translate}}</th>
+                        <th>{{'general_patient_uuid' | translate}}</th>
+                        <th>{{'general_submitted_on' | translate}}</th>
+                        <th>{{'general_processed_on' | translate}}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-hide="isErrorLoadingCompleted && errors.length">
-                        <td colspan="9">Hooray! You have no errors here.</td>
+                        <td colspan="9">{{'message_no_error_data' | translate}}</td>
                     </tr>
                     <tr ng-repeat="error in errors | orderBy:'submitted':true">
                         <td>
@@ -49,14 +49,17 @@
                 </table>
             </div>
             <div class="row col-lg-12">
-                <input class="col-md-10 form-control remove-reason" placeholder="Reason for removal" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_error_data" ng-required="remove_error_data"/>
-                <div ng-show="removeReasonError" style="color:red">Retire reason is required</div>
+                <input class="col-md-10 form-control remove-reason" translate translate-attr-placeholder="general_remove_reason" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_error_data" ng-required="remove_error_data"/>
+                <div ng-show="removeReasonError" style="color:red">{{'general_remove_reason_required' | translate}}</div>
             </div>
             <div ng-show="errors.length" class="row col-lg-12">
-                <button type="submit" ng-click="toggleRemoveError()" class="btn btn-danger" ng-show="!remove_error_data" style="margin-bottom: 20px;">Remove</button>
-                <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_error_data" style="margin-bottom: 20px;">Remove</button>&nbsp;
-                <button type="submit" ng-click="queue()" class="btn btn-primary" style="margin-bottom: 20px; margin-right:15px;">Queue</button>
-                <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="maxSize" items-per-page="pageSize" boundary-links="true" force-ellipses="true" class="pull-right"></ul>
+                <button type="submit" ng-click="toggleRemoveError()" class="btn btn-danger" ng-show="!remove_error_data" style="margin-bottom: 20px;">{{'general_remove' | translate}}</button>
+                <button type="submit" ng-click="delete()" class="btn btn-danger" ng-show="remove_error_data" style="margin-bottom: 20px;">{{'general_remove' | translate}}</button>&nbsp;
+                <button type="submit" ng-click="queue()" class="btn btn-primary" style="margin-bottom: 20px; margin-right:15px;">{{'general_queue' | translate}}</button>
+                <ul ng-if="loadPaginationStub" uib-pagination total-items="totalItems" ng-model="$parent.currentPage" max-size="maxSize" items-per-page="pageSize"
+                    boundary-links="true" force-ellipses="true" class="pull-right"
+                    first-text="{{'pagination_first'|translate}}" previous-text="{{'pagination_previous'|translate}}"
+                    next-text="{{'pagination_next'|translate}}" last-text="{{'pagination_last'|translate}}"></ul>
             </div>
         </div>
     </div>

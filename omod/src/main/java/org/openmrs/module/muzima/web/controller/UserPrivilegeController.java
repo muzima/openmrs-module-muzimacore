@@ -1,11 +1,14 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.muzima.web.utils.WebConverter;
 import org.openmrs.util.PrivilegeConstants;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Map;
 
 @Controller
 public class UserPrivilegeController {
@@ -32,5 +35,11 @@ public class UserPrivilegeController {
     @ResponseBody
     public boolean checkAddCohortsPrivilege(){
         return Context.getUserContext().hasPrivilege(PrivilegeConstants.ADD_COHORTS);
+    }
+
+    @RequestMapping(value = "/module/muzimacore/getUserLocale.json", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getUserLocale(){
+        return WebConverter.convertLocale(Context.getUserContext().getLocale().getLanguage().toString());
     }
 }

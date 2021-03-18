@@ -1,7 +1,7 @@
-var muzimaCoreModule = angular.module('muzimaCoreModule', ['ui.bootstrap', 'ngRoute', 'ngSanitize', 'filters', 'muzimafilters' ,'angular-tour']);
+var muzimaCoreModule = angular.module('muzimaCoreModule', ['ui.bootstrap', 'ngRoute', 'ngSanitize', 'filters', 'muzimafilters' ,'angular-tour', 'pascalprecht.translate']);
 
 muzimaCoreModule.
-    config(['$routeProvider', '$compileProvider', function ($routeProvider, $compileProvider) {
+    config(['$routeProvider', '$compileProvider', '$translateProvider', function ($routeProvider, $compileProvider, $translateProvider) {
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file):/);
         $routeProvider.
             when('/source/:uuid', {controller: SourceCtrl, templateUrl: '../../moduleResources/muzimacore/partials/source.html'}).
@@ -36,6 +36,14 @@ muzimaCoreModule.
             when('/createReportConfig/', {controller: ReportConfigurationCtrl, templateUrl: '../../moduleResources/muzimacore/partials/reportConfiguration.html'}).
             when('/dashboard', {controller: DashboardCtrl, templateUrl: '../../moduleResources/muzimacore/partials/dashboard.html'}).
             otherwise({redirectTo: '/dashboard'});
+
+            $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+            $translateProvider.useStaticFilesLoader({
+              prefix: '../../moduleResources/muzimacore/languageResources/strings_',
+              suffix: '.json'
+            });
+            $translateProvider.preferredLanguage('en');
+            $translateProvider.fallbackLanguage('en');
     }]
 );
 
@@ -484,5 +492,15 @@ muzimaCoreModule.factory('$dashboardService', function ($http) {
         getErrorDataCountGroupedByDiscriminator: getErrorDataCountGroupedByDiscriminator,
         getCohortDefinitionCount: getCohortDefinitionCount,
         getReportConfigurationCount: getReportConfigurationCount
+    }
+});
+
+muzimaCoreModule.factory('$localeService', function ($http) {
+    var getUserLocale = function(){
+        return $http.get("getUserLocale.json");
+    };
+
+    return {
+        getUserLocale: getUserLocale
     }
 });

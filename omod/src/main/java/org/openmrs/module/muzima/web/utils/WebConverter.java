@@ -383,4 +383,12 @@ public class WebConverter {
         }
         return map;
     }
+
+    public static Map<String, Object>  convertLocale(String locale) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (locale != null) {
+            map.put("locale", locale);
+        }
+        return map;
+    }
 }

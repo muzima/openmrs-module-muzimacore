@@ -1,4 +1,4 @@
-function MergeCtrl($scope, $routeParams, $location, $data) {
+function MergeCtrl($scope, $routeParams, $location, $data, $translate) {
     // page parameter
     $scope.uuid = $routeParams.uuid;
     $scope.queue_checkbox = { select_all: false };
@@ -138,19 +138,20 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         }
     });
 
-    $scope.categoryMap = ["Basic Demographics","Attributes","Identifiers","Addresses","Others"];
+
+    $scope.categoryMap = [$translate.instant('general_basic_demographics'),$translate.instant('general_attributes'),$translate.instant('general_identifiers'),$translate.instant('general_addresses'),$translate.instant('general_other')];
 
     function getRegistrationDataCategory(key){
         if(key.includes('attribute')){
-            return "Attributes";
+            $translate.instant('general_attributes');
         }
 
         if(key.includes('address')){
-            return "Addresses";
+            return $translate.instant('general_addresses');
         }
 
         if(key.includes('otheridentifier')){
-            return "Identifiers";
+            return $translate.instant('general_identifiers');;
         }
 
         switch(key) {
@@ -162,12 +163,12 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
             case 'age':
             case 'birth_date':
             case 'birthdate_estimated':
-                return 'Basic Demographics';
+                return $translate.instant('general_basic_demographics');
             case 'medical_record_number':
             case 'otheridentifier':
             case 'other_identifier_type':
             case 'other_identifier_value':
-                return 'Identifiers';
+                return $translate.instant('general_identifiers');
             case 'country':
             case 'county':
             case 'district':
@@ -185,25 +186,25 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
             case 'longitude':
             case 'location':
             case 'sub_location':
-                return 'Addresses';
+                return $translate.instant('general_addresses');
             case 'mothers_name':
             case 'phone_number':
-                return 'Attributes';
+                return $translate.instant('general_attributes');
             default:
-                return 'Others';
+                return $translate.instant('general_other');
         }
     }
 
     function getLabel(key) {
         const lableMap = {
-            'given_name': 'Given name',
-            'first_name': 'First Name',
-            'middle_name': 'Middle Name',
-            'family_name': 'Family Name',
-            'sex': 'Sex',
-            'country': 'Country',
-            'birth_date': 'Birthdate',
-            'age': 'Age',
+            'given_name': $translate.instant('general_given_name'),
+            'first_name': $translate.instant('general_first_name'),
+            'middle_name': $translate.instant('general_middle_name'),
+            'family_name': $translate.instant('general_family_name'),
+            'sex': $translate.instant('general_sex'),
+            'country': $translate.instant('general_country'),
+            'birth_date': $translate.instant('general_birth_date'),
+            'age': $translate.instant('general_age'),
         };
         if(_.has(lableMap, key)) {
             return _.get(lableMap, key);
@@ -350,8 +351,7 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         let birthdateEstimated = $scope.tableData.find(entry => entry['key'] === 'birthdate_estimated');
         if(birthdateEstimated && birthdateEstimated['emrPatient'] != birthdateEstimated['queuePatient']
         && $scope.emr_checkbox['birthdate_estimated'] === $scope.queue_checkbox['birthdate_estimated']) {
-            $scope.popupMessage = 'Please make a choice whether birthdate_estimated for patient record' +
-                'should be changed or not changed during merge.';
+            $scope.popupMessage = $translate.instant('alert_make_estimated_birthdate_action');;
             $('#merge-modal').modal('show');
             return updateSuccessfulStatus;
         } else {
@@ -515,7 +515,7 @@ function MergeCtrl($scope, $routeParams, $location, $data) {
         // Find the rowData object associated with key medical_record_number
         let medicalRecordNumberRowData = $scope.tableData.find(entry => entry['key'] === 'medical_record_number');
         if(medicalRecordNumberRowData && medicalRecordNumberRowData['emrPatient'] === medicalRecordNumberRowData['queuePatient']) {
-            $scope.popupMessage = 'Assigned medical record number already in use, please assign a different one on the new patient';
+            $scope.popupMessage = $translate.instant('alert_identifier_in_use');
             $('#merge-modal').modal('show');
         } else {
             $('#wait').show();

@@ -1,4 +1,4 @@
-function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormService,$cohortDefinitionService) {
+function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormService,$cohortDefinitionService, $translate) {
 
     // initialize control objects
     $scope.search = {forms: '', cohorts: '', locations: '', providers: '', concepts: ''};
@@ -799,7 +799,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     $scope.formatSettingDisplay = function (setting) {
         var value = '';
         if (setting.datatype == 'BOOLEAN'){
-            value = setting.value == true? 'Enabled':'Disabled';
+            value = setting.value == true?  $translate.instant('general_enabled'): $translate.instant('general_disabled');
         } else if(setting.datatype == 'PASSWORD'){
             for(i=0;i<setting.value.length;i++)
             {
@@ -808,7 +808,7 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
         } else {
             value = setting.value
         }
-        return setting.name + ' : ' + value;
+        return $translate.instant(setting.property + '_setting_name') + ' : ' + value;
     }
     var showSettingEditModal = function(setting) {
         $scope.setting = setting;
@@ -1323,13 +1323,22 @@ function ConfigCtrl($scope,$uibModal, $routeParams, $location, $configs, FormSer
     };
 }
 
-function ConfigsCtrl($scope, $configs) {
+function ConfigsCtrl($scope, $configs, $localeService, $translate) {
     $scope.showConfigWizard = false;
     // initialize the paging structure
     $scope.maxSize = 10;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
     $scope.totalItems = 0;
+
+    $scope.loadPaginationStub = false;
+    $localeService.getUserLocale().then(function (response) {
+        var serverData = response.data.locale;
+        $translate.use(serverData).then(function () {
+            $scope.loadPaginationStub = true;
+        });
+    });
+
     $configs.getConfigurations($scope.search, $scope.currentPage, $scope.pageSize).
     then(function (response) {
         var serverData = response.data;
