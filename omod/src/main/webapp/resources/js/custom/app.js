@@ -484,10 +484,6 @@ muzimaCoreModule.factory('$dashboardService', function ($http) {
         return $http.get("countReportConfigurations.json");
     };
 
-    var getUserLocale = function(){
-        return $http.get("getUserLocale.json");
-    };
-
 
     return {
         getSetupConfigCount: getSetupConfigCount,
@@ -495,8 +491,7 @@ muzimaCoreModule.factory('$dashboardService', function ($http) {
         getQueueDataCountGroupedByDiscriminator: getQueueDataCountGroupedByDiscriminator,
         getErrorDataCountGroupedByDiscriminator: getErrorDataCountGroupedByDiscriminator,
         getCohortDefinitionCount: getCohortDefinitionCount,
-        getReportConfigurationCount: getReportConfigurationCount,
-        getUserLocale: getUserLocale
+        getReportConfigurationCount: getReportConfigurationCount
     }
 });
 
