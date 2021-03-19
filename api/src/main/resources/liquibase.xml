@@ -2108,4 +2108,61 @@
                                  baseTableName="muzima_cohort_report_config" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
+    <changeSet id="muzima-20210319122800" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="datetime">
+                    SELECT DATA_TYPE
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_NAME = 'muzima_form'
+                    AND COLUMN_NAME = 'date_created'
+                </sqlCheck>
+            </not>
+        </preConditions>
+        <comment>
+            Alter column date_created from date to datetime
+        </comment>
+        <sql>
+            ALTER TABLE `muzima_form`
+            MODIFY COLUMN `date_created`  datetime NULL
+        </sql>
+    </changeSet>
+    <changeSet id="muzima-20210319125100" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="datetime">
+                    SELECT DATA_TYPE
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_NAME = 'muzima_form'
+                    AND COLUMN_NAME = 'date_changed'
+                </sqlCheck>
+            </not>
+        </preConditions>
+        <comment>
+            Alter column date_changed from date to datetime
+        </comment>
+        <sql>
+            ALTER TABLE `muzima_form`
+            MODIFY COLUMN `date_changed`  datetime NULL
+        </sql>
+    </changeSet>
+    <changeSet id="muzima-20210319125200" author="mssavai">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sqlCheck expectedResult="datetime">
+                    SELECT DATA_TYPE
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_NAME = 'muzima_form'
+                    AND COLUMN_NAME = 'date_retired'
+                </sqlCheck>
+            </not>
+        </preConditions>
+        <comment>
+            Alter column date_retired from date to datetime
+        </comment>
+        <sql>
+            ALTER TABLE `muzima_form`
+            MODIFY COLUMN `date_retired`  datetime NULL
+        </sql>
+    </changeSet>
 </databaseChangeLog>
