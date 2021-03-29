@@ -23,7 +23,7 @@
                             <label for="xFormFormDefinition">{{'general_form_definition' | translate}}</label>
                             <select ng-show="forms.length <= 10" class="form-control" id="xFormFormDefinition" ng-model="form" ng-options="form.name for form in forms" required="true" ng-change = loadData()>
                             </select>
-                            <input ng-show="forms.length > 10" type="text" class="form-control" ng-model="searchForm" translate translate-attr-placeholder="info_search_form_by_name" autocomplete="off"
+                            <input ng-show="forms.length > 10" type="text" class="form-control" ng-model="$parent.searchForm" translate translate-attr-placeholder="info_search_form_by_name" autocomplete="off"
                                    uib-typeahead="form as form.name for form in searchForms | filter:$viewValue |filter:retired=false | limitTo:10"
                                    uib-typeahead-wait-ms="500" typeahead-on-select="selectForm($item)" uib-typeahead-editable="false"/>
                         </div>
