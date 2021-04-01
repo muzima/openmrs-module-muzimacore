@@ -149,7 +149,7 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
     public ValidationMessages validateMuzimaForm(String html) {
         HTMLConceptParser parser = new HTMLConceptParser();
 
-        return parser.validateConceptsMetaData(html);
+        return parser.validateForm(html);
     }
 
 
