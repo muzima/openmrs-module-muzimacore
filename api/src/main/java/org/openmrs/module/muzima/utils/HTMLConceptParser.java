@@ -192,7 +192,6 @@ public class HTMLConceptParser {
                     }
                 }
             }else if("identifier_type_name".equals(element.attr("name")) && "select".equals(element.tagName())){
-                System.out.println();
                 Elements options = element.select("select > option");
                 for( Element option : options ) {
                     if (StringUtils.isNotEmpty(option.val()) && !option.equals("...")) {
