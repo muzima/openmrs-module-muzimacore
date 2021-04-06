@@ -127,17 +127,39 @@ public class HTMLConceptParser {
 
     public ValidationMessages validateAttributeTypes(ValidationMessages validationMessages, Elements elements){
         for (Element element : elements) {
-            if("attribute_type_uuid".equals(element.attr("name"))){
+            if("attribute_type_uuid".equals(element.attr("name")) && "input".equals(element.tagName())){
                 PersonService personService = Context.getPersonService();
                 PersonAttributeType attributeType = personService.getPersonAttributeTypeByUuid(element.val());
                 if(attributeType == null){
                     validationMessages.addError("Person Attribute Type with UUID = '"+element.val()+"' was not found in the database");
                 }
-            }else if("attribute_type_name".equals(element.attr("name"))){
+            }else if("attribute_type_name".equals(element.attr("name")) && "input".equals(element.tagName())){
                 PersonService personService = Context.getPersonService();
                 PersonAttributeType attributeType = personService.getPersonAttributeTypeByName(element.val());
                 if(attributeType == null){
                     validationMessages.addError("Person Attribute Type with name = '"+element.val()+"' was not found in the database");
+                }
+            }else if("attribute_type_uuid".equals(element.attr("name")) && "select".equals(element.tagName())){
+                Elements options = element.select("select > option");
+                for( Element option : options ) {
+                    if (StringUtils.isNotEmpty(option.val()) && !option.equals("...")) {
+                        PersonService personService = Context.getPersonService();
+                        PersonAttributeType attributeType = personService.getPersonAttributeTypeByUuid(option.attr("value"));
+                        if(attributeType == null){
+                            validationMessages.addError("Person Attribute Type with UUID = '"+option.attr("value")+"' was not found in the database");
+                        }
+                    }
+                }
+            }else if("attribute_type_name".equals(element.attr("name")) && "select".equals(element.tagName())){
+                Elements options = element.select("select > option");
+                for( Element option : options ) {
+                    if (StringUtils.isNotEmpty(option.val()) && !option.equals("...")) {
+                        PersonService personService = Context.getPersonService();
+                        PersonAttributeType attributeType = personService.getPersonAttributeTypeByUuid(option.attr("value"));
+                        if(attributeType == null){
+                            validationMessages.addError("Person Attribute Type with UUID = '"+option.attr("value")+"' was not found in the database");
+                        }
+                    }
                 }
             }
         }
@@ -146,17 +168,40 @@ public class HTMLConceptParser {
 
     public ValidationMessages validatePersonIdentifierTypes(ValidationMessages validationMessages, Elements elements){
         for (Element element : elements) {
-            if("identifier_type_uuid".equals(element.attr("name"))){
+            if("identifier_type_uuid".equals(element.attr("name")) && "input".equals(element.tagName())){
                 PatientService patientService = Context.getPatientService();
                 PatientIdentifierType patientIdentifierType = patientService.getPatientIdentifierTypeByUuid(element.val());
                 if(patientIdentifierType == null){
                     validationMessages.addError("Patient Identifier Type with UUID = '"+element.val()+"' was not found in the database");
                 }
-            }else if("identifier_type_name".equals(element.attr("name"))){
+            }else if("identifier_type_name".equals(element.attr("name")) && "input".equals(element.tagName())){
                 PatientService patientService = Context.getPatientService();
                 PatientIdentifierType patientIdentifierType = patientService.getPatientIdentifierTypeByName(element.val());
                 if(patientIdentifierType == null){
                     validationMessages.addError("Patient Identifier Type with name = '"+element.val()+"' was not found in the database");
+                }
+            }else if("identifier_type_uuid".equals(element.attr("name")) && "select".equals(element.tagName())){
+                Elements options = element.select("select > option");
+                for( Element option : options ) {
+                    if (StringUtils.isNotEmpty(option.val()) && !option.equals("...")) {
+                        PatientService patientService = Context.getPatientService();
+                        PatientIdentifierType patientIdentifierType = patientService.getPatientIdentifierTypeByUuid(option.attr("value"));
+                        if(patientIdentifierType == null){
+                            validationMessages.addError("Patient Identifier Type with UUID = '"+option.attr("value")+"' was not found in the database");
+                        }
+                    }
+                }
+            }else if("identifier_type_name".equals(element.attr("name")) && "select".equals(element.tagName())){
+                System.out.println();
+                Elements options = element.select("select > option");
+                for( Element option : options ) {
+                    if (StringUtils.isNotEmpty(option.val()) && !option.equals("...")) {
+                        PatientService patientService = Context.getPatientService();
+                        PatientIdentifierType patientIdentifierType = patientService.getPatientIdentifierTypeByName(option.attr("value"));
+                        if(patientIdentifierType == null){
+                            validationMessages.addError("Patient Identifier Type with name = '"+option.attr("value")+"' was not found in the database");
+                        }
+                    }
                 }
             }
         }
