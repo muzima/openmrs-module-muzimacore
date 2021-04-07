@@ -1,19 +1,6 @@
 <div id="wide-sidebar" class="row">
     <side-navigation menu-item="dashboard"></side-navigation>
     <div class="col-lg-8">
-        <table width="100%" style="margin-top: 20px">
-            <tbody>
-            <tr>
-                <td width="40%">
-                </td>
-                <td width="10%">
-                    <qrcode data="{{baseURL}}"></qrcode>
-                </td>
-                <td width="40%">
-                </td>
-            </tr>
-            </tbody>
-        </table>
         <table width="100%">
             <tbody>
             <tr>
@@ -185,6 +172,26 @@
                             </div>
                         </div>
                     </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <table width="100%" style="margin-top: 20px">
+            <tbody>
+            <tr>
+                <td width="35%">
+                </td>
+                <td width="20%">
+                    <div class="card dashboard-card" style="margin-left: 15px;">
+                        <div class="card-header" style="text-align: center;  background: #34495e; color: white;">
+                            <i class="fa fa-th-large"></i>  {{'url_qrcode' | translate}}
+                        </div>
+                        <div style="margin-top: 3%; margin-left: 17.5%; margin-bottom: 3%;">
+                            <qrcode data="{{baseURL}}"></qrcode>
+                        </div>
+                    </div>
+                </td>
+                <td width="35%">
                 </td>
             </tr>
             </tbody>
