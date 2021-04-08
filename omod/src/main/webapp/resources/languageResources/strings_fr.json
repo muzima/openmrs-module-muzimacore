@@ -336,5 +336,6 @@
   "pagination_last": "Dernier",
   "general_property": "Biens",
   "html_preview":"Aperçu HTML",
-  "html_code": "Code HTML"
+  "html_code": "Code HTML",
+  "url_qrcode":"Code QR URL"
 }
