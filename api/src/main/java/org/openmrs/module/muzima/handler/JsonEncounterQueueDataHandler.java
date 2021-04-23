@@ -341,6 +341,7 @@ public class JsonEncounterQueueDataHandler implements QueueDataHandler {
         String value=null;
         Obs obs = new Obs();
         obs.setConcept(concept);
+        obs.setCreator(encounter.getCreator());
 
         //check and parse if obs_value / obs_datetime object
         if(o instanceof LinkedHashMap){
