@@ -4,7 +4,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.openmrs.BaseOpenmrsData;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class NotificationToken extends BaseOpenmrsData implements Data {
+public class NotificationToken extends BaseOpenmrsData {
 
     private Integer id;
     private Integer userId;
@@ -34,10 +34,5 @@ public class NotificationToken extends BaseOpenmrsData implements Data {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    @Override
-    public String getPayload() {
-        return null;
     }
 }

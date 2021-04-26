@@ -12,9 +12,17 @@ public class NotificationTokenServiceImpl extends BaseOpenmrsService implements 
 
     private NotificationTokenDataDao dao;
 
+    public void setDao(NotificationTokenDataDao dao) {
+        this.dao = dao;
+    }
+
+    public NotificationTokenDataDao getDao(){
+        return dao;
+    }
+
     @Override
-    public NotificationToken getnotificationTokenById(String id) {
-        return dao.getnotificationTokenById(id);
+    public NotificationToken getNotificationTokenById(String id) {
+        return dao.getNotificationTokenById(id);
     }
 
     @Override
@@ -24,6 +32,8 @@ public class NotificationTokenServiceImpl extends BaseOpenmrsService implements 
 
     @Override
     public List<NotificationToken> getNotificationByUserId(User user) {
-        return dao.getNotificationByUserId(user);
+        List<NotificationToken> notificationTokens = dao.getNotificationByUserId(user);
+        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx "+notificationTokens.size());
+        return notificationTokens;
     }
 }

@@ -2181,8 +2181,8 @@
         <addForeignKeyConstraint constraintName="muzima_notification_token_changed_by"
                                  baseTableName="muzima_notification_token" baseColumnNames="changed_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
-        <addForeignKeyConstraint constraintName="muzima_notification_token_retired_by"
-                                 baseTableName="muzima_notification_token" baseColumnNames="retired_by"
+        <addForeignKeyConstraint constraintName="muzima_notification_token_voided_by"
+                                 baseTableName="muzima_notification_token" baseColumnNames="voided_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
         <addForeignKeyConstraint constraintName="muzima_notification_token_user_id"
                                  baseTableName="muzima_notification_token" baseColumnNames="user_id"

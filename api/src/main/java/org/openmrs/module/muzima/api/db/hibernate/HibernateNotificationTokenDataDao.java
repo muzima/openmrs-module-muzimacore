@@ -2,6 +2,7 @@ package org.openmrs.module.muzima.api.db.hibernate;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.junit.Test;
 import org.openmrs.User;
 import org.openmrs.api.db.hibernate.DbSession;
 import org.openmrs.api.db.hibernate.DbSessionFactory;
@@ -24,8 +25,12 @@ public class HibernateNotificationTokenDataDao implements NotificationTokenDataD
         this.sessionFactory = sessionFactory;
     }
 
+    @Test
+    public void Teste(){
+
+    }
     @Override
-    public NotificationToken getnotificationTokenById(String id) {
+    public NotificationToken getNotificationTokenById(String id) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
         criteria.add(Restrictions.eq("id",id));
         return (NotificationToken) criteria.uniqueResult();
@@ -33,14 +38,17 @@ public class HibernateNotificationTokenDataDao implements NotificationTokenDataD
 
     @Override
     public NotificationToken saveNotificationToken(NotificationToken notificationToken) {
-         sessionFactory.getCurrentSession().save(notificationToken);
-         return notificationToken;
+        sessionFactory.getCurrentSession().save(notificationToken);
+        return notificationToken;
     }
 
     @Override
     public List<NotificationToken> getNotificationByUserId(User user) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
-        criteria.add(Restrictions.eq("userId",user.getUserId().toString()));
-        return criteria.list();
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++ppppppppppppppppppppppppppppppppppppppppp "+user.getUserId().toString());
+        criteria.add(Restrictions.eq("userId",user.getUserId()));
+        List<NotificationToken> notificationTokens = criteria.list();
+        System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYy "+notificationTokens.size());
+        return notificationTokens;
     }
 }

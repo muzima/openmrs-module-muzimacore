@@ -7,7 +7,7 @@ import org.openmrs.module.muzima.model.NotificationToken;
 import java.util.List;
 
 public interface NotificationTokenService extends OpenmrsService {
-     NotificationToken getnotificationTokenById(String id);
+     NotificationToken getNotificationTokenById(String id);
      NotificationToken saveNotificationToken(NotificationToken notificationToken);
      List<NotificationToken> getNotificationByUserId(User user);
 }

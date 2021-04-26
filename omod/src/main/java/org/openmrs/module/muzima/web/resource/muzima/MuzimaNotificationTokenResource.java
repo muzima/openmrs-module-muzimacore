@@ -1,7 +1,6 @@
 package org.openmrs.module.muzima.web.resource.muzima;
 
 import org.openmrs.User;
-import org.openmrs.api.UserService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.NotificationTokenService;
 import org.openmrs.module.muzima.model.NotificationToken;
@@ -16,6 +15,7 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Resource(name = MuzimaConstants.MUZIMA_NAMESPACE + "/notificationtoken",
         supportedClass = NotificationToken.class, supportedOpenmrsVersions = {"1.8.*", "1.9.*","1.10.*","1.11.*","1.12.*","2.*"})
@@ -23,7 +23,7 @@ public class MuzimaNotificationTokenResource extends DataDelegatingCrudResource<
     @Override
     public NotificationToken getByUniqueId(String id) {
         NotificationTokenService notificationTokenService = Context.getService(NotificationTokenService.class);
-        return notificationTokenService.getnotificationTokenById(id);
+        return notificationTokenService.getNotificationTokenById(id);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MuzimaNotificationTokenResource extends DataDelegatingCrudResource<
      */
     @Override
     public Object create(final SimpleObject propertiesToCreate, final RequestContext context) throws ResponseException {
-        Object systemUserIdObject = propertiesToCreate.get("systemUserId");
+        Object systemUserIdObject = propertiesToCreate.get("userSystemId");
         Object tokenObject = propertiesToCreate.get("token");
         User user = Context.getUserService().getUserByUsername(systemUserIdObject.toString());
 
@@ -65,6 +65,8 @@ public class MuzimaNotificationTokenResource extends DataDelegatingCrudResource<
         notificationToken.setToken(tokenObject.toString());
         notificationToken.setCreator(user);
         notificationToken.setDateCreated(new Date());
+        notificationToken.setVoided(false);
+        notificationToken.setUuid(UUID.randomUUID().toString());
         save(notificationToken);
         return true;
     }
