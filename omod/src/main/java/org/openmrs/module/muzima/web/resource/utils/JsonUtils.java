@@ -62,7 +62,7 @@ public class JsonUtils {
             String value = readAsString(jsonObject, path);
             returnedBoolean = Boolean.valueOf(value);
         } catch (Exception e) {
-            logger.error("Unable to read boolean value with path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to read boolean value with path: " + path);
         }
         return returnedBoolean;
     }
@@ -94,7 +94,7 @@ public class JsonUtils {
         try {
             returnedString = (Double) JsonPath.read(jsonObject, path);
         } catch (Exception e) {
-            logger.error("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to read string value with path: " + path);
         }
         return returnedString;
     }
@@ -126,7 +126,7 @@ public class JsonUtils {
         try {
             returnedString = JsonPath.read(jsonObject, path);
         } catch (Exception e) {
-            logger.error("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to read string value with path: " + path);
         }
         return returnedString;
     }
@@ -170,9 +170,9 @@ public class JsonUtils {
             Calendar calendar = ISO8601Util.toCalendar(dateAsString);
             returnedDate = calendar.getTime();
         } catch (ParseException e) {
-            logger.error("Unable to convert string value from path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to convert string value from path: " + path);
         } catch (Exception e) {
-            logger.error("Unable to create date value from path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to create date value from path: " + path);
         }
         return returnedDate;
     }
@@ -189,7 +189,7 @@ public class JsonUtils {
         try {
             object = JsonPath.read(jsonObject, path);
         } catch (Exception e) {
-            logger.error("Unable to read object value with path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to read object value with path: " + path);
         }
         return object;
     }
@@ -206,7 +206,7 @@ public class JsonUtils {
         try {
             objects = JsonPath.read(jsonObject, path);
         } catch (Exception e) {
-            logger.error("Unable to read object value with path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to read object value with path: " + path);
         }
         return objects;
     }
@@ -246,7 +246,7 @@ public class JsonUtils {
                 return new SimpleDateFormat(DATE_PATTERN).parse(dateAsString.replace("/","-"));
             return new SimpleDateFormat(DATE_PATTERN).parse(dateAsString);
         } catch (ParseException e) {
-            logger.error("Unable to convert string value from path: " + path + " from: " + String.valueOf(serialized));
+            logger.error("Unable to convert string value from path: " + path);
         }
         return null;
     }
