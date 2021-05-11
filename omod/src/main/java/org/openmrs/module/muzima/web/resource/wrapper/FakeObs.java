@@ -72,7 +72,6 @@ public class FakeObs extends BaseOpenmrsData {
                 PropertyUtils.setProperty(fakeObs, property, o);
             } catch (Exception e) {
                 log.error("Copying property failed for property: '" + property + "' with message: " + e.getMessage(), e);
-                System.out.println("Copying property failed for property: '" + property + "' with message: " + e);
             }
         }
 

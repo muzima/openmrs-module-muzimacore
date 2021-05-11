@@ -45,10 +45,8 @@ public class HibernateNotificationTokenDataDao implements NotificationTokenDataD
     @Override
     public List<NotificationToken> getNotificationByUserId(User user) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(mappedClass);
-        System.out.println("++++++++++++++++++++++++++++++++++++++++++ppppppppppppppppppppppppppppppppppppppppp "+user.getUserId().toString());
         criteria.add(Restrictions.eq("userId",user.getUserId()));
         List<NotificationToken> notificationTokens = criteria.list();
-        System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYy "+notificationTokens.size());
         return notificationTokens;
     }
 }

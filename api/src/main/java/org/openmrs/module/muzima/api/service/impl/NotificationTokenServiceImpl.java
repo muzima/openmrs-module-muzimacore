@@ -33,7 +33,6 @@ public class NotificationTokenServiceImpl extends BaseOpenmrsService implements 
     @Override
     public List<NotificationToken> getNotificationByUserId(User user) {
         List<NotificationToken> notificationTokens = dao.getNotificationByUserId(user);
-        System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx "+notificationTokens.size());
         return notificationTokens;
     }
 }
