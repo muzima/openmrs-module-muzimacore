@@ -337,5 +337,7 @@
   "general_property": "Propriedade",
   "html_preview":"Antevisão HTML",
   "html_code": "Código HTML",
-  "url_qrcode":"Código QR URL"
+  "url_qrcode":"Código QR URL",
+  "Notification.isEnabled_setting_name": "Status de notificação",
+  "Notification.isEnabled_setting_description": "Especifica se o recurso de notificação será habilitado no aplicativo Android"
 }
