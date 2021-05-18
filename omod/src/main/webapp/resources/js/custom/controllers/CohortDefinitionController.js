@@ -122,7 +122,9 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         if(cohortDefinition.isFilterByLocationEnabled===undefined){
             cohortDefinition.isFilterByLocationEnabled=false;
         }
-        cohortDefinition.filterQuery = cohortDefinition.filterQuery.replaceAll(":cohort",cohortDefinition.cohortid);
+        if(cohortDefinition.filterQuery !== undefined){
+            cohortDefinition.filterQuery = cohortDefinition.filterQuery.replaceAll(":cohort",cohortDefinition.cohortid);
+        }
         cohortDefinition.definition = cohortDefinition.definition.replaceAll(":location",cohortDefinition.location);
         $cohortDefinitionService.saveCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
             cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled, cohortDefinition.filterQuery).

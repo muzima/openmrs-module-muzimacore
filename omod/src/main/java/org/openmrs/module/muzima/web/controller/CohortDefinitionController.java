@@ -135,7 +135,9 @@ public class CohortDefinitionController {
                     cohortDefinitionData.setIsMemberRemovalEnabled(isMemberRemovalEnabled);
                     cohortDefinitionData.setIsFilterByProviderEnabled(isFilterByProviderEnabled);
                     cohortDefinitionData.setIsFilterByLocationEnabled(isFilterByLocationEnabled);
-                    filterQuery = filterQuery.replaceAll(":cohort",savedCohort.getId().toString());
+                    if(filterQuery != null ) {
+                        filterQuery = filterQuery.replaceAll(":cohort", savedCohort.getId().toString());
+                    }
                     cohortDefinitionData.setFilterQuery(filterQuery);
                     expandedCohortDataService.saveCohortDefinitionData(cohortDefinitionData);
                 }
