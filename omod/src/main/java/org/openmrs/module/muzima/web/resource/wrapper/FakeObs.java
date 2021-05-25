@@ -75,7 +75,7 @@ public class FakeObs extends BaseOpenmrsData {
             }
         }
 
-        String valueComplex = "NULL";
+        String valueComplex = "";
         ConceptComplex complex = Context.getConceptService().getConceptComplex(obs.getConcept().getId());
         obs.getConcept().isComplex();
         if (complex != null) {
@@ -88,9 +88,9 @@ public class FakeObs extends BaseOpenmrsData {
                 fileInputStreamReader.read(bytes);
                 valueComplex = new String(Base64.encodeBase64(bytes), "UTF-8");
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                log.error("A file not found exception was encountered: " + e.getMessage(), e);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("A input/output exception was encountered: " + e.getMessage(), e);
             }
         }
 
