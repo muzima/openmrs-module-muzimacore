@@ -14,6 +14,7 @@
 package org.openmrs.module.muzima.web.controller;
 
 import org.openmrs.Cohort;
+import org.openmrs.Location;
 import org.openmrs.api.CohortService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.muzima.api.service.CohortDefinitionDataService;
@@ -28,8 +29,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -132,6 +135,9 @@ public class CohortDefinitionController {
                     cohortDefinitionData.setIsMemberRemovalEnabled(isMemberRemovalEnabled);
                     cohortDefinitionData.setIsFilterByProviderEnabled(isFilterByProviderEnabled);
                     cohortDefinitionData.setIsFilterByLocationEnabled(isFilterByLocationEnabled);
+                    if(filterQuery != null ) {
+                        filterQuery = filterQuery.replaceAll(":cohort", savedCohort.getId().toString());
+                    }
                     cohortDefinitionData.setFilterQuery(filterQuery);
                     expandedCohortDataService.saveCohortDefinitionData(cohortDefinitionData);
                 }
@@ -142,6 +148,21 @@ public class CohortDefinitionController {
             }
         } else {
             response.put("error", "User session is not authenticated");
+        }
+        return response;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/module/muzimacore/getAllLocations.json", method = RequestMethod.GET)
+    public Map<String, Object> getLocations() {
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        if (Context.isAuthenticated()) {
+            List<Object> objects = new ArrayList<Object>();
+            for (Location location : Context.getLocationService().getAllLocations()) {
+                objects.add(WebConverter.convertMuzimaLocation(location));
+            }
+            response.put("objects", objects);
         }
         return response;
     }

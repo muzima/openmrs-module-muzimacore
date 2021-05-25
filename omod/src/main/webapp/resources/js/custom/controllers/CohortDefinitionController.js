@@ -44,6 +44,8 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
     $scope.uuid = $routeParams.uuid;
     $scope.cohortDefinitionExecuted = false;
     $scope.isProcessingSuccessfull = false;
+    $scope.isLocationParameter = false;
+    $scope.locations;
 
     if ($scope.uuid === undefined) {
         $scope.mode = "edit";
@@ -66,6 +68,12 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
             });
     }
 
+    $cohortDefinitionService.getAllLocations().
+            then(function (response) {
+                var serverData = response.data;
+                $scope.locations = serverData.objects;
+            });
+
     $scope.edit = function () {
         $scope.cohortDefinitionExecuted = false;
         $scope.isProcessingSuccessfull = false;
@@ -86,6 +94,18 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         }
     };
 
+    $scope.$watch('cohortDefinition.definition', function (newValue, oldValue) {
+        if (newValue != oldValue) {
+            if(newValue === undefined){
+                $scope.isLocationParameter = false;
+            } else if(newValue.includes(":location")){
+                $scope.isLocationParameter = true;
+            }else{
+                $scope.isLocationParameter = false;
+            }
+        }
+    }, true);
+
     $scope.save = function (cohortDefinition) {
         if(cohortDefinition.isScheduledForExecution===undefined){
             cohortDefinition.isScheduledForExecution=false;
@@ -102,6 +122,10 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         if(cohortDefinition.isFilterByLocationEnabled===undefined){
             cohortDefinition.isFilterByLocationEnabled=false;
         }
+        if(cohortDefinition.filterQuery !== undefined){
+            cohortDefinition.filterQuery = cohortDefinition.filterQuery.replaceAll(":cohort",cohortDefinition.cohortid);
+        }
+        cohortDefinition.definition = cohortDefinition.definition.replaceAll(":location",cohortDefinition.location);
         $cohortDefinitionService.saveCohortDefinition(cohortDefinition.uuid,cohortDefinition.cohortid, cohortDefinition.definition,
             cohortDefinition.isScheduledForExecution, cohortDefinition.isMemberAdditionEnabled, cohortDefinition.isMemberRemovalEnabled, cohortDefinition.isFilterByProviderEnabled, cohortDefinition.isFilterByLocationEnabled, cohortDefinition.filterQuery).
             then(function () {
@@ -126,14 +150,14 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
     };
 
     $scope.cohortselected = function(cohortDefinition,cohorts){
-                angular.forEach(cohorts,function(cohort,key){
-                    if(cohortDefinition.cohortid==cohort.id){
-                        cohortDefinition.description = cohort.description;
-                        $scope.definitioninputdisabled=function(e){
-                            return false;
-                         };
-                    }
-                });
+        angular.forEach(cohorts,function(cohort,key){
+            if(cohortDefinition.cohortid==cohort.id){
+                cohortDefinition.description = cohort.description;
+                $scope.definitioninputdisabled=function(e){
+                    return false;
+                 };
+            }
+        });
 
     }
     $scope.definitioninputdisabled=function(uuid){
@@ -144,12 +168,20 @@ function CohortDefinitionCtrl($scope, $routeParams, $location, $cohortDefinition
         }
     };
     $scope.definitionsavingdisabled=function(definition){
-        if(definition){
+        if(definition && $scope.validateLocationField()){
             return false;
         }else{
             return true;
         }
     };
+
+    $scope.validateLocationField = function(){
+        if($scope.isLocationParameter){
+            return $scope.cohortDefinition.location != undefined;
+        }else{
+          return true;
+        }
+    }
 
     $scope.processDefinition = function (cohortDefinition) {
          $('#wait').show();

@@ -644,6 +644,7 @@
         <dropNotNullConstraint tableName="muzima_notification_data" columnName="receiver" columnDataType="int"/>
     </changeSet>
 
+
     <changeSet id="muzima-2015-03-30-4:00pm" author="Vikas">
         <preConditions onFail="MARK_RAN">
             <not>
@@ -2143,6 +2144,18 @@
             ALTER TABLE `muzima_form`
             MODIFY COLUMN `date_retired`  datetime NULL
         </sql>
+    </changeSet>
+    <changeSet id="muzima-20210517160900" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="muzima_cohort_metadata" columnName="location_id"/>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="muzima_cohort_metadata" constraintName="muzima_cohort_metadata_location_id"/>
+    </changeSet>
+    <changeSet id="muzima-20210517161200" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="muzima_cohort_metadata" columnName="provider_id"/>
+        </preConditions>
+        <dropForeignKeyConstraint baseTableName="muzima_cohort_metadata" constraintName="muzima_cohort_metadata_provider_id"/>
     </changeSet>
     <changeSet id="muzima-20210423142300" author="bmokaya">
         <preConditions onFail="MARK_RAN">

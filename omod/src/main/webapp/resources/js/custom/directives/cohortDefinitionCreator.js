@@ -3,6 +3,8 @@ muzimaCoreModule.directive('cohortDefinitionCreator', function($cohortDefinition
         restrict: 'E',
         link:function(scope){
             cohortDefinition = {};
+            scope.locations;
+            scope.isLocationParameter = false;
             scope.saveCohortAndCohortDefinition = function (cohort) {
                 if(cohort.isMemberAdditionEnabled===undefined){
                     cohort.isMemberAdditionEnabled=false;
@@ -17,6 +19,9 @@ muzimaCoreModule.directive('cohortDefinitionCreator', function($cohortDefinition
                     cohort.isFilterByLocationEnabled=false;
                 }
                 cohort.isScheduledForExecution = cohort.isMemberAdditionEnabled || cohort.isMemberRemovalEnabled;
+                if(cohort.definition !== undefined){
+                    cohort.definition = cohort.definition.replaceAll(":location",cohort.location);
+                }
                 $cohortDefinitionService.saveCohortAndCohortDefinition(cohort.name, cohort.description, cohort.definition, cohort.isScheduledForExecution,
                     cohort.isMemberAdditionEnabled, cohort.isMemberRemovalEnabled, cohort.isFilterByProviderEnabled, cohort.isFilterByLocationEnabled,
                     cohort.filterQuery).success(function (response) {
@@ -33,11 +38,30 @@ muzimaCoreModule.directive('cohortDefinitionCreator', function($cohortDefinition
                 });
             };
 
+            $cohortDefinitionService.getAllLocations().
+                then(function (response) {
+                    var serverData = response.data;
+                    scope.locations = serverData.objects;
+                });
+
+            scope.$watch('cohortDefinition.definition', function (newValue, oldValue) {
+                if (newValue != oldValue) {
+                    if(newValue === undefined){
+                        scope.isLocationParameter = false;
+                    } else if(newValue.includes(":location")){
+                        scope.isLocationParameter = true;
+                    }else{
+                        scope.isLocationParameter = false;
+                    }
+                }
+            }, true);
+
+
             scope.isAllRequiredFieldsEntered = function(){
                 return (scope.enableDynamicCohort == false || scope.enableDynamicCohort !== false
                     && scope.enableCohortFilters != undefined) && scope.cohortDefinition != undefined
                     && scope.cohortDefinition.name.trim() != '' && scope.cohortDefinition.description.trim() != ''
-                    && scope.validateDefinitionQuery() && scope.validateFilterQuery();
+                    && scope.validateDefinitionQuery() && scope.validateFilterQuery() && scope.validateLocationParameter();
             }
 
             scope.validateDefinitionQuery = function(){
@@ -51,6 +75,14 @@ muzimaCoreModule.directive('cohortDefinitionCreator', function($cohortDefinition
             scope.validateFilterQuery = function(){
                 if(scope.cohortDefinition.isFilterByProviderEnabled != undefined || scope.cohortDefinition.isFilterByLocationEnabled != undefined ){
                     return scope.cohortDefinition.filterQuery !=undefined && scope.cohortDefinition.filterQuery.trim() != '';
+                }else{
+                  return true;
+                }
+            }
+
+            scope.validateLocationParameter = function(){
+                if(scope.isLocationParameter){
+                    return scope.cohortDefinition.location != undefined;
                 }else{
                   return true;
                 }

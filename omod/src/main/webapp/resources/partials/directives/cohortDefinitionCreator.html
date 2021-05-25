@@ -9,7 +9,7 @@
         {{'info_cohort_name' | translate}} <span class="required">*</span> :
     </div>
     <div class="col-sm-9">
-        <input class="form-control" ng-model="cohortDefinition.name" translate translate-attr-placeholder="info_cohort_name">
+        <input class="form-control" ng-model="cohortDefinition.name">
     </div>
 </div>
 <div class="row">
@@ -17,7 +17,7 @@
         {{'general_description' | translate}} <span class="required">*</span>:
     </div>
     <div class="col-sm-9">
-        <textarea class="form-control" ng-model="cohortDefinition.description" translate translate-attr-placeholder="info_cohort_description"></textarea>
+        <textarea class="form-control" ng-model="cohortDefinition.description"></textarea>
     </div>
 </div>
 <div class="row">
@@ -60,7 +60,15 @@
         </div>
     </div>
 </div>
-
+<div class="row" ng-show="isLocationParameter">
+    <div class="col-sm-3">
+        {{'general_location' | translate}} <span class="required">*</span>:
+    </div>
+    <div class="col-sm-9">
+        <select class="form-control" ng-model="cohortDefinition.location" ng-options="location.id as location.name for location in locations">
+        </select>
+    </div>
+</div>
 <div class="row" ng-show="enableDynamicCohort == true">
     <div class="col-sm-12">
         <hr />

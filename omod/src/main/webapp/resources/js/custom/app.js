@@ -443,7 +443,11 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
 
     var processCohortDefinition = function (uuid){
         return $http.post("processCohortDefinition.json",{"uuid": uuid});
-    }
+    };
+
+    var getAllLocations = function(search) {
+        return $http.get("getAllLocations.json");
+    };
 
     return {
 
@@ -454,7 +458,8 @@ muzimaCoreModule.factory('$cohortDefinitionService', function ($http) {
         getAllCohorts:getAllCohorts,
         getAllCohortsWithoutDefinition:getAllCohortsWithoutDefinition,
         deleteCohortDefinition : deleteCohortDefinition,
-        processCohortDefinition : processCohortDefinition
+        processCohortDefinition : processCohortDefinition,
+        getAllLocations : getAllLocations
     }
 });
 

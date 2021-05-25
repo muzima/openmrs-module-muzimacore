@@ -277,6 +277,7 @@ public class WebConverter {
         Map<String, Object> map = new HashMap<String, Object>();
         if (location != null) {
             map.put("uuid", location.getUuid());
+            map.put("id",location.getId());
             map.put("name", location.getName());
         }
         return map;
