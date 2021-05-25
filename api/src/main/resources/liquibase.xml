@@ -2144,4 +2144,60 @@
             MODIFY COLUMN `date_retired`  datetime NULL
         </sql>
     </changeSet>
+    <changeSet id="muzima-20210423142300" author="bmokaya">
+        <preConditions onFail="MARK_RAN">
+            <not><tableExists tableName="muzima_notification_token"/></not>
+        </preConditions>
+        <comment>
+            Creating the notification token table
+        </comment>
+        <createTable tableName="muzima_notification_token">
+            <column name="id" type="int"  autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="int"/>
+            <column name="token" type="text"/>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int"/>
+            <column name="date_changed" type="datetime"/>
+            <column name="voided" type="tinyint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voided_by" type="int"/>
+            <column name="date_voided" type="datetime"/>
+            <column name="void_reason" type="varchar(255)" defaultValue="null"/>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="muzima_notification_token_creator"
+                                 baseTableName="muzima_notification_token" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_notification_token_changed_by"
+                                 baseTableName="muzima_notification_token" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_notification_token_voided_by"
+                                 baseTableName="muzima_notification_token" baseColumnNames="voided_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="muzima_notification_token_user_id"
+                                 baseTableName="muzima_notification_token" baseColumnNames="user_id"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
+    <changeSet id="muzima-20210517115500" author="bmokaya">
+        <insert tableName="muzima_setting">
+            <column name="property" value="Notification.isEnabled" />
+            <column name="name" value="Notification status" />
+            <column name="description" value="Specifies Notification feature will be enabled on Android App" />
+            <column name="setting_data_type" value="BOOLEAN" />
+            <column name="value_boolean" valueBoolean="false" />
+            <column name="date_created" valueDate="2021-05-17T11:55:00" />
+            <column name="creator" value="1" />
+            <column name="uuid" value="eb75326c-b6ed-11eb-bbfb-d0577bb73cd4" />
+        </insert>
+    </changeSet>
 </databaseChangeLog>

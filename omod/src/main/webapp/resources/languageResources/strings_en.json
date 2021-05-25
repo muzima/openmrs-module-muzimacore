@@ -337,5 +337,7 @@
   "general_property": "Property",
   "html_preview":"HTML Preview",
   "html_code": "HTML Code",
-  "url_qrcode":"URL QR Code"
+  "url_qrcode":"URL QR Code",
+  "Notification.isEnabled_setting_name": "Notification status",
+  "Notification.isEnabled_setting_description": "Specifies if notification feature will be enabled on Android App"
 }

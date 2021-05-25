@@ -36,7 +36,7 @@
             </tr>
             <tr ng-show="remove_queue_data">
                 <td colspan="4">
-                    <input class="col-md-10 form-control remove-reason" translate translate-attr-placeholder="general_remove_reason" name="remove_reason" type="text" ng-model="removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
+                    <input class="col-md-10 form-control remove-reason" translate translate-attr-placeholder="general_remove_reason" name="remove_reason" type="text" ng-model="removeReason" id="removeReason" ng-show="remove_queue_data" ng-required="remove_queue_data"/>
                     <div ng-show="removeReasonError" style="color:red">{{'general_remove_reason_required' | translate}}</div>
                 </td>
             </tr>

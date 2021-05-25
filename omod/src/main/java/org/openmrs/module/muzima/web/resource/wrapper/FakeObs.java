@@ -14,15 +14,25 @@
 package org.openmrs.module.muzima.web.resource.wrapper;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Concept;
+import org.openmrs.ConceptComplex;
 import org.openmrs.Encounter;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Person;
+import org.openmrs.api.context.Context;
+import org.openmrs.obs.handler.AbstractHandler;
+import org.openmrs.obs.handler.ImageHandler;
+import org.openmrs.web.WebConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
 
 public class FakeObs extends BaseOpenmrsData {
@@ -49,6 +59,7 @@ public class FakeObs extends BaseOpenmrsData {
     private Concept valueCoded;
     private Date valueDatetime;
     private Double valueNumeric;
+    private String valueComplex;
 
     private FakeObs() {
     }
@@ -63,6 +74,28 @@ public class FakeObs extends BaseOpenmrsData {
                 log.error("Copying property failed for property: '" + property + "' with message: " + e.getMessage(), e);
             }
         }
+
+        String valueComplex = "";
+        ConceptComplex complex = Context.getConceptService().getConceptComplex(obs.getConcept().getId());
+        obs.getConcept().isComplex();
+        if (complex != null) {
+            File file = AbstractHandler.getComplexDataFile(obs);
+            FileInputStream fileInputStreamReader = null;
+            byte[] bytes = new byte[(int)file.length()];
+            try {
+                //get Base64 string
+                fileInputStreamReader = new FileInputStream(file);
+                fileInputStreamReader.read(bytes);
+                valueComplex = new String(Base64.encodeBase64(bytes), "UTF-8");
+            } catch (FileNotFoundException e) {
+                log.error("A file not found exception was encountered: " + e.getMessage(), e);
+            } catch (IOException e) {
+                log.error("A input/output exception was encountered: " + e.getMessage(), e);
+            }
+        }
+
+
+        fakeObs.setValueComplex(valueComplex);
         fakeObs.setVoided(obs.getVoided());
         return fakeObs;
     }
@@ -147,5 +180,13 @@ public class FakeObs extends BaseOpenmrsData {
 
     public void setValueNumeric(Double valueNumeric) {
         this.valueNumeric = valueNumeric;
+    }
+
+    public String getValueComplex() {
+        return valueComplex;
+    }
+
+    public void setValueComplex(String valueComplex) {
+        this.valueComplex = valueComplex;
     }
 }

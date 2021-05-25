@@ -12,11 +12,12 @@ function QueueCtrl($scope, $routeParams, $location, $data) {
     });
 
     $scope.delete = function () {
-        if(!$scope.removeReason){
+        var removeReason = $('#removeReason').val();
+        if(!removeReason){
              $scope.removeReasonError = true;
         }else{
             var uuidList = [$scope.uuid];
-            $data.deleteQueue(uuidList, $scope.removeReason).
+            $data.deleteQueue(uuidList, removeReason).
             then(function () {
                 $location.path("/queues");
             });
@@ -68,10 +69,11 @@ function QueuesCtrl($scope, $location, $data, $localeService, $translate) {
                 uuidList.push(key);
             }
         });
-        if(!$scope.removeReason){
+        var removeReason = $('#removeReason').val();
+        if(!removeReason){
              $scope.removeReasonError = true;
         }else{
-            $data.deleteQueue(uuidList, $scope.removeReason).
+            $data.deleteQueue(uuidList, removeReason).
             then(function () {
                 $data.getQueues($scope.search, $scope.currentPage, $scope.pageSize).
                 then(function (response) {

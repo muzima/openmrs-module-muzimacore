@@ -229,7 +229,7 @@ public class WebConverter {
         try {
             returnedString = JsonPath.read(jsonObject, path);
         } catch (Exception e) {
-            logger.error("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
+            logger.error("Unable to read string value with path: " + path);
         }
         return returnedString;
     }
