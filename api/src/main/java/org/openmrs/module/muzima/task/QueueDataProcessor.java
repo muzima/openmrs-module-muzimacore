@@ -250,7 +250,7 @@ public class QueueDataProcessor {
         try {
             returnedString = JsonPath.read(jsonObject, path);
         } catch (Exception e) {
-            log.info("Unable to read string value with path: " + path + " from: " + String.valueOf(jsonObject));
+            log.info("Unable to read string value with path: " + path);
         }
         return returnedString;
     }

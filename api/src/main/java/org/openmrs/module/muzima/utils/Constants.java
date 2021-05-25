@@ -11,5 +11,6 @@ public class Constants {
         public static final String MUZIMA_VISIT_GENERATION_SETTING_PROPERTY = "VisitCreation.isEnabled";
         public static final String DEMOGRAPHICS_UPDATE_MANUAL_REVIEW_SETTING_PROPERTY = "DemographicsUpdateManualReviewEnforcement.isEnabled";
         public static final String MAXIMUM_OBS_DOWNLOAD_SETTING_PROPERTY = "Obs.maximumDownloadSize";
+        public static final String NOTIFICATION_FEATURE_STATUS_SETTING_PROPERTY = "Notification.isEnabled";
     }
 }
