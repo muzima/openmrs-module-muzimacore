@@ -33,15 +33,6 @@ public interface MuzimaFormService extends OpenmrsService {
     List<MuzimaForm> getMuzimaFormByForm(String form, boolean includeRetired);
 
     @Transactional
-    MuzimaForm create(String xformXml, String form,  String discriminator) throws Exception;
-
-    @Transactional
-    MuzimaForm update(String html, String form) throws Exception;
-
-    @Transactional
-    MuzimaForm importODK(String xformXml, String form, String discriminator) throws Exception;
-
-    @Transactional
     MuzimaForm createHTMLForm(String html, String form, String discriminator) throws Exception;
 
     @Transactional
@@ -57,6 +48,4 @@ public interface MuzimaFormService extends OpenmrsService {
     List<Form> getNonMuzimaForms(String search);
 
     List<Object[]> getFormCountGroupedByDiscriminator();
-
-    ValidationMessages validateODK(String xml) throws Exception;
 }

@@ -1,6 +1,5 @@
 package org.openmrs.module.muzima.api.service.impl;
 
-import org.dom4j.DocumentException;
 import org.javarosa.xform.parse.ValidationMessages;
 import org.javarosa.xform.parse.XFormParser;
 import org.openmrs.Form;
@@ -8,34 +7,19 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.muzima.api.db.MuzimaFormDAO;
 import org.openmrs.module.muzima.api.service.MuzimaFormService;
-import org.openmrs.module.muzima.model.CompositeEnketoResult;
 import org.openmrs.module.muzima.model.MuzimaForm;
 import org.openmrs.module.muzima.model.MuzimaXForm;
 import org.openmrs.module.muzima.utils.HTMLConceptParser;
-import org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer;
-import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer;
-import org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer;
-import org.openmrs.module.muzima.xForm2MuzimaTransform.XForm2Html5Transformer;
 
 import java.io.StringReader;
 import java.util.Date;
 import java.util.List;
 
 public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaFormService {
-    private XForm2Html5Transformer html5Transformer;
-    private ModelXml2JsonTransformer modelXml2JsonTransformer;
-    private ODK2JavarosaTransformer odk2JavarosaTransformer;
-    private ODK2HTML5Transformer odk2HTML5Transformer;
     private MuzimaFormDAO dao;
 
-    public MuzimaFormServiceImpl(MuzimaFormDAO dao, XForm2Html5Transformer html5Transformer,
-                                 ModelXml2JsonTransformer modelXml2JsonTransformer,
-                                 ODK2JavarosaTransformer odk2JavarosaTransformer, ODK2HTML5Transformer odk2HTML5Transformer) {
+    public MuzimaFormServiceImpl(MuzimaFormDAO dao) {
         this.dao = dao;
-        this.html5Transformer = html5Transformer;
-        this.modelXml2JsonTransformer = modelXml2JsonTransformer;
-        this.odk2JavarosaTransformer = odk2JavarosaTransformer;
-        this.odk2HTML5Transformer = odk2HTML5Transformer;
     }
 
     public List<MuzimaForm> getAll() {
@@ -57,32 +41,6 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         return dao.getPagedXForms(search, pageNumber, pageSize);
     }
 
-    public MuzimaForm create(String xformXml, String form,  String discriminator) throws Exception {
-        if (!isFormDefinitionExists(form)) {
-            CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
-                    transform(html5Transformer.transform(xformXml).getResult());
-
-            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), null, Context.getFormService().getFormByUuid(form)));
-        }
-        throw new DocumentException("The file name already Exists !");
-    }
-
-    public MuzimaForm update(String xformXml, String formUUID) throws Exception {
-        if (isFormExists(formUUID)) {
-            CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
-                    transform(html5Transformer.transform(xformXml).getResult());
-            MuzimaForm retrievedForm = dao.getFormByUuid(formUUID);
-            if(retrievedForm != null){
-                retrievedForm.setHtml(result.getForm());
-                retrievedForm.setModelXml(result.getModel());
-                retrievedForm.setModelJson(result.getModelAsJson());
-            }
-            return save(retrievedForm);
-        }else{
-            throw new DocumentException("Unable to update form with form definition !" + formUUID);
-        }
-    }
-
     private boolean isFormExists(String formUUID) {
         MuzimaForm muzimaforms = dao.getFormByUuid(formUUID);
         return muzimaforms != null;
@@ -98,22 +56,13 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
         return false;
     }
 
-    public MuzimaForm importODK(String xformXml,  String form, String discriminator) throws Exception {
-        if (!isFormDefinitionExists(form)) {
-            CompositeEnketoResult result = (CompositeEnketoResult) modelXml2JsonTransformer.
-                    transform(odk2HTML5Transformer.transform(xformXml).getResult());
-            return save(new MuzimaForm(form, discriminator, result.getForm(), result.getModel(), result.getModelAsJson(), null, Context.getFormService().getFormByUuid(form)));
-        }
-        throw new DocumentException("The file name already Exists !");
-    }
-
     public MuzimaForm createHTMLForm(String html,  String form,  String discriminator) throws Exception {
         if (!isFormDefinitionExists(form)) {
             HTMLConceptParser parser = new HTMLConceptParser();
             String metaJson = parser.createConceptMetadata(parser.parse(html));
             return save(new MuzimaForm(form, discriminator, html, null, null,metaJson, Context.getFormService().getFormByUuid(form)));
         }
-        throw new DocumentException("The file name already Exists !");
+        throw new Exception("The file name already Exists !");
     }
 
     public MuzimaForm updateHTMLForm(String html,  String formUUID) throws Exception {
@@ -127,7 +76,7 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
                 return save(retrievedForm);
             }
         }
-        throw new DocumentException("Unable to update form with id !" + formUUID);
+        throw new Exception("Unable to update form with id !" + formUUID);
     }
 
     public MuzimaForm save(MuzimaForm form) throws Exception {
@@ -139,11 +88,6 @@ public class MuzimaFormServiceImpl extends BaseOpenmrsService implements MuzimaF
 
     public ValidationMessages validateJavaRosa(String xml) {
         return new XFormParser(new StringReader(xml)).validate();
-    }
-
-    public ValidationMessages validateODK(String xml) throws Exception {
-        String result = odk2JavarosaTransformer.transform(xml).getResult();
-        return new XFormParser(new StringReader(result)).validate();
     }
 
     public ValidationMessages validateMuzimaForm(String html) {

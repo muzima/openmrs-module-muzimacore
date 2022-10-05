@@ -6,42 +6,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
   		    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="transformerFactory" class="net.sf.saxon.TransformerFactoryImpl"/>
-
-    <bean id="xform2html5XSLPipeline" class="org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline"
-          factory-method="xform2HTML5Pipeline"/>
-
-    <bean id="odk2JavarosaXSLPipeline" class="org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline"
-          factory-method="ODK2Javarosa"/>
-
-    <bean id="odk2HTML5XSLPipeline" class="org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline"
-          factory-method="ODK2HTML5"/>
-
-    <bean id="modelXml2JsonXSLPipeline"
-          class="org.openmrs.module.muzima.xForm2MuzimaTransform.XslTransformPipeline"
-          factory-method="modelXml2JsonXSLPipeline"/>
-
-    <bean id="xform2HtmlTransformer" class="org.openmrs.module.muzima.xForm2MuzimaTransform.EnketoXslTransformer">
-        <constructor-arg name="transformerFactory" ref="transformerFactory"/>
-        <constructor-arg name="transformPipeline" ref="xform2html5XSLPipeline"/>
-    </bean>
-
-    <bean id="odk2JavarosaTransformer" class="org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2JavarosaTransformer">
-        <constructor-arg name="transformerFactory" ref="transformerFactory"/>
-        <constructor-arg name="transformPipeline" ref="odk2JavarosaXSLPipeline"/>
-    </bean>
-
-    <bean id="odk2HTML5Transformer" class="org.openmrs.module.muzima.xForm2MuzimaTransform.ODK2HTML5Transformer">
-        <constructor-arg name="transformerFactory" ref="transformerFactory"/>
-        <constructor-arg name="transformPipeline" ref="odk2HTML5XSLPipeline"/>
-    </bean>
-
-    <bean id="modelXml2JsonTransformer"
-          class="org.openmrs.module.muzima.xForm2MuzimaTransform.ModelXml2JsonTransformer">
-        <constructor-arg name="transformerFactory" ref="transformerFactory"/>
-        <constructor-arg name="jsonTransformers" ref="modelXml2JsonXSLPipeline"/>
-    </bean>
-
     <bean id="muzimaFormDAO" class="org.openmrs.module.muzima.api.db.hibernate.HibernateMuzimaFormDAO">
         <constructor-arg ref="dbSessionFactory"/>
     </bean>
@@ -198,10 +162,6 @@
                     <property name="target">
                         <bean class="org.openmrs.module.muzima.api.service.impl.MuzimaFormServiceImpl">
                             <constructor-arg name="dao" ref="muzimaFormDAO"/>
-                            <constructor-arg name="html5Transformer" ref="xform2HtmlTransformer"/>
-                            <constructor-arg name="modelXml2JsonTransformer" ref="modelXml2JsonTransformer"/>
-                            <constructor-arg name="odk2JavarosaTransformer" ref="odk2JavarosaTransformer"/>
-                            <constructor-arg name="odk2HTML5Transformer" ref="odk2HTML5Transformer"/>
                         </bean>
                     </property>
                     <property name="preInterceptors">
