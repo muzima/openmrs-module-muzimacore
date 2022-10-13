@@ -10,13 +10,13 @@
             <generator class="native"/>
         </id>
         <property name="cohortId" type="java.lang.Integer" column="cohort_id" unique="true"/>
-        <property name="definition" type="java.lang.String" column="sql_definition"/>
+        <property name="definition" type="java.lang.String" column="sql_definition" length="65525"/>
 	    <property name="isScheduledForExecution" type="boolean" column="is_scheduled" length="1" not-null="true"/>
 	    <property name="isMemberAdditionEnabled" type="boolean" column="enable_member_addition" length="1" not-null="true"/>
 	    <property name="isMemberRemovalEnabled" type="boolean" column="enable_member_removal" length="1" not-null="true"/>
         <property name="isFilterByProviderEnabled" type="boolean" column="enable_filter_by_provider" length="1" not-null="true"/>
         <property name="isFilterByLocationEnabled" type="boolean" column="enable_filter_by_location" length="1" not-null="true"/>
-        <property name="filterQuery" type="java.lang.String" column="filter_query"/>
+        <property name="filterQuery" type="java.lang.String" column="filter_query" length="65525"/>
 
         <many-to-one name="creator" class="org.openmrs.User" not-null="true">
             <column name="creator"/>
