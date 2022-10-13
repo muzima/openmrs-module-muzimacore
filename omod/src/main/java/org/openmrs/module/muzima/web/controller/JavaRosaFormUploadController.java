@@ -37,34 +37,6 @@ public class JavaRosaFormUploadController {
         return service.validateJavaRosa(extractFile(request));
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/odk/validate.form", method = RequestMethod.POST)
-    public ValidationMessages validateODK(final MultipartHttpServletRequest request) throws Exception {
-        MuzimaFormService service = Context.getService(MuzimaFormService.class);
-        return service.validateODK(extractFile(request));
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/javarosa/upload.form", method = RequestMethod.POST)
-    public void uploadJavaRosa(final MultipartHttpServletRequest request,
-                               final @RequestParam String form,
-                               final @RequestParam String discriminator) throws Exception {
-        if (Context.isAuthenticated()) {
-            MuzimaFormService service = Context.getService(MuzimaFormService.class);
-            service.create(extractFile(request), form, discriminator);
-        }
-    }
-
-    @ResponseBody
-    @RequestMapping(value="/javarosa/update.form", method = RequestMethod.POST)
-    public  void updateJavaRosa(final MultipartHttpServletRequest request,
-                                final @RequestParam String form_id) throws Exception {
-        if (Context.isAuthenticated()) {
-            MuzimaFormService service = Context.getService(MuzimaFormService.class);
-            service.update(extractFile(request), form_id);
-        }
-
-    }
 
     @ResponseBody
     @RequestMapping(value = "/html/upload.form", method = RequestMethod.POST)
@@ -125,17 +97,6 @@ public class JavaRosaFormUploadController {
         if (Context.isAuthenticated()) {
             MuzimaFormService service = Context.getService(MuzimaFormService.class);
             service.updateHTMLForm(extractFile(request), form);
-        }
-    }
-
-    @ResponseBody
-    @RequestMapping(value = "/odk/upload.form", method = RequestMethod.POST)
-    public void uploadODK(final MultipartHttpServletRequest request,
-                          final @RequestParam String form,
-                          final @RequestParam String discriminator) throws Exception {
-        if (Context.isAuthenticated()) {
-            MuzimaFormService service = Context.getService(MuzimaFormService.class);
-            service.importODK(extractFile(request), form, discriminator);
         }
     }
 

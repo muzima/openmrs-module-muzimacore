@@ -343,12 +343,12 @@
         <repository>
             <id>openmrs-repo</id>
             <name>OpenMRS Nexus Repository</name>
-            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
         </repository>
         <repository>
             <id>spring-test-repo</id>
             <name>Spring Test Repository</name>
-            <url>http://repo.springsource.org/libs-snapshot</url>
+            <url>https://repo.springsource.org/libs-snapshot</url>
         </repository>
     </repositories>
 
@@ -356,7 +356,7 @@
         <pluginRepository>
             <id>openmrs-repo</id>
             <name>OpenMRS Nexus Repository</name>
-            <url>http://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
+            <url>https://mavenrepo.openmrs.org/nexus/content/repositories/public</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>

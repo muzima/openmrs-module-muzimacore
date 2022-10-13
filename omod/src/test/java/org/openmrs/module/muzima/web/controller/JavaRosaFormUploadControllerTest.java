@@ -39,21 +39,6 @@ public class JavaRosaFormUploadControllerTest {
         when(Context.getService(MuzimaFormService.class)).thenReturn(service);
         when(Context.isAuthenticated()).thenReturn(true);
     }
-
-    @Test
-    public void shouldConvertJavaRosaFormToHTMLAndSaveIt() throws Exception {
-        request.addFile(multipartFile("file", "sampleUploadForm.xml"));
-        controller.uploadJavaRosa(request,  "form", "discriminator");
-        verify(service).create(readStream(request.getFile("file").getInputStream()),  "form",  "discriminator");
-    }
-
-    @Test
-    public void shouldConvertODKFormToHTMLAndSaveIt() throws Exception {
-        request.addFile(multipartFile("file", "sampleUploadForm.xml"));
-        controller.uploadODK(request,  "form",  "discriminator");
-        verify(service).importODK(readStream(request.getFile("file").getInputStream()),"form",  "discriminator");
-    }
-
     @Test
     public void validate_shouldValidateAJavaRosaXMLUsingTheService() throws Exception {
         request.addFile(multipartFile("file", "sampleUploadForm.xml"));
